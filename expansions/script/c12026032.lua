@@ -22,9 +22,10 @@ function c12026032.initial_effect(c)
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
 	e2:SetCountLimit(1,12026032+100)
+	e2:SetCost(c12026032.thcost)
 	e2:SetTarget(c12026032.thtg)
 	e2:SetOperation(c12026032.thop)
-	c:RegisterEffect(e1)
+	c:RegisterEffect(e2)
 	--leave field
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
@@ -63,7 +64,6 @@ function c12026032.thfilter(c)
 	return c:IsType(TYPE_MONSTER) and c:IsAttribute(ATTRIBUTE_LIGHT) and c:IsAbleToHand()
 end
 function c12026032.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c12026032.thfilter(chkc) end
 	if chk==0 then return Duel.IsExistingMatchingCard(c12026032.thfilter,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,1,0,0)
 end
@@ -85,5 +85,5 @@ function c12026032.regop(e,tp,eg,ep,ev,re,r,rp)
 	e2:SetReset(RESET_PHASE+PHASE_END)
 	e2:SetValue(99)
 	e2:SetTargetRange(1,0)
-	Duel.RegisterEffect(tp,e2)
+	Duel.RegisterEffect(e2,tp)
 end
