@@ -32,7 +32,7 @@ local function KaguyaTransformOperation(extra_opreation)
 		local tc=g:GetFirst()
 		local p=tc:GetControler()
 		if p~=tp then
-			Duel.MoveToField(c,p,p,LOCATION_SZONE,POS_FACEUP,true)
+			Duel.MoveToField(c,p,p,LOCATION_SZONE,POS_FACEUP,false)
 		end
 		Senya.TransformDFCCard(c)
 		Duel.Equip(p,e:GetHandler(),tc)
@@ -52,7 +52,7 @@ function Kaguya.ContinuousCommonEffect(c,effect_code,effect_codition,effect_cost
 	ex:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_F)
 	ex:SetCode(effect_code)
 	ex:SetRange(LOCATION_SZONE)
-	ex:SetProperty(0x14000)
+	ex:SetProperty(0x14000+EFFECT_FLAG_IGNORE_IMMUNE)
 	ex:SetCondition(effect_codition)
 	ex:SetTarget(KaguyaTransformTarget)
 	ex:SetOperation(KaguyaTransformOperation(extra_opreation))

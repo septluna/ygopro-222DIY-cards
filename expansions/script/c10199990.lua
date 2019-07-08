@@ -94,7 +94,8 @@ if not RealSclVersion then
 	rsef.rsvalinfo={} --value for inside series, inside type etc.
 	rscost.costinfo={} --Cost information 
 	rsef.targetlist={}  --target group list
-	rsef.effectinfo={}  --Effect information
+	rsef.attachinfo={}  --Effect information for attach effect
+	rsef.effectinfo={} --Effect information 
 	--[[
 	c.rssynlv --No level synchro monster's level
 	c.rsnlritlv --No level ritual monster's level
@@ -601,7 +602,7 @@ function rsef.FC_AttachEffect(cardtbl,attachtime,desctbl1,ctlimittbl,flag,range,
 	if flag2&EFFECT_FLAG_NO_TURN_RESET~=0 then
 		e2:SetProperty(EFFECT_FLAG_NO_TURN_RESET)
 	end
-	rsef.effectinfo[e1]=e2
+	rsef.attachinfo[e1]=e2
 	local reset,resetct=0,0
 	if resettbl then 
 		reset,resetct=rsef.RegisterReset(nil,resettbl,true) 
@@ -640,20 +641,20 @@ function rsef.FC_AttachEffect_resetinfo(e,tp,eg,ep,ev,re,r,rp)
 			return 
 		end
 	end 
-	rsef.effectinfo[ev]=baseop
+	rsef.attachinfo[ev]=baseop
 end
 function rsef.ChangeChainOperation2(chainev,changeop,ischange)
 	rsef.ChangeChainOperation(chainev,changeop)
 	if not ischange then
-		rsef.effectinfo[chainev]=changeop
+		rsef.attachinfo[chainev]=changeop
 	end
 end
 function rsef.GetOperation(e,chainev)
-	return rsef.effectinfo[chainev]
+	return rsef.attachinfo[chainev]
 end
 function rsef.FC_AttachEffect_setcon(e)
 	local tp=e:GetHandlerPlayer()
-	local te=rsef.effectinfo[e]
+	local te=rsef.attachinfo[e]
 	te:SetCondition(aux.TRUE)
 	local bool=te:IsActivatable(tp)
 	te:SetCondition(aux.FALSE)
@@ -746,7 +747,7 @@ function rsef.FC_AttachEffect_geteffect(parameterlistcheck,parameterlistsolve,at
 			rsef.FC_AttachEffect_Operation_Solve(parameterlistsolve,effect,attachlisttotal)
 		end
 		table.insert(attachlist,effect)
-		local te=rsef.effectinfo[effect]
+		local te=rsef.attachinfo[effect]
 		te:UseCountLimit(tp,1)
 		local g2=rsef.FC_AttachEffect_getgroup(parameterlistcheck,cardlist,attachtime)
 	until (ct>1 and #g2<=0) or (ct>1 and not Duel.SelectYesNo(tp,aux.Stringid(m,11))) 
@@ -1383,13 +1384,19 @@ function rstg.disnegtg(disorneg,waystring)
 	end
 end
 function rstg.distg(waystring)
-	rstg.disnegtg("dis",waystring)
+	return function(...)
+		return rstg.disnegtg("dis",waystring)(...)
+	end
 end
 function rstg.negtg(waystring)
-	rstg.disnegtg("neg",waystring)
+	return function(...)
+		return rstg.disnegtg("neg",waystring)(...)
+	end
 end
 function rstg.negsumtg(waystring)
-	rstg.disnegtg("sum",waystring)
+	return function(...)
+		return rstg.disnegtg("sum",waystring)(...)
+	end
 end
 --Target function: Get target attributes
 function rstg.GetTargetAttribute(e,tp,eg,ep,ev,re,r,rp,targetlist)
@@ -1943,16 +1950,17 @@ end
 --cost: Pay LP
 function rscost.lpcost(lp,isdirectly,islabel)
 	return function(e,tp,eg,ep,ev,re,r,rp,chk)
-		if type(lp)=="boolean" then lp=math.floor(Duel.GetLP(tp)/2) end
-		if isdirectly then lp=Duel.GetLP(tp)-lp end
+		local clp=lp
+		if type(lp)=="boolean" then clp=math.floor(Duel.GetLP(tp)/2) end
+		if isdirectly then clp=Duel.GetLP(tp)-clp end
 		if type(islabel)=="nil" and isdirectly then islabel=true end
 		if chk==0 then 
-			return lp>0 and Duel.CheckLPCost(tp,lp)
+			return clp>0 and Duel.CheckLPCost(tp,clp)
 		end
-		Duel.PayLPCost(tp,lp)   
-		rscost.costinfo[e]=lp
+		Duel.PayLPCost(tp,clp)   
+		rscost.costinfo[e]=clp
 		if islabel then
-			e:SetLabel(lp)
+			e:SetLabel(clp)
 		end
 	end
 end
@@ -2071,10 +2079,14 @@ function rscon.disnegcon(disorneg,filterfun,playerfun)
 	end 
 end
 function rscon.discon(filterfun,playerfun)
-	rscon.disnegcon("dis",filterfun,playerfun)
+	return function(...)
+		return rscon.disnegcon("dis",filterfun,playerfun)(...)
+	end
 end
 function rscon.negcon(filterfun,playerfun)
-	rscon.disnegcon("neg",filterfun,playerfun)
+	return function(...)
+		return rscon.disnegcon("neg",filterfun,playerfun)(...)
+	end
 end
 --Condition: Is exisit matching card
 function rscon.excardfilter(filter,varlist,e,tp,eg,ep,ev,re,r,rp)
@@ -2163,13 +2175,19 @@ function rsop.disnegop(disorneg,waystring)
 	end
 end
 function rsop.disop(waystring)
-	return rsop.disnegop("dis",waystring)
+	return function(...)
+		return rsop.disnegop("dis",waystring)(...)
+	end
 end
 function rsop.negop(waystring)
-	return rsop.disnegop("neg",waystring)
+	return function(...)
+		return rsop.disnegop("neg",waystring)(...)
+	end
 end
 function rsop.negsumop(waystring)
-	return rsop.disnegop("sum",waystring)
+	return function(...)
+		return rsop.disnegop("sum",waystring)(...)
+	end
 end
 --Operation: Equip 
 function rsop.eqop(e,eqc,eqtc,pos,opside)
@@ -2355,21 +2373,25 @@ function rsgf.GetSurroundingGroup2(seq,loc,cp,contains)
 	return sg
 end
 --Group effect: get adjacent group
-function rsgf.GetAdjacentGroup(c)
+function rsgf.GetAdjacentGroup(c,contains)
+	return rsgf.GetAdjacentGroup2(c:GetSequence(),c:GetLocation(),c:GetControler(),contains)
+end 
+--Group effect: get adjacent group (use sequence)
+function rsgf.GetAdjacentGroup2(seq,loc,tp,contains)
 	local g=Group.CreateGroup()
-	local seq=c:GetSequence()
 	if seq>0 and seq<5 then
-		rsgf.Mix(g,Duel.GetFieldCard(c:GetControler(),c:GetLocation(),seq-1))
+		rsgf.Mix(g,Duel.GetFieldCard(tp,loc,seq-1))
 	end
 	if seq<4 then
-		rsgf.Mix(g,Duel.GetFieldCard(c:GetControler(),c:GetLocation(),seq+1))
+		rsgf.Mix(g,Duel.GetFieldCard(tp,loc,seq+1))
 	end
+	if contains then rsgf.Mix(g,Duel.GetFieldCard(tp,loc,seq)) end
 	return g
 end
 --Group effect: Get Target Group for Operations
 function rsgf.GetTargetGroup(targetfilter,...)
 	local g,e,tp=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_PLAYER)
-	local tg=g:Filter(rscf.TargetFilter,nil,e,targetfilter,...)
+	local tg=g:Filter(rscf.TargetFilter,nil,e,tp,targetfilter,...)
 	return tg,tg:GetFirst()
 end
 --Group effect: Mix Card & Group,add to the first group
@@ -2427,8 +2449,7 @@ end
 function rscf.SetSpecialSummonProduce(cardtbl,range,con,op,desctbl,ctlimittbl,resettbl)
 	local tc1,tc2,ignore=rsef.GetRegisterCard(cardtbl)
 	if not desctbl then desctbl=rshint.spproc end
-	local flag="uc" 
-	if not tc2:IsSummonableCard() then flag="uc,cd" end
+	local flag=not tc2:IsSummonableCard() and "uc,cd" or "uc" 
 	local e1=rsef.Register(cardtbl,EFFECT_TYPE_FIELD,EFFECT_SPSUMMON_PROC,desctbl,ctlimittbl,nil,flag,range,con,nil,nil,op,nil,nil,nil,resettbl)
 	return e1
 end
@@ -2438,7 +2459,7 @@ function rscf.SetSummonCondition(cardtbl,isnsable,sumvalue,iseffectspsum,resettb
 	local tc1,tc2,ignore=rsef.GetRegisterCard(cardtbl)
 	if tc2:IsStatus(STATUS_COPYING_EFFECT) then return end
 	if not isnsable then
-		if iseffectspsum then
+		if iseffectspsum or (sumvalue and sumvalue==rsval.spcons) then
 			tc2:EnableUnsummonable()
 		else
 			tc2:EnableReviveLimit()
@@ -2901,14 +2922,20 @@ function rscf.IsPreviousSurrounding(c,tc)
 	return czone&zone ~=0   
 end
 --Card effect: Get First Target Card for Operations
-function rscf.TargetFilter(c,e,filter,...)
-	return c:IsRelateToEffect(e) and (not filter or filter(c,...))
+function rscf.TargetFilter(c,e,tp,filter,...)
+	local varlist={...}
+	if not c:IsRelateToEffect(e) then return false end
+	if not filter then return true end
+	if not ... then return filter(c,e,tp) 
+	else
+		return filter(c,table.unpack(varlist),e,tp)
+	end
 end
 function rscf.GetTargetCard(targetfilter,...)
 	local tc=Duel.GetFirstTarget()
 	if not tc then return nil end
 	local e,tp=Duel.GetChainInfo(0,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_PLAYER) 
-	if rscf.TargetFilter(tc,e,targetfilter,...) then return tc 
+	if rscf.TargetFilter(tc,e,tp,targetfilter,...) then return tc 
 	else return nil
 	end
 end
@@ -3144,13 +3171,17 @@ function cm.initial_effect(c)
 		"rsos"  =   "OracleSmith"
 		"rssp"  =   "StellarPearl"
 		--"rsgd"  =   "GhostdomDragon"
+		"rsed"  =   "EpicDragon"
 				}--]]
 
 --  "Series Others" 
   --[[rsv.Series2={
+		"rsve"  =   "Voison"
+		"rsneov"=   "Neons"
+		"tfrsv" =   "T.Fairies"
+		"rsss"  =   "StarSpirit"
 		"rssg"  =   "SexGun"
 		"rslap" =   "Lapin"
-		"rsss"  =   "StarSpirit"
 		"rslrd" =   "LifeDeathRoundDance"
 		"rsps"  =   "PseudoSoul"
 		"rslf"  =   "LittleFox"
@@ -3159,6 +3190,8 @@ function cm.initial_effect(c)
 		"rspq"  =   "PhantomQuantum"
 		"rsphh" =   "PhantomThievesOfHearts"
 		"rssk"  =   "Shinkansen"
+		"rsan"  =   "Arknights"
+		"rsnm"  =   "Nightmare"
 				}--]]   
 end
 end
