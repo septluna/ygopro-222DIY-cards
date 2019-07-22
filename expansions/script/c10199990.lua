@@ -1295,7 +1295,7 @@ function rsval.spconfe(e,se,sp,st)
 end
 --value: SummonConditionValue - can only be special summoned by self effects
 function rsval.spcons(e,se,sp,st)
-	return se:GetHandler()==e:GetHandler() and not se:IsHasProperty(EFFECT_FLAG_UNCOPYABLE)
+	return se:GetHandler()==e:GetHandler() and se:IsHasType(EFFECT_TYPE_ACTIONS) 
 end
 --value: reason by battle or card effects
 function rsval.indbae(string1,string2)
@@ -2460,7 +2460,7 @@ function rscf.SetSummonCondition(cardtbl,isnsable,sumvalue,iseffectspsum,resettb
 	if tc2:IsStatus(STATUS_COPYING_EFFECT) then return end
 	if not isnsable then
 		if iseffectspsum or (sumvalue and sumvalue==rsval.spcons) then
-			tc2:EnableUnsummonable()
+			--tc2:EnableUnsummonable()
 		else
 			tc2:EnableReviveLimit()
 		end
@@ -3192,6 +3192,7 @@ function cm.initial_effect(c)
 		"rssk"  =   "Shinkansen"
 		"rsan"  =   "Arknights"
 		"rsnm"  =   "Nightmare"
+		"rsdt"  =   "DarkTale"
 				}--]]   
 end
 end
