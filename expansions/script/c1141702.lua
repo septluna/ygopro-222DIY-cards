@@ -1,8 +1,13 @@
 --光晕『唐伞惊吓闪光』
+local m=1141702
+local cm=_G["c"..m]
+xpcall(function() require("expansions/script/c1110198") end,function() require("script/c1110198") end)
+--
 function c1141702.initial_effect(c)
 --
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_NEGATE+CATEGORY_POSITION)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_CHAINING)
 	e1:SetCondition(c1141702.con1)
@@ -11,10 +16,11 @@ function c1141702.initial_effect(c)
 	c:RegisterEffect(e1)
 --
 	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_QUICK_O)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetCode(EVENT_FREE_CHAIN)
 	e2:SetRange(LOCATION_GRAVE)
-	e2:SetCost(c1141702.cost2)
+	e2:SetCost(aux.bfgcost)
 	e2:SetCondition(c1141702.con2)
 	e2:SetOperation(c1141702.op2)
 	c:RegisterEffect(e2)
@@ -51,16 +57,11 @@ function c1141702.op1(e,tp,eg,ep,ev,re,r,rp)
 	if not tc:IsRelateToEffect(e) then return end
 	local Pos1=tc:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_ATTACK) and POS_FACEUP_ATTACK or 0
 	local Pos2=tc:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE) and POS_FACEDOWN_DEFENSE or 0
-	if Duel.SpecialSummon(c,0,tp,tp,false,false,Pos1+Pos2)>0 then
+	if Duel.SpecialSummon(tc,0,tp,tp,false,false,Pos1+Pos2)>0 then
 		Duel.NegateActivation(ev)
 		if not re:GetHandler():IsRelateToEffect(re) then return end
 		Duel.Destroy(eg,REASON_EFFECT)
 	end
-end
---
-function c1141702.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():IsAbleToRemoveAsCost() end
-	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)
 end
 --
 function c1141702.tfilter2(c,tp)
@@ -71,6 +72,8 @@ function c1141702.con2(e,tp,eg,ep,ev,re,r,rp)
 end
 --
 function c1141702.op2(e,tp,eg,ep,ev,re,r,rp)
-	Duel.SkipPhase(1-tp,PHASE_MAIN1,RESET_PHASE+PHASE_MAIN1,1)
+	if Duel.GetTurnPlayer()~=tp and Duel.GetCurrentPhase()==PHASE_MAIN1 then
+		Duel.SkipPhase(1-tp,PHASE_MAIN1,RESET_PHASE+PHASE_MAIN1,1)
+	end
 end
 --
