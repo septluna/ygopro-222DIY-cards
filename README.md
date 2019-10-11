@@ -1,5 +1,7 @@
-# YGOPro-222DIY-cards
-The custom card data of YGOPro 222DIY Custom Server. see http://koishi.pro/pre.html .
-User QQ Group: 642043095
+# Bloomy!
+まっすぐに感じよう
+いつも わたしらしくいよう
+風が連れてくるよ カルペディエム
+ひらり 舞い上がってゆけbloomy
 # Sound
 https://github.com/purerosefallen/ygopro-222DIY-sound

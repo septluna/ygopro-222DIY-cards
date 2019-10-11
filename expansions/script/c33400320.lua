@@ -34,7 +34,7 @@ function c33400320.initial_effect(c)
 	e5:SetCategory(CATEGORY_TOHAND+CATEGORY_REMOVE)
 	e5:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e5:SetCode(EVENT_BATTLE_DESTROYING)
-	e5:SetCountLimit(1,33400320)
+	e5:SetCountLimit(1,33400320+10000)
 	e5:SetCondition(aux.bdcon)
 	e5:SetOperation(c33400320.desop)
 	c:RegisterEffect(e5)
@@ -140,9 +140,10 @@ function c33400320.thfilter1(c)
 	return  c:IsAbleToHand() and c:IsSetCard(0x5341)
 end
 function c33400320.desop(e,tp,eg,ep,ev,re,r,rp)
-	 if  Duel.GetFieldGroupCount(c:GetControler(),0,LOCATION_ONFIELD)==0 then return end
-	 local g1=GetMatchingGroup(nil,tp,0,LOCATION_ONFIELD,nil)
-	 local g2=GetMatchingGroup(c33400320.thfilter1,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil)
+   
+	 if  Duel.GetFieldGroupCount(tp,0,LOCATION_ONFIELD)==0 then return end
+	 local g1=Duel.GetMatchingGroup(nil,tp,0,LOCATION_ONFIELD,nil)
+	 local g2=Duel.GetMatchingGroup(c33400320.thfilter1,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil)
 		 Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 		 local tc=g1:Select(tp,1,1,nil)
 		 Duel.Remove(tc,POS_FACEDOWN,REASON_EFFECT)
