@@ -23,11 +23,8 @@ end
 --Reika effect condition
 function Tenka.ReikaCon(e,tp,eg,ep,ev,re,r,rp)
 	local tp=e:GetHandlerPlayer()
-	if Duel.IsPlayerAffectedByEffect(tp,81015050) then 
-		return true else
-		for i=0,4 do
-			if Duel.GetFieldCard(tp,LOCATION_SZONE,i) then return false end
-		end
+	for i=0,4 do
+		if Duel.GetFieldCard(tp,LOCATION_SZONE,i) then return false end
 	end
 	return true
 end
