@@ -10,7 +10,7 @@ function c81019002.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function c81019002.filter(c)
-	return c:IsCode(81000000,81010000) and c:IsAbleToHand()
+	return c:IsCode(81000000,81011000) and c:IsAbleToHand()
 end
 function c81019002.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c81019002.filter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil) end
