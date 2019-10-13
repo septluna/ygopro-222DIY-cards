@@ -1,4 +1,5 @@
 --眼镜的光辉·上条春菜
+c81008006.card_code_list={81010004}
 function c81008006.initial_effect(c)
 	--search
 	local e1=Effect.CreateEffect(c)

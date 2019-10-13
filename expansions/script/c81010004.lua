@@ -1,4 +1,5 @@
 --水晶世界
+c81010004.card_code_list={81010004}
 function c81010004.initial_effect(c)
 	--activate
 	local e1=Effect.CreateEffect(c)

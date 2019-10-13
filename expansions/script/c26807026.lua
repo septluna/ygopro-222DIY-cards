@@ -1,4 +1,5 @@
 --避暑计划
+c26807026.card_code_list={81010004}
 function c26807026.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)

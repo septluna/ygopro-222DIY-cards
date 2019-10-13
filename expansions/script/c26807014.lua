@@ -1,4 +1,5 @@
 --夕町·杜野凛世
+c26807014.card_code_list={81010004}
 function c26807014.initial_effect(c)
 	--xyz summon
 	aux.AddXyzProcedure(c,nil,7,2)

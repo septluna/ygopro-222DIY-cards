@@ -1,4 +1,5 @@
 --秋叶原探秘
+c26807016.card_code_list={81010004}
 function c26807016.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)

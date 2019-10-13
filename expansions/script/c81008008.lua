@@ -1,4 +1,5 @@
 --辉蓝之羽·绫濑穗乃香
+c81008008.card_code_list={81010004}
 function c81008008.initial_effect(c)
 	--search
 	local e1=Effect.CreateEffect(c)

@@ -1,4 +1,5 @@
 --Stargazer
+c26809018.card_code_list={81010004}
 function c26809018.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()

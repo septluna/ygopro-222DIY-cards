@@ -1,4 +1,5 @@
 --水晶之泪
+c81010042.card_code_list={81010004}
 function c81010042.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)

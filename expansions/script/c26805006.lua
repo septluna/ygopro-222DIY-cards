@@ -1,4 +1,5 @@
 --月刊CLIMAX
+c26805006.card_code_list={81010004}
 function c26805006.initial_effect(c)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)

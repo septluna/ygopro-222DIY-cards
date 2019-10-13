@@ -1,4 +1,5 @@
 --凛世花坛·杜野凛世
+c26805002.card_code_list={81010004}
 function c26805002.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()

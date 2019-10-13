@@ -1,4 +1,5 @@
 --意气风发·西城树里
+c26807024.card_code_list={81010004}
 function c26807024.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()

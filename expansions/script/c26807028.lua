@@ -1,4 +1,5 @@
 --水晶长廊
+c26807028.card_code_list={81010004}
 function c26807028.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)

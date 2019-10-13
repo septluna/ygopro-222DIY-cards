@@ -1,4 +1,5 @@
 --蓝色拿破仑·上条春菜
+c81008007.card_code_list={81010004}
 function c81008007.initial_effect(c)
 	--search
 	local e1=Effect.CreateEffect(c)

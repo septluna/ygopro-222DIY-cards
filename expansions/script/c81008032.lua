@@ -1,4 +1,5 @@
 --辉蓝天鹅湖·绫濑穗乃香
+c81008032.card_code_list={81010004}
 function c81008032.initial_effect(c)
 	--pendulum summon
 	aux.EnablePendulumAttribute(c)

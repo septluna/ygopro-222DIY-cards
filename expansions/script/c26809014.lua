@@ -1,4 +1,5 @@
 --花火倒影
+c26809014.card_code_list={81010004}
 function c26809014.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)

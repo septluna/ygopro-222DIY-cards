@@ -1,4 +1,5 @@
 --印象派·杜野凛世
+c26807018.card_code_list={81010004}
 function c26807018.initial_effect(c)
 	--link summon
 	c:EnableReviveLimit()

@@ -1,4 +1,5 @@
 --海滩铁板烧·小宫果穗
+c26805010.card_code_list={81010004}
 function c26805010.initial_effect(c)
 	--summon with no tribute
 	local e1=Effect.CreateEffect(c)

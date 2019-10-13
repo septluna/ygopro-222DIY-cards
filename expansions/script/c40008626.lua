@@ -89,7 +89,7 @@ function c40008626.rmtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 		local g=Duel.GetMatchingGroup(Card.IsAbleToGrave,0,LOCATION_REMOVED,LOCATION_REMOVED,nil)
 		Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g,g:GetCount(),0,0)
 	else
-	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,LOCATION_MZONE+LOCATION_HAND,LOCATION_MZONE+LOCATION_HAND,e:GetHandler())
+	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,LOCATION_ONFIELD+LOCATION_HAND,LOCATION_ONFIELD+LOCATION_HAND,e:GetHandler())
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,g:GetCount(),0,0)
 	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,g:GetCount()*300)
 	end
@@ -113,7 +113,7 @@ function c40008626.rmop(e,tp,eg,ep,ev,re,r,rp)
 		end
 	end
 	else
-	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,LOCATION_MZONE+LOCATION_HAND,LOCATION_MZONE+LOCATION_HAND,aux.ExceptThisCard(e))
+	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,LOCATION_ONFIELD+LOCATION_HAND,LOCATION_ONFIELD+LOCATION_HAND,aux.ExceptThisCard(e))
 	local ct=Duel.Remove(g,POS_FACEDOWN,REASON_EFFECT) 
 		if ct>0 and g:GetCount()>0 then
 			Duel.BreakEffect()

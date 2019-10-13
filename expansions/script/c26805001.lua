@@ -1,4 +1,5 @@
 --微热风铃·杜野凛世
+c26805001.card_code_list={81010004}
 function c26805001.initial_effect(c)
 	--to hand
 	local e2=Effect.CreateEffect(c)
