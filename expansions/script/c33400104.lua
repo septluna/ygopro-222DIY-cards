@@ -52,10 +52,12 @@ function c33400104.operation(e,tp,eg,ep,ev,re,r,rp)
 	local ct=Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)
 	Duel.SpecialSummonComplete()
 	local  tg=Duel.GetMatchingGroup(c33400104.thfilter,tp,LOCATION_GRAVE,0,nil)
-	if tg and Duel.SelectYesNo(tp,aux.Stringid(33400104,0)) and Duel.GetFlagEffect(tp,33400101)>=2 then
+	if tg  and Duel.GetFlagEffect(tp,33400101)>=2 then
+		if Duel.SelectYesNo(tp,aux.Stringid(33400104,0)) then 
 		local tc1=tg:Select(tp,1,1,nil)
 		Duel.SendtoHand(tc1,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,tc1)
+		end
 	end 
 	Duel.RegisterFlagEffect(tp,33400101,RESET_EVENT+RESET_PHASE+PHASE_END,0,0)
 end
