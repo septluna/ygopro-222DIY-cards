@@ -44,7 +44,7 @@ function c81018022.initial_effect(c)
 	e6:SetCode(EFFECT_CANNOT_ATTACK)
 	e6:SetRange(LOCATION_SZONE)
 	e6:SetTargetRange(LOCATION_MZONE,0)
-	e6:SetTarget(c81018022.ftarget)
+	e6:SetTarget(c81018022.atktg)
 	c:RegisterEffect(e6)
 end
 function c81018022.eqlimit(e,c)
@@ -86,6 +86,6 @@ function c81018022.atkop(e,tp,eg,ep,ev,re,r,rp)
 		pe:SetValue(ct*200)
 	end
 end
-function c81018022.ftarget(e,c)
-	return not e:GetHandler():IsSetCard(0x81b)
+function c81018022.atktg(e,c)
+	return not c:IsSetCard(0x81b)
 end
