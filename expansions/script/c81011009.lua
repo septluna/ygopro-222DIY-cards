@@ -5,5 +5,5 @@ xpcall(function() require("expansions/script/c81000000") end,function() require(
 function cm.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcCode2(c,81000000,81010000,true,true)
+	aux.AddFusionProcCode2(c,81000000,81011000,true,true)
 end
