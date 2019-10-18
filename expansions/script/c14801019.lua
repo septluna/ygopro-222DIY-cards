@@ -64,12 +64,9 @@ function c14801019.efop(e,tp,eg,ep,ev,re,r,rp)
     e1:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
     e1:SetRange(LOCATION_MZONE)
     e1:SetLabel(ep)
-    e1:SetValue(c14801019.tgval)
+    e1:SetValue(1)
     e1:SetReset(RESET_EVENT+RESETS_STANDARD)
     rc:RegisterEffect(e1,true)
-end
-function c14801019.tgval(e,re,rp)
-    return rp==1-e:GetLabel()
 end
 function c14801019.thcon(e,tp,eg,ep,ev,re,r,rp)
     return e:GetHandler():IsReason(REASON_EFFECT)

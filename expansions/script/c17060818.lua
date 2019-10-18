@@ -96,9 +96,10 @@ end
 function cm.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local g1=Duel.GetMatchingGroup(cm.filter1,tp,LOCATION_MZONE,0,nil)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and cm.filter2(chkc,tp) end
-	if chk==0 then return iCount(0,tp,m,1) and Duel.IsExistingTarget(cm.filter2,tp,LOCATION_MZONE,0,1,nil,tp) and g1:GetClassCount(Card.GetLevel)>1 end
+	if chk==0 then return Duel.GetFlagEffect(tp,17060818)==0 and Duel.IsExistingTarget(cm.filter2,tp,LOCATION_MZONE,0,1,nil,tp) and g1:GetClassCount(Card.GetLevel)>1 end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
 	Duel.SelectTarget(tp,cm.filter2,tp,LOCATION_MZONE,0,1,1,nil,tp)
+	Duel.RegisterFlagEffect(tp,17060818,RESET_PHASE+PHASE_END,0,1)
 end
 function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
@@ -110,9 +111,9 @@ function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 			local e1=Effect.CreateEffect(e:GetHandler())
 			e1:SetType(EFFECT_TYPE_SINGLE)
 			e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-			e1:SetCode(EFFECT_CHANGE_LEVEL_FINAL)
+			e1:SetCode(EFFECT_CHANGE_LEVEL)
 			e1:SetValue(lv)
-			e1:SetReset(RESET_EVENT+0x1fe0000)
+			e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 			lc:RegisterEffect(e1)
 			lc=g:GetNext()
 		end

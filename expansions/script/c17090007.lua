@@ -50,15 +50,17 @@ function cm.con(e,c)
 	if c==nil then return true end
 	return Duel.GetMatchingGroupCount(aux.TRUE,c:GetControler(),LOCATION_MZONE,0,nil)==1
 end
+function cm.spfilter(c,ft,tp)
+	return c:IsControler(tp)
+end
 function cm.spcon(e,c)
 	if c==nil then return true end
-	return Duel.GetLocationCount(c:GetControler(),LOCATION_MZONE)>0 and
-		Duel.GetMatchingGroupCount(aux.TRUE,c:GetControler(),LOCATION_MZONE,0,nil)==1
-			and Duel.CheckReleaseGroup(tp,Card.IsReleasable,1,nil)
+	local tp=c:GetControler()
+	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
+	return Duel.GetMatchingGroupCount(aux.TRUE,c:GetControler(),LOCATION_MZONE,0,nil)==1 and Duel.CheckReleaseGroup(tp,cm.spfilter,1,nil,ft,tp)
 end
 function cm.spop(e,tp,eg,ep,ev,re,r,rp,c)
-	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-	local g=Duel.GetFirstMatchingCard(Card.IsReleasable,tp,LOCATION_MZONE,1,nil)
+	local g=Duel.GetFirstMatchingCard(Card.IsReleasable,tp,LOCATION_MZONE,0,nil)
 	Duel.Release(g,REASON_COST)
 end
 function cm.atkfilter(c)
@@ -77,7 +79,7 @@ function cm.sumsuc(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetCountLimit(1)
 		e1:SetCondition(cm.epcon)
 		e1:SetOperation(cm.activate)
-		Duel.RegisterEffect(e1,tp)
+		Duel.RegisterEffect(e1,c:GetControler())
 	end
 end
 function cm.epcon(e,tp,eg,ep,ev,re,r,rp)
@@ -96,14 +98,14 @@ function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 		local e2=e1:Clone()
 		e2:SetCode(EFFECT_UPDATE_DEFENSE)
 		g:RegisterEffect(e2)
-	end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-	local cg=Duel.SelectMatchingCard(tp,aux.TRUE,tp,0,LOCATION_MZONE,1,1,nil)
-	if cg:GetCount()<1 then
-		Duel.Damage(1-tp,1000,REASON_EFFECT)
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
+		local cg=Duel.SelectMatchingCard(tp,aux.TRUE,tp,0,LOCATION_MZONE,1,1,nil)
+		if cg:GetCount()<1 then
+			Duel.Damage(1-tp,1000,REASON_EFFECT)
 		else
-		Duel.HintSelection(cg)
-		Duel.Destroy(cg,REASON_EFFECT)
-		Duel.Damage(1-tp,1000,REASON_EFFECT)
+			Duel.HintSelection(cg)
+			Duel.Destroy(cg,REASON_EFFECT)
+			Duel.Damage(1-tp,1000,REASON_EFFECT)
+		end
 	end
 end
