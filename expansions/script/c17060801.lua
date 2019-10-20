@@ -53,7 +53,7 @@ function cm.Mercenary_Arthur(c)
 end
 function cm.IsMillion_Arthur(c)
 	local m=_G["c"..c:GetCode()]
-	return m and m.is_named_with_Million_Arthur
+	return m and (m.is_named_with_Million_Arthur or c:IsSetCard(0x7f0))
 end
 function cm.atktg(e,c)
 	return c:IsFaceup() and cm.IsMillion_Arthur(c) and c:IsSummonType(SUMMON_TYPE_PENDULUM)

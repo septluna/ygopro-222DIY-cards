@@ -37,7 +37,7 @@ function cm.IsRegal_Arthur(c)
 end
 function cm.IsMillion_Arthur(c)
 	local m=_G["c"..c:GetCode()]
-	return m and m.is_named_with_Million_Arthur
+	return m and (m.is_named_with_Million_Arthur or c:IsSetCard(0x7f0))
 end
 function iCount(name,tp,m,id)
     return ((name=="get" or name=="set")
@@ -63,7 +63,6 @@ end
 function cm.damval(e,re,val,r,rp,rc)
 	return val/2
 end
-
 function cm.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_PENDULUM)
 end
