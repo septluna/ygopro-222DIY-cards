@@ -6,8 +6,8 @@ function c11200087.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_CONTINUOUS_TARGET)
-	e1:SetCountLimit(1,11200087)
-	e1:SetCondition(c11200087.con)
+	e1:SetCountLimit(1,11200087+EFFECT_COUNT_CODE_OATH)
+	e1:SetCost(c11200087.cost)
 	e1:SetTarget(c11200087.target)
 	e1:SetOperation(c11200087.operation)
 	c:RegisterEffect(e1)
@@ -30,8 +30,17 @@ end
 function c11200087.nfilter(c)
 	return c:IsFaceup() and (c:IsType(TYPE_RITUAL) or c:IsType(TYPE_FUSION)) and c:IsAttribute(ATTRIBUTE_FIRE)
 end
-function c11200087.con(e,tp,eg,ep,ev,re,r,rp)
+function c11200087.actcon(e)
 	return Duel.IsExistingMatchingCard(c11200087.nfilter,tp,LOCATION_MZONE,0,1,nil)
+end
+function c11200087.costfilter(c)
+	return c:IsType(TYPE_MONSTER) and c:IsAttribute(ATTRIBUTE_FIRE) and c:IsAbleToRemoveAsCost()
+end
+function c11200087.cost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(c11200087.costfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+	local g=Duel.SelectMatchingCard(tp,c11200087.costfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,1,nil)
+	Duel.Remove(g,POS_FACEUP,REASON_COST)
 end
 function c11200087.filter(c)
 	return c:IsFaceup() and c:IsControlerCanBeChanged()
@@ -82,7 +91,4 @@ function c11200087.descon(e,tp,eg,ep,ev,re,r,rp)
 end
 function c11200087.desop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Destroy(e:GetHandler(),REASON_EFFECT)
-end
-function c11200087.actcon(e)
-	return Duel.IsExistingMatchingCard(Card.IsCode,e:GetHandlerPlayer(),LOCATION_REMOVED,0,1,nil,11200103) or Duel.IsExistingMatchingCard(Card.IsCode,e:GetHandlerPlayer(),LOCATION_REMOVED,0,1,nil,11200104)
 end

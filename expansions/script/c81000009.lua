@@ -14,8 +14,8 @@ function c81000009.initial_effect(c)
 	c:RegisterEffect(e1)
 	--battle damage
 	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetCode(EVENT_BATTLE_START)
+	e2:SetType(EFFECT_TYPE_QUICK_O)
+	e2:SetCode(EVENT_FREE_CHAIN)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,81000009)
 	e2:SetCondition(c81000009.damcon1)
@@ -29,8 +29,8 @@ function c81000009.damval(e,re,val,r,rp,rc)
 	if val<=atk and bit.band(r,REASON_EFFECT)~=0 then return 0 else return val end
 end
 function c81000009.damcon1(e,tp,eg,ep,ev,re,r,rp)
-	local a=Duel.GetAttacker()
-	return a and a:IsControler(1-tp)
+	local ph=Duel.GetCurrentPhase()
+	return ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE
 end
 function c81000009.cfilter(c)
 	return c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsDiscardable()

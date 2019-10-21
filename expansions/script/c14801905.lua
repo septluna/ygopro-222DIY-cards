@@ -44,7 +44,7 @@ function c14801905.initial_effect(c)
     e5:SetCategory(CATEGORY_DAMAGE)
     e5:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
     e5:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_F)
-    e5:SetCode(EVENT_DRAW)
+    e5:SetCode(EVENT_PREDRAW)
     e5:SetCountLimit(1)
     e5:SetRange(LOCATION_MZONE)
     e5:SetCondition(c14801905.damcon)
@@ -90,7 +90,7 @@ function c14801905.antarget(e,c)
     return not c:IsSetCard(0x480d)
 end
 function c14801905.damcon(e,tp,eg,ep,ev,re,r,rp)
-    return Duel.GetTurnPlayer()==tp
+    return tp==Duel.GetTurnPlayer() and Duel.GetFieldGroupCount(tp,LOCATION_DECK,0)>0
 end
 function c14801905.damtg(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return true end
@@ -103,7 +103,7 @@ function c14801905.damop(e,tp,eg,ep,ev,re,r,rp)
     Duel.Damage(p,d,REASON_EFFECT)
 end
 function c14801905.damcon2(e,tp,eg,ep,ev,re,r,rp)
-    return Duel.GetTurnPlayer()~=tp
+    return tp~=Duel.GetTurnPlayer() and Duel.GetFieldGroupCount(1-tp,LOCATION_DECK,0)>0
 end
 function c14801905.damtg2(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return true end

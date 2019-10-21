@@ -27,26 +27,22 @@ function c14801201.initial_effect(c)
     c:RegisterEffect(e2)
 end
 function c14801201.drtg(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duel.IsPlayerCanDraw(tp,1)
-        and Duel.GetFieldGroupCount(tp,0,LOCATION_DECK)>0 end
-    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CARDTYPE)
-    e:SetLabel(Duel.AnnounceType(tp))
+    if chk==0 then return true end
     Duel.SetTargetPlayer(tp)
     Duel.SetTargetParam(1)
-    local ct=Duel.GetFieldGroupCount(tp,0,LOCATION_ONFIELD)
-    Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,ct)
+    Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
+    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CARDTYPE)
+    e:SetLabel(Duel.AnnounceType(tp))
 end
 function c14801201.drop(e,tp,eg,ep,ev,re,r,rp)
-    if Duel.GetFieldGroupCount(tp,0,LOCATION_DECK)==0 then return end
-    local p=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER)
-    local d=Duel.GetFieldGroupCount(tp,0,LOCATION_ONFIELD)
     Duel.ConfirmDecktop(1-tp,1)
     local g=Duel.GetDecktopGroup(1-tp,1)
     local tc=g:GetFirst()
     local opt=e:GetLabel()
     if (opt==0 and tc:IsType(TYPE_MONSTER)) or (opt==1 and tc:IsType(TYPE_SPELL)) or (opt==2 and tc:IsType(TYPE_TRAP)) then
-        Duel.Draw(p,d,REASON_EFFECT)
-    end  
+       local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
+       Duel.Draw(p,d,REASON_EFFECT)
+    end 
 end
 function c14801201.spcon2(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()

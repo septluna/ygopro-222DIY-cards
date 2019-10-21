@@ -28,16 +28,12 @@ function c81000004.initial_effect(c)
 	--atk/def
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD)
-	e3:SetCode(EFFECT_SET_ATTACK_FINAL)
+	e3:SetCode(EFFECT_CANNOT_DIRECT_ATTACK)
 	e3:SetRange(LOCATION_MZONE)
 	e3:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
 	e3:SetCondition(c81000004.imcon)
 	e3:SetTarget(c81000004.atktg)
-	e3:SetValue(0)
 	c:RegisterEffect(e3)
-	local e4=e3:Clone()
-	e4:SetCode(EFFECT_SET_DEFENSE_FINAL)
-	c:RegisterEffect(e4)
 end
 function c81000004.matfilter(c)
 	return c:GetSummonLocation()==LOCATION_EXTRA

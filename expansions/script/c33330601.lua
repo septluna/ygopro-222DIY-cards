@@ -67,6 +67,19 @@ function cm.eqop(e,tp,eg,ep,ev,re,r,rp)
 	e2:SetValue(800)
 	e2:SetReset(RESET_EVENT+RESETS_STANDARD)
 	c:RegisterEffect(e2)
+		Duel.Damage(1-tp,ev,REASON_EFFECT)
+		local e3=Effect.CreateEffect(e:GetHandler())
+		e3:SetType(EFFECT_TYPE_FIELD)
+		e3:SetCode(EFFECT_CHANGE_DAMAGE)
+		e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+		e3:SetTargetRange(1,1)
+		e3:SetValue(cm.damval)
+		e3:SetReset(RESET_PHASE+PHASE_END)
+		Duel.RegisterEffect(e3,tp)
+		local e4=e3:Clone()
+		e4:SetCode(EFFECT_NO_EFFECT_DAMAGE)
+		e4:SetReset(RESET_PHASE+PHASE_END)
+		Duel.RegisterEffect(e4,tp)   
 end
 function cm.eqlimit(e,c)
 	return c==e:GetLabelObject()
@@ -83,6 +96,7 @@ function cm.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function cm.sfilter(c,e,tp)
 	return  c:IsSetCard(0x1553) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+and c
 end
 function cm.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
@@ -92,8 +106,12 @@ end
 function cm.spop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SelectMatchingCard(tp,cm.sfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,1,nil,e,tp)
+	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(cm.sfilter),tp,LOCATION_HAND+LOCATION_GRAVE,0,1,1,nil,e,tp)
 	if g:GetCount()>0 then
 		Duel.SpecialSummon(g,0,tp,tp,false,true,POS_FACEUP)
 	end
+end
+function cm.damval(e,re,val,r,rp,rc)
+	if bit.band(r,REASON_EFFECT)~=0 then return 0
+	else return val end
 end
