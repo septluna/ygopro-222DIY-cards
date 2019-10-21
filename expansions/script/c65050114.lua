@@ -44,10 +44,10 @@ function c65050114.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local tg=Duel.SelectMatchingCard(tp,c65050114.filter,tp,LOCATION_GRAVE+LOCATION_HAND,0,1,1,nil,e,tp)
+	local tg=Duel.SelectMatchingCard(tp,c65050114.filter,tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
 	if tg:GetCount()>0 then
 		local tc=tg:GetFirst()
-		local mg=Duel.GetMatchingGroup(c65050114.matfilter,tp,LOCATION_GRAVE+LOCATION_HAND,0,tc)
+		local mg=Duel.GetMatchingGroup(c65050114.matfilter,tp,LOCATION_GRAVE,0,tc)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 		local mat=mg:SelectWithSumEqual(tp,Card.GetRitualLevel,tc:GetLevel(),1,99,tc)
 		tc:SetMaterial(mat)

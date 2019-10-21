@@ -64,7 +64,7 @@ function c65050112.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	end
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,1-tp,1)
 end
-function c65050112.activate(e,tp,eg,ep,ev,re,r,rp)
+function c65050112.operation(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.NegateActivation(ev) and re:GetHandler():IsRelateToEffect(re) then
 		Duel.Destroy(eg,REASON_EFFECT)
 	end
