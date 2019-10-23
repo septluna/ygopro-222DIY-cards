@@ -85,5 +85,5 @@ function c75646258.op(e,tp,eg,ep,ev,re,r,rp)
 end
 function c75646258.actlimit(e,re,rp)
 	local rc=re:GetHandler()
-	return not rc:IsSetCard(0x2c0) and not c:IsType(TYPE_EQUIP)
+	return not rc:IsSetCard(0x2c0) and not rc:IsType(TYPE_EQUIP)
 end
