@@ -1,17 +1,10 @@
 --烦恼相谈·四条凛香
+require("expansions/script/c81000000")
 function c81041014.initial_effect(c)
 	 --pendulum summon
 	aux.EnablePendulumAttribute(c)
 	c:EnableReviveLimit()
-	--atk
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_SINGLE)
-	e0:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e0:SetRange(LOCATION_MZONE)
-	e0:SetCode(EFFECT_UPDATE_ATTACK)
-	e0:SetCondition(c81041014.atkcon)
-	e0:SetValue(c81041014.atkval)
-	c:RegisterEffect(e0)
+	Tenka.KoikakeRitual(c)
 	--handes
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_HANDES)
@@ -40,13 +33,6 @@ function c81041014.initial_effect(c)
 	e4:SetTarget(c81041014.damtg)
 	e4:SetOperation(c81041014.damop)
 	c:RegisterEffect(e4)
-end
-function c81041014.atkcon(e)
-	local ph=Duel.GetCurrentPhase()
-	return ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE
-end
-function c81041014.atkval(e,c)
-	return c:GetLevel()*300
 end
 function c81041014.cfilter(c,e,tp)
 	return c:IsFaceup() and c:IsControler(tp) and c:IsType(TYPE_RITUAL) and c:IsType(TYPE_PENDULUM) and c:IsCanBeEffectTarget(e)

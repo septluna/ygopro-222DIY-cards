@@ -1,17 +1,10 @@
 --最初回忆·四条凛香
+require("expansions/script/c81000000")
 function c81041004.initial_effect(c)
 	--pendulum summon
 	aux.EnablePendulumAttribute(c)
 	c:EnableReviveLimit()
-	--atk
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_SINGLE)
-	e0:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e0:SetRange(LOCATION_MZONE)
-	e0:SetCode(EFFECT_UPDATE_ATTACK)
-	e0:SetCondition(c81041004.atkcon)
-	e0:SetValue(c81041004.atkval)
-	c:RegisterEffect(e0)
+	Tenka.KoikakeRitual(c)
 	--level
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_IGNITION)
@@ -45,13 +38,6 @@ function c81041004.initial_effect(c)
 	e4:SetTarget(c81041004.psptg)
 	e4:SetOperation(c81041004.pspop)
 	c:RegisterEffect(e4)
-end
-function c81041004.atkcon(e)
-	local ph=Duel.GetCurrentPhase()
-	return ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE
-end
-function c81041004.atkval(e,c)
-	return c:GetLevel()*300
 end
 function c81041004.filter(c)
 	return c:IsFaceup() and c:IsType(TYPE_RITUAL) and c:IsType(TYPE_PENDULUM) and c:GetLevel()>0

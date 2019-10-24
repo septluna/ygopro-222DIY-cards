@@ -1,16 +1,9 @@
 --小鞠由依 & 国见菜子
+require("expansions/script/c81000000")
 function c81041027.initial_effect(c)
 	c:EnableReviveLimit()
 	aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsLinkType,TYPE_EFFECT),2,99,c81041027.lcheck)
-	  --atk up
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_SINGLE)
-	e0:SetCode(EFFECT_UPDATE_ATTACK)
-	e0:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e0:SetRange(LOCATION_MZONE)
-	e0:SetCondition(c81041027.atkcon)
-	e0:SetValue(c81041027.atkval)
-	c:RegisterEffect(e0)
+	Tenka.KoikakeLink(c)
 	--negate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_DISABLE)
@@ -39,17 +32,6 @@ function c81041027.lcheck(g,lc)
 end
 function c81041027.mzfilter(c)
 	return c:IsLinkType(TYPE_RITUAL) and c:IsLinkType(TYPE_PENDULUM) and c:IsAttack(1550) and c:IsDefense(1050)
-end
-function c81041027.atkcon(e)
-	local ph=Duel.GetCurrentPhase()
-	return ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE
-end
-function c81041027.atkfilter(c)
-	return c:IsFaceup() and c:IsType(TYPE_RITUAL) and c:IsType(TYPE_PENDULUM) and c:GetLevel()>0
-end
-function c81041027.atkval(e,c)
-	local lg=c:GetLinkedGroup():Filter(c81041027.atkfilter,nil)
-	return lg:GetSum(Card.GetLevel)*300
 end
 function c81041027.con(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()~=tp

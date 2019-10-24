@@ -1,16 +1,9 @@
 --路上的日常·国见洸太郎
+require("expansions/script/c81000000")
 function c81041009.initial_effect(c)
 	c:EnableReviveLimit()
 	aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsLinkType,TYPE_EFFECT),2,99,c81041009.lcheck)
-	  --atk up
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_SINGLE)
-	e0:SetCode(EFFECT_UPDATE_ATTACK)
-	e0:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e0:SetRange(LOCATION_MZONE)
-	e0:SetCondition(c81041009.atkcon)
-	e0:SetValue(c81041009.atkval)
-	c:RegisterEffect(e0)
+	Tenka.KoikakeLink(c)
 	--tohand
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_TODECK)
@@ -40,17 +33,6 @@ function c81041009.lcheck(g,lc)
 end
 function c81041009.mzfilter(c)
 	return c:IsLinkType(TYPE_RITUAL) and c:IsLinkType(TYPE_PENDULUM) and c:IsAttack(1550) and c:IsDefense(1050)
-end
-function c81041009.atkcon(e)
-	local ph=Duel.GetCurrentPhase()
-	return ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE
-end
-function c81041009.atkfilter(c)
-	return c:IsFaceup() and c:IsType(TYPE_RITUAL) and c:IsType(TYPE_PENDULUM) and c:GetLevel()>0
-end
-function c81041009.atkval(e,c)
-	local lg=c:GetLinkedGroup():Filter(c81041009.atkfilter,nil)
-	return lg:GetSum(Card.GetLevel)*300
 end
 function c81041009.costfilter(c)
 	return c:IsFaceup() and c:IsType(TYPE_RITUAL) and c:IsType(TYPE_PENDULUM) and c:GetLevel()>c:GetOriginalLevel()

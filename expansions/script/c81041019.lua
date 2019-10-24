@@ -1,17 +1,10 @@
 --缄默之言·新堂彩音
+require("expansions/script/c81000000")
 function c81041019.initial_effect(c)
 	--pendulum summon
 	aux.EnablePendulumAttribute(c)
 	c:EnableReviveLimit()
-	--atk
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_SINGLE)
-	e0:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e0:SetRange(LOCATION_MZONE)
-	e0:SetCode(EFFECT_UPDATE_ATTACK)
-	e0:SetCondition(c81041019.atkcon)
-	e0:SetValue(c81041019.atkval)
-	c:RegisterEffect(e0)
+	Tenka.KoikakeRitual(c)
 	--Add counter
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
@@ -37,13 +30,6 @@ function c81041019.initial_effect(c)
 	e3:SetTarget(c81041019.thtg)
 	e3:SetOperation(c81041019.thop)
 	c:RegisterEffect(e3)
-end
-function c81041019.atkcon(e)
-	local ph=Duel.GetCurrentPhase()
-	return ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE
-end
-function c81041019.atkval(e,c)
-	return c:GetLevel()*300
 end
 function c81041019.stkcon(e,tp,eg,ep,ev,re,r,rp)
 	local at=Duel.GetAttacker()

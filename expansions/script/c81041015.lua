@@ -1,17 +1,10 @@
 --国见洸太郎 & 姬野星奏
+require("expansions/script/c81000000")
 function c81041015.initial_effect(c)
 	--link summon
 	aux.AddLinkProcedure(c,c81041015.mfilter,2)
 	c:EnableReviveLimit()
-	--atk up
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_SINGLE)
-	e0:SetCode(EFFECT_UPDATE_ATTACK)
-	e0:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e0:SetRange(LOCATION_MZONE)
-	e0:SetCondition(c81041015.atkcon)
-	e0:SetValue(c81041015.atkval)
-	c:RegisterEffect(e0)
+	Tenka.KoikakeLink(c)
 	--To hand
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_TODECK)
@@ -37,17 +30,6 @@ function c81041015.initial_effect(c)
 end
 function c81041015.mfilter(c)
 	return c:IsAttack(1550) and c:IsDefense(1050)
-end
-function c81041015.atkcon(e)
-	local ph=Duel.GetCurrentPhase()
-	return ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE
-end
-function c81041015.atkfilter(c)
-	return c:IsFaceup() and c:IsType(TYPE_RITUAL) and c:IsType(TYPE_PENDULUM) and c:GetLevel()>0
-end
-function c81041015.atkval(e,c)
-	local lg=c:GetLinkedGroup():Filter(c81041015.atkfilter,nil)
-	return lg:GetSum(Card.GetLevel)*300
 end
 function c81041015.thfilter(c)
 	return c:IsCode(81041005) and c:IsFaceup() and c:IsAbleToHand()
