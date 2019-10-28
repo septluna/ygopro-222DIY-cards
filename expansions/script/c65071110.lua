@@ -26,7 +26,7 @@ function c65071110.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsPlayerCanDraw(tp,e:GetLabel()) end
 	Duel.SetTargetPlayer(tp)
 	Duel.SetTargetParam(e:GetLabel())
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,0,tp,e:GetLabel())
+	Duel.SetOperationInfo(0,CATEGORY_DRAW,0,0,tp,e:GetLabel())
 end
 
 function c65071110.activate(e,tp,eg,ep,ev,re,r,rp)
