@@ -58,9 +58,9 @@ function c81011015.disop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.Destroy(eg,REASON_EFFECT)
 	end
 end
-function c81011015.tgfilter(e,c)
-	return c:GetAttack()<e:GetHandler():GetAttack() and c:IsRace(RACE_FAIRY) and c:IsAttribute(ATTRIBUTE_LIGHT)
+function c81011015.tgfilter(c,atk)
+	return c:IsFaceup() and c:GetAttack()<atk and c:IsRace(RACE_FAIRY) and c:IsAttribute(ATTRIBUTE_LIGHT)
 end
 function c81011015.tgcon(e)
-	return Duel.IsExistingMatchingCard(c81011015.tgfilter,e:GetHandlerPlayer(),LOCATION_MZONE,0,1,nil) and e:GetHandler():GetAttack()<=800
+	return Duel.IsExistingMatchingCard(c81011015.tgfilter,tp,LOCATION_MZONE,0,1,nil,e:GetHandler():GetAttack()) and e:GetHandler():GetAttack()<=800
 end
