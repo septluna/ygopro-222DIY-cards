@@ -61,7 +61,7 @@ function c81011302.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function c81011302.thfilter(c,lv)
-	return c:IsLevel(lv) and c:IsRace(RACE_DRAGON) and c:IsAbleToHand()
+	return c:IsLevel(lv) and c:IsType(TYPE_RITUAL) and c:IsType(TYPE_PENDULUM) and c:IsAbleToHand()
 end
 function c81011302.thop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
