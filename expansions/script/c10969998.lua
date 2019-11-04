@@ -1,4 +1,4 @@
---御魂术
+-御魂术
 function c10969998.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)
@@ -9,6 +9,19 @@ function c10969998.initial_effect(c)
 	e1:SetTarget(c10969998.target)
 	e1:SetOperation(c10969998.activate)
 	c:RegisterEffect(e1)
+	if not c10969998.global_check then
+		c10969998.global_check=true
+		local ge1=Effect.CreateEffect(c)
+		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		ge1:SetCode(EVENT_CHAINING)
+		ge1:SetOperation(c10969998.checkop)
+		Duel.RegisterEffect(ge1,0)
+	end
+end
+function c10969998.checkop(e,tp,eg,ep,ev,re,r,rp)
+	if re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:IsActiveType(TYPE_SPELL) and not re:GetHandler():IsCode(10969998) then
+		Duel.RegisterFlagEffect(rp,20822521,RESET_PHASE+PHASE_END,0,1)
+	end
 end
 function c10969998.filter(c)
 	return c:IsFaceup() and c:GetSummonLocation()==LOCATION_EXTRA and (c:GetSequence()>=5 or c:IsRace(RACE_ZOMBIE))  

@@ -44,7 +44,7 @@ function c33400423.spop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function c33400423.cnfilter(c)
-	return c:IsSetCard(0x9343) 
+	return c:IsSetCard(0x6343) or (c:IsSetCard(0x9343) and c:IsType(TYPE_SPELL+TYPE_TRAP)) and c:IsFaceup()
 end
 function c33400423.condition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsExistingMatchingCard(c33400423.cnfilter,tp,LOCATION_ONFIELD,0,1,nil)
@@ -81,9 +81,7 @@ function c33400423.drop(e,tp,eg,ep,ev,re,r,rp)
 		   Duel.IsExistingMatchingCard(Card.IsFaceup,tp,0,LOCATION_MZONE,1,nil) and 
 			(Duel.IsExistingMatchingCard(c33400423.cccfilter1,tp,LOCATION_SZONE,0,1,nil) or 
 			Duel.IsExistingMatchingCard(c33400423.cccfilter2,tp,LOCATION_MZONE,0,1,nil))
-		  ) and 
-		Duel.GetFieldGroupCount(e:GetHandler():GetControler(),LOCATION_MZONE,0,nil)<
-		Duel.GetFieldGroupCount(e:GetHandler():GetControler(),0,LOCATION_MZONE,nil) then   
+		  ) then   
 			if   Duel.SelectYesNo(tp,aux.Stringid(33400423,1)) then 
 			  Duel.Draw(tp,1,REASON_EFFECT)
 			end 

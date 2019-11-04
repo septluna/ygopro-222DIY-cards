@@ -22,7 +22,7 @@ function cm.LoadMetatable(code)
 	local m2=cm.loaded_metatable_list[code]
 	if m2 then return m2 end
 	_G["c"..code]={}
-	if pcall(function() dofile("expansions/script/c"..code..".lua") end) or pcall(function() dofile("script/c"..code..".lua") end) then
+	if pcall(function() Duel.LoadScript("c"..code..".lua") end) then
 		local mt=_G["c"..code]
 		_G["c"..code]=nil
 		if mt then
@@ -621,9 +621,10 @@ function cm.SawawaSpsummonCost(ct,exf)
 		   end
 end
 function cm.SelfSpsummonTarget(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetMZoneCount(tp)>0
-		and e:GetHandler():IsCanBeSpecialSummoned(e,0,tp,false,false) end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,e:GetHandler(),1,0,0)
+	local c=e:GetHandler()
+	if chk==0 then return cm.CheckSummonLocation(c,tp,nil)
+		and c:IsCanBeSpecialSummoned(e,0,tp,false,false) end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
 end
 function cm.SelfSpsummonOperation(e,tp,eg,ep,ev,re,r,rp)
 	if e:GetHandler():IsRelateToEffect(e) then

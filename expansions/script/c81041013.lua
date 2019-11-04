@@ -1,17 +1,10 @@
 --花园少女·小鞠由依
+require("expansions/script/c81000000")
 function c81041013.initial_effect(c)
 	--pendulum summon
 	aux.EnablePendulumAttribute(c)
 	c:EnableReviveLimit()
-	--atk
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_SINGLE)
-	e0:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e0:SetRange(LOCATION_MZONE)
-	e0:SetCode(EFFECT_UPDATE_ATTACK)
-	e0:SetCondition(c81041013.atkcon)
-	e0:SetValue(c81041013.atkval)
-	c:RegisterEffect(e0)
+	Tenka.KoikakeRitual(c)
 	--level
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_IGNITION)
@@ -41,13 +34,6 @@ function c81041013.initial_effect(c)
 	e3:SetTarget(c81041013.drtg)
 	e3:SetOperation(c81041013.drop)
 	c:RegisterEffect(e3)
-end
-function c81041013.atkcon(e)
-	local ph=Duel.GetCurrentPhase()
-	return ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE
-end
-function c81041013.atkval(e,c)
-	return c:GetLevel()*300
 end
 function c81041013.lvcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsDiscardable,tp,LOCATION_HAND,0,1,nil) end

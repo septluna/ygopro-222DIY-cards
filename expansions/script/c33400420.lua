@@ -33,7 +33,7 @@ function c33400420.cccfilter2(c)
 end
 function c33400420.ccfilter(e,tp,eg,ep,ev,re,r,rp)
 	return  Duel.IsExistingMatchingCard(Card.IsFaceup,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil) and 
-   (Duel.IsExistingMatchingCard(c33400420.cccfilter1,tp,LOCATION_SZONE,0,1,nil) or 
+   (Duel.IsExistingMatchingCard(c33400420.cccfilter1,tp,LOCATION_ONFIELD,0,1,nil) or 
 	Duel.IsExistingMatchingCard(c33400420.cccfilter2,tp,LOCATION_MZONE,0,1,nil) 
 	)
 end
@@ -52,10 +52,10 @@ function c33400420.spop(e,tp,eg,ep,ev,re,r,rp)
 	  if  Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP) then 
 			if Duel.IsExistingMatchingCard(c33400420.filter,tp,LOCATION_GRAVE,0,1,nil,e,tp,e:GetHandler())
 			and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and not Duel.IsExistingMatchingCard(c33400420.spcfilter,tp,LOCATION_MZONE,0,1,nil) then
-				if  Duel.IsExistingMatchingCard(c33400420.spcfilter,tp,0,LOCATION_MZONE,1,nil)	   
+				if  Duel.IsExistingMatchingCard(c33400420.spcfilter,tp,0,LOCATION_MZONE,1,nil)   
 				or
 				  (  Duel.IsExistingMatchingCard(Card.IsFaceup,tp,0,LOCATION_MZONE,1,nil) and 
-					(Duel.IsExistingMatchingCard(c33400420.cccfilter1,tp,LOCATION_SZONE,0,1,nil) or 
+					(Duel.IsExistingMatchingCard(c33400420.cccfilter1,tp,LOCATION_ONFIELD,0,1,nil) or 
 					Duel.IsExistingMatchingCard(c33400420.cccfilter2,tp,LOCATION_MZONE,0,1,nil) 
 					)
 				  )
@@ -92,18 +92,6 @@ function c33400420.spop1(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c33400420.spfilter1,tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
 	if g:GetCount()>0 then
-		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
-	  local tc=g:GetFirst()
-		 local e1=Effect.CreateEffect(e:GetHandler())
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_DISABLE)
-		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-		tc:RegisterEffect(e1)
-		local e2=Effect.CreateEffect(e:GetHandler())
-		e2:SetType(EFFECT_TYPE_SINGLE)
-		e2:SetCode(EFFECT_DISABLE_EFFECT)
-		e2:SetReset(RESET_EVENT+RESETS_STANDARD)
-		tc:RegisterEffect(e2)
-	   
+		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)	
 	end
 end

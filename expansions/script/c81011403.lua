@@ -2,7 +2,7 @@
 function c81011403.initial_effect(c)
 	--link summon
 	c:EnableReviveLimit()
-	aux.AddLinkProcedure(c,nil,3,3)
+	aux.AddLinkProcedure(c,nil,2,2)
 	--direct attack
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)

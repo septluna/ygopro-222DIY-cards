@@ -86,10 +86,10 @@ function c33400462.operation(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function c33400462.descon1(e,tp,eg,ep,ev,re,r,rp)
-	  return not (e:GetHandler():GetEquipTarget():IsType(TYPE_XYZ) and e:GetHandler():GetEquipTarget():IsRankAbove(8))
+	  return not (e:GetHandler():GetEquipTarget():IsType(TYPE_XYZ) )
 end
 function c33400462.descon2(e,tp,eg,ep,ev,re,r,rp)
-	  return e:GetHandler():GetEquipTarget():IsType(TYPE_XYZ) and e:GetHandler():GetEquipTarget():IsRankAbove(8)
+	  return e:GetHandler():GetEquipTarget():IsType(TYPE_XYZ) 
 end
 function c33400462.destg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsOnField() and chkc:IsControler(1-tp) end

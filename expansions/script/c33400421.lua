@@ -47,12 +47,31 @@ end
 function c33400421.spop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) then return end
-	if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP) then 
-	local tc=Duel.GetMatchingGroup(c33400421.cfilter2,tp,LOCATION_ONFIELD,0,nil)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-	local tc1=tc:Select(tp,1,1,nil)
-	Duel.Destroy(tc1,REASON_EFFECT)
+	if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)~=0 and not Duel.IsExistingMatchingCard(Card.IsSetCard,tp,LOCATION_MZONE,0,1,nil,0x341) and Duel.IsExistingMatchingCard(c33400421.filter,tp,LOCATION_ONFIELD,0,1,nil,e,tp) then
+		if  Duel.IsExistingMatchingCard(Card.IsSetCard,tp,0,LOCATION_MZONE,1,nil,0x341)   
+		or (  Duel.IsExistingMatchingCard(Card.IsFaceup,tp,0,LOCATION_MZONE,1,nil) and 
+			(Duel.IsExistingMatchingCard(c33400421.cccfilter1,tp,LOCATION_ONFIELD,0,1,nil) or 
+			Duel.IsExistingMatchingCard(c33400421.cccfilter2,tp,LOCATION_MZONE,0,1,nil))
+		  ) then 
+			if Duel.SelectYesNo(tp,aux.Stringid(33400421,0)) then 
+				Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
+				local tc=Duel.SelectMatchingCard(tp,c33400421.filter,tp,LOCATION_ONFIELD,0,1,1,nil,e,tp)   
+				   Duel.Release(tc,REASON_EFFECT)
+				   Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+				   local tc2=Duel.SelectMatchingCard(tp,c33400421.tfilter,tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
+				   Duel.SpecialSummon(tc2,0,tp,tp,false,false,POS_FACEUP)
+				
+			end
+		end
 	end
+end
+function c33400421.tfilter(c,e,tp)
+	return c:IsSetCard(0x9343) and c:IsType(TYPE_MONSTER) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+end
+function c33400421.filter(c,e,tp)
+	return  c:IsSetCard(0x6343) or c:IsSetCard(0x9343) and c:IsReleasable()
+		and Duel.IsExistingMatchingCard(c33400421.tfilter,tp,LOCATION_GRAVE,0,1,nil,e,tp)
+		and Duel.GetLocationCountFromEx(tp,tp,c)>0
 end
 
 function c33400421.thp(e,tp,eg,ep,ev,re,r,rp)
@@ -83,9 +102,9 @@ function c33400421.thop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 	local g=Duel.SelectMatchingCard(tp,c33400421.thfilter,tp,LOCATION_GRAVE,0,1,1,nil)  
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
-	 if (Duel.IsExistingMatchingCard(c33400421.cccfilter1,tp,LOCATION_SZONE,0,1,nil) or 
+	 if (Duel.IsExistingMatchingCard(c33400421.cccfilter1,tp,LOCATION_ONFIELD,0,1,nil) or 
 	Duel.IsExistingMatchingCard(c33400421.cccfilter2,tp,LOCATION_MZONE,0,1,nil) 
-	)or (e:GetHandler():GetBattleTarget():IsSetCard(0x341)) and Duel.IsExistingMatchingCard(c33400421.thfilter2,tp,LOCATION_GRAVE,0,1,nil) and   rp==1-tp then
+	)or (e:GetHandler():GetBattleTarget():IsSetCard(0x341)) and Duel.IsExistingMatchingCard(c33400421.thfilter2,tp,LOCATION_GRAVE,0,1,nil)  then
 		  if Duel.SelectYesNo(tp,aux.Stringid(33400421,2)) then 
 			  local g2=Duel.GetMatchingGroup(c33400421.thfilter2,tp,LOCATION_GRAVE,0,1,nil)
 			  local g3=g2:Select(tp,1,1,nil)

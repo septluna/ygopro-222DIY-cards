@@ -1,17 +1,10 @@
 --最初回忆·小鞠由依
+require("expansions/script/c81000000")
 function c81041003.initial_effect(c)
 	--pendulum summon
 	aux.EnablePendulumAttribute(c)
 	c:EnableReviveLimit()
-	--atk
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_SINGLE)
-	e0:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e0:SetRange(LOCATION_MZONE)
-	e0:SetCode(EFFECT_UPDATE_ATTACK)
-	e0:SetCondition(c81041003.atkcon)
-	e0:SetValue(c81041003.atkval)
-	c:RegisterEffect(e0)
+	Tenka.KoikakeRitual(c)
 	--level up
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
@@ -47,13 +40,6 @@ function c81041003.initial_effect(c)
 	e5:SetTarget(c81041003.rdtg)
 	e5:SetOperation(c81041003.rdop)
 	c:RegisterEffect(e5)
-end
-function c81041003.atkcon(e)
-	local ph=Duel.GetCurrentPhase()
-	return ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE
-end
-function c81041003.atkval(e,c)
-	return c:GetLevel()*300
 end
 function c81041003.lvcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()==tp and (Duel.GetCurrentPhase()>=PHASE_BATTLE_START and Duel.GetCurrentPhase()<=PHASE_BATTLE)

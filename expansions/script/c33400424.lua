@@ -54,9 +54,7 @@ function c33400424.thop(e,tp,eg,ep,ev,re,r,rp)
 	   Duel.IsExistingMatchingCard(Card.IsFaceup,tp,0,LOCATION_MZONE,1,nil) and 
 		(Duel.IsExistingMatchingCard(c33400423.cccfilter1,tp,LOCATION_SZONE,0,1,nil) or 
 		Duel.IsExistingMatchingCard(c33400423.cccfilter2,tp,LOCATION_MZONE,0,1,nil))
-	  ) and 
-	Duel.GetFieldGroupCount(tp,LOCATION_ONFIELD,0,nil)<
-	Duel.GetFieldGroupCount(tp,0,LOCATION_ONFIELD,nil) then   
+	  ) then   
 		   tcnm=2
 	end
 	local g1=Duel.SelectMatchingCard(tp,c33400424.rthcfilter,tp,LOCATION_ONFIELD,0,1,1,c,tp)

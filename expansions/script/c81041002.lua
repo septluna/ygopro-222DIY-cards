@@ -1,17 +1,10 @@
 --最初回忆·新堂彩音
+require("expansions/script/c81000000")
 function c81041002.initial_effect(c)
 	--pendulum summon
 	aux.EnablePendulumAttribute(c)
 	c:EnableReviveLimit()
-	--atk
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_SINGLE)
-	e0:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e0:SetRange(LOCATION_MZONE)
-	e0:SetCode(EFFECT_UPDATE_ATTACK)
-	e0:SetCondition(c81041002.atkcon)
-	e0:SetValue(c81041002.atkval)
-	c:RegisterEffect(e0)
+	Tenka.KoikakeRitual(c)
 	--level
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_IGNITION)
@@ -37,13 +30,6 @@ function c81041002.initial_effect(c)
 	e3:SetTarget(c81041002.ktarget)
 	e3:SetOperation(c81041002.koperation)
 	c:RegisterEffect(e3)
-end
-function c81041002.atkcon(e)
-	local ph=Duel.GetCurrentPhase()
-	return ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE
-end
-function c81041002.atkval(e,c)
-	return c:GetLevel()*300
 end
 function c81041002.cfilter(c)
 	return c:IsType(TYPE_RITUAL) and c:IsType(TYPE_PENDULUM)

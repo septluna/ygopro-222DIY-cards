@@ -60,13 +60,15 @@ function c65050105.disop2(e,tp,eg,ep,ev,re,r,rp)
 			local g1=Duel.SelectMatchingCard(tp,c65050105.thfil1,tp,LOCATION_DECK,0,1,1,nil)
 			local g11=Duel.SelectMatchingCard(tp,c65050105.thfil2,tp,LOCATION_DECK,0,1,1,nil)
 			g1:Merge(g11)
-			Duel.SpecialSummon(g1,0,tp,tp,false,false,POS_FACEUP)
+			Duel.SendtoHand(g1,tp,REASON_EFFECT)
+			Duel.ConfirmCards(1-tp,g1)
 		end
 		if Duel.IsExistingMatchingCard(c65050105.thfil1,1-tp,LOCATION_DECK,0,1,nil) and Duel.IsExistingMatchingCard(c65050105.thfil2,1-tp,LOCATION_DECK,0,1,nil) and Duel.SelectYesNo(1-tp,aux.Stringid(65050105,1)) then
 			local g2=Duel.SelectMatchingCard(1-tp,c65050105.thfil1,1-tp,LOCATION_DECK,0,1,1,nil)
 			local g22=Duel.SelectMatchingCard(1-tp,c65050105.thfil2,1-tp,LOCATION_DECK,0,1,1,nil)
 			g2:Merge(g22)
-			Duel.SpecialSummon(g2,0,1-tp,1-tp,false,false,POS_FACEUP)
+			Duel.SendtoHand(g2,1-tp,REASON_EFFECT)
+			Duel.ConfirmCards(tp,g2)
 		end
 	end
 end

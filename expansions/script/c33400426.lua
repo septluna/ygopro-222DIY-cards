@@ -53,26 +53,10 @@ function c33400426.thop(e,tp,eg,ep,ev,re,r,rp)
 			 local g=Duel.SelectMatchingCard(tp,c33400426.thfilter2,tp,LOCATION_DECK,0,1,1,nil,tc:GetCode())
 			 if g:GetCount()>0 then
 				Duel.SendtoHand(g,tp,REASON_EFFECT)
-				Duel.ConfirmCards(1-tp,g)
-				local e1=Effect.CreateEffect(e:GetHandler())
-				e1:SetType(EFFECT_TYPE_FIELD)
-				e1:SetCode(EFFECT_CANNOT_ACTIVATE)
-				e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-				e1:SetTargetRange(1,0)
-				e1:SetTarget(c33400426.sumlimit)   
-				e1:SetValue(c33400426.aclimit)
-				e1:SetLabel(tc:GetCode())
-				e1:SetReset(RESET_PHASE+PHASE_END)
-				Duel.RegisterEffect(e1,tp)
+				Duel.ConfirmCards(1-tp,g)			 
 			 end
 		end
 	end
-end
-function c33400426.sumlimit(e,c)
-	return c:IsCode(e:GetLabel())
-end
-function c33400426.aclimit(e,re,tp)
-	return re:GetHandler():IsCode(e:GetLabel())
 end
 
 function c33400426.setfilter1(c,tp)

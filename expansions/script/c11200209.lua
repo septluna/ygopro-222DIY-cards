@@ -28,24 +28,23 @@ function cm.initial_effect(c)
 	e3:SetCondition(cm.spcon)
 	e3:SetOperation(cm.spop)
 	c:RegisterEffect(e3)
-	--actlimit
+	--tohand
 	local e4=Effect.CreateEffect(c)
-	e4:SetType(EFFECT_TYPE_FIELD)
-	e4:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e4:SetCode(EFFECT_CANNOT_ACTIVATE)
-	e4:SetRange(LOCATION_MZONE)
-	e4:SetTargetRange(0,1)
-	e4:SetValue(1)
-	e4:SetCondition(cm.actcon)
+	e4:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_DESTROY)
+	e4:SetType(EFFECT_TYPE_IGNITION)
+	e4:SetRange(LOCATION_PZONE)
+	e4:SetCountLimit(1,11200209)
+	e4:SetTarget(cm.thtg)
+	e4:SetOperation(cm.thop)
 	c:RegisterEffect(e4)
-	--cannot be target
+	--remove
 	local e5=Effect.CreateEffect(c)
-	e5:SetType(EFFECT_TYPE_SINGLE)
-	e5:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e5:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
-	e5:SetRange(LOCATION_MZONE)
-	e5:SetCondition(cm.bctcon)
-	e5:SetValue(aux.tgoval)
+	e5:SetCategory(CATEGORY_REMOVE)
+	e5:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e5:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
+	e5:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e5:SetTarget(cm.target)
+	e5:SetOperation(cm.operation)
 	c:RegisterEffect(e5)
 	--todeck
 	local e6=Effect.CreateEffect(c)
@@ -53,7 +52,7 @@ function cm.initial_effect(c)
 	e6:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e6:SetCode(EVENT_REMOVE)
 	e6:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DELAY)
-	e6:SetCountLimit(1,26807956)
+	e6:SetCountLimit(1,11209209)
 	e6:SetTarget(cm.tgtg)
 	e6:SetOperation(cm.tdop)
 	c:RegisterEffect(e6)
@@ -91,15 +90,6 @@ function cm.spop(e,tp,eg,ep,ev,re,r,rp,c)
 	end
 	Duel.Release(g,REASON_COST)
 end
-function cm.nfilter(c)
-	return c:IsFaceup() and (c:IsType(TYPE_RITUAL) or c:IsType(TYPE_FUSION)) and c:IsAttribute(ATTRIBUTE_FIRE)
-end
-function cm.actcon(e)
-	return Duel.GetAttacker()==e:GetHandler() or Duel.GetAttackTarget()==e:GetHandler() and Duel.IsExistingMatchingCard(cm.nfilter,tp,LOCATION_MZONE,0,1,nil)
-end
-function cm.bctcon(e)
-	return Duel.IsExistingMatchingCard(cm.nfilter,tp,LOCATION_MZONE,0,1,nil)
-end
 function cm.tgfilter(c)
 	return c:IsAbleToDeck() and c:IsFaceup() and not c:IsCode(m)
 end
@@ -114,5 +104,44 @@ function cm.tdop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS):Filter(Card.IsRelateToEffect,nil,e)
 	if g:GetCount()>0 then
 		Duel.SendtoDeck(g,nil,2,REASON_EFFECT)
+	end
+end
+function cm.thfilter(c)
+	return c:IsCode(11200086) and c:IsAbleToHand()
+end
+function cm.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(cm.thfilter,tp,LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED)
+end
+function cm.thop(e,tp,eg,ep,ev,re,r,rp)
+	if not e:GetHandler():IsRelateToEffect(e) then return end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+	local g=Duel.SelectMatchingCard(tp,cm.thfilter,tp,LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil)
+	if g:GetCount()>0 then
+		Duel.SendtoHand(g,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,g)
+		Duel.BreakEffect()
+		Duel.Destroy(c,REASON_EFFECT)
+	end
+end
+function cm.asfilter(c)
+	return c:IsFaceup() and c:IsType(TYPE_PENDULUM) and c:IsAbleToRemove()
+end
+function cm.target(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(cm.asfilter,tp,LOCATION_EXTRA,LOCATION_EXTRA,1,nil) end
+	local g=Duel.GetMatchingGroup(cm.asfilter,tp,LOCATION_EXTRA,LOCATION_EXTRA,nil)
+	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,g:GetCount(),0,0)
+end
+function cm.operation(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroup(cm.asfilter,tp,LOCATION_EXTRA,LOCATION_EXTRA,nil)
+	local ct=Duel.Remove(g,POS_FACEUP,REASON_EFFECT)
+	local c=e:GetHandler()
+	if ct>0 and c:IsFaceup() and c:IsRelateToEffect(e) then
+		local e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_UPDATE_ATTACK)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_DISABLE)
+		e1:SetValue(ct*300)
+		c:RegisterEffect(e1)
 	end
 end

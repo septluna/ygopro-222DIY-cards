@@ -29,7 +29,7 @@ function c33400432.descon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_SYNCHRO)
 end
 function c33400432.filter(c)
-	return c:IsFaceup() and c:IsSetCard(0x6343)
+	return c:IsFaceup() and c:IsSetCard(0x9343)
 end
 function c33400432.filter2(c)
 	return c:IsSetCard(0x6343)   and c:IsAbleToHand()
@@ -42,6 +42,15 @@ function c33400432.cccfilter1(c)
 end
 function c33400432.cccfilter2(c)
 	return c:IsCode(33400425) and c:IsFaceup() and c:IsSummonType(SUMMON_TYPE_XYZ)
+end
+function c33400432.filter11(c)
+	return c:IsFaceup() and c:IsSetCard(0x9343) and c:IsType(TYPE_MONSTER)
+end
+function c33400432.filter12(c)
+	return c:IsFaceup() and c:IsSetCard(0x9343)and c:IsType(TYPE_SPELL)
+end
+function c33400432.filter13(c)
+	return c:IsFaceup() and c:IsSetCard(0x9343)and c:IsType(TYPE_TRAP)
 end
 function c33400432.destg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsOnField() and chkc:IsControler(1-tp)  end
@@ -60,10 +69,19 @@ function c33400432.destg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 			then
 				Duel.RegisterFlagEffect(tp,33400432,RESET_EVENT+0x1fe0000+RESET_CHAIN,0,0)
 	end 
-	local ct=Duel.GetMatchingGroupCount(c33400432.filter,tp,LOCATION_ONFIELD,0,nil)
+	local ct=0
+	if  Duel.IsExistingMatchingCard(c33400432.filter11,tp,LOCATION_ONFIELD,0,1,nil) then
+		ct=ct+1
+	end
+	if  Duel.IsExistingMatchingCard(c33400432.filter12,tp,LOCATION_ONFIELD,0,1,nil) then
+		ct=ct+1
+	end
+	if  Duel.IsExistingMatchingCard(c33400432.filter13,tp,LOCATION_ONFIELD,0,1,nil) then
+		ct=ct+1
+	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
 	local g=Duel.SelectTarget(tp,aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,ct,nil)
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,g:GetCount(),0,0)
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,g:GetCount(),0,0)
 end
 function c33400432.desop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS):Filter(Card.IsRelateToEffect,nil,e)

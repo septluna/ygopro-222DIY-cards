@@ -56,7 +56,7 @@ function c14801725.operation(e,tp,eg,ep,ev,re,r,rp)
     end
 end
 function c14801725.dicost(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duel.IsExistingMatchingCard(Card.IsDiscardable,tp,LOCATION_GRAVE,0,1,e:GetHandler()) end
+    if chk==0 then return Duel.IsExistingMatchingCard(Card.IsDiscardable,tp,LOCATION_HAND,0,1,e:GetHandler()) end
     Duel.DiscardHand(tp,Card.IsDiscardable,1,1,REASON_COST+REASON_DISCARD)
 end
 function c14801725.distg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

@@ -2,7 +2,7 @@
 function c81009021.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcFun2(c,aux.FilterBoolFunction(Card.IsFusionAttribute,ATTRIBUTE_FIRE),c81009021.ffilter,false)
+	aux.AddFusionProcFun2(c,c81009021.affilter,c81009021.bffilter,false)
 	aux.AddContactFusionProcedure(c,Card.IsReleasable,LOCATION_MZONE,0,Duel.Release,REASON_COST+REASON_FUSION+REASON_MATERIAL)
 	--spsummon condition
 	local e0=Effect.CreateEffect(c)
@@ -39,7 +39,10 @@ end
 function c81009021.splimit(e,se,sp,st)
 	return not e:GetHandler():IsLocation(LOCATION_EXTRA) or aux.fuslimit(e,se,sp,st)
 end
-function c81009021.ffilter(c)
+function c81009021.affilter(c)
+	return c:IsFusionAttribute(ATTRIBUTE_FIRE) and bit.band(c:GetType(),0x81)==0x81
+end
+function c81009021.bffilter(c)
 	return c:IsFusionAttribute(ATTRIBUTE_FIRE) and not c:IsFusionType(TYPE_TOKEN)
 end
 function c81009021.cfilter(c)
