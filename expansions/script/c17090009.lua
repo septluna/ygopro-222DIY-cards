@@ -18,8 +18,8 @@ function cm.initial_effect(c)
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
     e2:SetCode(EVENT_SUMMON_SUCCESS)
-	e2:SetTarget(cm.target)
 	e2:SetOperation(cm.activate)
+	c:RegisterEffect(e2)
 	local e3=e2:Clone()
 	e3:SetCode(EVENT_SPSUMMON_SUCCESS)
 	c:RegisterEffect(e3)
@@ -52,9 +52,6 @@ function cm.tdop(e,tp,eg,ep,ev,re,r,rp)
 end
 function cm.rmfilter(c)
 	return not c:IsSetCard(0x47f2)
-end
-function cm.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(cm.rmfilter,tp,LOCATION_DECK,0,1,nil) end
 end
 function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(cm.rmfilter,tp,LOCATION_DECK,0,nil)
