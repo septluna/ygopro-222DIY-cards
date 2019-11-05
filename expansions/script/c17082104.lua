@@ -50,16 +50,6 @@ function cm.initial_effect(c)
 	e4:SetCondition(cm.damcon)
 	e4:SetOperation(cm.damop)
 	c:RegisterEffect(e4)
-	--back
-	local e5=Effect.CreateEffect(c)
-	e5:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e5:SetCode(EVENT_LEAVE_FIELD)
-	e5:SetRange(LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED+LOCATION_HAND+LOCATION_EXTRA)
-	e5:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_SET_AVAILABLE)
-	e5:SetCountLimit(1)
-	e5:SetCondition(cm.backon)
-	e5:SetOperation(cm.backop)
-	c:RegisterEffect(e5)
 	--atk voice
 	local e6=Effect.CreateEffect(c)
 	e6:SetCategory(CATEGORY_ATKCHANGE)
@@ -77,18 +67,6 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e7)
 end
 cm.pendulum_level=8
-function cm.backon(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	return c.dfc_front_side and c:GetOriginalCode()==c.dfc_back1_side
-end
-function cm.backop(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local tcode=c.dfc_front_side
-	c:SetEntityCode(tcode)
-	Duel.ConfirmCards(tp,Group.FromCards(c))
-	Duel.ConfirmCards(1-tp,Group.FromCards(c))
-	c:ReplaceEffect(tcode,0,0)
-end
 function cm.imcon(e)
 	return e:GetHandler():GetOverlayCount()>0
 end

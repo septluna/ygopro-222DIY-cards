@@ -50,10 +50,6 @@ function cm.initial_effect(c)
 				else return false end
 			end)
 	e0:SetOperation(function(e,tp,eg,ep,ev,re,r,rp,c,og,min,max)
-				local tcode=e:GetHandler().dfc_back_side
-				e:GetHandler():SetEntityCode(tcode,true)
-				e:GetHandler():ReplaceEffect(tcode,0,0)
-				Duel.ShuffleExtra(tp)
 				if og and not min then
 					local sg=Group.CreateGroup()
 					local tc=og:GetFirst()
@@ -79,6 +75,22 @@ function cm.initial_effect(c)
 					Duel.Overlay(c,mg)
 					mg:DeleteGroup()
 				end
+				--back
+				local e1=Effect.CreateEffect(e:GetHandler())
+				e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+				e1:SetCode(EVENT_ADJUST)
+				e1:SetRange(LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED+LOCATION_HAND+LOCATION_EXTRA)
+				e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_SET_AVAILABLE)
+				e1:SetCountLimit(1)
+				e1:SetLabel(e:GetHandler():GetOriginalCode())
+				e1:SetCondition(cm.backon)
+				e1:SetOperation(cm.backop)
+				e:GetHandler():RegisterEffect(e1)
+				local tcode=17082104
+				e:GetHandler():SetEntityCode(tcode,true)
+				e:GetHandler():ReplaceEffect(tcode,0,0)
+				c:RegisterFlagEffect(17082102,nil,0,0)
+				Duel.ShuffleExtra(tp)
 end)
 	e0:SetValue(SUMMON_TYPE_XYZ)
 	c:RegisterEffect(e0)
@@ -145,6 +157,19 @@ end)
 	e7:SetCondition(cm.descon)
 	e7:SetOperation(cm.dessuc)
 	c:RegisterEffect(e7)
+end
+function cm.backon(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	return e:GetHandler():GetFlagEffect(17082102)>0
+end
+function cm.backop(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local tcode=e:GetLabel()
+	c:SetEntityCode(tcode)
+	Duel.ConfirmCards(tp,Group.FromCards(c))
+	Duel.ConfirmCards(1-tp,Group.FromCards(c))
+	c:ReplaceEffect(tcode,0,0)
+	e:GetHandler():ResetFlagEffect(17082102)
 end
 function cm.xyzfilter(c)
 	return c:IsXyzType(TYPE_PENDULUM)
