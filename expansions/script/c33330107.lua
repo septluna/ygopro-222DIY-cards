@@ -1,7 +1,7 @@
 --造神计划7 赤游鱼
 function c33330107.initial_effect(c)
 	--link summon
-	aux.AddLinkProcedure(c,nil,2,2,c33330107.lcheck)
+	aux.AddLinkProcedure(c,nil,2,99,c33330107.lcheck)
 	c:EnableReviveLimit()
 	--spsummon
 	local e1=Effect.CreateEffect(c)
@@ -37,6 +37,7 @@ function c33330107.lcheck(g,lc)
 	return g:IsExists(Card.IsLinkRace,1,nil,RACE_AQUA)
 end
 function c33330107.disable(e,c)
+	local tp=e:GetHandlerPlayer()
 	local lg1=Duel.GetLinkedGroup(tp,1,1)
 	local lg2=Duel.GetLinkedGroup(1-tp,1,1)
 	lg1:Merge(lg2)
@@ -66,7 +67,7 @@ function c33330107.tg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsCanBeSpecialSummoned,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,nil,e,0,tp,false,false) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,0,LOCATION_GRAVE)
 end
-function c33330107.cost(e,tp,eg,ep,ev,re,r,rp)
+function c33330107.op(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetMZoneCount(tp)<=0 then return end
 	local g=Duel.SelectMatchingCard(tp,Card.IsCanBeSpecialSummoned,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,1,nil,e,0,tp,false,false)
 	if g then
