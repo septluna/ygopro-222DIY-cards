@@ -16,7 +16,7 @@ function c33400114.tfilter(c,e,tp)
 	return c:IsCode(33400011) and c:IsCanBeSpecialSummoned(e,0,tp,true,false)
 end
 function c33400114.filter(c,e,tp)
-	return  c:IsSetCard(0x3341)
+	return  c:IsSetCard(0x3341) 
 		and Duel.IsExistingMatchingCard(c33400114.tfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp)
 		and Duel.GetLocationCountFromEx(tp,tp,c)>0
 end
@@ -69,8 +69,8 @@ function c33400114.tgop(e,tp,eg,ep,ev,re,r,rp)
 	local dg=Duel.GetMatchingGroup(c33400114.ss,tp,LOCATION_GRAVE,0,nil,e,tp)
 		if dg:GetCount()>0  and Duel.SelectYesNo(tp,aux.Stringid(33400114,0)) then
 			Duel.BreakEffect()
-			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)		
-			local g=Duel.SelectMatchingCard(tp,c33400114.ss,tp,LOCATION_GRAVE,0,1,1,nil,e,tp)	   
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)	  
+			local g=Duel.SelectMatchingCard(tp,c33400114.ss,tp,LOCATION_GRAVE,0,1,1,nil,e,tp)	 
 			local  tc=g:GetFirst()
 			Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 		end

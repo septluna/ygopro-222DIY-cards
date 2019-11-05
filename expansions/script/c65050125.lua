@@ -38,7 +38,7 @@ function c65050125.tg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,0,0,tp,2)
 end
 function c65050125.op(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.DiscardHand(tp,Card.IsAbleToGrave,1,1,REASON_EFFECT,nil)~=0 then
+	if Duel.DiscardHand(tp,c65050125.tgfilter,1,1,REASON_EFFECT,nil)~=0 then
 		Duel.Draw(tp,2,REASON_EFFECT)
 	end
 end

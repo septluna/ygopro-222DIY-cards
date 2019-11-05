@@ -91,6 +91,7 @@ function c30556010.cfilter(c)
 	return c:IsType(TYPE_SYNCHRO)
 end
 function c30556010.damcon(e,tp,eg,ep,ev,re,r,rp)
+	local tp=e:GetHandler()
 	return Duel.IsExistingMatchingCard(c30556010.cfilter,tp,LOCATION_GRAVE,0,1,nil)
 end
 --to hand
@@ -112,7 +113,7 @@ function c30556010.desop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,c30556010.qfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil)
 	if g:GetCount()>0 then
 		if Duel.SendtoHand(g,nil,REASON_EFFECT)~=0 then
-			Duel.ConfirmCards(1-tp,g)		 
+			Duel.ConfirmCards(1-tp,g)		
 		end
 	end
 end
