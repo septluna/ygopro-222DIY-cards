@@ -167,7 +167,7 @@ function cm.initial_effect(c)
 end
 function cm.SelfSpsummonTarget(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if chk==0 then return cm.CheckSummonLocation(c,tp,nil)
+	if chk==0 then return Senya.CheckSummonLocation(c,tp,nil)
 		and c:IsCanBeSpecialSummoned(e,0,tp,true,true) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
 end
