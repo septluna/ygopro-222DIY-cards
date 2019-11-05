@@ -63,13 +63,16 @@ function c33330107.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=lg:FilterSelect(tp,c33330107.relfil,1,1,nil,tp)
 	Duel.Release(g,REASON_COST)
 end
+function c33330107.spfil(c,e,tp)
+	return c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:IsRace(RACE_AQUA) and not c:IsCode(33330107)
+end
 function c33330107.tg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsCanBeSpecialSummoned,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,nil,e,0,tp,false,false) end
+	if chk==0 then return Duel.IsExistingMatchingCard(c33330107.spfil,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,nil,e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,0,LOCATION_GRAVE)
 end
 function c33330107.op(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetMZoneCount(tp)<=0 then return end
-	local g=Duel.SelectMatchingCard(tp,Card.IsCanBeSpecialSummoned,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,1,nil,e,0,tp,false,false)
+	local g=Duel.SelectMatchingCard(tp,c33330107.spfil,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,1,nil,e,tp)
 	if g then
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
