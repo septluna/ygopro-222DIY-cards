@@ -2,7 +2,7 @@
 function c12031011.initial_effect(c)
 	c:SetSPSummonOnce(12031011)
 	--xyz summon
-	aux.AddXyzProcedure(c,nil,8,2,c12031011.ovfilter,aux.Stringid(12031011,0))
+	aux.AddXyzProcedure(c,c12031011.ovfilter1,4,4,c12031011.ovfilter,aux.Stringid(12031011,0))
 	c:EnableReviveLimit()
 	--effect
 	local e1=Effect.CreateEffect(c)
@@ -46,6 +46,9 @@ function c12031011.checkop(e,tp,eg,ep,ev,re,r,rp)
 end
 function c12031011.ovfilter(c)
 	return c:IsFaceup() and c:IsCode(12031000)
+end
+function c12031011.ovfilter1(c)
+	return c:IsFaceup() and c:IsAttribute(ATTRIBUTE_DARK)
 end
 function c12031011.discon(e,tp,eg,ep,ev,re,r,rp)
 	return ep~=tp

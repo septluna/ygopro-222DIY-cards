@@ -83,16 +83,16 @@ function scard.initial_effect(c)
 		Duel.RegisterEffect(e7,tp)
 	end)
 	c:RegisterEffect(e6)
-	local e8=Effect.CreateEffect(c)
-	e8:SetDescription(m*16+4)
-	e8:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e8:SetProperty(EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_CANNOT_DISABLE)
-	e8:SetRange(LOCATION_FZONE)
-	e8:SetCountLimit(1)
-	e8:SetCode(EVENT_PHASE+PHASE_END)
-	e8:SetCondition(cm.descon)
-	e8:SetOperation(cm.desop)
-	c:RegisterEffect(e8)
+	--local e8=Effect.CreateEffect(c)
+	--e8:SetDescription(m*16+4)
+	--e8:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	--e8:SetProperty(EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_CANNOT_DISABLE)
+	--e8:SetRange(LOCATION_FZONE)
+	--e8:SetCountLimit(1)
+	--e8:SetCode(EVENT_PHASE+PHASE_END)
+	--e8:SetCondition(cm.descon)
+	--e8:SetOperation(cm.desop)
+	--c:RegisterEffect(e8)
 	if scard.counter==nil then
 		scard.counter=true
 		scard[0]=0
@@ -165,20 +165,26 @@ function scard.gyop(e,tp,eg,ep,ev,re,r,rp)
 	local ct=c:GetTurnCounter()
 	ct=ct+1
 	c:SetTurnCounter(ct)
-	if ct==3then
+	if ct==3 then
 		Duel.SendtoGrave(c,REASON_RULE)
+	else if Duel.IsExistingMatchingCard(Card.IsDiscardable,tp,LOCATION_HAND,0,1,e:GetHandler()) and Duel.SelectYesNo(tp,aux.Stringid(m,5)) then
+		Duel.DiscardHand(tp,Card.IsDiscardable,1,1,REASON_COST+REASON_DISCARD,e:GetHandler())
+		else
+			Duel.SendtoGrave(c,REASON_COST)
+		end
 	end
 end
-function cm.descon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetTurnPlayer()==tp
-end
-function cm.desop(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	Duel.HintSelection(Group.FromCards(c))
-	if Duel.IsExistingMatchingCard(Card.IsDiscardable,tp,LOCATION_HAND,0,1,e:GetHandler()) and Duel.SelectYesNo(tp,aux.Stringid(m,5)) then
-		Duel.DiscardHand(tp,Card.IsDiscardable,1,1,REASON_COST+REASON_DISCARD,e:GetHandler())
-	else Duel.SendtoGrave(c,REASON_COST) end
-end
+--function cm.descon(e,tp,eg,ep,ev,re,r,rp)
+	--local c=e:GetHandler()
+	--return Duel.GetTurnPlayer()==tp and 
+--end
+--function cm.desop(e,tp,eg,ep,ev,re,r,rp)
+	--local c=e:GetHandler()
+	--Duel.HintSelection(Group.FromCards(c))
+	--if Duel.IsExistingMatchingCard(Card.IsDiscardable,tp,LOCATION_HAND,0,1,e:GetHandler()) and Duel.SelectYesNo(tp,aux.Stringid(m,5)) then
+		--Duel.DiscardHand(tp,Card.IsDiscardable,1,1,REASON_COST+REASON_DISCARD,e:GetHandler())
+	--else Duel.SendtoGrave(c,REASON_COST) end
+--end
 function cm.setlimit(e,c,tp)
 	return c:IsType(TYPE_FIELD)
 end
