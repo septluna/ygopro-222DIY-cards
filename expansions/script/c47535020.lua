@@ -95,6 +95,7 @@ function c47535020.sctg(e,tp,eg,ep,ev,re,r,rp,chk)
     Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c47535020.scop(e,tp,eg,ep,ev,re,r,rp)
+    local c=e:GetHandler()
     local g=Duel.GetMatchingGroup(c47535020.scfilter,tp,LOCATION_EXTRA,0,nil,nil)
     if g:GetCount()>0 then
         Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
