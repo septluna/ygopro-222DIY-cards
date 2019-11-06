@@ -3,13 +3,6 @@ function c81011502.initial_effect(c)
 	--pendulum summon
 	aux.EnablePendulumAttribute(c)
 	c:EnableReviveLimit()
-	--spsummon bgm
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
-	e0:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e0:SetCondition(c81011502.sumcon)
-	e0:SetOperation(c81011502.sumsuc)
-	c:RegisterEffect(e0)
 	--pendulum set
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_DESTROY)
@@ -41,12 +34,6 @@ function c81011502.initial_effect(c)
 	e4:SetTarget(c81011502.distg)
 	e4:SetOperation(c81011502.disop)
 	c:RegisterEffect(e4)
-end
-function c81011502.sumcon(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():IsSummonType(SUMMON_TYPE_RITUAL) or e:GetHandler():IsSummonType(SUMMON_TYPE_PENDULUM)
-end
-function c81011502.sumsuc(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_MUSIC,0,aux.Stringid(81011502,0))
 end
 function c81011502.penfilter(c)
 	return c:IsType(TYPE_RITUAL) and not c:IsCode(81011502) and not c:IsForbidden()
