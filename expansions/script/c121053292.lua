@@ -3,15 +3,15 @@ function c121053292.initial_effect(c)
 	--pendulum summon
 	aux.EnablePendulumAttribute(c)
 	--splimit
-    local e1=Effect.CreateEffect(c)
-    e1:SetType(EFFECT_TYPE_FIELD)
-    e1:SetRange(LOCATION_PZONE)
-    e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
-    e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CANNOT_DISABLE)
-    e1:SetTargetRange(1,0)
-    e1:SetCondition(c121053292.splimcon)
-    e1:SetTarget(c121053292.splimit)
-    c:RegisterEffect(e1)
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetRange(LOCATION_PZONE)
+	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CANNOT_DISABLE)
+	e1:SetTargetRange(1,0)
+	e1:SetCondition(c121053292.splimcon)
+	e1:SetTarget(c121053292.splimit)
+	c:RegisterEffect(e1)
 	--attack all
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(121053292,0))
@@ -24,16 +24,16 @@ function c121053292.initial_effect(c)
 	e2:SetOperation(c121053292.operation)
 	c:RegisterEffect(e2)
 	--hand
-    local e3=Effect.CreateEffect(c)
-    e3:SetDescription(aux.Stringid(121053292,4))
-    e3:SetCategory(CATEGORY_HANDES+CATEGORY_DAMAGE)
-    e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
+	local e3=Effect.CreateEffect(c)
+	e3:SetDescription(aux.Stringid(121053292,4))
+	e3:SetCategory(CATEGORY_HANDES+CATEGORY_DAMAGE)
+	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
 	e3:SetRange(LOCATION_MZONE)
-    e3:SetCode(EVENT_DAMAGE_STEP_END)
-    e3:SetCondition(c121053292.effcon)
-    e3:SetTarget(c121053292.attar)
-    e3:SetOperation(c121053292.atop)
-    c:RegisterEffect(e3)
+	e3:SetCode(EVENT_DAMAGE_STEP_END)
+	e3:SetCondition(c121053292.effcon)
+	e3:SetTarget(c121053292.attar)
+	e3:SetOperation(c121053292.atop)
+	c:RegisterEffect(e3)
 	--tohand
 	local e4=Effect.CreateEffect(c)
 	e4:SetCategory(CATEGORY_TOHAND)
@@ -47,16 +47,16 @@ function c121053292.initial_effect(c)
 	c:RegisterEffect(e4)
 end
 function c121053292.splimcon(e)
-    return not e:GetHandler():IsForbidden()
+	return not e:GetHandler():IsForbidden()
 end
 function c121053292.splimit(e,c,tp,sumtp,sumpos)
-    return not c:IsSetCard(0x121) and bit.band(sumtp,SUMMON_TYPE_PENDULUM)==SUMMON_TYPE_PENDULUM
+	return not c:IsSetCard(0x921) and bit.band(sumtp,SUMMON_TYPE_PENDULUM)==SUMMON_TYPE_PENDULUM
 end
 function c121053292.condition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsAbleToEnterBP()
 end
 function c121053292.filter(c)
-	return c:IsFaceup() and c:IsSetCard(0x121)
+	return c:IsFaceup() and c:IsSetCard(0x921)
 end
 function c121053292.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and c121053292.filter(chkc) end
@@ -79,29 +79,29 @@ function c121053292.atkfilter(e,c)
 	return c:IsSummonType(SUMMON_TYPE_SPECIAL)
 end
 function c121053292.effcon(e,tp,eg,ep,ev,re,r,rp)
-    return e:GetHandler()==Duel.GetAttacker() and e:GetHandler():IsRelateToBattle()
+	return e:GetHandler()==Duel.GetAttacker() and e:GetHandler():IsRelateToBattle()
 end
 function c121053292.attar(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return true end
-    Duel.SetOperationInfo(0,CATEGORY_HANDES,nil,0,1-tp,1)
+	if chk==0 then return true end
+	Duel.SetOperationInfo(0,CATEGORY_HANDES,nil,0,1-tp,1)
 end
 function c121053292.atop(e,tp,eg,ep,ev,re,r,rp)
-    local g=Duel.GetFieldGroup(tp,0,LOCATION_HAND)
-    if g:GetCount()>0 then
-        local sg=g:RandomSelect(1-tp,1)
-        Duel.SendtoGrave(sg,REASON_EFFECT+REASON_DISCARD)
-        local tc=sg:GetFirst()
-        if tc:IsType(TYPE_MONSTER) then
-            Duel.Damage(1-tp,tc:GetLevel()*200,REASON_EFFECT)
-        end
-    end
+	local g=Duel.GetFieldGroup(tp,0,LOCATION_HAND)
+	if g:GetCount()>0 then
+		local sg=g:RandomSelect(1-tp,1)
+		Duel.SendtoGrave(sg,REASON_EFFECT+REASON_DISCARD)
+		local tc=sg:GetFirst()
+		if tc:IsType(TYPE_MONSTER) then
+			Duel.Damage(1-tp,tc:GetLevel()*200,REASON_EFFECT)
+		end
+	end
 end
 function c121053292.thcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return c:IsPreviousPosition(POS_FACEUP) and c:GetLocation()~=LOCATION_DECK
 end
 function c121053292.thfilter(c)
-	return c:IsSetCard(0x121) and c:IsType(TYPE_MONSTER)  and c:IsAbleToHand()
+	return c:IsSetCard(0x921) and c:IsType(TYPE_MONSTER)  and c:IsAbleToHand()
 		and ((c:IsFaceup() and c:IsLocation(LOCATION_EXTRA) and c:IsType(TYPE_PENDULUM)) or c:IsLocation(LOCATION_GRAVE))
 end
 function c121053292.thtg(e,tp,eg,ep,ev,re,r,rp,chk)

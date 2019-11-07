@@ -86,14 +86,14 @@ function c121029293.spop(e,tp,eg,ep,ev,re,r,rp,c)
 	Duel.Release(g1,REASON_COST+REASON_FUSION+REASON_MATERIAL)
 end
 function c121029293.efilter(e,c)
-	return c:IsSetCard(0x121) and c:IsFaceup()
+	return c:IsSetCard(0x921) and c:IsFaceup()
 end
 function c121029293.thcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return c:IsPreviousPosition(POS_FACEUP) and c:GetLocation()~=LOCATION_DECK
 end
 function c121029293.thfilter(c)
-	return c:IsSetCard(0x121)  and c:IsFaceup() and  c:IsType(TYPE_PENDULUM) and c:IsAbleToHand()
+	return c:IsSetCard(0x921)  and c:IsFaceup() and  c:IsType(TYPE_PENDULUM) and c:IsAbleToHand()
 end
 function c121029293.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c121029293.thfilter,tp,LOCATION_EXTRA,0,1,nil) end

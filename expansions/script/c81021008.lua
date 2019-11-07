@@ -58,7 +58,7 @@ function c81021008.descon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return bit.band(r,REASON_EFFECT+REASON_BATTLE)~=0 and c:IsPreviousLocation(LOCATION_MZONE) and c:IsFaceup()
 end
-function c81021008.desfilter(c)
+function c81021008.desfilter(c,e,tp)
 	return c:IsSetCard(0x818) and not c:IsCode(81021008) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c81021008.destg(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -83,7 +83,7 @@ function c81021008.atkcon(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetAttacker()
 	if tc:IsControler(1-tp) then tc=Duel.GetAttackTarget() end
 	e:SetLabelObject(tc)
-	return tc and tc:IsFaceup() and tc:IsSetCard(0x818) and tc:IsRelateToBattle() and Duel.GetAttackTarget()~=nil
+	return tc and tc:IsFaceup() and tc:IsSetCard(0x818) and tc:IsRelateToBattle() and tc~=e:GetHandler() and Duel.GetAttackTarget()~=nil
 end
 function c81021008.atkcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.CheckLPCost(tp,800) and e:GetHandler():IsReleasable() end

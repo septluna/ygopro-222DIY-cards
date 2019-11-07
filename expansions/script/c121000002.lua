@@ -1,6 +1,6 @@
 --樱之大地
 function c121000002.initial_effect(c)
-    --Activate
+	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
@@ -10,7 +10,7 @@ function c121000002.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function c121000002.filter(c)
-	return c:IsSetCard(0x121) and c:IsAbleToHand()
+	return c:IsSetCard(0x921) and c:IsAbleToHand()
 end
 function c121000002.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c121000002.filter,tp,LOCATION_DECK,0,1,nil) end
@@ -27,7 +27,7 @@ function c121000002.activate(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ShuffleDeck(tp)
 		if Duel.IsExistingMatchingCard(c121000002.tdfilter,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,nil)  and Duel.SelectYesNo(tp,aux.Stringid(23310009,5)) then
 		local tg=Duel.SelectMatchingCard(tp,c121000002.tdfilter,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,1,nil)
-	     if tg:GetCount()>0 then
+		 if tg:GetCount()>0 then
 		Duel.SendtoDeck(tg,nil,0,REASON_EFFECT)
 	end
 end

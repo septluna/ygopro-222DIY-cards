@@ -75,11 +75,12 @@ end
 function c81021007.atkop(e,tp,eg,ep,ev,re,r,rp)
 	local c=Duel.GetAttacker()
 	if c:IsControler(1-tp) then c=Duel.GetAttackTarget() end
+	local atk=e:GetLabel()
 	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetCode(EFFECT_UPDATE_ATTACK)
 	e1:SetReset(RESET_PHASE+PHASE_DAMAGE_CAL)
-	e1:SetValue(e:GetLabel())
+	e1:SetValue(atk*2)
 	c:RegisterEffect(e1)
 	local e2=e1:Clone()
 	e2:SetCode(EFFECT_UPDATE_DEFENSE)
