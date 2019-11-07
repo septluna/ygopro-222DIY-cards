@@ -34,7 +34,7 @@ function c1156012.con1(e,tp,eg,ep,ev,re,r,rp)
 end
 --
 function c1156012.tfilter1(c)
-	return c:IsAbleToGrave() and c:IsType(TYPE_MONSTER) and not (c:IsAttribute(ATTRIBUTE_WATER) and c:IsRace(RACE_ZOMBIE))
+	return c:IsAbleToGrave() and c:IsType(TYPE_MONSTER) and not c:IsAttribute(ATTRIBUTE_WATER)
 end
 function c1156012.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end

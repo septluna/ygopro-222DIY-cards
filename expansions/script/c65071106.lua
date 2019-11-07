@@ -32,9 +32,9 @@ function c65071106.initial_effect(c)
 	local e5=Effect.CreateEffect(c)
 	e5:SetCategory(CATEGORY_COUNTER)
 	e5:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_F)
+	e5:SetRange(LOCATION_SZONE)
 	e5:SetCountLimit(1)
 	e5:SetCode(EVENT_PHASE+PHASE_END)
-	e5:SetTarget(c65071106.contg)
 	e5:SetOperation(c65071106.conop)
 	c:RegisterEffect(e5)
 	--tograve
@@ -64,21 +64,18 @@ function c65071106.eqop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function c65071106.confil(c,e)
-	return c:GetCounter(0x1da0)==0
-end
-
-function c65071106.contg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c65071106.confil,tp,LOCATION_ONFIELD,0,1,e:GetHandler(),e) and Duel.IsExistingMatchingCard(c65071106.confil,tp,0,LOCATION_ONFIELD,1,nil,e) end
+	return c:GetCounter(0x1da0)==0 and c:IsFaceup()
 end
 
 function c65071106.conop(e,tp,eg,ep,ev,re,r,rp)
 	if not (Duel.IsExistingMatchingCard(c65071106.confil,tp,LOCATION_ONFIELD,0,1,e:GetHandler(),e) and Duel.IsExistingMatchingCard(c65071106.confil,tp,0,LOCATION_ONFIELD,1,nil,e)) then return end
+	if not e:GetHandler():IsRelateToEffect(e) then return end
 	local g1=Duel.SelectMatchingCard(tp,c65071106.confil,tp,LOCATION_ONFIELD,0,1,1,e:GetHandler(),e)
 	Duel.HintSelection(g1)
-	local g2=Duel.SelectMatchingCard(c65071106.confil,tp,0,LOCATION_ONFIELD,1,1,nil,e)
+	local g2=Duel.SelectMatchingCard(tp,c65071106.confil,tp,0,LOCATION_ONFIELD,1,1,nil,e)
 	Duel.HintSelection(g2)
 	local tc1=g1:GetFirst()
-	local tc2=g1:GetFirst()
+	local tc2=g2:GetFirst()
 	tc1:AddCounter(0x1da0,1)
 	tc2:AddCounter(0x1da0,1)
 end

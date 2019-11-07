@@ -30,9 +30,9 @@ function c81021005.initial_effect(c)
 	e2:SetCode(EVENT_PAY_LPCOST)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,81021905)
-	e2:SetCondition(c81021011.tgcon)
-	e2:SetTarget(c81021011.tdtg)
-	e2:SetOperation(c81021011.tdop)
+	e2:SetCondition(c81021005.tgcon)
+	e2:SetTarget(c81021005.tdtg)
+	e2:SetOperation(c81021005.tdop)
 	c:RegisterEffect(e2)
 end
 function c81021005.matfilter(c)
@@ -77,16 +77,16 @@ function c81021005.thop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ConfirmCards(1-tp,g1)
 	end
 end
-function c81021011.tgcon(e,tp,eg,ep,ev,re,r,rp)
+function c81021005.tgcon(e,tp,eg,ep,ev,re,r,rp)
 	return ep==tp
 end
-function c81021011.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
+function c81021005.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	Duel.SetTargetPlayer(1-tp)
 	Duel.SetTargetParam(1000)
 	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,1000)
 end
-function c81021011.tdop(e,tp,eg,ep,ev,re,r,rp)
+function c81021005.tdop(e,tp,eg,ep,ev,re,r,rp)
 	local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
 	Duel.Damage(p,d,REASON_EFFECT)
 end

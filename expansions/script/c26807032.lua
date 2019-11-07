@@ -70,33 +70,6 @@ function c26807032.initial_effect(c)
 	e6:SetTarget(c26807032.tdtg)
 	e6:SetOperation(c26807032.tdop)
 	c:RegisterEffect(e6)
-	if scard.counter==nil then
-		scard.counter=true
-		scard[0]=0
-		scard[1]=0
-		local ea=Effect.CreateEffect(c)
-		ea:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
-		ea:SetCode(EVENT_PHASE_START+PHASE_DRAW)
-		ea:SetOperation(scard.resetcount)
-		Duel.RegisterEffect(ea,0)
-		local eb=Effect.CreateEffect(c)
-		eb:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
-		eb:SetCode(EVENT_RELEASE)
-		eb:SetOperation(scard.addcount)
-		Duel.RegisterEffect(eb,0)
-	end
-end
-function scard.resetcount(e,tp,eg,ep,ev,re,r,rp)
-	scard[0]=0
-	scard[1]=0
-end
-function scard.addcount(e,tp,eg,ep,ev,re,r,rp)
-	local tc=eg:GetFirst()
-	while tc do
-		local p=tc:GetReasonPlayer()
-		scard[p]=scard[p]+1
-		tc=eg:GetNext()
-	end
 end
 function c26807032.cfilter(c,tp)
 	return c:GetOwner()==1-tp and c:IsAbleToRemoveAsCost()

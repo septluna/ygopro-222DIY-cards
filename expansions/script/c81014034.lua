@@ -65,33 +65,6 @@ function c81014034.initial_effect(c)
 	e5:SetCondition(c81014034.drcon)
 	e5:SetOperation(c81014034.drop)
 	c:RegisterEffect(e5)
-	if scard.counter==nil then
-		scard.counter=true
-		scard[0]=0
-		scard[1]=0
-		local e2=Effect.CreateEffect(c)
-		e2:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
-		e2:SetCode(EVENT_PHASE_START+PHASE_DRAW)
-		e2:SetOperation(scard.resetcount)
-		Duel.RegisterEffect(e2,0)
-		local e3=Effect.CreateEffect(c)
-		e3:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
-		e3:SetCode(EVENT_RELEASE)
-		e3:SetOperation(scard.addcount)
-		Duel.RegisterEffect(e3,0)
-	end
-end
-function scard.resetcount(e,tp,eg,ep,ev,re,r,rp)
-	scard[0]=0
-	scard[1]=0
-end
-function scard.addcount(e,tp,eg,ep,ev,re,r,rp)
-	local tc=eg:GetFirst()
-	while tc do
-		local p=tc:GetReasonPlayer()
-		scard[p]=scard[p]+1
-		tc=eg:GetNext()
-	end
 end
 function c81014034.setlimit(e,c,tp)
 	return c:IsType(TYPE_FIELD)
