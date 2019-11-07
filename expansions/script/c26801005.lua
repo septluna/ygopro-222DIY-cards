@@ -27,7 +27,7 @@ function c26801005.filter(c,e,tp,m)
 	return m:CheckWithSumEqual(Card.GetRitualLevel,c:GetLevel(),1,99,c)
 end
 function c26801005.matfilter(c)
-	return bit.band(c:GetType(),0x81)~=0x81 and c:IsAbleToGrave()
+	return bit.band(c:GetType(),0x81)==0x81 and c:IsAbleToGrave()
 end
 function c26801005.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
