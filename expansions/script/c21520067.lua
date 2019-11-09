@@ -104,7 +104,7 @@ function c21520067.rhop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(c21520067.rmfilter,tp,LOCATION_DECK,0,nil,LOCATION_DECK,e:GetHandlerPlayer())
 	if g:GetCount()>0 then 
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 		local sg=g:Select(tp,1,1,nil)
 		local g2=Duel.SelectMatchingCard(tp,c21520067.ormfilter,tp,LOCATION_DECK,0,1,1,nil,sg:GetFirst():GetCode())
 		sg:Merge(g2)

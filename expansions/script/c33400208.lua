@@ -55,8 +55,12 @@ function c33400208.tgop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c33400208.discost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
-	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)   
+	local ft=0
+	if e:GetHandler():GetFlagEffect(33401301)>0 then ft=1 end
+	if chk==0 then return  ((ft==1) or e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST)) end   
+	if ft==0 then 
+	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
+	end
 end
 function c33400208.distg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsOnField() and chkc:IsControler(1-tp) end
@@ -79,7 +83,7 @@ function c33400208.disop(e,tp,eg,ep,ev,re,r,rp)
 	local t2=bit.band(tc:GetType(),0x7)
 	if t1==t2  then 
 		 Duel.Damage(1-tp,500,REASON_EFFECT) 
-		 if Duel.SelectYesNo(tp,aux.Stringid(33400208,3)) then		 
+		 if Duel.SelectYesNo(tp,aux.Stringid(33400208,3)) then	   
 				local e1=Effect.CreateEffect(tc2)
 				e1:SetType(EFFECT_TYPE_FIELD)
 				e1:SetCode(EFFECT_DISABLE)
@@ -95,12 +99,12 @@ function c33400208.disop(e,tp,eg,ep,ev,re,r,rp)
 				e2:SetOperation(c33400208.disop2)
 				e2:SetLabelObject(tc1)
 				e2:SetReset(RESET_PHASE+PHASE_END)
-				Duel.RegisterEffect(e2,tp)	 
+				Duel.RegisterEffect(e2,tp)   
 		 end 
 	end
 	if tc:IsCode(ac) then 
 		  Duel.Damage(1-tp,500,REASON_EFFECT)
-		  if tc1:IsRelateToEffect(e) and Duel.SelectYesNo(tp,aux.Stringid(33400208,4))then	  
+		  if tc1:IsRelateToEffect(e) and Duel.SelectYesNo(tp,aux.Stringid(33400208,4))then	
 			  Duel.SendtoGrave(tc1,REASON_EFFECT)
 		  end
 		  
