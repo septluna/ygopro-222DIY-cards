@@ -15,10 +15,10 @@ function c81000007.initial_effect(c)
 	Duel.AddCustomActivityCounter(81000007,ACTIVITY_CHAIN,c81000007.chainfilter)
 end
 function c81000007.chainfilter(re,tp,cid)
-	return re:IsActiveType(TYPE_MONSTER)
+	return not re:IsActiveType(TYPE_MONSTER)
 end
 function c81000007.counterfilter(c)
-	return c:IsType(TYPE_EFFECT)
+	return not c:IsType(TYPE_EFFECT)
 end
 function c81000007.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetCustomActivityCount(81000007,tp,ACTIVITY_SUMMON)==0

@@ -5,6 +5,7 @@ function c33400402.initial_effect(c)
 	e0:SetDescription(aux.Stringid(33400402,0))
 	e0:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e0:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e0:SetProperty(EFFECT_FLAG_DELAY)
 	e0:SetCode(EVENT_EQUIP)
 	e0:SetCountLimit(1,33400402)
 	e0:SetCondition(c33400402.spcon)
@@ -27,7 +28,7 @@ function c33400402.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(Card.IsSetCard,1,nil,0x6343) or eg:IsExists(Card.IsSetCard,1,nil,0x5343)
 end
 function c33400402.spfilter1(c,e,tp)
-	return  c:IsSetCard(0x341) or c:IsSetCard(0x5342) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return  c:IsSetCard(0x341) or c:IsSetCard(0x5342) and c:IsType(TYPE_MONSTER) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c33400402.sptg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0

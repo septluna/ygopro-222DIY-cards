@@ -25,20 +25,20 @@ function c33401304.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function c33401304.chkfilter1(c,e,tp)
-	return c:IsSetCard(0x341) and c:IsType(TYPE_MONSTER) and 
+	return (not c:IsSetCard(0xc342)) and  c:IsSetCard(0x341) and c:IsType(TYPE_MONSTER) and 
 		not c:IsHasEffect(EFFECT_REVIVE_LIMIT) and Duel.IsPlayerCanSpecialSummon(tp,0,POS_FACEUP,tp,c)
 		and Duel.IsExistingMatchingCard(c33401304.chkfilter2,tp,LOCATION_DECK,0,1,nil,e,tp,c:GetCode())
 end
 function c33401304.chkfilter2(c,e,tp,cd)
-	return c:IsSetCard(0x341) and c:IsType(TYPE_MONSTER) and not c:IsCode(cd)
+	return (not c:IsSetCard(0xc342)) and c:IsSetCard(0x341) and c:IsType(TYPE_MONSTER) and not c:IsCode(cd)
 		and not c:IsHasEffect(EFFECT_REVIVE_LIMIT) and Duel.IsPlayerCanSpecialSummon(tp,0,POS_FACEUP,1-tp,c)
 end
 function c33401304.filter1(c,e,tp)
-	return c:IsSetCard(0x341) and c:IsType(TYPE_MONSTER) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return (not c:IsSetCard(0xc342)) and c:IsSetCard(0x341) and c:IsType(TYPE_MONSTER) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 		and Duel.IsExistingMatchingCard(c33401304.filter2,tp,LOCATION_DECK,0,1,nil,e,tp,c:GetCode())
 end
 function c33401304.filter2(c,e,tp,cd)
-	return c:IsSetCard(0x341) and c:IsType(TYPE_MONSTER) and not c:IsCode(cd)
+	return (not c:IsSetCard(0xc342)) and  c:IsSetCard(0x341) and c:IsType(TYPE_MONSTER) and not c:IsCode(cd)
 		and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_ATTACK,1-tp)
 end
 function c33401304.target(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -103,5 +103,5 @@ end
 function c33401304.spop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(1-tp,LOCATION_MZONE)<=0 then return end
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then Duel.SpecialSummon(tc,0,tp,1-tp,false,false,POS_FACEUP) end	 
+	if tc:IsRelateToEffect(e) then Duel.SpecialSummon(tc,0,tp,1-tp,false,false,POS_FACEUP) end   
 end
