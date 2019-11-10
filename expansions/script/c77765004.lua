@@ -14,7 +14,7 @@ function cm.initial_effect(c)
 	e1:SetTarget(cm.target)
 	e1:SetOperation(cm.activate)
 	c:RegisterEffect(e1)
-	for _,code in ipairs({EFFECT_CANNOT_BE_XYZ_MATERIAL,EFFECT_CANNOT_BE_SYNCHRO_MATERIAL,EFFECT_CANNOT_BE_FUSION_MATERIAL,EFFECT_CANNOT_BE_LINK_MATERIAL}) do
+	for _,code in ipairs({EFFECT_CANNOT_BE_XYZ_MATERIAL,EFFECT_CANNOT_BE_SYNCHRO_MATERIAL,EFFECT_CANNOT_BE_FUSION_MATERIAL,EFFECT_CANNOT_BE_LINK_MATERIAL,m}) do
 		local e2=Effect.CreateEffect(c)
 		e2:SetType(EFFECT_TYPE_FIELD)
 		e2:SetCode(code)

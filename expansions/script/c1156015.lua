@@ -47,7 +47,7 @@ function c1156015.initial_effect(c)
 --
 end
 --
-function c1156015.chnfilter(c)
+function c1156015.cknfilter(c)
     return c:GetOriginalCode()==77765004 and not c:IsDisabled()
 end
 function c1156015.lkfilter(c,lc,tp)

@@ -61,8 +61,14 @@ end
 function cm.lfilter(c)
 	return c:IsLinkRace(RACE_CYBERSE+RACE_MACHINE) or c:IsType(TYPE_SPELL)
 end
-function cm.matval(e,c,mg)
-	return c:IsCode(m)
+function cm.matval(e,c,mg,mc)
+	if c~=e:GetHandler() then return false end
+	local counter_effects={mc:IsHasEffect(77765004)}
+	for _,te in pairs(counter_effects) do
+		local vf=te:GetValue()
+		if not vf or vf(te,c) then return false end
+	end
+	return true
 end
 function cm.mattg(e,c)
 	return c:IsFaceup() and c:IsType(TYPE_SPELL)

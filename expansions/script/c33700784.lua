@@ -5,18 +5,18 @@ if not RSVoVal then
    RSVoVal=RSVoVal or {}
    rsvo=RSVoVal
 --other link material bug repair
-function Auxiliary.LCheckOtherMaterial(c,mg,lc)
-	local le={c:IsHasEffect(EFFECT_EXTRA_LINK_MATERIAL)}
+function Auxiliary.LCheckOtherMaterial(c,mg,lc,tp)
+	local le={c:IsHasEffect(EFFECT_EXTRA_LINK_MATERIAL,tp)}
 	if #le==0 then return true end
 	for _,te in pairs(le) do
 		local f=te:GetValue()
-		if not f or f(te,lc,mg) then return true end
+		if not f or f(te,lc,mg,c) then return true end
 	end
 	return false
 end
 function Auxiliary.LExtraFilter(c,f,lc)
 	if c:IsLocation(LOCATION_ONFIELD) and not c:IsFaceup() then return false end
-	return c:IsHasEffect(EFFECT_EXTRA_LINK_MATERIAL) and (c:IsCanBeLinkMaterial(lc) or ((bit.band(c:GetOriginalType(),TYPE_SPELL)~=0 or bit.band(c:GetOriginalType(),TYPE_TRAP)~=0) and not c:IsType(TYPE_MONSTER))) and (not f or f(c))
+	return c:IsHasEffect(EFFECT_EXTRA_LINK_MATERIAL,tp) and (c:IsCanBeLinkMaterial(lc) or ((bit.band(c:GetOriginalType(),TYPE_SPELL)~=0 or bit.band(c:GetOriginalType(),TYPE_TRAP)~=0) and not c:IsType(TYPE_MONSTER))) and (not f or f(c))
 end
 function rsvo.LPLinkFunction(c)   
 	c:EnableReviveLimit()
