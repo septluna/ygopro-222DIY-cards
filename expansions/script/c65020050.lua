@@ -63,15 +63,23 @@ function c65020050.reacon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(c65020050.reafil,1,nil,tp)
 end
 function c65020050.reatg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetFieldGroup(tp,0,1):IsExists(Card.IsAbleToRemove,1,nil) end
+	if chk==0 then return Duel.GetFieldGroup(tp,0,1):IsExists(c65020050.abletoremove,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,0,0)
 end
 function c65020050.abletoremove(c)
 	return c:IsAbleToRemove() and not c:IsType(TYPE_TOKEN)
 end
 function c65020050.reaop(e,tp,eg,ep,ev,re,r,rp)
-	if not Duel.GetFieldGroup(tp,0,1):IsExists(Card.IsAbleToRemove,1,nil) then return end
-	local m=Duel.SelectOption(1-tp,aux.Stringid(65020050,0),aux.Stringid(65020050,1))
+	local b1=Duel.GetMatchingGroupCount(c65020050.abletoremove,tp,0,LOCATION_HAND+LOCATION_ONFIELD+LOCATION_GRAVE+LOCATION_EXTRA,nil)>0
+	local b2=Duel.GetMatchingGroupCount(c65020050.abletoremove,tp,0,LOCATION_DECK,nil)>0
+	local m=2
+	if b1 and b2 then
+		m=Duel.SelectOption(1-tp,aux.Stringid(65020050,0),aux.Stringid(65020050,1))
+	elseif b1 then
+		m=0
+	elseif b2 then
+		m=1
+	end
 	if m==0 then
 		local g1=Duel.SelectMatchingCard(1-tp,c65020050.abletoremove,1-tp,LOCATION_HAND+LOCATION_ONFIELD+LOCATION_GRAVE+LOCATION_EXTRA,0,1,1,nil)
 		Duel.HintSelection(g1)

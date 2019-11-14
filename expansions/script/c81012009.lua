@@ -43,17 +43,17 @@ function c81012009.ovfilter(c)
 	return c:IsFaceup() and c:IsRace(RACE_PYRO) and c:IsType(TYPE_LINK)
 end
 function c81012009.mtfilter(c,e)
-	return (c:IsLocation(LOCATION_HAND) or c:IsFaceup()) and c:IsType(TYPE_RITUAL) and c:IsType(TYPE_PENDULUM) and not c:IsImmuneToEffect(e)
+	return c:IsType(TYPE_RITUAL) and c:IsType(TYPE_PENDULUM) and not c:IsImmuneToEffect(e)
 end
 function c81012009.mttg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsType(TYPE_XYZ)
-		and Duel.IsExistingMatchingCard(c81012009.mtfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,nil,e) end
+		and Duel.IsExistingMatchingCard(c81012009.mtfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,nil,e) end
 end
 function c81012009.mtop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) or c:IsFacedown() then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
-	local g=Duel.SelectMatchingCard(tp,c81012009.mtfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,nil,e)
+	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(c81012009.mtfilter),tp,LOCATION_HAND+LOCATION_GRAVE,0,1,1,nil,e)
 	if g:GetCount()>0 then
 		Duel.Overlay(c,g)
 	end
