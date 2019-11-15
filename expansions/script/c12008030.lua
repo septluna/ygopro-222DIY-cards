@@ -50,7 +50,7 @@ function c12008030.spfilter1(c,e,tp)
 		and aux.MustMaterialCheck(c,tp,EFFECT_MUST_BE_XMATERIAL)
 end
 function c12008030.spfilter2(c,e,tp,mc,level)
-	return c:IsType(TYPE_XYZ) and c:GetLevel()==level and mc:IsCanBeXyzMaterial(c)
+	return c:IsType(TYPE_XYZ) and c:GetRank==level and mc:IsCanBeXyzMaterial(c)
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) and Duel.GetLocationCountFromEx(tp,tp,mc,c)>0
 end
 function c12008030.sptg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
