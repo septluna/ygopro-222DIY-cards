@@ -26,7 +26,7 @@ function c12008023.initial_effect(c)
 	c:RegisterEffect(e2)  
 end
 function c12008023.cfilter(c)
-	return c:IsSetCard(0x1fb3) and c:IsType(TYPE_MONSTER) and not c:IsPublic()
+	return  ( c:IsSetCard(0x1fb3) or c:IsSetCard(0xfbb)  ) and c:IsType(TYPE_MONSTER) and not c:IsPublic()
 end
 function c12008023.thfilter2(c)
 	return c:IsSetCard(0x2fb3) and c:IsAbleToHand() and not c:IsCode(12008023)
