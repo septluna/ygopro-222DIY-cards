@@ -1,6 +1,5 @@
 --时崎狂三---时之战士
 function c33400008.initial_effect(c)
-	  --link summon
 	aux.AddLinkProcedure(c,c33400008.mfilter,2)
 	c:EnableReviveLimit()
 		--activate from hand
