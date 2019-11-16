@@ -74,18 +74,18 @@ function c12006009.condition(e,tp,eg,ep,ev,re,r,rp)
 		or rp==1-tp and c:IsReason(REASON_DESTROY))
 		and c:IsPreviousLocation(LOCATION_ONFIELD)
 end
-function c12006009.filter(c,e,tp)
+function c12006009.filter3(c,e,tp)
 	return c:IsSetCard(0x8fbd) and not c:IsCode(12006009) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c12006009.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsExistingMatchingCard(c12006009.filter,tp,LOCATION_DECK,0,1,nil,e,tp) end
+		and Duel.IsExistingMatchingCard(c12006009.filter3,tp,LOCATION_DECK,0,1,nil,e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK)
 end
 function c12006009.operation(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SelectMatchingCard(tp,c12006009.filter,tp,LOCATION_DECK,0,1,1,nil,e,tp)
+	local g=Duel.SelectMatchingCard(tp,c12006009.filter3,tp,LOCATION_DECK,0,1,1,nil,e,tp)
 	if g:GetCount()>0 then
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
