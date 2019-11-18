@@ -47,6 +47,7 @@ function c47554018.initial_effect(c)
     e4:SetRange(LOCATION_SZONE)
     e4:SetHintTiming(0,TIMINGS_CHECK_MONSTER+TIMING_END_PHASE)
     e4:SetCountLimit(1,47554018)
+    e4:SetCost(c47554018.descost)
     e4:SetTarget(c47554018.destg)
     e4:SetOperation(c47554018.desop)
     c:RegisterEffect(e4)
@@ -58,6 +59,25 @@ function c47554018.setcon(e,tp,eg,ep,ev,re,r,rp)
 end
 function c47554018.desfilter(c)
     return c:IsFaceup() and c:IsSetCard(0x5d0) and c:IsType(TYPE_PENDULUM) and c:GetSummonLocation()==LOCATION_EXTRA 
+end
+function c47554018.descost(e,tp,eg,ep,ev,re,r,rp,chk)
+    local c=e:GetHandler()
+    local g=Duel.SelectMatchingCard(tp,c47554018.desfilter,tp,LOCATION_MZONE,0,1,1,nil,e:GetHandler(),tp)
+    local tc=g:GetFirst()
+    if chk==0 then return tc:IsAbleToRemoveAsCost() end
+    if Duel.Remove(tc,POS_FACEUP,REASON_COST+REASON_TEMPORARY)~=0 then
+        local e1=Effect.CreateEffect(c)
+        e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+        e1:SetCode(EVENT_PHASE+PHASE_END)
+        e1:SetReset(RESET_PHASE+PHASE_END)
+        e1:SetLabelObject(tc)
+        e1:SetCountLimit(1)
+        e1:SetOperation(c47554018.retop)
+        Duel.RegisterEffect(e1,tp)
+    end
+end
+function c47554018.retop(e,tp,eg,ep,ev,re,r,rp)
+    Duel.ReturnToField(e:GetLabelObject())
 end
 function c47554018.destg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
     if chkc then return false end
