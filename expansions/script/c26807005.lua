@@ -13,7 +13,7 @@ function c26807005.activate(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
 	e1:SetTargetRange(LOCATION_FZONE,LOCATION_FZONE)
-	e1:SetValue(aux.indoval)
+	e1:SetValue(1)
 	e1:SetReset(RESET_PHASE+PHASE_END)
 	Duel.RegisterEffect(e1,tp)
 	local e2=Effect.CreateEffect(c)
@@ -30,7 +30,7 @@ end
 function c26807005.discon(e,tp,eg,ep,ev,re,r,rp)
 	if not re:IsHasProperty(EFFECT_FLAG_CARD_TARGET) then return false end
 	local g=Duel.GetChainInfo(ev,CHAININFO_TARGET_CARDS)
-	return g and g:IsExists(c26807005.indfilter,1,nil) and ep~=tp
+	return g and g:IsExists(c26807005.indfilter,1,nil)
 end
 function c26807005.disop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.NegateEffect(ev)

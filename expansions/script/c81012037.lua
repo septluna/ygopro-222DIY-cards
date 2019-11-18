@@ -1,4 +1,4 @@
---四散的花瓣·雾切响子
+--烦恼中·双叶
 function c81012037.initial_effect(c)
 	--pendulum summon
 	aux.EnablePendulumAttribute(c)

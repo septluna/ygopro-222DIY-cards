@@ -96,5 +96,5 @@ function c26807013.soperation(e,tp,eg,ep,ev,re,r,rp)
 	Duel.RegisterEffect(e1,tp)
 end
 function c26807013.ssplimit(e,c,sump,sumtype,sumpos,targetp,se)
-	return not (c:IsAttack(2200) and c:IsDefense(600))
+	return not ((c:IsAttack(2200) and c:IsDefense(600)) or (c:IsAttack(3200) and c:IsType(TYPE_LINK)))
 end

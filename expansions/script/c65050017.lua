@@ -66,5 +66,6 @@ function c65050017.activate(e,tp,eg,ep,ev,re,r,rp)
 		local e5=e3:Clone()
 		e5:SetCode(EFFECT_MUST_BE_LMATERIAL)
 		tc:RegisterEffect(e5)
+		tc:RegisterFlagEffect(0,RESET_EVENT+0x1fe0000,EFFECT_FLAG_CLIENT_HINT,1,0,aux.Stringid(65050017,0))
 	end
 end

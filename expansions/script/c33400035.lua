@@ -3,14 +3,21 @@ function c33400035.initial_effect(c)
 	c:EnableCounterPermit(0x34f)
 	 --xyz summon
 	c:EnableReviveLimit()
-	aux.AddXyzProcedureLevelFree(c,c33400035.mfilter,c33400035.xyzcheck,3,99)   
+	aux.AddXyzProcedureLevelFree(c,c33400035.mfilter,c33400035.xyzcheck,3,99,c33400035.ovfilter,aux.Stringid(33400035,7),c33400035.xyzop)  
+	--spsummon limit
+	local e0=Effect.CreateEffect(c)
+	e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e0:SetType(EFFECT_TYPE_SINGLE)
+	e0:SetCode(EFFECT_SPSUMMON_CONDITION)
+	e0:SetValue(aux.xyzlimit)
+	c:RegisterEffect(e0)  
 	 --negate
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(33400035,0))
 	e1:SetCategory(CATEGORY_NEGATE+CATEGORY_DESTROY+CATEGORY_TODECK+CATEGORY_COUNTER)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_CHAINING)
-	e1:SetCountLimit(2,33400035)
+	e1:SetCountLimit(1,33400035)
 	e1:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCost(c33400035.necost)
@@ -50,22 +57,48 @@ function c33400035.initial_effect(c)
 	c:RegisterEffect(e4)
 end
 function c33400035.mfilter(c,xyzc)
-	return c:IsXyzType(TYPE_XYZ) 
+	return c:IsXyzType(TYPE_XYZ) and c:IsType(TYPE_MONSTER)
 end
-function c33400035.xyzcheck(g,c,xyzc)
-	return g:IsExists(c33400035.cfilter1,1,nil,c,xyzc) and g:IsExists(c33400035.cfilter2,1,nil,c,xyzc)
+function c33400035.xyzcheck(g)
+	return g:IsExists(Card.IsSetCard,1,nil,0x3341) and g:IsExists(Card.IsSetCard,1,nil,0x7342)
 end
-function c33400035.cfilter1(c,xyzc)
-	return c:IsType(TYPE_XYZ) and c:IsSetCard(0x3341)
+function c33400035.ovfilter(c)
+	return c:IsFaceup() and c:IsSetCard(0x341) 
 end
-function c33400035.cfilter2(c,xyzc)
-	return c:IsType(TYPE_XYZ) and c:IsSetCard(0x7342)
+function c33400035.refilter1(c)
+	return c:IsXyzType(TYPE_XYZ) and c:IsType(TYPE_MONSTER) and c:IsSetCard(0x3341) 
 end
+function c33400035.refilter2(c)
+	return c:IsXyzType(TYPE_XYZ) and c:IsType(TYPE_MONSTER) and c:IsSetCard(0x6342) 
+end
+function c33400035.refilter3(c)
+	return c:IsXyzType(TYPE_XYZ) and c:IsType(TYPE_MONSTER) 
+end
+function c33400035.check(g)
+	return   g:IsExists(Card.IsSetCard,1,nil,0x3341) and g:IsExists(Card.IsSetCard,1,nil,0x6342)
+end
+function c33400035.xyzop(e,tp,chk,c)
+	local g1nm=Duel.GetMatchingGroupCount(c33400035.refilter1,tp,LOCATION_GRAVE,0,nil)
+	local g2nm=Duel.GetMatchingGroupCount(c33400035.refilter2,tp,LOCATION_GRAVE,0,nil)
+	local g3nm=Duel.GetMatchingGroupCount(c33400035.refilter3,tp,LOCATION_GRAVE,0,nil)
+	local cnm=g1nm+g2nm
+	local cnm2=g3nm-cnm
+	if chk==0 then return cnm>=3 or (g1nm==1 and g2nm==1 and  cnm2>=1) end
+	local g=Duel.GetMatchingGroup(c33400035.refilter3,tp,LOCATION_GRAVE,0,nil)
+	 Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+	local g1=g:SelectSubGroup(tp,c33400035.check,false,3,99)	 
+	Duel.Remove(g1,POS_FACEUP,REASON_COST)
+end
+
 function c33400035.necost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsCanRemoveCounter(tp,1,0,0x34f,2,REASON_COST) and e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
+	local ft=0
+	if e:GetHandler():GetFlagEffect(33401301)>0 then ft=1 end
+	if chk==0 then return Duel.IsCanRemoveCounter(tp,1,0,0x34f,2,REASON_COST) and ((ft==1) or e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST)) end
 	Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
 	Duel.RemoveCounter(tp,1,0,0x34f,2,REASON_COST)
+	if ft==0 then 
 	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
+	end
 end
 function c33400035.necon(e,tp,eg,ep,ev,re,r,rp)
 	return not e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED) and Duel.IsChainNegatable(ev)

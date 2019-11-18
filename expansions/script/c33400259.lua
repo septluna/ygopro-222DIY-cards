@@ -39,10 +39,13 @@ function c33400259.operation(e,tp,eg,ep,ev,re,r,rp)
 		 Duel.Damage(1-tp,500,REASON_EFFECT)  
 		 if Duel.SelectYesNo(tp,aux.Stringid(33400259,0))  then
 		   Duel.NegateEffect(ev)
+			if re:GetHandler():IsRelateToEffect(re) then 
+			   Duel.Destroy(eg,REASON_EFFECT)
+			end
 		 end
 	end
 	if tc:IsCode(ac) then 
-		 Duel.Damage(1-tp,500,REASON_EFFECT)  
+		 Duel.Damage(1-tp,1000,REASON_EFFECT)  
 		 if Duel.SelectYesNo(tp,aux.Stringid(33400259,1)) and Duel.IsExistingTarget(c33400259.thfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil) then 
 			 local g3=Duel.SelectTarget(tp,c33400259.thfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil)
 			 Duel.SendtoHand(g3,nil,REASON_EFFECT)   

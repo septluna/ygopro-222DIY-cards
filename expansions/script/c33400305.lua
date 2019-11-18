@@ -1,14 +1,15 @@
 --夜刀神十香 剑之王者
 function c33400305.initial_effect(c)
 	 --xyz summon
-	 aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsSetCard,0x5341),4,2)
-	c:EnableReviveLimit()
+	 aux.AddXyzProcedureLevelFree(c,c33400305.mfilter,c33400305.xyzcheck,2,2,c33400305.ovfilter,
+	 aux.Stringid(33400305,2),nil)
+	c:EnableReviveLimit()  
 	--Battle!!
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(33400305,0))
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetCountLimit(1)
+	e1:SetCountLimit(1,33400305)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetHintTiming(0,TIMINGS_CHECK_MONSTER)
@@ -23,17 +24,31 @@ function c33400305.initial_effect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_TO_GRAVE)
+	e2:SetCountLimit(1,33400305+10000)
 	e2:SetCondition(c33400305.thcon)
 	e2:SetTarget(c33400305.thtg)
 	e2:SetOperation(c33400305.thop)
 	c:RegisterEffect(e2)
 end
+function c33400305.mfilter(c)
+	return c:IsLevel(4)
+end
+function c33400305.xyzcheck(g)
+	return g:IsExists(Card.IsType,1,nil,TYPE_RITUAL)
+end
+function c33400305.ovfilter(c)
+	return c:IsFaceup() and c:IsSetCard(0x5341) and c:IsType(TYPE_RITUAL) and c:IsType(TYPE_MONSTER)
+end
 function c33400305.splimit(e,c)
 	return c:IsLocation(LOCATION_EXTRA)
 end
 function c33400305.bacost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
-	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)   
+	local ft=0
+	if e:GetHandler():GetFlagEffect(33401301)>0 then ft=1 end
+	if chk==0 then return ((ft==1) or e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST)) end
+	if ft==0 then 
+	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
+	end
 end
 function c33400355.bafilter1(c)
 	return c:IsAttackable() and c:IsSetCard(0x5341) and c:IsFaceup()

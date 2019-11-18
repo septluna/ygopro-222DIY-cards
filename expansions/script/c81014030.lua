@@ -75,28 +75,28 @@ function c81014030.tgop(e,tp,eg,ep,ev,re,r,rp)
 			local miu=setg:GetFirst()
 			Duel.SSet(tp,miu)
 			Duel.ConfirmCards(1-tp,miu)
-		end
-		local e0=Effect.CreateEffect(e:GetHandler())
-		e0:SetType(EFFECT_TYPE_SINGLE)
-		e0:SetCode(EFFECT_LEAVE_FIELD_REDIRECT)
-		e0:SetReset(RESET_EVENT+RESETS_REDIRECT)
-		e0:SetValue(LOCATION_REMOVED)
-		miu:RegisterEffect(e0,true)
-		if miu:IsType(TYPE_QUICKPLAY) then
-			local e1=Effect.CreateEffect(e:GetHandler())
-			e1:SetType(EFFECT_TYPE_SINGLE)
-			e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
-			e1:SetCode(EFFECT_QP_ACT_IN_SET_TURN)
-			e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-			miu:RegisterEffect(e1)
-		end
-		if miu:IsType(TYPE_TRAP) then
-			local e2=Effect.CreateEffect(e:GetHandler())
-			e2:SetType(EFFECT_TYPE_SINGLE)
-			e2:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
-			e2:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
-			e2:SetReset(RESET_EVENT+RESETS_STANDARD)
-			miu:RegisterEffect(e2)
+			local e0=Effect.CreateEffect(e:GetHandler())
+			e0:SetType(EFFECT_TYPE_SINGLE)
+			e0:SetCode(EFFECT_LEAVE_FIELD_REDIRECT)
+			e0:SetReset(RESET_EVENT+RESETS_REDIRECT)
+			e0:SetValue(LOCATION_REMOVED)
+			miu:RegisterEffect(e0,true)
+			if miu:IsType(TYPE_QUICKPLAY) then
+				local e1=Effect.CreateEffect(e:GetHandler())
+				e1:SetType(EFFECT_TYPE_SINGLE)
+				e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
+				e1:SetCode(EFFECT_QP_ACT_IN_SET_TURN)
+				e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+				miu:RegisterEffect(e1)
+			end
+			if miu:IsType(TYPE_TRAP) then
+				local e2=Effect.CreateEffect(e:GetHandler())
+				e2:SetType(EFFECT_TYPE_SINGLE)
+				e2:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
+				e2:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
+				e2:SetReset(RESET_EVENT+RESETS_STANDARD)
+				miu:RegisterEffect(e2)
+			end
 		end
 	end
 	Duel.ShuffleHand(1-tp)

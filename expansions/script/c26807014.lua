@@ -2,7 +2,7 @@
 c26807014.card_code_list={81010004}
 function c26807014.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,nil,7,2)
+	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_WIND),7,2)
 	c:EnableReviveLimit()
 	--to deck
 	local e1=Effect.CreateEffect(c)
@@ -88,11 +88,11 @@ function c26807014.filter(c)
 	return c:IsLevelBelow(3) and c:IsAttribute(ATTRIBUTE_WIND) and c:IsAbleToGrave()
 end
 function c26807014.atktg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and c26807014.tgfilter(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(c26807014.tgfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and c26807014.tgfilter(chkc) and c:IsControler(tp) end
+	if chk==0 then return Duel.IsExistingTarget(c26807014.tgfilter,tp,LOCATION_MZONE,0,1,nil)
 		 and Duel.IsExistingMatchingCard(c26807014.filter,tp,LOCATION_DECK,0,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-	Duel.SelectTarget(tp,c26807014.tgfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil)
+	Duel.SelectTarget(tp,c26807014.tgfilter,tp,LOCATION_MZONE,0,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
 end
 function c26807014.atkop(e,tp,eg,ep,ev,re,r,rp)

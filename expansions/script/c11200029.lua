@@ -1,15 +1,22 @@
 --泄矢诹访子
 c11200029.card_code_list={11200029}
 function c11200029.initial_effect(c)
-	--special summon
+	--cannot special summon
+	local e0=Effect.CreateEffect(c)
+	e0:SetType(EFFECT_TYPE_SINGLE)
+	e0:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e0:SetRange(LOCATION_DECK)
+	e0:SetCode(EFFECT_SPSUMMON_CONDITION)
+	c:RegisterEffect(e0)
+	--to grave
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TOGRAVE+CATEGORY_SPECIAL_SUMMON)
+	e1:SetCategory(CATEGORY_TOGRAVE)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_HAND)
 	e1:SetCountLimit(1,11200029)
-	e1:SetCost(c11200029.spcost)
-	e1:SetTarget(c11200029.sptg)
-	e1:SetOperation(c11200029.spop)
+	e1:SetCost(c11200029.sgcost)
+	e1:SetTarget(c11200029.sgtg)
+	e1:SetOperation(c11200029.sgop)
 	c:RegisterEffect(e1)
 	--to hand
 	local e2=Effect.CreateEffect(c)
@@ -24,27 +31,31 @@ function c11200029.initial_effect(c)
 	e2:SetOperation(c11200029.thop)
 	c:RegisterEffect(e2)
 end
-function c11200029.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsDiscardable,tp,LOCATION_HAND,0,1,c) end
-	Duel.DiscardHand(tp,Card.IsDiscardable,1,1,REASON_COST+REASON_DISCARD,c)
+function c11200029.cfilter(c)
+	return c:IsRace(RACE_AQUA) and c:IsDiscardable()
 end
-function c11200029.tgfilter(c)
+function c11200029.sgcost(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if chk==0 then return c:IsDiscardable()
+		and Duel.IsExistingMatchingCard(c11200029.cfilter,tp,LOCATION_HAND,0,1,c) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DISCARD)
+	local g=Duel.SelectMatchingCard(tp,c11200029.cfilter,tp,LOCATION_HAND,0,1,1,c)
+	g:AddCard(c)
+	Duel.SendtoGrave(g,REASON_DISCARD+REASON_COST)
+end
+function c11200029.filter(c)
 	return aux.IsCodeListed(c,11200029) and not c:IsCode(11200029) and c:IsAbleToGrave()
 end
-function c11200029.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and e:GetHandler():IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE)
-		and Duel.IsExistingMatchingCard(c11200029.tgfilter,tp,LOCATION_DECK,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,e:GetHandler(),1,0,0)
-end
-function c11200029.spop(e,tp,eg,ep,ev,re,r,rp)
+function c11200029.sgtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
+	if chk==0 then return Duel.IsExistingMatchingCard(c11200029.filter,tp,LOCATION_DECK,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
+end
+function c11200029.sgop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectMatchingCard(tp,c11200029.tgfilter,tp,LOCATION_DECK,0,1,1,nil)
-	if g:GetCount()>0 and Duel.SendtoGrave(g,REASON_EFFECT)~=0 and g:GetFirst():IsLocation(LOCATION_GRAVE) and c:IsRelateToEffect(e) then
-		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP_DEFENSE)
+	local g=Duel.SelectMatchingCard(tp,c11200029.filter,tp,LOCATION_DECK,0,1,1,nil)
+	if g:GetCount()>0 then 
+		Duel.SendtoGrave(g,REASON_EFFECT)
 	end
 end
 function c11200029.thcon(e,tp,eg,ep,ev,re,r,rp)

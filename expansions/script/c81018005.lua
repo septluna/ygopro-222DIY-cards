@@ -6,12 +6,14 @@ function c81018005.initial_effect(c)
 	c:EnableReviveLimit()
 	Tenka.Shizuka(c)
 	--atk
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_SINGLE)
-	e2:SetCode(EFFECT_UPDATE_ATTACK)
-	e2:SetCondition(c81018005.atkcom)
-	e2:SetValue(-800)
-	c:RegisterEffect(e2)
+	local e0=Effect.CreateEffect(c)
+	e0:SetType(EFFECT_TYPE_SINGLE)
+	e0:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+	e0:SetRange(LOCATION_MZONE)
+	e0:SetCode(EFFECT_UPDATE_ATTACK)
+	e0:SetCondition(c81018005.askcon)
+	e0:SetValue(c81018005.askval)
+	c:RegisterEffect(e0)
 	--atkup
 	local e3=Effect.CreateEffect(c)
 	e3:SetCategory(CATEGORY_ATKCHANGE)
@@ -26,10 +28,12 @@ function c81018005.initial_effect(c)
 	e3:SetOperation(c81018005.atkop)
 	c:RegisterEffect(e3)
 end
-function c81018005.atkcom(e)
+function c81018005.askcon(e)
 	local ph=Duel.GetCurrentPhase()
-	return (ph==PHASE_DAMAGE or ph==PHASE_DAMAGE_CAL)
-		and Duel.GetAttacker()==e:GetHandler() and Duel.GetAttackTarget()~=nil
+	return ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE
+end
+function c81018005.askval(e,c)
+	return Duel.GetFieldGroupCount(c:GetControler(),LOCATION_MZONE,LOCATION_MZONE)*-500
 end
 function c81018005.atkcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetCurrentPhase()~=PHASE_DAMAGE or not Duel.IsDamageCalculated()
@@ -43,7 +47,7 @@ function c81018005.atkfilter(c)
 end
 function c81018005.atktg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and chkc:IsFaceup() end
-	if chk==0 then return Duel.IsExistingMatchingCard(c81018005.atkfilter,tp,LOCATION_MZONE,0,1,nil)
+	if chk==0 then return Duel.IsExistingMatchingCard(c81018005.atkfilter,tp,LOCATION_GRAVE,0,1,nil)
 		and Duel.IsExistingTarget(Card.IsFaceup,tp,0,LOCATION_MZONE,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
 	Duel.SelectTarget(tp,Card.IsFaceup,tp,0,LOCATION_MZONE,1,1,nil)
@@ -51,7 +55,7 @@ end
 function c81018005.atkop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc:IsFaceup() and tc:IsRelateToEffect(e) then
-		local ct=Duel.GetMatchingGroupCount(c81018005.atkfilter,tp,LOCATION_MZONE,0,nil)
+		local ct=Duel.GetMatchingGroupCount(c81018005.atkfilter,tp,LOCATION_GRAVE,0,nil)
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_UPDATE_ATTACK)

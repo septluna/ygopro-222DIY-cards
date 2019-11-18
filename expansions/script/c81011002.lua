@@ -20,24 +20,17 @@ function c81011002.initial_effect(c)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_DESTROYED)
 	e2:SetCountLimit(1,81011092)
-	e2:SetCost(c81011002.cost)
 	e2:SetCondition(c81011002.spcon2)
 	e2:SetTarget(c81011002.sptg2)
 	e2:SetOperation(c81011002.spop2)
 	c:RegisterEffect(e2)
-	Duel.AddCustomActivityCounter(81011002,ACTIVITY_SPSUMMON,c81011002.counterfilter)
-end
-function c81011002.counterfilter(c)
-	return (c:IsRace(RACE_FIEND) and c:IsAttribute(ATTRIBUTE_LIGHT)) or c:GetSummonLocation()~=LOCATION_EXTRA
 end
 function c81011002.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST)
-		and c81011002.cost(e,tp,eg,ep,ev,re,r,rp,0) end
+	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
 	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
-	c81011002.cost(e,tp,eg,ep,ev,re,r,rp,1)
 end
 function c81011002.spfilter(c,e,tp)
-	return c:IsType(TYPE_XYZ) and c:IsRank(10) and not c:IsCode(81011002)
+	return c:IsType(TYPE_XYZ) and c:IsRank(10) and c:IsRace(RACE_FIEND) and c:IsAttribute(ATTRIBUTE_LIGHT) and not c:IsCode(81011002)
 		and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c81011002.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -54,27 +47,13 @@ function c81011002.spop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)
 	end
 end
-function c81011002.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetCustomActivityCount(81011002,tp,ACTIVITY_SPSUMMON)==0 end
-	local e1=Effect.CreateEffect(e:GetHandler())
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_OATH)
-	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
-	e1:SetTargetRange(1,0)
-	e1:SetTarget(c81011002.splimit)
-	e1:SetReset(RESET_PHASE+PHASE_END)
-	Duel.RegisterEffect(e1,tp)
-end
-function c81011002.splimit(e,c,sump,sumtype,sumpos,targetp,se)
-	return not (c:IsRace(RACE_FIEND) and c:IsAttribute(ATTRIBUTE_LIGHT)) and c:IsLocation(LOCATION_EXTRA)
-end
 function c81011002.spcon2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return (c:IsReason(REASON_BATTLE) or (c:IsReason(REASON_EFFECT) and c:GetReasonPlayer()==1-tp and c:GetPreviousControler()==tp))
 		and c:IsPreviousLocation(LOCATION_MZONE) and c:IsSummonType(SUMMON_TYPE_XYZ)
 end
 function c81011002.spfilter2(c,e,tp)
-	return c:IsLevel(10) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsLevel(10) and c:IsRace(RACE_FIEND) and c:IsAttribute(ATTRIBUTE_LIGHT) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c81011002.spcheck(g)
 	return g:GetClassCount(Card.GetCode)==#g

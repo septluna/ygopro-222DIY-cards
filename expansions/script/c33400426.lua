@@ -15,6 +15,11 @@ function c33400426.initial_effect(c)
 	e1:SetTarget(c33400426.thtg)
 	e1:SetOperation(c33400426.thop)
 	c:RegisterEffect(e1)
+	local e3=e1:Clone()
+	e3:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DELAY+EFFECT_FLAG_CANNOT_INACTIVATE+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_CANNOT_NEGATE)
+	e3:SetCondition(c33400426.thcon2)
+	e3:SetTarget(c33400426.thtg2)
+	c:RegisterEffect(e3)
    --set
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(33400426,2))
@@ -29,8 +34,24 @@ end
 function c33400426.lcheck(g)
 	return g:IsExists(Card.IsLinkSetCard,1,nil,0x9343) 
 end
+function c33400420.cccfilter1(c)
+	return c:IsCode(33400428) and c:IsFaceup()
+end
+function c33400420.cccfilter2(c)
+	return c:IsCode(33400425) and c:IsFaceup() and c:IsSummonType(SUMMON_TYPE_XYZ)
+end
+function c33400420.ccfilter(e,tp,eg,ep,ev,re,r,rp)
+	return  Duel.IsExistingMatchingCard(Card.IsFaceup,tp,0,LOCATION_MZONE,1,nil) and 
+   (Duel.IsExistingMatchingCard(c33400420.cccfilter1,tp,LOCATION_ONFIELD,0,1,nil) or 
+	Duel.IsExistingMatchingCard(c33400420.cccfilter2,tp,LOCATION_MZONE,0,1,nil) 
+	)
+end
 function c33400426.thcon(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():IsSummonType(SUMMON_TYPE_LINK)
+	return e:GetHandler():IsSummonType(SUMMON_TYPE_LINK) and not (not Duel.IsExistingMatchingCard(Card.IsSetCard,tp,LOCATION_MZONE,0,1,nil,0x341) and Duel.IsExistingMatchingCard(Card.IsSetCard,tp,0,LOCATION_MZONE,1,nil,0x341) or c33400420.ccfilter(e,tp,eg,ep,ev,re,r,rp))
+end
+function c33400426.thcon2(e,tp,eg,ep,ev,re,r,rp)
+	return e:GetHandler():IsSummonType(SUMMON_TYPE_LINK) and not Duel.IsExistingMatchingCard(Card.IsSetCard,tp,LOCATION_MZONE,0,1,nil,0x341) and Duel.IsExistingMatchingCard(Card.IsSetCard,tp,0,LOCATION_MZONE,1,nil,0x341) or  c33400420.ccfilter(e,tp,eg,ep,ev,re,r,rp)
+ 
 end
 function c33400426.thfilter(c)
 	return (c:IsSetCard(0x5342) or c:IsSetCard(0x9343)) and c:IsAbleToDeck()
@@ -41,6 +62,14 @@ function c33400426.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local g=Duel.SelectTarget(tp,c33400426.thfilter,tp,LOCATION_GRAVE,0,1,1,nil)
 	Duel.SetOperationInfo(0,HINTMSG_TODECK,g,1,0,0)
+end
+function c33400426.thtg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c33400426.thfilter(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(c33400426.thfilter,tp,LOCATION_GRAVE,0,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	local g=Duel.SelectTarget(tp,c33400426.thfilter,tp,LOCATION_GRAVE,0,1,1,nil)
+	Duel.SetOperationInfo(0,HINTMSG_TODECK,g,1,0,0)
+	Duel.SetChainLimit(aux.FALSE)
 end
 function c33400426.thfilter2(c,code)
 	return c:IsSetCard(0x9343)  and not c:IsCode(code) and c:IsAbleToHand()
@@ -53,7 +82,7 @@ function c33400426.thop(e,tp,eg,ep,ev,re,r,rp)
 			 local g=Duel.SelectMatchingCard(tp,c33400426.thfilter2,tp,LOCATION_DECK,0,1,1,nil,tc:GetCode())
 			 if g:GetCount()>0 then
 				Duel.SendtoHand(g,tp,REASON_EFFECT)
-				Duel.ConfirmCards(1-tp,g)			 
+				Duel.ConfirmCards(1-tp,g)			
 			 end
 		end
 	end

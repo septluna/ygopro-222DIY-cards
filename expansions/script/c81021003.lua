@@ -52,9 +52,9 @@ function c81021003.lrcon(e,tp,eg,ep,ev,re,r,rp)
 	if tp~=ep then return false end
 	local lp=Duel.GetLP(ep)
 	if lp<ev then return false end
-	if not re or not re:IsHasType(0x7e0) then return false end
+	if not re or not re:IsHasType(0x7f0) then return false end
 	local rc=re:GetHandler()
-	return rc:IsSetCard(0x818) and (rc:IsLocation(LOCATION_MZONE) or rc:IsLocation(LOCATION_PZONE)) and e:GetHandler():GetCounter(0x818)>0
+	return rc:IsSetCard(0x818) and e:GetHandler():GetCounter(0x818)>0
 end
 function c81021003.lrop(e,tp,eg,ep,ev,re,r,rp)
 	e:GetHandler():RemoveCounter(ep,0x818,1,REASON_EFFECT)

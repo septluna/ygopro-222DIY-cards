@@ -2,7 +2,7 @@
 function c26807010.initial_effect(c)
 	--link summon
 	c:EnableReviveLimit()
-	aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsLinkType,TYPE_RITUAL),3,3)
+	aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsLinkType,TYPE_EFFECT),2,99,c26807010.lcheck)
 	--cannot be link material
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_SINGLE)
@@ -33,6 +33,9 @@ function c26807010.initial_effect(c)
 	e4:SetTarget(c26807010.thtg)
 	e4:SetOperation(c26807010.thop)
 	c:RegisterEffect(e4)
+end
+function c26807010.lcheck(g,lc)
+	return g:IsExists(Card.IsLinkType,1,nil,TYPE_RITUAL)
 end
 function c26807010.thcfilter(c,lg)
 	return c:IsType(TYPE_RITUAL) and c:IsSummonType(SUMMON_TYPE_RITUAL) and lg:IsContains(c)

@@ -13,7 +13,7 @@ function c81010028.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function c81010028.filter(c)
-	return c:IsType(TYPE_MONSTER) and c:IsStatus(STATUS_SPSUMMON_TURN)
+	return c:IsType(TYPE_MONSTER) and c:IsStatus(STATUS_SPSUMMON_TURN+STATUS_FLIP_SUMMON_TURN+STATUS_SUMMON_TURN)
 end
 function c81010028.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and c81010028.filter(chkc) end

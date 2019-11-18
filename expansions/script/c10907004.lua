@@ -1,0 +1,73 @@
+--花寄女生 小东人鱼
+function c10907004.initial_effect(c)	  
+	local e0=Effect.CreateEffect(c)
+	e0:SetType(EFFECT_TYPE_SINGLE)
+	e0:SetCode(EFFECT_TO_GRAVE_REDIRECT_CB)
+	e0:SetProperty(EFFECT_FLAG_UNCOPYABLE)
+	e0:SetCondition(c10907004.repcon)
+	e0:SetOperation(c10907004.repop)
+	c:RegisterEffect(e0)
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
+	e1:SetRange(LOCATION_SZONE)
+	e1:SetTargetRange(LOCATION_MZONE,0)
+	e1:SetTarget(aux.TargetBoolFunction(Card.IsSetCard,0x23a))
+	e1:SetCondition(c10907004.spcon)
+	e1:SetValue(aux.indoval)
+	c:RegisterEffect(e1)
+	local e2=e1:Clone()
+	e2:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
+	e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
+	e2:SetValue(aux.tgoval)
+	c:RegisterEffect(e2)	
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_IGNITION)
+	e3:SetDescription(aux.Stringid(10907004,0))
+	e3:SetRange(LOCATION_MZONE)
+	e3:SetCondition(c10907004.spcon)
+	e3:SetCountLimit(1,10907004)
+	e3:SetTarget(c10907004.target)
+	e3:SetOperation(c10907004.operation)
+	c:RegisterEffect(e3)
+end
+function c10907004.repcon(e)
+	local c=e:GetHandler()
+	return c:IsFaceup() and c:IsLocation(LOCATION_MZONE) and e:GetHandler():GetFlagEffect(10907004)==0
+end
+function c10907004.repop(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local e1=Effect.CreateEffect(c)
+	e1:SetCode(EFFECT_CHANGE_TYPE)
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+	e1:SetReset(RESET_EVENT+RESETS_STANDARD-RESET_TURN_SET)
+	e1:SetValue(TYPE_SPELL+TYPE_CONTINUOUS)
+	c:RegisterEffect(e1)
+end
+function c10907004.spcon(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.IsEnvironment(10907000)
+end
+function c10907004.filter(c)
+	return c:IsSetCard(0x23a) and c:IsType(TYPE_MONSTER) and not c:IsForbidden()
+end
+function c10907004.target(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(c10907004.filter,tp,LOCATION_DECK+LOCATION_GRAVE+LOCATION_HAND,0,1,nil)
+		and Duel.GetLocationCount(tp,LOCATION_SZONE)>0 end
+end
+function c10907004.operation(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 then return end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOFIELD)
+	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(c10907004.filter),tp,LOCATION_DECK+LOCATION_GRAVE+LOCATION_HAND,0,1,1,nil)
+	local tc=g:GetFirst()
+	if tc then
+		Duel.MoveToField(tc,tp,tp,LOCATION_SZONE,POS_FACEUP,true)
+		local e1=Effect.CreateEffect(e:GetHandler())
+		e1:SetCode(EFFECT_CHANGE_TYPE)
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD-RESET_TURN_SET)
+		e1:SetValue(TYPE_SPELL+TYPE_CONTINUOUS)
+		tc:RegisterEffect(e1)
+	end
+end

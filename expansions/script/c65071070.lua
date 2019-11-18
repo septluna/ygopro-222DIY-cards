@@ -19,9 +19,8 @@ function c65071070.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function c65071070.drcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsCanRemoveCounter(tp,1,1,0x1da0,15,REASON_COST) and e:GetHandler():IsAbleToRemoveAsCost() end
-	Duel.RemoveCounter(tp,1,1,0x11,15,REASON_COST)
-	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)
+	if chk==0 then return Duel.IsCanRemoveCounter(tp,1,1,0x1da0,20,REASON_COST) end
+	Duel.RemoveCounter(tp,1,1,0x1da0,20,REASON_COST)
 end
 
 function c65071070.drop(e,tp,eg,ep,ev,re,r,rp)
@@ -65,7 +64,7 @@ function c65071070.ctop(e,tp,eg,ep,ev,re,r,rp)
 end
 function c65071070.acop(e,tp,eg,ep,ev,re,r,rp)
 	local c=re:GetHandler()
-	if re:IsActiveType(TYPE_MONSTER) then
+	if re:IsActiveType(TYPE_MONSTER) and c:IsRelateToEffect(re) then
 		c:AddCounter(0x1da0,1)
 	end
 end

@@ -77,10 +77,11 @@ function c33401313.cpop(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 		e1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
-		e1:SetCode(EFFECT_CHANGE_CODE)
+		e1:SetCode(EFFECT_ADD_CODE)
 		e1:SetValue(code)
 		c:RegisterEffect(e1)
 		c:CopyEffect(code,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END,1)
+		c:RegisterFlagEffect(33401301,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END,0,1)
 	end
 end
 

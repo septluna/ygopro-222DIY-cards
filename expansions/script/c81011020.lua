@@ -26,11 +26,11 @@ function c81011020.initial_effect(c)
 	c:RegisterEffect(e2)
 	--special summon
 	local e3=Effect.CreateEffect(c)
-	e3:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+	e3:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_TODECK)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e3:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
 	e3:SetCode(EVENT_TO_GRAVE)
-	e3:SetCountLimit(1,81011920+EFFECT_COUNT_CODE_SINGLE)
+	e3:SetCountLimit(1,81011920)
 	e3:SetTarget(c81011020.sptg)
 	e3:SetOperation(c81011020.spop)
 	c:RegisterEffect(e3)
@@ -69,7 +69,7 @@ function c81011020.tkcon(e,tp,eg,ep,ev,re,r,rp)
 end
 function c81011020.tktg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsExistingMatchingCard(Card.IsAbleToRemove,tp,LOCATION_MZONE,0,1,nil)
+		and Duel.IsExistingMatchingCard(Card.IsAbleToRemove,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,1,nil)
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,81011019,0,0x4011,2800,2000,8,RACE_PLANT,ATTRIBUTE_EARTH) end
 	Duel.SetOperationInfo(0,CATEGORY_TOKEN,nil,1,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,0,0)
@@ -81,24 +81,31 @@ function c81011020.tkop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummon(token,0,tp,tp,false,false,POS_FACEUP)
 	end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToRemove,tp,LOCATION_MZONE,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToRemove,tp,LOCATION_ONFIELD+LOCATION_GRAVE,0,1,1,nil)
 	if g:GetCount()>0 then
 		Duel.BreakEffect()
 		Duel.Remove(g,POS_FACEUP,REASON_EFFECT)
 	end
 end
-function c81011020.thfilter2(c)
-	return c:IsCode(81011021) and c:IsAbleToHand()
+function c81011020.thfilter(c)
+	return c:IsCode(81011021,26809024) and c:IsAbleToHand()
 end
 function c81011020.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c81011020.thfilter2,tp,LOCATION_DECK,0,1,nil) end
+	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToDeck,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,e:GetHandler())
+		and Duel.IsExistingMatchingCard(c81011020.thfilter,tp,LOCATION_DECK,0,1,nil) end
+	local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,e:GetHandler())
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,1,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function c81011020.spop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingCard(tp,c81011020.thfilter2,tp,LOCATION_DECK,0,1,1,nil)
-	if g:GetCount()>0 then
-		Duel.SendtoHand(g,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,g)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToDeck,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,aux.ExceptThisCard(e))
+	if g:GetCount()>0 and Duel.SendtoDeck(g,nil,0,REASON_EFFECT)~=0 then
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+		local g=Duel.SelectMatchingCard(tp,c81011020.thfilter,tp,LOCATION_DECK,0,1,1,nil)
+		if g:GetCount()>0 then
+			Duel.SendtoHand(g,nil,REASON_EFFECT)
+			Duel.ConfirmCards(1-tp,g)
+		end
 	end
 end

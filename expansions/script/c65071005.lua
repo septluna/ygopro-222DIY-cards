@@ -20,7 +20,7 @@ function c65071005.initial_effect(c)
 end
 
 function c65071005.tgfil(c,e)
-	return c:GetCounter(0x1da0)~=0
+	return c:GetCounter(0x1da0)>=3
 end
 
 function c65071005.tgtg(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -30,7 +30,10 @@ end
 
 function c65071005.tgop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,c65071005.tgfil,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil,e)
-	if g:GetCount()>0 then Duel.SendtoGrave(g,REASON_EFFECT) end
+	if g:GetCount()>0 then 
+		Duel.HintSelection(g)
+		Duel.SendtoGrave(g,REASON_EFFECT) 
+	end
 end
 
 function c65071005.ctop(e,tp,eg,ep,ev,re,r,rp)
@@ -57,7 +60,7 @@ function c65071005.ctop(e,tp,eg,ep,ev,re,r,rp)
 end
 function c65071005.acop(e,tp,eg,ep,ev,re,r,rp)
 	local c=re:GetHandler()
-	if re:IsActiveType(TYPE_MONSTER) then
+	if re:IsActiveType(TYPE_MONSTER) and c:IsRelateToEffect(re) then
 		c:AddCounter(0x1da0,1)
 	end
 end

@@ -1,39 +1,28 @@
 --或许很烦人的谜之神明
 function c11200033.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,nil,5,2)
+	aux.AddXyzProcedure(c,nil,2,2)
 	c:EnableReviveLimit()
-	--add counter
+	--discard deck & draw
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_COUNTER)
+	e1:SetCategory(CATEGORY_DECKDES+CATEGORY_DAMAGE)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetCountLimit(1,11200033)
 	e1:SetRange(LOCATION_MZONE)
-	e1:SetHintTiming(0,TIMINGS_CHECK_MONSTER+TIMING_END_PHASE)
-	e1:SetCost(c11200033.ctcost)
-	e1:SetTarget(c11200033.cttg)
-	e1:SetOperation(c11200033.ctop)
+	e1:SetCountLimit(1,11200033)
+	e1:SetCondition(c11200033.drcon)
+	e1:SetCost(c11200033.drcost)
+	e1:SetTarget(c11200033.distg)
+	e1:SetOperation(c11200033.drop)
 	c:RegisterEffect(e1)
-	--cannot release
+	--destroy replace
 	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD)
+	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
+	e2:SetCode(EFFECT_DESTROY_REPLACE)
+	e2:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 	e2:SetRange(LOCATION_MZONE)
-	e2:SetCode(EFFECT_CANNOT_BE_LINK_MATERIAL)
-	e2:SetTarget(c11200033.tg)
-	e2:SetValue(1)
-	e2:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
+	e2:SetTarget(c11200033.reptg)
 	c:RegisterEffect(e2)
-	local e3=e2:Clone()
-	e3:SetCode(EFFECT_CANNOT_BE_XYZ_MATERIAL)
-	c:RegisterEffect(e3)
-	local e4=e2:Clone()
-	e4:SetCode(EFFECT_CANNOT_BE_FUSION_MATERIAL)
-	c:RegisterEffect(e4)
-	local e5=e2:Clone()
-	e5:SetCode(EFFECT_CANNOT_BE_SYNCHRO_MATERIAL)
-	c:RegisterEffect(e5)
 	--destroy
 	local e3=Effect.CreateEffect(c)
 	e3:SetCategory(CATEGORY_DESTROY)
@@ -46,24 +35,31 @@ function c11200033.initial_effect(c)
 	e3:SetOperation(c11200033.desop)
 	c:RegisterEffect(e3)
 end
-function c11200033.ctcost(e,tp,eg,ep,ev,re,r,rp,chk)
+function c11200033.drcon(e,tp,eg,ep,ev,re,r,rp)
+	return e:GetHandler():GetOverlayGroup():IsExists(Card.IsType,1,nil,TYPE_XYZ)
+end
+function c11200033.drcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
 	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
 end
-function c11200033.cttg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsControler(1-tp) and chkc:IsLocation(LOCATION_MZONE) and chkc:IsCanAddCounter(0x1620,1) end
-	if chk==0 then return Duel.IsExistingTarget(Card.IsCanAddCounter,tp,0,LOCATION_MZONE,1,nil,0x1620,1) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-	Duel.SelectTarget(tp,Card.IsCanAddCounter,tp,0,LOCATION_MZONE,1,1,nil,0x1620,1)
+function c11200033.distg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsPlayerCanDiscardDeck(tp,3) end
+	Duel.SetTargetPlayer(tp)
+	Duel.SetTargetParam(3)
+	Duel.SetOperationInfo(0,CATEGORY_DECKDES,nil,0,tp,3)
 end
-function c11200033.ctop(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) and tc:IsFaceup() then
-		tc:AddCounter(0x1620,1)
+function c11200033.cfilter(c)
+	return c:IsRace(RACE_AQUA) and c:IsLocation(LOCATION_GRAVE)
+end
+function c11200033.drop(e,tp,eg,ep,ev,re,r,rp)
+	local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
+	Duel.DiscardDeck(p,d,REASON_EFFECT)
+	local g=Duel.GetOperatedGroup()
+	local ct=g:FilterCount(c11200033.cfilter,nil)
+	if ct>0 then
+		Duel.BreakEffect()
+		Duel.Damage(1-tp,1200,REASON_EFFECT)
 	end
-end
-function c11200033.tg(e,c)
-	return c:GetCounter(0x1620)~=0
 end
 function c11200033.descon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -82,4 +78,13 @@ function c11200033.desop(e,tp,eg,ep,ev,re,r,rp)
 	if tc:IsRelateToEffect(e) then
 		Duel.Destroy(tc,REASON_EFFECT)
 	end
+end
+function c11200033.reptg(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if chk==0 then return c:IsReason(REASON_BATTLE+REASON_EFFECT) and not c:IsReason(REASON_REPLACE) and c:GetOverlayGroup():IsExists(Card.IsType,1,nil,TYPE_XYZ)
+		and c:CheckRemoveOverlayCard(tp,1,REASON_EFFECT) end
+	if Duel.SelectEffectYesNo(tp,e:GetHandler(),96) then
+		e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_EFFECT)
+		return true
+	else return false end
 end

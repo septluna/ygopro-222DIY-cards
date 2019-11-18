@@ -40,7 +40,7 @@ function c81021005.matfilter(c)
 end
 function c81021005.costchange(e,re,rp,val)
 	local rc=re:GetHandler()
-	if re and re:GetHandler():IsSetCard(0x818) and (rc:IsLocation(LOCATION_MZONE) or rc:IsLocation(LOCATION_PZONE)) then
+	if re and re:GetHandler():IsSetCard(0x818) and re:IsHasType(0x7f0) then
 		return 200
 	else
 		return val

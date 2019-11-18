@@ -18,9 +18,9 @@ function c81021001.lrcon(e,tp,eg,ep,ev,re,r,rp)
 	if tp~=ep then return false end
 	local lp=Duel.GetLP(ep)
 	if lp<ev then return false end
-	if not re or not re:IsHasType(0x7e0) or not e:GetHandler():IsAbleToRemove() then return false end
+	if not re or not re:IsHasType(0x7f0) or not e:GetHandler():IsAbleToRemove() then return false end
 	local rc=re:GetHandler()
-	return rc:IsSetCard(0x818) and (rc:IsLocation(LOCATION_MZONE) or rc:IsLocation(LOCATION_PZONE))
+	return rc:IsSetCard(0x818)
 end
 function c81021001.lrop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_EFFECT)

@@ -44,7 +44,7 @@ function c81040012.atkcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetAttacker():IsControler(1-tp)
 end
 function c81040012.cfilter(c)
-	return c:IsSetCard(0x81c) and c:IsType(TYPE_MONSTER) and c:IsDiscardable()
+	return c:IsDiscardable()
 end
 function c81040012.atkcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c81040012.cfilter,tp,LOCATION_HAND,0,1,nil) end
@@ -70,7 +70,7 @@ function c81040012.atkop(e,tp,eg,ep,ev,re,r,rp)
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_UPDATE_ATTACK)
-		e1:SetValue(ct*-100)
+		e1:SetValue(ct*-300)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 		tc:RegisterEffect(e1)
 	end

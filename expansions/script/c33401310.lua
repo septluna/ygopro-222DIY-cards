@@ -51,7 +51,7 @@ function c33401310.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,0,tp,LOCATION_GRAVE)
 end
 function c33401310.thfilter(c)
-	return c:IsSetCard(0x341) or c:IsSetCard(0xa342) and c:IsAbleToHand() and not c:IsSetCard(0xc342) and c:IsType(TYPE_MONSTER)
+	return  c:IsType(TYPE_MONSTER)and (c:IsSetCard(0x341) or c:IsSetCard(0xa342)) and c:IsAbleToHand() and not c:IsSetCard(0xc342) 
 end
 function c33401310.thop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,c33401310.thfilter,tp,LOCATION_GRAVE,0,1,1,nil)

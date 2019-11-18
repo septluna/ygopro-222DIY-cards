@@ -71,7 +71,7 @@ function c26807007.spop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.RegisterEffect(e3,tp)
 end
 function c26807007.pphlimit(e,c)
-	return not ((c:IsAttack(1550) and c:IsDefense(1050)) or (c:IsType(TYPE_RITUAL) and c:IsType(TYPE_PENDULUM)))
+	return not ((c:IsAttack(1550)) or (c:IsType(TYPE_RITUAL) and c:IsType(TYPE_PENDULUM)))
 end
 function c26807007.cfilter(c,tp)
 	return c:IsFaceup() and c:IsType(TYPE_PENDULUM) and c:IsSummonType(SUMMON_TYPE_RITUAL) and c:IsControler(tp)
@@ -85,7 +85,7 @@ function c26807007.damcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetLabelObject():GetLabel()~=1
 end
 function c26807007.damop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.SetLP(tp,Duel.GetLP(tp)-3000)
+	Duel.SetLP(tp,Duel.GetLP(tp)-4000)
 end
 function c26807007.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsFaceup()

@@ -12,10 +12,10 @@ function c81018024.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function c81018024.filter(c)
-	return c:IsSetCard(0x81b) and c:IsFaceup()
+	return c:IsSetCard(0x81b) and c:IsFaceup() and c:GetBaseAttack()>0
 end
 function c81018024.tgfilter(c)
-	return c:IsFaceup()
+	return c:IsFaceup() and c:IsPosition(POS_FACEUP_ATTACK)
 end
 function c81018024.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and c81018024.tgfilter(chkc) end
@@ -28,7 +28,7 @@ function c81018024.operation(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) and tc:IsFaceup() then
 		local g=Duel.GetMatchingGroup(c81018024.filter,tp,LOCATION_MZONE,0,nil)
-		local atk=g:GetSum(Card.GetAttack)
+		local atk=g:GetSum(Card.GetBaseAttack)
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_UPDATE_ATTACK)

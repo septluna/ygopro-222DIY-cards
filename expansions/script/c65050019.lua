@@ -11,6 +11,7 @@ function c65050019.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_SZONE)
+	e1:SetCountLimit(1)
 	e1:SetTarget(c65050019.hsptg)
 	e1:SetOperation(c65050019.hspop)
 	c:RegisterEffect(e1)
@@ -25,7 +26,7 @@ function c65050019.initial_effect(c)
 	c:RegisterEffect(e2)
 	--Activate
 	local e3=Effect.CreateEffect(c)
-	e3:SetCategory(CATEGORY_NEGATE+CATEGORY_TODECK)
+	e3:SetCategory(CATEGORY_NEGATE)
 	e3:SetType(EFFECT_TYPE_QUICK_O)
 	e3:SetCode(EVENT_CHAINING)
 	e3:SetRange(LOCATION_SZONE)
@@ -40,13 +41,13 @@ function c65050019.hspfilter(c,e,tp)
 end
 function c65050019.hsptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsExistingMatchingCard(c65050019.hspfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil,e,tp) and Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0)==0 end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
+		and Duel.IsExistingMatchingCard(c65050019.hspfilter,tp,LOCATION_DECK,0,1,nil,e,tp) and Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0)==0 end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK)
 end
 function c65050019.hspop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SelectMatchingCard(tp,c65050019.hspfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,e,tp)
+	local g=Duel.SelectMatchingCard(tp,c65050019.hspfilter,tp,LOCATION_DECK,0,1,1,nil,e,tp)
 	local tc=g:GetFirst()
 	if tc and Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0)==0 then Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP) end
 end
@@ -62,7 +63,8 @@ function c65050019.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SendtoDeck(g,nil,2,REASON_COST)
 end
 function c65050019.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
+	if chk==0 then return e:GetHandler():GetFlagEffect(65050019)==0 end
+	e:GetHandler():RegisterFlagEffect(65050019,RESET_CHAIN,0,1)
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
 	if re:GetHandler():IsRelateToEffect(re) then
 		Duel.SetOperationInfo(0,CATEGORY_TODECK,eg,1,0,0)
@@ -71,8 +73,5 @@ end
 function c65050019.activate(e,tp,eg,ep,ev,re,r,rp)
 	local ec=re:GetHandler()
 	if not e:GetHandler():IsRelateToEffect(e) then return end
-	if Duel.NegateActivation(ev) and ec:IsRelateToEffect(re) then
-		ec:CancelToGrave()
-		Duel.SendtoDeck(ec,nil,2,REASON_EFFECT)
-	end
+	Duel.NegateActivation(ev)
 end

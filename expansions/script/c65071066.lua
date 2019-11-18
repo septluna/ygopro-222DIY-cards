@@ -16,7 +16,7 @@ function c65071066.initial_effect(c)
 	e2:SetCode(EVENT_FREE_CHAIN)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCost(aux.bfgcost)
-	e2:SetOperation(c65071066.ctop)
+	e2:SetOperation(c65071066.coop)
 	c:RegisterEffect(e2)
 end
 function c65071066.ctfil(c,e)
@@ -38,7 +38,7 @@ function c65071066.ctop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 
-function c65071066.ctop(e,tp,eg,ep,ev,re,r,rp)
+function c65071066.coop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local e0=Effect.CreateEffect(c)
 		e0:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
@@ -62,7 +62,7 @@ function c65071066.ctop(e,tp,eg,ep,ev,re,r,rp)
 end
 function c65071066.acop(e,tp,eg,ep,ev,re,r,rp)
 	local c=re:GetHandler()
-	if re:IsActiveType(TYPE_MONSTER) then
+	if re:IsActiveType(TYPE_MONSTER) and c:IsRelateToEffect(re) then
 		c:AddCounter(0x1da0,1)
 	end
 end

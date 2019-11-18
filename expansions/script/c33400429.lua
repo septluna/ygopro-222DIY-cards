@@ -34,11 +34,24 @@ function c33400429.thfilter(c)
 end
 function c33400429.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c33400429.thfilter,tp,LOCATION_GRAVE,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_GRAVE)
+	local des=eg:GetFirst()
+	local rc=des:GetReasonCard()
+   if (rc:IsSetCard(0x341) or(Duel.IsExistingMatchingCard(c33400429.cccfilter1,tp,LOCATION_SZONE,0,1,nil) or  Duel.IsExistingMatchingCard(c33400429.cccfilter2,tp,LOCATION_MZONE,0,1,nil) 
+		   )) then
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_GRAVE+LOCATION_DECK)
+	else Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_GRAVE)
+	end
 end
 function c33400429.operation(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingCard(tp,c33400429.thfilter,tp,LOCATION_GRAVE,0,1,2,nil)
+	local g
+   local des=eg:GetFirst()
+	local rc=des:GetReasonCard()
+   if (rc:IsSetCard(0x341) or(Duel.IsExistingMatchingCard(c33400429.cccfilter1,tp,LOCATION_SZONE,0,1,nil) or  Duel.IsExistingMatchingCard(c33400429.cccfilter2,tp,LOCATION_MZONE,0,1,nil) 
+		   )) then
+	 g=Duel.SelectMatchingCard(tp,c33400429.thfilter,tp,LOCATION_GRAVE+LOCATION_DECK,0,1,2,nil)
+	else  g=Duel.SelectMatchingCard(tp,c33400429.thfilter,tp,LOCATION_GRAVE,0,1,2,nil)
+	end
 	if g:GetCount()>0 then
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)
@@ -51,14 +64,16 @@ end
 function c33400429.cccfilter2(c)
 	return c:IsCode(33400425) and c:IsFaceup() and c:IsSummonType(SUMMON_TYPE_XYZ)
 end
-function c33400429.cfilter2(c,tp,re)
+function c33400429.cfilter2(c,tp,eg)
+	local des=eg:GetFirst()
+	local rc=des:GetReasonCard()
 	return  c:IsReason(REASON_BATTLE) or c:IsReason(REASON_EFFECT)
 		and c:GetPreviousControler()==tp and c:IsPreviousLocation(LOCATION_ONFIELD) 
-		and (re:GetOwner():IsSetCard(0x341) or(Duel.IsExistingMatchingCard(c33400420.cccfilter1,tp,LOCATION_SZONE,0,1,nil) or  Duel.IsExistingMatchingCard(c33400420.cccfilter2,tp,LOCATION_MZONE,0,1,nil) 
+		and (rc:IsSetCard(0x341) or(Duel.IsExistingMatchingCard(c33400420.cccfilter1,tp,LOCATION_SZONE,0,1,nil) or  Duel.IsExistingMatchingCard(c33400420.cccfilter2,tp,LOCATION_MZONE,0,1,nil) 
 		   ))
 end
 function c33400429.setcon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(c33400429.cfilter2,1,nil,tp,re)
+	return eg:IsExists(c33400429.cfilter2,1,nil,tp,eg)
 end
 function c33400429.settg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsSSetable() end

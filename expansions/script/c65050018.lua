@@ -52,7 +52,8 @@ function c65050018.hspfilter(c,e,tp)
 end
 function c65050018.hsptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(1-tp,LOCATION_MZONE)>0
-		and Duel.IsExistingMatchingCard(c65050018.hspfilter,tp,LOCATION_HAND+LOCATION_DECK,0,1,nil,e,tp) end
+		and Duel.IsExistingMatchingCard(c65050018.hspfilter,tp,LOCATION_HAND+LOCATION_DECK,0,1,nil,e,tp) and e:GetHandler():GetFlagEffect(65050018)==0 end
+	e:GetHandler():RegisterFlagEffect(65050018,RESET_CHAIN,0,1)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND+LOCATION_DECK)
 end
 function c65050018.hspop(e,tp,eg,ep,ev,re,r,rp)
@@ -63,7 +64,7 @@ function c65050018.hspop(e,tp,eg,ep,ev,re,r,rp)
 	if tc then Duel.SpecialSummon(tc,0,tp,1-tp,false,false,POS_FACEUP) end
 end
 function c65050018.confil(c,tp)
-	return c:IsSetCard(0xcda3) and c:IsType(TYPE_MONSTER) and c:IsType(TYPE_LINK)
+	return c:IsSetCard(0xcda3) and c:IsType(TYPE_MONSTER) and c:IsType(TYPE_LINK) and c:IsSummonType(SUMMON_TYPE_LINK)
 end
 function c65050018.con(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(c65050018.confil,1,nil) and Duel.GetTurnPlayer()~=tp

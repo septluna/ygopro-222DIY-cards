@@ -59,13 +59,13 @@ function c11200041.spcon(e,tp,eg,ep,ev,re,r,rp)
 end
 function c11200041.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,11200041,0,0x11,0,2300,5,RACE_AQUA,ATTRIBUTE_WATER) end
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,11200041,0,0x11,0,1800,2,RACE_AQUA,ATTRIBUTE_WATER) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,e:GetHandler(),1,0,0)
 end
 function c11200041.spop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
 	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) and Duel.IsPlayerCanSpecialSummonMonster(tp,11200041,0,0x11,0,2300,5,RACE_AQUA,ATTRIBUTE_WATER) then
+	if c:IsRelateToEffect(e) and Duel.IsPlayerCanSpecialSummonMonster(tp,11200041,0,0x11,0,1800,2,RACE_AQUA,ATTRIBUTE_WATER) then
 		c:AddMonsterAttribute(TYPE_NORMAL)
 		Duel.SpecialSummonStep(c,0,tp,tp,true,false,POS_FACEUP_DEFENSE)
 		local e1=Effect.CreateEffect(c)
