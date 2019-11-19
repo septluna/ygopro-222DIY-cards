@@ -25,7 +25,7 @@ function c33400474.cfilter(c,e,tp)
 	return c:IsSetCard(0x341) and c:IsAbleToRemoveAsCost() and Duel.IsExistingMatchingCard(c33400474.filter,tp,LOCATION_EXTRA,0,1,nil,e,tp,nm) 
 end
 function c33400474.filter(c,e,tp,nm)
-	return c:IsType(TYPE_XYZ) and c:IsRank(nm)
+	return c:IsSetCard(0x341) and  c:IsType(TYPE_XYZ) and c:IsRank(nm)
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) 
 end
 function c33400474.sptg(e,tp,eg,ep,ev,re,r,rp,chk)

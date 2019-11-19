@@ -47,7 +47,7 @@ function c11200044.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SendtoDeck(e:GetHandler(),nil,2,REASON_COST)
 end
 function c11200044.filter1(c,e,tp)
-	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:IsRace(RACE_AQUA)
+	return c:IsFaceup() and c:IsRace(RACE_AQUA)
 		and Duel.IsExistingMatchingCard(c11200044.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,c,c:GetCode())
 		and Duel.GetLocationCountFromEx(tp,tp,c)>0
 		and aux.MustMaterialCheck(c,tp,EFFECT_MUST_BE_XMATERIAL)
