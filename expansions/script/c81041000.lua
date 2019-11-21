@@ -6,7 +6,6 @@ function c81041000.initial_effect(c)
 	e0:SetType(EFFECT_TYPE_ACTIVATE)
 	e0:SetCode(EVENT_FREE_CHAIN)
 	e0:SetCountLimit(1,81041000+EFFECT_COUNT_CODE_OATH)
-	e0:SetCost(c81041000.cost)
 	e0:SetTarget(c81041000.target)
 	e0:SetOperation(c81041000.activate)
 	c:RegisterEffect(e0)
@@ -33,10 +32,6 @@ function c81041000.initial_effect(c)
 	e3:SetOperation(c81041000.drop)
 	c:RegisterEffect(e3)
 end
-function c81041000.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
-	Duel.Hint(HINT_MUSIC,0,aux.Stringid(81041000,0))
-end
 function c81041000.filter(c)
 	return c:IsCode(81041005) and c:IsAbleToHand()
 end
@@ -46,6 +41,7 @@ function c81041000.target(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c81041000.activate(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end
+	Duel.Hint(HINT_MUSIC,0,aux.Stringid(81041000,0))
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(c81041000.filter),tp,LOCATION_GRAVE+LOCATION_DECK+LOCATION_REMOVED,0,1,1,nil)
 	if g:GetCount()>0 then

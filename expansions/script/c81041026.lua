@@ -22,12 +22,12 @@ end
 function c81041026.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	e:GetHandler():RegisterFlagEffect(81041026,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,EFFECT_FLAG_OATH,1)
-	Duel.Hint(HINT_MUSIC,0,aux.Stringid(81041026,0))
 end
 function c81041026.filter(c,e,tp)
 	return c:IsAttack(1550) and c:IsDefense(1050) and c:IsType(TYPE_PENDULUM)
 end
 function c81041026.activate(e,tp,eg,ep,ev,re,r,rp)
+	Duel.Hint(HINT_MUSIC,0,aux.Stringid(81041026,0))
 	local mg=Duel.GetRitualMaterial(tp)
 	local g=Duel.GetMatchingGroup(aux.RitualUltimateFilter,tp,LOCATION_HAND,0,nil,c81041026.filter,e,tp,mg,nil,Card.GetLevel,"Greater")
 	if g:GetCount()>0 and Duel.SelectYesNo(tp,aux.Stringid(81041026,1)) then
