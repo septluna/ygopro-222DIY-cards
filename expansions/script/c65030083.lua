@@ -60,11 +60,11 @@ function c65030083.negop(e,tp,eg,ep,ev,re,r,rp)
 			if Duel.GetFieldGroupCount(tp,LOCATION_HAND,0)>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.IsPlayerCanSpecialSummon(tp) then
 				Duel.BreakEffect()
 				local tgg=Duel.GetFieldGroup(tp,LOCATION_HAND,0)
-				local tc=tgg:RandomSelect(1-tp,1)
-				Duel.HintSelection(tc)
-				if c65030083.checkfil(tc:GetFirst(),e,tp) then
+				local tg=tgg:RandomSelect(1-tp,1)
+				Duel.HintSelection(tg)
+				if c65030083.checkfil(tg:GetFirst(),e,tp) then
 					Duel.NegateActivation(ev)
-					Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)
+					Duel.SpecialSummon(tg,0,tp,tp,false,false,POS_FACEUP)
 				end
 			end
 		end
