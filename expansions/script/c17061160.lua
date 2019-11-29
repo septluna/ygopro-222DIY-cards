@@ -45,15 +45,6 @@ function cm.initial_effect(c)
 	e5:SetCode(EVENT_ATTACK_ANNOUNCE)
 	e5:SetOperation(cm.atksuc)
 	c:RegisterEffect(e5)
-	--back
-	local e8=Effect.CreateEffect(c)
-	e8:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e8:SetCode(EVENT_ADJUST)
-	e8:SetRange(LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED+LOCATION_HAND+LOCATION_EXTRA)
-	e8:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_SET_AVAILABLE)
-	e8:SetCondition(cm.backon)
-	e8:SetOperation(cm.backop)
-	c:RegisterEffect(e8)
 end
 function cm.thcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -82,18 +73,6 @@ end
 function cm.damop(e,tp,eg,ep,ev,re,r,rp)
 	local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
 	Duel.Damage(p,d,REASON_EFFECT)
-end
-function cm.backon(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	return c.dfc_front_side and c:GetOriginalCode()==c.dfc_back_side2
-end
-function cm.backop(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local tcode=c.dfc_front_side
-	c:SetEntityCode(tcode)
-	Duel.ConfirmCards(tp,Group.FromCards(c))
-	Duel.ConfirmCards(1-tp,Group.FromCards(c))
-	c:ReplaceEffect(tcode,0,0)
 end
 function cm.descon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

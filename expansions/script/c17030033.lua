@@ -29,11 +29,7 @@ function cm.rccfilter(c)
 	return c:IsFaceup() and c:IsCode(17030001)
 end
 function cm.condition(e,tp,eg,ep,ev,re,r,rp)
-	if not Duel.IsExistingMatchingCard(cm.rccfilter,tp,LOCATION_ONFIELD,0,1,nil) then
-		return Duel.GetTurnPlayer()==tp
-	else
-		return true
-	end
+	return Duel.GetTurnPlayer()==tp or Duel.IsExistingMatchingCard(cm.rccfilter,tp,LOCATION_ONFIELD,0,1,nil)
 end
 function cm.filter(c)
 	return c:IsFaceup()
@@ -72,7 +68,7 @@ function cm.cttg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(1-tp) and chkc:IsLocation(LOCATION_MZONE) and chkc:IsCanAddCounter(0x1119,1) end
 	if chk==0 then return Duel.IsExistingTarget(Card.IsCanAddCounter,tp,LOCATION_MZONE,0,1,nil,0x1119,2) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-	Duel.SelectTarget(tp,Card.IsCanAddCounter,tp,LOCATION_MZONE,0,2,2,nil,0x1119,2)
+	Duel.SelectTarget(tp,Card.IsCanAddCounter,tp,LOCATION_MZONE,0,1,1,nil,0x1119,2)
 end
 function cm.ctop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
