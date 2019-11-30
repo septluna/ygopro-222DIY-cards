@@ -4,7 +4,7 @@ local cm=_G["c"..m]
 function cm.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcFunRep(c,aux.FilterBoolFunction(Card.IsFusionSetCard,0xf7f2),2,true)
+	aux.AddFusionProcFunRep(c,aux.FilterBoolFunction(Card.IsFusionSetCard,0x77f4),2,true)
 	--inactivatable
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)
@@ -32,7 +32,7 @@ end
 function cm.effectfilter(e,ct)
 	local p=e:GetHandler():GetControler()
 	local te,tp,loc=Duel.GetChainInfo(ct,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_PLAYER,CHAININFO_TRIGGERING_LOCATION)
-	return p==tp and te:GetHandler():IsSetCard(0xf7f2) and bit.band(loc,LOCATION_ONFIELD)~=0
+	return p==tp and te:GetHandler():IsSetCard(0x77f4) and bit.band(loc,LOCATION_ONFIELD)~=0
 end
 function cm.thfilter(c)
 	return c:IsCode(17030035) and c:IsAbleToHand()

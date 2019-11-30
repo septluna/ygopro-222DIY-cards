@@ -55,7 +55,7 @@ function cm.rmop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function cm.damon(e,tp,eg,ep,ev,re,r,rp)
-	return re and re:GetHandler():IsSetCard(0xf7f2)
+	return re and re:GetHandler():IsSetCard(0x77f4)
 end
 function cm.damop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_CARD,0,17030034)

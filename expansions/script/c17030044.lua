@@ -31,7 +31,7 @@ function cm.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SendtoGrave(e:GetHandler(),REASON_COST+REASON_DISCARD)
 end
 function cm.thfilter(c)
-	return c:IsSetCard(0xf7f2) and c:IsAbleToHand()
+	return c:IsSetCard(0x77f4) and c:IsAbleToHand()
 end
 function cm.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and cm.thfilter(chkc) end
@@ -50,7 +50,7 @@ function cm.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()==tp
 end
 function cm.filter(c)
-	return c:IsSetCard(0xf7f2) and c:IsType(TYPE_SPELL) and c:IsAbleToHand()
+	return c:IsSetCard(0x77f4) and c:IsType(TYPE_SPELL) and c:IsAbleToHand()
 end
 function cm.thtg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(cm.filter,tp,LOCATION_DECK,0,1,nil) end

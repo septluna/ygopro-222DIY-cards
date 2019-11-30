@@ -26,7 +26,7 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function cm.spfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0x87f2) and c:IsAbleToDeckAsCost()
+	return c:IsFaceup() and c:IsSetCard(0x37f4) and c:IsAbleToDeckAsCost()
 end
 function cm.spcon(e,c)
 	if c==nil then return true end

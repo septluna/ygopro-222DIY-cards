@@ -30,7 +30,7 @@ function cm.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_LINK)
 end
 function cm.lcheck(g,lc)
-	return g:IsExists(Card.IsLinkSetCard,1,nil,0xf7f2)
+	return g:IsExists(Card.IsLinkSetCard,1,nil,0x77f4)
 end
 function cm.linkcon(e)
 	local c=e:GetHandler()

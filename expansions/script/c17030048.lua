@@ -36,7 +36,7 @@ function cm.spcon(e,c)
 		and Duel.IsExistingMatchingCard(cm.spfilter,tp,LOCATION_ONFIELD,0,1,nil)
 end
 function cm.thfilter(c,tp)
-	return c:IsFaceup() and c:IsControler(tp) and c:IsSetCard(0xf7f2)
+	return c:IsFaceup() and c:IsControler(tp) and c:IsSetCard(0x77f4)
 end
 function cm.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(cm.thfilter,1,nil,tp)

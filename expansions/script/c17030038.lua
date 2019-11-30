@@ -19,7 +19,7 @@ function cm.damtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,400)
 end
 function cm.rccfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0xf7f2)
+	return c:IsFaceup() and c:IsSetCard(0x77f4)
 end
 function cm.damop(e,tp,eg,ep,ev,re,r,rp)
 	local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)

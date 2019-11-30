@@ -26,7 +26,7 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function cm.filter(c)
-	return c:IsSetCard(0xf7f2) and c:IsType(TYPE_SPELL) and c:CheckActivateEffect(true,true,false)~=nil
+	return c:IsSetCard(0x77f4) and c:IsType(TYPE_SPELL) and c:CheckActivateEffect(true,true,false)~=nil
 end
 function cm.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then
@@ -63,7 +63,7 @@ function cm.operation(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function cm.negfilter(c,tp)
-	return c:IsFaceup() and c:IsSetCard(0xf7f2) and c:IsControler(tp) and c:IsLocation(LOCATION_ONFIELD)
+	return c:IsFaceup() and c:IsSetCard(0x77f4) and c:IsControler(tp) and c:IsLocation(LOCATION_ONFIELD)
 end
 function cm.negcon(e,tp,eg,ep,ev,re,r,rp)
 	if rp==tp then return false end

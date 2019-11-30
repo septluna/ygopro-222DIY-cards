@@ -34,7 +34,7 @@ function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 	Duel.RegisterEffect(e2,tp)
 end
 function cm.indtg(e,c)
-	return c:IsSetCard(0xf7f2)
+	return c:IsSetCard(0x77f4)
 end
 function cm.condition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()~=tp and (Duel.IsAbleToEnterBP() or (Duel.GetCurrentPhase()>=PHASE_BATTLE_START and Duel.GetCurrentPhase()<=PHASE_BATTLE))

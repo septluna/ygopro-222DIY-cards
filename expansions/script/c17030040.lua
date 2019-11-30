@@ -19,7 +19,7 @@ function cm.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,0,0)
 end
 function cm.rccfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0xf7f2)
+	return c:IsFaceup() and c:IsSetCard(0x77f4)
 end
 function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0

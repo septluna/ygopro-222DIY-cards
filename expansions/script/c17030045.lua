@@ -18,10 +18,10 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function cm.spcon(e,tp,eg,ep,ev,re,r,rp)
-	return re and re:GetHandler():IsSetCard(0xf7f2)
+	return re and re:GetHandler():IsSetCard(0x77f4)
 end
 function cm.spfilter(c,e,tp)
-	return c:IsSetCard(0xf7f2) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard(0x77f4) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function cm.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0

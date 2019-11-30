@@ -20,7 +20,7 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function cm.spfilter(c,tp)
-	return c:IsFaceup() and c:IsControler(tp) and c:IsSetCard(0xf7f2)
+	return c:IsFaceup() and c:IsControler(tp) and c:IsSetCard(0x77f4)
 end
 function cm.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(cm.spfilter,1,nil,tp)
