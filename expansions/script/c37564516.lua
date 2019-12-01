@@ -26,7 +26,7 @@ function cm.mfilter(c)
 	return c:IsRace(RACE_FAIRY)
 end
 function cm.filter(c,tp)
-	return c:IsType(TYPE_SPELL+TYPE_TRAP) and (c:IsControler(tp) or c:IsAbleToChangeControler())
+	return c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsCanOverlay()
 end
 function cm.target0(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_ONFIELD+LOCATION_GRAVE) and cm.filter(chkc,tp) and chkc~=e:GetHandler() and chkc:IsControler(1-tp) end

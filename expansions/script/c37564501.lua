@@ -37,7 +37,7 @@ function cm.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetTargetCard(eg)
 end
 function cm.filter(c,e,tp)
-	return c:IsFaceup() and c:GetFlagEffect(m)==0 and c:IsRelateToEffect(e) and not c:IsImmuneToEffect(e) and not c:IsType(TYPE_TOKEN) and (c:IsControler(tp) or c:IsAbleToChangeControler())
+	return c:IsFaceup() and c:GetFlagEffect(m)==0 and c:IsRelateToEffect(e) and not c:IsImmuneToEffect(e) c:IsCanOverlay()
 end
 function cm.operation(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

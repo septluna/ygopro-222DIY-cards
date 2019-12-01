@@ -69,7 +69,7 @@ function cm.ccost(costf)
 	end
 end
 function cm.filter(c,tp)
-	return (c:IsControler(tp) or c:IsAbleToChangeControler()) and not c:IsType(TYPE_TOKEN)
+	return c:IsCanOverlay()
 end
 function cm.target0(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and cm.filter(chkc,tp) and chkc~=e:GetHandler() end

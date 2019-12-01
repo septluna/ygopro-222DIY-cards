@@ -53,5 +53,5 @@ function cm.exop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function cm.drfilter(c,e)
-	return not c:IsType(TYPE_TOKEN) and (c:IsControler(tp) or c:IsAbleToChangeControler()) and not c:IsImmuneToEffect(e)
+	returnc:IsCanOverlay() and not c:IsImmuneToEffect(e)
 end

@@ -58,7 +58,7 @@ function cm.con(e,tp,eg,ep,ev,re,r,rp)
 end
 function cm.filter(c,tp)
 	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:GetRank()==4
-		and (c:IsControler(tp) or c:IsAbleToChangeControler())
+		and c:IsCanOverlay()
 end
 function cm.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE+LOCATION_GRAVE) and cm.filter(chkc,tp) and chkc~=e:GetHandler() end

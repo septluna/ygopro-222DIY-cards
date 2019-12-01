@@ -89,7 +89,7 @@ function cm.rm(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Remove(g,POS_FACEUP,REASON_COST)
 end
 function cm.drfilter(c,e,tp)
-	return not c:IsType(TYPE_TOKEN) and (c:IsControler(tp) or c:IsAbleToChangeControler()) and not c:IsImmuneToEffect(e) and c~=e:GetHandler()
+	return c:IsCanOverlay() and not c:IsImmuneToEffect(e) and c~=e:GetHandler()
 end
 function cm.desfilter(c,e,tp)
 	return c:IsAttribute(ATTRIBUTE_WATER) and c:IsAbleToHand() and c:IsRace(RACE_SEASERPENT) and c:IsFaceup() and Duel.IsExistingMatchingCard(cm.drfilter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,c,e,tp)
