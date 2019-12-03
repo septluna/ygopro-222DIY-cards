@@ -33,32 +33,16 @@ function cm.initial_effect(c)
 	e5:SetCode(EVENT_FREE_CHAIN)
 	e5:SetRange(LOCATION_MZONE)
 	e5:SetHintTiming(0,0x1e0)
-	e5:SetCountLimit(1,m)
+	e5:SetCountLimit(1,17060883)
 	e5:SetCondition(cm.ctcon)
 	e5:SetTarget(cm.cttg)
 	e5:SetOperation(cm.ctop)
 	c:RegisterEffect(e5)
-	--
-	if not Card.IsLinkState then
-		function Card.IsLinkState(c)
-			if not c then return false end
-			if c:IsType(TYPE_LINK) and c:GetLinkedGroupCount()>0 then return true end
-			local g=Duel.GetMatchingGroup(Card.IsType,0,LOCATION_MZONE,LOCATION_MZONE,nil,TYPE_LINK)
-			local lc=g:GetFirst()
-			while lc do
-				local lg=lc:GetLinkedGroup()
-				if lg and lg:IsContains(c) then return true end
-				lc=g:GetNext()
-			end
-			return false
-		end
-	end
 end
 cm.is_named_with_domovo_i=1
 cm.is_named_with_Ma_Elf=1
 function cm.incon(e)
-	local c=e:GetHandler()
-	return c:IsLinkState()
+	return e:GetHandler():IsLinkState()
 end
 function cm.atlimit(e,c)
 	return c~=e:GetHandler()

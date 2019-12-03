@@ -19,7 +19,7 @@ function c26807030.filter(c,e,tp,m)
 	return m:CheckWithSumEqual(Card.GetRitualLevel,c:GetLevel(),1,99,c)
 end
 function c26807030.matfilter(c)
-	return c:IsCode(81011000,81000000,26807000,26800000) and c:IsAbleToGrave()
+	return c:IsType(TYPE_NORMAL) and c:IsAttribute(ATTRIBUTE_WIND) and c:IsAbleToGrave()
 end
 function c26807030.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then

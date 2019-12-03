@@ -21,7 +21,7 @@ function c81011027.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function c81011027.spfilter(c)
-	return c:IsFaceup() and c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsAbleToGraveAsCost()
+	return (bit.band(c:GetOriginalType(),TYPE_SPELL)~=0 or bit.band(c:GetOriginalType(),TYPE_TRAP)~=0) and c:IsAbleToGraveAsCost()
 end
 function c81011027.spcon(e,c)
 	if c==nil then return true end
@@ -34,7 +34,7 @@ function c81011027.spop(e,tp,eg,ep,ev,re,r,rp,c)
 	Duel.SendtoGrave(g,REASON_COST)
 end
 function c81011027.vfilter(c)
-	return c:IsFaceup() and c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsAbleToGraveAsCost()
+	return c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsAbleToGraveAsCost()
 end
 function c81011027.setcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c81011027.vfilter,tp,LOCATION_ONFIELD,0,1,nil) end
@@ -57,17 +57,5 @@ function c81011027.setop(e,tp,eg,ep,ev,re,r,rp)
 	if tc then
 		Duel.SSet(tp,tc)
 		Duel.ConfirmCards(1-tp,g)
-		local e1=Effect.CreateEffect(e:GetHandler())
-		e1:SetType(EFFECT_TYPE_FIELD)
-		e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-		e1:SetCode(EFFECT_CANNOT_ACTIVATE)
-		e1:SetTargetRange(1,0)
-		e1:SetValue(c81011027.aclimit)
-		e1:SetLabel(tc:GetCode())
-		e1:SetReset(RESET_PHASE+PHASE_END)
-		Duel.RegisterEffect(e1,tp)
 	end
-end
-function c81011027.aclimit(e,re,tp)
-	return re:GetHandler():IsCode(e:GetLabel())
 end

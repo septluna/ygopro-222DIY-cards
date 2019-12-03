@@ -18,49 +18,44 @@ function c65050001.initial_effect(c)
 	c:RegisterEffect(e1)
 	--tohand
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_RELEASE)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_FZONE)
-	e2:SetCost(c65050001.thcost)
 	e2:SetTarget(c65050001.thtg)
 	e2:SetOperation(c65050001.thop)
 	c:RegisterEffect(e2)
 end
-function c65050001.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.CheckReleaseGroup(tp,Card.IsType,1,nil,TYPE_TOKEN) end
-	local lv=0
-	local g=Duel.SelectReleaseGroup(tp,Card.IsType,1,99,nil,TYPE_TOKEN)
-	local rc=g:GetFirst()
-	while rc do
-		lv=lv+rc:GetLevel()
-		rc=g:GetNext()
-	end
-	Duel.Release(g,REASON_COST)
-	e:SetLabel(lv)
+function c65050001.thfilter(c,mg)
+	if not c:IsSetCard(0x3da1) or bit.band(c:GetType(),0x81)~=0x81
+		or not c:IsAbleToHand() then return false end
+	return mg:CheckWithSumGreater(Card.GetLevel,c:GetLevel(),c)
 end
-function c65050001.thfil(c,lv)
-	return c:IsType(TYPE_RITUAL) and c:IsLevelBelow(lv) and c:IsAbleToHand()
+function c65050001.gmfil(c)
+	return c:IsCode(65050012) and c:IsLevelAbove(1) and c:IsReleasable()
 end
 function c65050001.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local rg=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_MZONE,0,nil,TYPE_TOKEN)
-	local rc=rg:GetFirst()
-	local lv=0
-	while rc do
-		lv=lv+rc:GetLevel()
-		rc=rg:GetNext()
+	local mg=Duel.GetMatchingGroup(c65050001.gmfil,tp,LOCATION_MZONE,0,1,nil)
+	if chk==0 then
+		return Duel.IsExistingMatchingCard(c65050001.thfilter,tp,LOCATION_DECK,0,1,nil,mg)
 	end
-	if chk==0 then return Duel.IsExistingMatchingCard(c65050001.thfil,tp,LOCATION_DECK,0,1,nil,lv) end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,0,LOCATION_DECK)
+	Duel.SetOperationInfo(0,CATEGORY_RELEASE,nil,1,tp,LOCATION_MZONE)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function c65050001.thop(e,tp,eg,ep,ev,re,r,rp)
-	local lv=e:GetLabel()
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingCard(tp,c65050001.thfil,tp,LOCATION_DECK,0,1,1,nil,lv)
-	if g:GetCount()>0 then
-		Duel.SendtoHand(g,tp,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,g)
+	local mg=Duel.GetMatchingGroup(c65050001.gmfil,tp,LOCATION_MZONE,0,1,nil)
+	local tg=Duel.SelectMatchingCard(tp,c65050001.thfilter,tp,LOCATION_DECK,0,1,1,nil,mg)
+	local tc=tg:GetFirst()
+	if tc then
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
+		local g=mg:SelectWithSumGreater(tp,Card.GetLevel,tc:GetLevel(),tc)
+		if Duel.Release(g,REASON_EFFECT)~=0 then
+			Duel.SendtoHand(tc,tp,REASON_EFFECT)
+			Duel.ConfirmCards(1-tp,tc)
+		end
 	end
 end
+
+
 function c65050001.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(c65050001.spcofil,1,nil) and eg:GetCount()==1 
 end

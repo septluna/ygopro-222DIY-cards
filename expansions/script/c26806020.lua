@@ -70,7 +70,7 @@ function c26806020.indtg(e,c)
 	return e:GetHandler():GetLinkedGroup():IsContains(c) or e:GetHandler()==c
 end
 function c26806020.tscon(e,tp,eg,ep,ev,re,r,rp)
-	return rp==tp and re and re:IsHasType(EFFECT_TYPE_ACTIVATE) and re:GetHandler():IsType(TYPE_CONTINUOUS) and re:GetHandler():IsType(TYPE_SPELL)
+	return rp==tp and re and re:GetHandler():IsCode(26806009)
 		and e:GetHandler():GetFlagEffect(1)>0
 end
 function c26806020.tsfilter(c)

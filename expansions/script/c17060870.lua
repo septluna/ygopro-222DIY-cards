@@ -3,11 +3,11 @@ local m=17060870
 local cm=_G["c"..m]
 function cm.initial_effect(c)
 	--link summon
-	aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsType,TYPE_PENDULUM),2,2,cm.lcheck)
+	aux.AddLinkProcedure(c,nil,2,2,cm.lcheck)
 	c:EnableReviveLimit()
 	--sp summon
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(m,0))
+	e1:SetDescription(aux.Stringid(17060870,0))
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DAMAGE_STEP)
@@ -18,7 +18,7 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e1)
 	--cannot be target/battle indestructable
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(m,1))
+	e2:SetDescription(aux.Stringid(17060870,1))
 	e2:SetType(EFFECT_TYPE_FIELD)
 	e2:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
 	e2:SetRange(LOCATION_MZONE)
