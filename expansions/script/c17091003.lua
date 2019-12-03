@@ -1,15 +1,17 @@
 --ユニコーンガンダム バンシー
 function c17091003.initial_effect(c)
 	--link summon
-	aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsLinkType,TYPE_EFFECT),2)
+	aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsLinkRace,RACE_MACHINE),2)
 	c:EnableReviveLimit()
+	--FTK
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(17091003,0))
+	e1:SetCategory(CATEGORY_DESTROY+CATEGORY_DAMAGE)
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e1:SetProperty(EFFECT_FLAG_DELAY)
 	e1:SetCode(EVENT_SUMMON_SUCCESS)
 	e1:SetRange(LOCATION_MZONE)
-	e1:SetCountLimit(1)
+	e1:SetCountLimit(1,17091003)
 	e1:SetCondition(c17091003.atkcon)
 	e1:SetOperation(c17091003.atkop)
 	c:RegisterEffect(e1)
