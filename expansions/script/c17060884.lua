@@ -11,19 +11,15 @@ function cm.initial_effect(c)
 	e0:SetCode(EFFECT_EXTRA_ATTACK)
 	e0:SetValue(cm.ctval)
 	c:RegisterEffect(e0)
-	--eff
+	--indes
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 	e1:SetRange(LOCATION_MZONE)
-	e1:SetCode(EFFECT_IMMUNE_EFFECT)
-	e1:SetValue(cm.efilter)
+	e1:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
 	e1:SetCondition(cm.efcon)
+	e1:SetValue(1)
 	c:RegisterEffect(e1)
-	local e2=e1:Clone()
-	e2:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
-	e2:SetValue(1)
-	c:RegisterEffect(e2)
 	--atk
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE)
@@ -35,7 +31,7 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e3)
 	--negate+copy
 	local e4=Effect.CreateEffect(c)
-	e4:SetDescription(aux.Stringid(m,3))
+	e4:SetDescription(aux.Stringid(17060884,0))
 	e4:SetCategory(CATEGORY_DISABLE+CATEGORY_CONTROL)
 	e4:SetType(EFFECT_TYPE_QUICK_O)
 	e4:SetCode(EVENT_FREE_CHAIN)
@@ -72,13 +68,15 @@ function cm.necon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():GetMutualLinkedGroupCount()>=3
 end
 function cm.necost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():GetFlagEffect(m)==0 end
-	e:GetHandler():RegisterFlagEffect(m,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END,0,1)
+	if chk==0 then return e:GetHandler():GetFlagEffect(17060884)==0 end
+	e:GetHandler():RegisterFlagEffect(17060884,RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END,0,1)
 end
-
+function c6958551.filter(c)
+	return c:IsFaceup() and c:IsControlerCanBeChanged()
+end
 function cm.netg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and chkc:IsControlerCanBeChanged() end
-	if chk==0 then return Duel.IsExistingTarget(Card.IsControlerCanBeChanged,tp,0,LOCATION_MZONE,1,nil) end
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and c6958551.filter(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(c6958551.filter,tp,0,LOCATION_MZONE,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONTROL)
 	local g=Duel.SelectTarget(tp,Card.IsControlerCanBeChanged,tp,0,LOCATION_MZONE,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_CONTROL,g,1,0,0)

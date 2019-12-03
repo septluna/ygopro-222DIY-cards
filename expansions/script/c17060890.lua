@@ -65,7 +65,7 @@ function c17060890.filter(c,e,tp,zone)
 	return c:IsType(TYPE_PENDULUM) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP,tp,zone)
 end
 function c17060890.scfilter(c,pc)
-	return c:GetLeftScale()>=3
+	return c:GetLeftScale()~=1
 end
 function c17060890.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chkc then return chkc:IsLocation(LOCATION_PZONE) and chkc:IsControler(tp) and c17060890.scfilter(chkc) end
@@ -79,15 +79,15 @@ function c17060890.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c17060890.spop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) and tc:GetLeftScale()>=3 then
+	if tc:IsRelateToEffect(e) and tc:GetLeftScale()~=1 then
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_UPDATE_LSCALE)
-		e1:SetValue(-3)
+		e1:SetCode(EFFECT_CHANGE_LSCALE)
+		e1:SetValue(1)
 		e1:SetReset(RESET_EVENT+0x1fe0000)
 		tc:RegisterEffect(e1)
 		local e2=e1:Clone()
-		e2:SetCode(EFFECT_UPDATE_RSCALE)
+		e2:SetCode(EFFECT_CHANGE_RSCALE)
 		tc:RegisterEffect(e2)
 		local zone=e:GetHandler():GetLinkedZone()
 		if zone==0 then return end
