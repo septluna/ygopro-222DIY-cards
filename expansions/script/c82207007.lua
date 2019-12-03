@@ -10,7 +10,7 @@ function cm.initial_effect(c)
 	e1:SetTarget(cm.target)  
 	e1:SetOperation(cm.activate)  
 	c:RegisterEffect(e1)  
-end	
+end 
 function cm.filter(c,e,tp)  
 	return c:IsType(TYPE_RITUAL) 
 end  
@@ -38,7 +38,7 @@ function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)  
 	aux.RCheckAdditional=cm.rcheck  
 	aux.RGCheckAdditional=cm.rgcheck  
-	local tg=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(aux.RitualUltimateFilter),tp,LOCATION_DECK,0,1,1,nil,cm.filter,e,tp,m,nil,Card.GetLevel,"Equal")  
+	local tg=Duel.SelectMatchingCard(tp,aux.RitualUltimateFilter,tp,LOCATION_DECK,0,1,1,nil,cm.filter,e,tp,m,nil,Card.GetLevel,"Equal")  
 	local tc=tg:GetFirst()  
 	if tc then  
 		local mg=m:Filter(Card.IsCanBeRitualMaterial,tc,tc)   
@@ -65,6 +65,7 @@ function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 		local lv=tc:GetOriginalLevel()
 		Duel.Damage(tp,lv*1000,REASON_EFFECT)
 		local e3=Effect.CreateEffect(e:GetHandler())
+		e3:SetDescription(aux.Stringid(m,0))
 		e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 		e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 		e3:SetRange(LOCATION_MZONE) 

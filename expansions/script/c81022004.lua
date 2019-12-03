@@ -39,7 +39,7 @@ function c81022004.filterF(c,tp,mg,rc)
 	else return false end
 end
 function c81022004.mfilter(c)
-	return c:GetLevel()>0 and bit.band(c:GetType(),0x81)~=0x81 and c:IsAbleToDeck()
+	return c:GetLevel()>0 and bit.band(c:GetType(),0x81)==0x81 and c:IsAbleToDeck()
 end
 function c81022004.cfilter(c)
 	return c:IsFaceup() and c:IsCode(81022000)
@@ -97,9 +97,9 @@ end
 function c81022004.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c81022004.tdfilter(chkc) and chkc~=e:GetHandler() end
 	if chk==0 then return e:GetHandler():IsAbleToDeck()
-		and Duel.IsExistingTarget(c81022004.tdfilter,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,e:GetHandler()) end
+		and Duel.IsExistingTarget(c81022004.tdfilter,tp,LOCATION_GRAVE,0,1,e:GetHandler()) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectTarget(tp,c81022004.tdfilter,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,1,e:GetHandler())
+	local g=Duel.SelectTarget(tp,c81022004.tdfilter,tp,LOCATION_GRAVE,0,1,1,e:GetHandler())
 	g:AddCard(e:GetHandler())
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,2,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
