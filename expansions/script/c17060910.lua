@@ -15,7 +15,7 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e1)
 	--des
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(m,0))
+	e2:SetDescription(aux.Stringid(17060910,0))
 	e2:SetCategory(CATEGORY_DESTROY)
 	e2:SetType(EFFECT_TYPE_QUICK_O)
 	e2:SetCode(EVENT_FREE_CHAIN)

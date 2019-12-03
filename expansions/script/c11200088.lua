@@ -3,15 +3,14 @@ function c11200088.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
 	aux.AddFusionProcFunRep(c,aux.FilterBoolFunction(Card.IsFusionAttribute,ATTRIBUTE_FIRE),3,false)
-	--equip
+	--remove
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_EQUIP)
-	e1:SetType(EFFECT_TYPE_IGNITION)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetCountLimit(1,11200088)
-	e1:SetCost(c11200088.eqcost)
-	e1:SetTarget(c11200088.eqtg)
-	e1:SetOperation(c11200088.eqop)
+	e1:SetCategory(CATEGORY_REMOVE)
+	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e1:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
+	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e1:SetTarget(c11200088.target)
+	e1:SetOperation(c11200088.operation)
 	c:RegisterEffect(e1)
 	--spsummon
 	local e2=Effect.CreateEffect(c)
@@ -19,7 +18,7 @@ function c11200088.initial_effect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e2:SetCode(EVENT_REMOVE)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCountLimit(1,11209088)
+	e2:SetCountLimit(1,11200088)
 	e2:SetTarget(c11200088.sptg)
 	e2:SetOperation(c11200088.spop)
 	c:RegisterEffect(e2)
@@ -43,38 +42,28 @@ function c11200088.initial_effect(c)
 	e4:SetCondition(c11200088.actcon)
 	c:RegisterEffect(e4)
 end
-function c11200088.costfilter(c,tp)
-	return c:IsCode(11200103,11200104) and c:IsAbleToDeckAsCost()
+function c11200088.filter(c)
+	return c:IsFaceup() and c:IsType(TYPE_PENDULUM) and c:IsAbleToRemove()
 end
-function c11200088.eqcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c11200088.costfilter,tp,LOCATION_REMOVED,0,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectMatchingCard(tp,c11200088.costfilter,tp,LOCATION_REMOVED,0,1,1,nil)
-	Duel.SendtoDeck(g,nil,2,REASON_COST)
+function c11200088.target(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(c11200088.filter,tp,LOCATION_EXTRA,LOCATION_EXTRA,1,nil) end
+	local g=Duel.GetMatchingGroup(c11200088.filter,tp,LOCATION_EXTRA,LOCATION_EXTRA,nil)
+	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,g:GetCount(),0,0)
 end
-function c11200088.eqfilter(c,ec)
-	return c:IsType(TYPE_EQUIP) and c:CheckEquipTarget(ec)
-end
-function c11200088.eqtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_SZONE)>0
-		and Duel.IsExistingMatchingCard(c11200088.eqfilter,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE,0,1,nil,e:GetHandler()) end
-	Duel.SetOperationInfo(0,CATEGORY_EQUIP,nil,1,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE)
-end
-function c11200088.eqop(e,tp,eg,ep,ev,re,r,rp)
+function c11200088.operation(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroup(c11200088.filter,tp,LOCATION_EXTRA,LOCATION_EXTRA,nil)
+	local ct=Duel.Remove(g,POS_FACEUP,REASON_EFFECT)
 	local c=e:GetHandler()
-	if Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 or c:IsFacedown() or not c:IsRelateToEffect(e) then return end
-	Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(11200088,1))
-	local g=Duel.SelectMatchingCard(tp,c11200088.eqfilter,tp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,c)
-	local tc=g:GetFirst()
-	if tc then
-		Duel.Equip(tp,tc,c)
+	if ct>0 and c:IsFaceup() and c:IsRelateToEffect(e) then
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_LEAVE_FIELD_REDIRECT)
-		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-		e1:SetReset(RESET_EVENT+RESETS_REDIRECT)
-		e1:SetValue(LOCATION_HAND)
-		tc:RegisterEffect(e1)
+		e1:SetCode(EFFECT_UPDATE_ATTACK)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_DISABLE)
+		e1:SetValue(ct*300)
+		c:RegisterEffect(e1)
+		local e2=e1:Clone()
+		e2:SetCode(EFFECT_UPDATE_DEFENSE)
+		c:RegisterEffect(e2)
 	end
 end
 function c11200088.sptg(e,tp,eg,ep,ev,re,r,rp,chk)

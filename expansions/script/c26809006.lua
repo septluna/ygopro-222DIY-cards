@@ -1,31 +1,39 @@
---难受火炉房
+--鱼禁止上岸人禁止下水
 function c26809006.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_DESTROY)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e1:SetCondition(c26809006.condition)
-	e1:SetTarget(c26809006.target)
-	e1:SetOperation(c26809006.activate)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetCondition(c26809006.actcon)
 	c:RegisterEffect(e1)
+	--atk/def
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_FIELD)
+	e2:SetCode(EFFECT_SET_ATTACK_FINAL)
+	e2:SetRange(LOCATION_MZONE)
+	e2:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
+	e2:SetTarget(c26809006.target)
+	e2:SetValue(0)
+	c:RegisterEffect(e2)
+	local e3=e2:Clone()
+	e3:SetCode(EFFECT_SET_DEFENSE_FINAL)
+	c:RegisterEffect(e3)
+	--Pos Change
+	local e5=Effect.CreateEffect(c)
+	e5:SetType(EFFECT_TYPE_FIELD)
+	e5:SetCode(EFFECT_SET_POSITION)
+	e5:SetRange(LOCATION_MZONE)
+	e5:SetTarget(c26809006.target)
+	e5:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
+	e5:SetValue(POS_FACEUP_DEFENSE)
+	c:RegisterEffect(e5)
 end
-function c26809006.cfilter(c,tp)
-	return c:IsFaceup() and c:IsPreviousLocation(LOCATION_GRAVE) and c:GetPreviousControler()==1-tp
-		and c:IsControler(tp)
+function c26809006.cfilter(c)
+	return c:IsRace(RACE_FISH)
 end
-function c26809006.condition(e,tp,eg,ep,ev,re,r,rp,chk)
-	return eg:IsExists(c26809006.cfilter,1,nil,1-tp)
+function c26809006.actcon(e,tp,eg,ep,ev,re,r,rp)
+	return not Duel.IsExistingMatchingCard(c26809006.cfilter,tp,LOCATION_MZONE,0,1,nil)
 end
-function c26809006.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsOnField() end
-	if chk==0 then return Duel.IsExistingTarget(aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,2,e:GetHandler()) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-	local g=Duel.SelectTarget(tp,aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,2,2,e:GetHandler())
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,2,0,0)
-end
-function c26809006.activate(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS):Filter(Card.IsRelateToEffect,nil,e)
-	Duel.Destroy(g,REASON_EFFECT)
+function c26809006.target(e,c)
+	return c:IsRace(RACE_FISH)
 end

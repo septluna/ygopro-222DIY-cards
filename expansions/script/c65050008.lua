@@ -28,9 +28,6 @@ function c65050008.initial_effect(c)
 	e2:SetTarget(c65050008.sptg)
 	e2:SetOperation(c65050008.spop)
 	c:RegisterEffect(e2)
-	local e3=e2:Clone()
-	e3:SetCode(EVENT_LEAVE_FIELD)
-	c:RegisterEffect(e3)
 end
 function c65050008.cocofil(c)
 	return c:IsType(TYPE_MONSTER) and c:IsSetCard(0x3da1) and c:IsReleasable()
@@ -48,7 +45,6 @@ function c65050008.cotg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return Duel.IsExistingTarget(Card.IsControlerCanBeChanged,tp,0,LOCATION_MZONE,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
 	local g=Duel.SelectTarget(tp,Card.IsControlerCanBeChanged,tp,0,LOCATION_MZONE,1,1,nil)
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
 end
 function c65050008.coop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
