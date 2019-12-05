@@ -34,21 +34,14 @@ function cm.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	--e1:SetCode(EVENT_FREE_CHAIN)
 	--e1:SetHintTiming(0,TIMINGS_CHECK_MONSTER)
-<<<<<<< HEAD
-=======
     e1:SetRange(LOCATION_SZONE)
->>>>>>> 5a43ca2cc6bdcc10fc8c54e5e9ffbbeaafb5a6f1
 	e1:SetCountLimit(1)
 	e1:SetTarget(function(e,tp,eg,ep,ev,re,r,rp,chk)
 		if chk==0 then return true end
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CARDTYPE)
 		Duel.SetTargetParam(Duel.SelectOption(tp,1056,1063,1073,1076))
 	end)
-<<<<<<< HEAD
-	e1:SetOperation(function cm.operation(e,tp,eg,ep,ev,re,r,rp)
-=======
 	e1:SetOperation(function(e,tp,eg,ep,ev,re,r,rp)
->>>>>>> 5a43ca2cc6bdcc10fc8c54e5e9ffbbeaafb5a6f1
 		local c=e:GetHandler()
 		local opt=Duel.GetChainInfo(0,CHAININFO_TARGET_PARAM)
 		local ct=nil
@@ -156,8 +149,4 @@ function cm.sumlimit(e,c,sump,sumtype,sumpos,targetp)
 end
 function cm.distg(e,c)
 	return c:IsType(e:GetLabel())
-<<<<<<< HEAD
 end
-=======
-end
->>>>>>> 5a43ca2cc6bdcc10fc8c54e5e9ffbbeaafb5a6f1
