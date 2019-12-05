@@ -61,9 +61,10 @@ function cm.initial_effect(c)
 	e1:SetCondition(function(e,tp,eg,ep,ev,re,r,rp)
 		local atks={}
 		for p=0,1 do
-			local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,0,nil)
+			local g=Duel.GetMatchingGroup(Card.IsFaceup,p,LOCATION_MZONE,0,nil)
 			atks[p]=g:GetSum(Card.GetAttack)
 		end
+        --Debug.Message(atks[1])
 		return atks[1-tp]>atks[tp]
 	end)
 	e1:SetTarget(function(e,tp,eg,ep,ev,re,r,rp,chk)
