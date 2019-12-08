@@ -37,22 +37,23 @@ function c82228519.efilter(e,re)
 	return e:GetOwnerPlayer()~=re:GetOwnerPlayer() and re:IsActivated() and re:IsActiveType(TYPE_MONSTER)
 end  
 function c82228519.cost2(e,tp,eg,ep,ev,re,r,rp,chk)  
-	if chk==0 then return e:GetHandler():IsAbleToRemoveAsCost() end  
-	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)  
+	if chk==0 then return e:GetHandler():IsAbleToRemoveAsCost() and Duel.IsExistingMatchingCard(Card.IsDiscardable,tp,LOCATION_HAND,0,1,e:GetHandler()) end  
+	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_COST)	
+	Duel.DiscardHand(tp,Card.IsDiscardable,1,1,REASON_COST+REASON_DISCARD)  
 end  
 function c82228519.spfilter(c,e,tp)  
 	return c:IsSetCard(0x291) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)  
 end  
 function c82228519.tg(e,tp,eg,ep,ev,re,r,rp,chk)  
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0  
-		and Duel.IsExistingMatchingCard(c82228519.spfilter,tp,LOCATION_HAND,0,1,nil,e,tp) end  
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND)  
+		and Duel.IsExistingMatchingCard(c82228519.spfilter,tp,LOCATION_DECK,0,1,nil,e,tp) end  
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK)  
 end  
 function c82228519.op(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end  
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)  
-	local g=Duel.SelectMatchingCard(tp,c82228519.spfilter,tp,LOCATION_HAND,0,1,1,nil,e,tp)  
+	local g=Duel.SelectMatchingCard(tp,c82228519.spfilter,tp,LOCATION_DECK,0,1,1,nil,e,tp)  
 	local tc=g:GetFirst()  
 	if tc and Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)~=0 then  
 		local fid=e:GetHandler():GetFieldID()  
