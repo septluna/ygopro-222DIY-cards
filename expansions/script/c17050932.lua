@@ -107,7 +107,7 @@ function cm.discon(e,tp,eg,ep,ev,re,r,rp)
 	return not e:GetHandler():IsStatus(STATUS_BATTLE_DESTROYED) and Duel.IsChainNegatable(ev)
 end
 function cm.distg(e,tp,eg,ep,ev,re,r,rp,chk)
-	Duel.Hint(HINT_SOUND,0,aux.Stringid(17030012,4))
+	Duel.Hint(HINT_SOUND,0,aux.Stringid(17050932,4))
 	if chk==0 then return true end
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
 	if re:GetHandler():IsDestructable() and re:GetHandler():IsRelateToEffect(re) then
@@ -124,11 +124,11 @@ function cm.descon(e,tp,eg,ep,ev,re,r,rp)
 	return c:IsPreviousLocation(LOCATION_MZONE+LOCATION_SZONE) and c:IsFaceup()
 end
 function cm.sumsuc(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SOUND,0,aux.Stringid(17030012,2))
+	Duel.Hint(HINT_SOUND,0,aux.Stringid(17050932,2))
 end	
 function cm.atksuc(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SOUND,0,aux.Stringid(17030012,3))
+	Duel.Hint(HINT_SOUND,0,aux.Stringid(17050932,3))
 end
 function cm.dessuc(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SOUND,0,aux.Stringid(17030012,5))
+	Duel.Hint(HINT_SOUND,0,aux.Stringid(17050932,5))
 end
