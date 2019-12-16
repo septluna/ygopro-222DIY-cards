@@ -1,148 +1,133 @@
---赤色制裁
+--黯黑视线
 function c11200109.initial_effect(c)
-	--Activate
+	--activate
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_FUSION_SUMMON)
+	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_TOKEN)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCountLimit(1,11200109)
+	e1:SetCost(c11200109.cost)
 	e1:SetTarget(c11200109.target)
 	e1:SetOperation(c11200109.activate)
 	c:RegisterEffect(e1)
-	--Remove
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_SINGLE)
-	e3:SetCode(EVENT_LEAVE_FIELD)
-	e3:SetOperation(c11200109.rmop)
-	c:RegisterEffect(e3)
-	--atk down
-	local e4=Effect.CreateEffect(c)
-	e4:SetType(EFFECT_TYPE_FIELD)
-	e4:SetCode(EFFECT_UPDATE_ATTACK)
-	e4:SetRange(LOCATION_SZONE)
-	e4:SetTargetRange(0,LOCATION_MZONE)
-	e4:SetCondition(c11200109.atkcon)
-	e4:SetTarget(c11200109.atktg)
-	e4:SetValue(-1200)
-	c:RegisterEffect(e4)
-	--damage
-	local e4=Effect.CreateEffect(c)
-	e4:SetCategory(CATEGORY_DAMAGE)
-	e4:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e4:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
-	e4:SetCode(EVENT_REMOVE)
-	e4:SetCountLimit(1,11209109)
-	e4:SetTarget(c11200109.damtg)
-	e4:SetOperation(c11200109.damop)
-	c:RegisterEffect(e4)
 end
-function c11200109.filter0(c)
-	return c:IsCanBeFusionMaterial() and c:IsAbleToRemove()
+function c11200109.cost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.GetActivityCount(tp,ACTIVITY_SUMMON)==0
+		and Duel.GetActivityCount(tp,ACTIVITY_FLIPSUMMON)==0 and Duel.GetActivityCount(tp,ACTIVITY_SPSUMMON)==0 end
+	local e1=Effect.CreateEffect(e:GetHandler())
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_OATH)
+	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+	e1:SetReset(RESET_PHASE+PHASE_END)
+	e1:SetTargetRange(1,0)
+	e1:SetLabelObject(e)
+	e1:SetTarget(c11200109.sumlimit)
+	Duel.RegisterEffect(e1,tp)
+	local e2=Effect.CreateEffect(e:GetHandler())
+	e2:SetType(EFFECT_TYPE_FIELD)
+	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_OATH)
+	e2:SetCode(EFFECT_CANNOT_SUMMON)
+	e2:SetReset(RESET_PHASE+PHASE_END)
+	e2:SetTargetRange(1,0)
+	Duel.RegisterEffect(e2,tp)
+	local e3=e2:Clone()
+	e3:SetCode(EFFECT_CANNOT_FLIP_SUMMON)
+	Duel.RegisterEffect(e3,tp)
 end
-function c11200109.filter1(c,e)
-	return not c:IsImmuneToEffect(e)
+function c11200109.sumlimit(e,c,sump,sumtype,sumpos,targetp,se)
+	return e:GetLabelObject()~=se
 end
-function c11200109.filter2(c,e,tp,m,f,chkf)
-	return c:IsType(TYPE_FUSION)  and c:IsAttribute(ATTRIBUTE_FIRE) and c:IsRace(RACE_SPELLCASTER) and (not f or f(c))
-		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false) and c:CheckFusionMaterial(m,nil,chkf)
+function c11200109.filter(c,tp)
+	return c:IsFaceup() and c:GetBaseAttack()>=0 and c:IsReleasableByEffect()
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,11200199,0,0x4011,c:GetBaseAttack(),0,8,RACE_FIEND,ATTRIBUTE_FIRE)
 end
-function c11200109.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then
-		local chkf=tp
-		local mg1=Duel.GetFusionMaterial(tp):Filter(Card.IsLocation,nil,LOCATION_MZONE)
-		local mg2=Duel.GetMatchingGroup(c11200109.filter0,tp,LOCATION_GRAVE,0,nil)
-		mg1:Merge(mg2)
-		local res=Duel.IsExistingMatchingCard(c11200109.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,mg1,nil,chkf)
-		if not res then
-			local ce=Duel.GetChainMaterial(tp)
-			if ce~=nil then
-				local fgroup=ce:GetTarget()
-				local mg2=fgroup(ce,e,tp)
-				local mf=ce:GetValue()
-				res=Duel.IsExistingMatchingCard(c11200109.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,mg2,mf,chkf)
+function c11200109.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsControler(1-tp) and chkc:IsLocation(LOCATION_MZONE) and c11200109.filter(chkc,tp) end
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		and Duel.IsExistingTarget(c11200109.filter,tp,0,LOCATION_MZONE,1,nil,tp) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
+	Duel.SelectTarget(tp,c11200109.filter,tp,0,LOCATION_MZONE,1,1,nil,tp)
+	Duel.SetOperationInfo(0,CATEGORY_TOKEN,nil,1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,0,0)
+end
+function c11200109.operation(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)<1 then return end
+	local tc=Duel.GetFirstTarget()
+	if tc:IsFaceup() and tc:IsRelateToEffect(e) and Duel.Release(tc,REASON_EFFECT)>0 then
+		local token=Duel.CreateToken(tp,11200199)
+		Duel.SpecialSummonStep(token,0,tp,tp,false,false,POS_FACEUP)
+		local e1=Effect.CreateEffect(e:GetHandler())
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_SET_BASE_ATTACK)
+		e1:SetValue(tc:GetBaseAttack())
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+		token:RegisterEffect(e1,true)
+		local e2=Effect.CreateEffect(e:GetHandler())
+		e2:SetCategory(CATEGORY_RELEASE+CATEGORY_SPECIAL_SUMMON)
+		e2:SetType(EFFECT_TYPE_QUICK_O)
+		e2:SetCode(EVENT_FREE_CHAIN)
+		e2:SetCondition(c11200109.rscon)
+		e2:SetTarget(c11200109.rstg)
+		e2:SetOperation(c11200109.rsop)
+		e2:SetReset(RESET_EVENT+RESETS_STANDARD)
+		token:RegisterEffect(e2,true)
+		Duel.SpecialSummonComplete()
+	end
+end
+function c11200109.rscon(e,tp,eg,ep,ev,re,r,rp)
+	local ph=Duel.GetCurrentPhase()
+	return ph==PHASE_MAIN1 or (ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE) or ph==PHASE_MAIN2
+end
+function c11200109.mfilter(c)
+	return c:IsAttribute(ATTRIBUTE_FIRE) and c:IsType(TYPE_RITUAL) and c:IsType(TYPE_MONSTER)
+end
+function c11200109.rcheck(gc)
+	return  function(tp,g,c)
+				return g:IsContains(gc)
 			end
-		end
+end
+function c11200109.rstg(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if chk==0 then
+		local mg=Duel.GetRitualMaterial(tp)
+		aux.RCheckAdditional=c11200109.rcheck(c)
+		local res=mg:IsContains(c) and Duel.IsExistingMatchingCard(aux.RitualUltimateFilter,tp,LOCATION_HAND,0,1,nil,c11200109.mfilter,e,tp,mg,nil,Card.GetLevel,"Greater")
+		aux.RCheckAdditional=nil
 		return res
 	end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_HAND)
 end
-function c11200109.activate(e,tp,eg,ep,ev,re,r,rp)
-	local chkf=tp
-	local mg1=Duel.GetFusionMaterial(tp):Filter(c11200109.filter1,nil,e):Filter(Card.IsLocation,nil,LOCATION_MZONE)
-	local mg0=Duel.GetMatchingGroup(c11200109.filter0,tp,LOCATION_GRAVE,0,nil)
-	mg1:Merge(mg0)
-	local sg1=Duel.GetMatchingGroup(c11200109.filter2,tp,LOCATION_EXTRA,0,nil,e,tp,mg1,nil,chkf)
-	local mg2=nil
-	local sg2=nil
-	local ce=Duel.GetChainMaterial(tp)
-	if ce~=nil then
-		local fgroup=ce:GetTarget()
-		mg2=fgroup(ce,e,tp)
-		local mf=ce:GetValue()
-		sg2=Duel.GetMatchingGroup(c11200109.filter2,tp,LOCATION_EXTRA,0,nil,e,tp,mg2,mf,chkf)
-	end
-	if sg1:GetCount()>0 or (sg2~=nil and sg2:GetCount()>0) then
-		local sg=sg1:Clone()
-		if sg2 then sg:Merge(sg2) end
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local tg=sg:Select(tp,1,1,nil)
-		local tc=tg:GetFirst()
-		if sg1:IsContains(tc) and (sg2==nil or not sg2:IsContains(tc) or not Duel.SelectYesNo(tp,ce:GetDescription())) then
-			local mat1=Duel.SelectFusionMaterial(tp,tc,mg1,nil,chkf)
-			tc:SetMaterial(mat1)
-			Duel.Remove(mat1,POS_FACEUP,REASON_EFFECT+REASON_MATERIAL+REASON_FUSION)
-			Duel.BreakEffect()
-			Duel.SpecialSummonStep(tc,SUMMON_TYPE_FUSION,tp,tp,false,false,POS_FACEUP)
-			--Add Equip limit
-			local e1=Effect.CreateEffect(e:GetHandler())
-			e1:SetType(EFFECT_TYPE_SINGLE)
-			e1:SetCode(EFFECT_EQUIP_LIMIT)
-			e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-			e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-			e1:SetValue(c11200109.eqlimit)
-			e1:SetLabelObject(tc)
-			tc:RegisterEffect(e1)
-			local e2=Effect.CreateEffect(e:GetHandler())
-			e2:SetType(EFFECT_TYPE_SINGLE)
-			e2:SetCode(EFFECT_LEAVE_FIELD_REDIRECT)
-			e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-			e2:SetReset(RESET_EVENT+RESETS_REDIRECT)
-			e2:SetValue(LOCATION_REMOVED)
-			tc:RegisterEffect(e2)
-			Duel.SpecialSummonComplete()
-		else
-			local mat2=Duel.SelectFusionMaterial(tp,tc,mg2,nil,chkf)
-			local fop=ce:GetOperation()
-			fop(ce,e,tp,tc,mat2)
-		end
-		tc:CompleteProcedure()
-		Duel.Equip(tp,e:GetHandler(),tc)
-	end
-end
-function c11200109.eqlimit(e,c)
-	return e:GetLabelObject()==c
-end
-function c11200109.rmop(e,tp,eg,ep,ev,re,r,rp)
+function c11200109.rsop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local tc=e:GetHandler():GetEquipTarget()
+	local mg=Duel.GetRitualMaterial(tp)
+	if c:GetControler()~=tp or not c:IsRelateToEffect(e) or not mg:IsContains(c) then return end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+	aux.RCheckAdditional=c11200109.rcheck(c)
+	local tg=Duel.SelectMatchingCard(tp,aux.RitualUltimateFilter,tp,LOCATION_HAND,0,1,1,nil,c11200109.mfilter,e,tp,mg,nil,Card.GetLevel,"Greater")
+	local tc=tg:GetFirst()
 	if tc then
-		Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)
+		mg=mg:Filter(Card.IsCanBeRitualMaterial,tc,tc)
+		if tc.mat_filter then
+			mg=mg:Filter(tc.mat_filter,tc,tp)
+		else
+		mg:RemoveCard(tc)
+		end
+		if not mg:IsContains(c) then return end
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
+		Duel.SetSelectedCard(c)
+		aux.GCheckAdditional=aux.RitualCheckAdditional(tc,tc:GetLevel(),"Greater")
+		local mat=mg:SelectSubGroup(tp,aux.RitualCheck,false,1,tc:GetLevel(),tp,tc,tc:GetLevel(),"Greater")
+		aux.GCheckAdditional=nil
+		if not mat or mat:GetCount()==0 then
+			aux.RCheckAdditional=nil
+			return
+		end
+		tc:SetMaterial(mat)
+		Duel.ReleaseRitualMaterial(mat)
+		Duel.BreakEffect()
+		Duel.SpecialSummon(tc,SUMMON_TYPE_RITUAL,tp,tp,false,true,POS_FACEUP)
+		tc:CompleteProcedure()
 	end
-end
-function c11200109.atkcon(e)
-	return Duel.GetCurrentPhase()==PHASE_DAMAGE_CAL
-		and e:GetHandler():GetEquipTarget():GetBattleTarget()
-end
-function c11200109.atktg(e,c)
-	return c==e:GetHandler():GetEquipTarget():GetBattleTarget()
-end
-function c11200109.damtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
-	Duel.SetTargetPlayer(1-tp)
-	Duel.SetTargetParam(1200)
-	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,1200)
-end
-function c11200109.damop(e,tp,eg,ep,ev,re,r,rp)
-	local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
-	Duel.Damage(p,d,REASON_EFFECT)
+	aux.RCheckAdditional=nil
 end

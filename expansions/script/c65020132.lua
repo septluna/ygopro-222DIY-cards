@@ -57,21 +57,22 @@ function c65020132.op(e,tp,eg,ep,ev,re,r,rp)
 			while g0:GetCount()>0 do
 				local g2=g0:Select(tp,1,1,nil)
 				g1:Merge(g2)
-				local code=g1:GetFirst():GetCode()
+				local code=g2:GetFirst():GetCode()
 				g0:Remove(Card.IsCode,nil,code)
 			end
 			if Duel.SendtoHand(g1,tp,REASON_EFFECT)~=0 then
 				Duel.ConfirmCards(1-tp,g1)
 				Duel.BreakEffect()
-				if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and g1:FilterCount(Card.IsCanBeSpecialSummoned,nil,e,0,tp,false,false)>0 and Duel.SelectYesNo(tp,aux.Stringid(65020132,0)) then
+				local g3=g1:Filter(Card.IsLocation,nil,LOCATION_HAND)
+				if Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and g3:FilterCount(Card.IsCanBeSpecialSummoned,nil,e,0,tp,false,false)>0 and Duel.SelectYesNo(tp,aux.Stringid(65020132,0)) then
 					local num=Duel.GetLocationCount(tp,LOCATION_MZONE)
-					if num>g1:FilterCount(Card.IsCanBeSpecialSummoned,nil,e,0,tp,false,false) then num=g1:FilterCount(Card.IsCanBeSpecialSummoned,nil,e,0,tp,false,false) end
-					local gsp=g1:FilterSelect(tp,Card.IsCanBeSpecialSummoned,1,1,nil,e,0,tp,false,false)
+					if num>g1:FilterCount(Card.IsCanBeSpecialSummoned,nil,e,0,tp,false,false) then num=g3:FilterCount(Card.IsCanBeSpecialSummoned,nil,e,0,tp,false,false) end
+					local gsp=g3:FilterSelect(tp,Card.IsCanBeSpecialSummoned,1,99,nil,e,0,tp,false,false)
 					Duel.SpecialSummon(gsp,0,tp,tp,false,false,POS_FACEUP)
-					g1:Remove(c65020132.fil,nil,gsp)
+					g3:Remove(c65020132.fil,nil,gsp)
 				end
-				if g1:FilterCount(Card.IsAbleToGrave,nil)>0 and Duel.SelectYesNo(tp,aux.Stringid(65020132,1)) then
-					local gtg=g1:FilterSelect(tp,Card.IsAbleToGrave,1,1,nil)
+				if g3:FilterCount(Card.IsAbleToGrave,nil)>0 and Duel.SelectYesNo(tp,aux.Stringid(65020132,1)) then
+					local gtg=g3:FilterSelect(tp,Card.IsAbleToGrave,1,99,nil)
 					Duel.SendtoGrave(gtg,REASON_EFFECT)
 				end
 			end

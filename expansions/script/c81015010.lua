@@ -1,11 +1,27 @@
 --MS-765·北上丽花
+require("expansions/script/c81000000")
 function c81015010.initial_effect(c)
-	--summon with no tribute
+	--summon limit
+	local e0=Effect.CreateEffect(c)
+	e0:SetType(EFFECT_TYPE_SINGLE)
+	e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e0:SetCode(EFFECT_CANNOT_SUMMON)
+	e0:SetCondition(aux.NOT(Tenka.ReikaCon))
+	c:RegisterEffect(e0)
+	--spsummon limit
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_SUMMON_PROC)
-	e1:SetCondition(c81015010.ntcon)
+	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
+	e1:SetValue(Tenka.ReikaCon)
 	c:RegisterEffect(e1)
+	--summon with no tribute
+	local e2=Effect.CreateEffect(c)
+	e2:SetDescription(aux.Stringid(81015010,0))
+	e2:SetType(EFFECT_TYPE_SINGLE)
+	e2:SetCode(EFFECT_SUMMON_PROC)
+	e2:SetCondition(c81015010.ntcon)
+	c:RegisterEffect(e2)
 	--synchro level
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_SINGLE)

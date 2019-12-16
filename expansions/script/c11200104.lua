@@ -3,15 +3,15 @@ function c11200104.initial_effect(c)
 	--pendulum summon
 	aux.EnablePendulumAttribute(c)
 	c:EnableReviveLimit()
-	--adup
+	--atkdown
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_ATKCHANGE)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetHintTiming(PHASE_BATTLE_START)
+	e1:SetCode(EVENT_PRE_DAMAGE_CALCULATE)
+	e1:SetRange(LOCATION_HAND)
 	e1:SetCountLimit(1,11200104)
 	e1:SetCondition(c11200104.atkcon)
+	e1:SetCost(c11200104.atkcost)
 	e1:SetOperation(c11200104.atkop)
 	c:RegisterEffect(e1)
 	--search
@@ -35,41 +35,38 @@ function c11200104.initial_effect(c)
 	e3:SetCondition(c11200104.actcon)
 	c:RegisterEffect(e3)
 end
+function c11200104.atkfilter(c)
+	return c:IsAttribute(ATTRIBUTE_FIRE) and (bit.band(c:GetType(),0x81)==0x81 or c:IsType(TYPE_FUSION))
+end
 function c11200104.atkcon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetCurrentPhase()==PHASE_BATTLE_START
+	local a=Duel.GetAttacker()
+	local d=Duel.GetAttackTarget()
+	if a:IsControler(1-tp) then a,d=d,a end
+	e:SetLabelObject(d)
+	local g=Group.FromCards(a,d)
+	return a and d and a:IsRelateToBattle() and d:IsRelateToBattle() and g:IsExists(c11200104.atkfilter,1,nil,nil)
 end
-function c11200104.atkop(e,tp,eg,ep,ev,re,r,rp)
+function c11200104.atkcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if c:IsFacedown() or not c:IsRelateToEffect(e) then return end
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_UPDATE_ATTACK)
-	e1:SetValue(2500)
-	e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_DISABLE+RESET_PHASE+PHASE_END)
-	c:RegisterEffect(e1,true)
-	c:RegisterFlagEffect(11200104,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1)
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e2:SetCode(EVENT_PHASE+PHASE_BATTLE)
-	e2:SetRange(LOCATION_MZONE)
-	e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
-	e2:SetCountLimit(1)
-	e2:SetCondition(c11200104.tgcon)
-	e2:SetOperation(c11200104.tgop)
-	e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_BATTLE)
-	c:RegisterEffect(e2,true)
+	if chk==0 then return c:IsDiscardable() end
+	Duel.SendtoGrave(c,REASON_COST+REASON_DISCARD)
 end
-function c11200104.tgcon(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():GetFlagEffect(11200104)~=0
-end
-function c11200104.tgop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Remove(e:GetHandler(),POS_FACEUP,REASON_EFFECT)
+function c11200104.atkop(e,tp,eg,ep,ev,re,r,rp,chk)
+	local tc=e:GetLabelObject()
+	if tc:IsFaceup() and tc:IsRelateToBattle() then
+		local e1=Effect.CreateEffect(e:GetHandler())
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_UPDATE_ATTACK)
+		e1:SetValue(-2550)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+		tc:RegisterEffect(e1)
+	end
 end
 function c11200104.actcon(e)
 	return Duel.GetAttacker()==e:GetHandler() or Duel.GetAttackTarget()==e:GetHandler()
 end
 function c11200104.thfilter(c)
-	return c:IsCode(11200103,11200104) and c:IsAbleToHand()
+	return c:IsAttribute(ATTRIBUTE_FIRE) and bit.band(c:GetType(),0x81)==0x81 and c:IsAbleToHand()
 end
 function c11200104.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c11200104.thfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil) end

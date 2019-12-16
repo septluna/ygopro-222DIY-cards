@@ -1,6 +1,9 @@
 --两栖类的神明
 c11200030.card_code_list={11200029}
 function c11200030.initial_effect(c)
+	--fusion material
+	c:EnableReviveLimit()
+	aux.AddFusionProcCodeFun(c,11200029,aux.FilterBoolFunction(Card.IsRace,RACE_AQUA),1,true,true)
 	--code
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_SINGLE)
@@ -9,48 +12,61 @@ function c11200030.initial_effect(c)
 	e0:SetRange(LOCATION_MZONE+LOCATION_GRAVE)
 	e0:SetValue(11200029)
 	c:RegisterEffect(e0)
-	--cannot special summon
+	--atkdown
 	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e1:SetRange(LOCATION_DECK)
-	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetCode(EFFECT_UPDATE_ATTACK)
+	e1:SetRange(LOCATION_MZONE)
+	e1:SetTargetRange(LOCATION_MZONE,0)
+	e1:SetTarget(c11200030.atktg)
+	e1:SetValue(c11200030.atkval)
 	c:RegisterEffect(e1)
-	--search
-	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TOGRAVE)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetCode(EVENT_DESTROYED)
-	e2:SetRange(LOCATION_GRAVE)
-	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCountLimit(1,11200030)
-	e2:SetCost(c11200030.thcost)
-	e2:SetCondition(c11200030.thcon)
-	e2:SetTarget(c11200030.thtg)
-	e2:SetOperation(c11200030.thop)
+	local e2=e1:Clone()
+	e2:SetCode(EFFECT_UPDATE_DEFENSE)
 	c:RegisterEffect(e2)
+	--destroy
+	local e3=Effect.CreateEffect(c)
+	e3:SetCategory(CATEGORY_DESTROY)
+	e3:SetType(EFFECT_TYPE_QUICK_O)
+	e3:SetCode(EVENT_BE_BATTLE_TARGET)
+	e3:SetRange(LOCATION_GRAVE)
+	e3:SetCountLimit(1,11200030+EFFECT_COUNT_CODE_SINGLE)
+	e3:SetCondition(c11200030.descon1)
+	e3:SetCost(aux.bfgcost)
+	e3:SetTarget(c11200030.destg)
+	e3:SetOperation(c11200030.desop)
+	c:RegisterEffect(e3)
+	local e4=e3:Clone()
+	e4:SetCode(EVENT_BECOME_TARGET)
+	e4:SetCountLimit(1,11200030+EFFECT_COUNT_CODE_SINGLE)
+	e4:SetCondition(c11200030.descon2)
+	c:RegisterEffect(e4)
 end
-function c11200030.cfilter(c,tp)
-	return c:IsControler(tp) and aux.IsCodeListed(c,11200029) and not c:IsCode(11200030)
+function c11200030.atktg(e,c)
+	return c:IsRace(RACE_AQUA)
 end
-function c11200030.thcon(e,tp,eg,ep,ev,re,r,rp)
-	return not eg:IsContains(e:GetHandler()) and eg:IsExists(c11200030.cfilter,1,nil,tp)
+function c11200030.atkval(e,c)
+	return Duel.GetCounter(0,1,1,0x1620)*400
 end
-function c11200030.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():IsAbleToDeckAsCost() end
-	Duel.SendtoDeck(e:GetHandler(),nil,2,REASON_COST)
+function c11200030.tgfilter(c,tp)
+	return c:IsLocation(LOCATION_MZONE) and c:IsRace(RACE_AQUA) and c:IsControler(tp)
 end
-function c11200030.tgfilter(c)
-	return c:IsRace(RACE_AQUA) and c:IsLevel(2) and not c:IsCode(11200030) and c:IsAbleToGrave()
+function c11200030.descon1(e,tp,eg,ep,ev,re,r,rp)
+	return eg:IsExists(c11200030.tgfilter,1,nil,tp)
 end
-function c11200030.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c11200030.tgfilter,tp,LOCATION_DECK,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
+function c11200030.descon2(e,tp,eg,ep,ev,re,r,rp)
+	return rp==1-tp and eg:IsExists(c11200030.tgfilter,1,nil,tp)
 end
-function c11200030.thop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectMatchingCard(tp,c11200030.tgfilter,tp,LOCATION_DECK,0,1,1,nil)
-	if g:GetCount()>0 then
-		Duel.SendtoGrave(g,REASON_EFFECT)
+function c11200030.destg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(nil,tp,0,LOCATION_ONFIELD,1,nil) end
+	local g=Duel.GetMatchingGroup(nil,tp,0,LOCATION_ONFIELD,nil)
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
+end
+function c11200030.desop(e,tp,eg,ep,ev,re,r,rp)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
+	local g=Duel.SelectMatchingCard(tp,nil,tp,0,LOCATION_ONFIELD,1,1,nil)
+	if #g>0 then
+		Duel.HintSelection(g)
+		Duel.Destroy(g,REASON_EFFECT)
 	end
 end

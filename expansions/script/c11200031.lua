@@ -10,19 +10,10 @@ function c11200031.initial_effect(c)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,11200031)
-	e1:SetCondition(c11200031.thcon)
 	e1:SetCost(c11200031.thcost)
 	e1:SetTarget(c11200031.thtg)
 	e1:SetOperation(c11200031.thop)
 	c:RegisterEffect(e1)
-	--destroy replace
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
-	e3:SetCode(EFFECT_DESTROY_REPLACE)
-	e3:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e3:SetRange(LOCATION_MZONE)
-	e3:SetTarget(c11200031.reptg)
-	c:RegisterEffect(e3)
 	--draw
 	local e4=Effect.CreateEffect(c)
 	e4:SetCategory(CATEGORY_DRAW)
@@ -34,9 +25,6 @@ function c11200031.initial_effect(c)
 	e4:SetTarget(c11200031.drtg)
 	e4:SetOperation(c11200031.drop)
 	c:RegisterEffect(e4)
-end
-function c11200031.thcon(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():GetOverlayGroup():IsExists(Card.IsType,1,nil,TYPE_XYZ)
 end
 function c11200031.thfilter(c,tp)
 	return c:IsType(TYPE_FIELD) and c:IsCode(11200039,11200040) and (c:IsAbleToHand() or c:GetActivateEffect():IsActivatable(tp,true,true))
@@ -94,13 +82,4 @@ end
 function c11200031.drop(e,tp,eg,ep,ev,re,r,rp)
 	local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
 	Duel.Draw(p,d,REASON_EFFECT)
-end
-function c11200031.reptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then return c:IsReason(REASON_BATTLE+REASON_EFFECT) and not c:IsReason(REASON_REPLACE) and c:GetOverlayGroup():IsExists(Card.IsType,1,nil,TYPE_XYZ)
-		and c:CheckRemoveOverlayCard(tp,1,REASON_EFFECT) end
-	if Duel.SelectEffectYesNo(tp,e:GetHandler(),96) then
-		e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_EFFECT)
-		return true
-	else return false end
 end

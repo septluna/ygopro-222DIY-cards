@@ -1,73 +1,75 @@
---手长足长的神明
+--土著神『宝永四年的赤蛙』
 c11200049.card_code_list={11200029}
 function c11200049.initial_effect(c)
-	--code
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_SINGLE)
-	e0:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e0:SetCode(EFFECT_CHANGE_CODE)
-	e0:SetRange(LOCATION_MZONE+LOCATION_GRAVE)
-	e0:SetValue(11200029)
-	c:RegisterEffect(e0)
-	--add counter
+	--activate
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_COUNTER)
-	e1:SetType(EFFECT_TYPE_IGNITION)
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetCountLimit(1,11200049)
-	e1:SetRange(LOCATION_GRAVE)
-	e1:SetHintTiming(0,TIMINGS_CHECK_MONSTER+TIMING_END_PHASE)
-	e1:SetCost(c11200049.ctcost)
-	e1:SetTarget(c11200049.cttg)
-	e1:SetOperation(c11200049.ctop)
+	e1:SetTarget(c11200049.target)
+	e1:SetOperation(c11200049.activate)
 	c:RegisterEffect(e1)
-	--cannot special summon
+	--spsummon
 	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_SINGLE)
-	e2:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e2:SetRange(LOCATION_DECK)
-	e2:SetCode(EFFECT_SPSUMMON_CONDITION)
+	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetCode(EVENT_TO_GRAVE)
+	e2:SetRange(LOCATION_GRAVE)
+	e2:SetCountLimit(1,11200949)
+	e2:SetCondition(c11200049.spcon)
+	e2:SetTarget(c11200049.sptg)
+	e2:SetOperation(c11200049.spop)
 	c:RegisterEffect(e2)
 end
-function c11200049.ctcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():IsAbleToDeckAsCost() end
-	Duel.SendtoDeck(e:GetHandler(),nil,2,REASON_COST)
+function c11200049.xyzfilter(c)
+	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:IsRace(RACE_AQUA)
 end
-function c11200049.cttg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsControler(1-tp) and chkc:IsLocation(LOCATION_MZONE) and chkc:IsCanAddCounter(0x1620,1) end
-	if chk==0 then return Duel.IsExistingTarget(Card.IsCanAddCounter,tp,0,LOCATION_MZONE,1,nil,0x1620,1) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-	Duel.SelectTarget(tp,Card.IsCanAddCounter,tp,0,LOCATION_MZONE,1,1,nil,0x1620,1)
+function c11200049.matfilter(c)
+	return c:IsType(TYPE_XYZ) and c:IsRace(RACE_AQUA) and c:IsCanOverlay()
 end
-function c11200049.ctop(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
+function c11200049.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and c11200049.xyzfilter(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(c11200049.xyzfilter,tp,LOCATION_MZONE,0,1,nil)
+		and Duel.IsExistingMatchingCard(c11200049.matfilter,tp,LOCATION_DECK+LOCATION_HAND,0,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
+	Duel.SelectTarget(tp,c11200049.xyzfilter,tp,LOCATION_MZONE,0,1,1,nil)
+end
+function c11200049.activate(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) and tc:AddCounter(0x1620,1) then
-		local e3_1_1=Effect.CreateEffect(c)
-		e3_1_1:SetType(EFFECT_TYPE_SINGLE)
-		e3_1_1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-		e3_1_1:SetCode(EFFECT_CANNOT_BE_FUSION_MATERIAL)
-		e3_1_1:SetCondition(c11200049.disable)
-		e3_1_1:SetValue(1)
-		e3_1_1:SetReset(RESET_EVENT+0x1fe0000)
-		tc:RegisterEffect(e3_1_1)
-		local e3_1_2=e3_1_1:Clone()
-		e3_1_2:SetCode(EFFECT_CANNOT_BE_SYNCHRO_MATERIAL)
-		tc:RegisterEffect(e3_1_2)
-		local e3_1_3=e3_1_1:Clone()
-		e3_1_3:SetCode(EFFECT_CANNOT_BE_XYZ_MATERIAL)
-		tc:RegisterEffect(e3_1_3)
-		local e3_1_4=e3_1_1:Clone()
-		e3_1_4:SetCode(EFFECT_CANNOT_BE_LINK_MATERIAL)
-		tc:RegisterEffect(e3_1_4)
-		local e3_1_5=e3_1_1:Clone()
-		e3_1_5:SetCode(EFFECT_UNRELEASABLE_SUM)
-		tc:RegisterEffect(e3_1_5)
-		local e3_1_6=e3_1_1:Clone()
-		e3_1_6:SetCode(EFFECT_UNRELEASABLE_NONSUM)
-		tc:RegisterEffect(e3_1_6)
+	if tc:IsRelateToEffect(e) and not tc:IsImmuneToEffect(e) then
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
+		local g=Duel.SelectMatchingCard(tp,c11200049.matfilter,tp,LOCATION_DECK+LOCATION_HAND,0,1,1,nil,tc)
+		if g:GetCount()>0 then
+			Duel.Overlay(tc,g)
+		end
 	end
 end
-function c11200049.disable(e)
-	return e:GetHandler():GetCounter(0x1620)>0
+function c11200049.cfilter(c)
+	return c:IsControler(tp) and aux.IsCodeListed(c,11200029) and not c:IsCode(11200049)
+end
+function c11200049.spcon(e,tp,eg,ep,ev,re,r,rp)
+	return not eg:IsContains(e:GetHandler()) and eg:IsExists(c11200049.cfilter,1,nil,tp)
+end
+function c11200049.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,11200049,0,0x11,0,1800,2,RACE_AQUA,ATTRIBUTE_WATER) end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,e:GetHandler(),1,0,0)
+end
+function c11200049.spop(e,tp,eg,ep,ev,re,r,rp)
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
+	local c=e:GetHandler()
+	if c:IsRelateToEffect(e) and Duel.IsPlayerCanSpecialSummonMonster(tp,11200049,0,0x11,0,1800,2,RACE_AQUA,ATTRIBUTE_WATER) then
+		c:AddMonsterAttribute(TYPE_NORMAL)
+		Duel.SpecialSummonStep(c,0,tp,tp,true,false,POS_FACEUP_DEFENSE)
+		local e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+		e1:SetCode(EFFECT_CANNOT_BE_LINK_MATERIAL)
+		e1:SetValue(1)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+		c:RegisterEffect(e1,true)
+		Duel.SpecialSummonComplete()
+	end
 end

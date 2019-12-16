@@ -20,7 +20,7 @@ function c65020117.initial_effect(c)
 	e2:SetTarget(c65020117.target)
 	e2:SetOperation(c65020117.activate)
 	c:RegisterEffect(e2)
-	local e3=Effect.CreateEffect(c)
+	local e3=e2:Clone()
 	e3:SetCode(EVENT_SUMMON_SUCCESS)
 	c:RegisterEffect(e3)
 end
@@ -29,7 +29,7 @@ function c65020117.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SendtoHand(e:GetHandler(),nil,REASON_COST)
 end
 function c65020117.thfil1(c,e,tp)
-	return c.material and aux.IsMaterialListCode(c,65020117) and Duel.IsExistingMatchingCard(c65020117.thfil2,tp,LOCATION_DECK,0,1,nil,c) and c:IsLevelBelow(6)
+	return c.material and aux.IsMaterialListCode(c,65020117) and Duel.IsExistingMatchingCard(c65020117.thfil2,tp,LOCATION_DECK,0,1,nil,c) 
 end
 function c65020117.thfil2(c,fc)
 	if c:IsForbidden() or not c:IsAbleToGrave() then return false end
@@ -49,28 +49,6 @@ function c65020117.thop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=g:GetFirst()
 	if not tc then return end
 	Duel.SendtoGrave(tc,REASON_EFFECT)
-	local e1=Effect.CreateEffect(e:GetHandler())
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_OATH)
-	e1:SetCode(EFFECT_CANNOT_ACTIVATE)
-	e1:SetTargetRange(1,0)
-	e1:SetValue(c65020117.aclimit)
-	e1:SetReset(RESET_PHASE+PHASE_END)
-	Duel.RegisterEffect(e1,tp)
-	local e2=Effect.CreateEffect(e:GetHandler())
-	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_OATH)
-	e2:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
-	e2:SetReset(RESET_PHASE+PHASE_END)
-	e2:SetTargetRange(1,0)
-	e2:SetTarget(c65020117.splimit)
-	Duel.RegisterEffect(e2,tp)
-end
-function c65020117.aclimit(e,re,tp)
-	return not re:GetHandler():IsSetCard(0xcda4)
-end
-function c65020117.splimit(e,c,sump,sumtype,sumpos,targetp,se)
-	return not c:IsSetCard(0xcda4)
 end
 
 function c65020117.filter1(c,e)

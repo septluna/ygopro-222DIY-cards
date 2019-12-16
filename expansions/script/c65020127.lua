@@ -2,14 +2,13 @@
 function c65020127.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcCode3(c,65020113,65020115,65020117,true,true)
+	aux.AddFusionProcFun2(c,c65020127.matfilter,aux.FilterBoolFunction(Card.IsFusionSetCard,0xcda4),true)
 	--change seq
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SEARCH+CATEGORY_TOHAND)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,65020127)
-	e1:SetCost(c65020127.cost)
 	e1:SetTarget(c65020127.tg)
 	e1:SetOperation(c65020127.op)
 	c:RegisterEffect(e1)
@@ -32,13 +31,13 @@ function c65020127.initial_effect(c)
 	e3:SetValue(c65020127.atlimit)
 	c:RegisterEffect(e3)
 end
+function c65020127.matfilter(c)
+	return c:IsFusionType(TYPE_FUSION) and c:IsFusionSetCard(0xcda4) and c:IsAttribute(ATTRIBUTE_WATER)
+end
 function c65020127.atlimit(e,c)
 	return not c:IsCode(65020127) and c:IsSetCard(0xcda4)
 end
-function c65020127.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsDiscardable,tp,LOCATION_HAND,0,1,nil) end
-	Duel.DiscardHand(tp,Card.IsDiscardable,1,1,REASON_COST+REASON_DISCARD)
-end
+
 function c65020127.tgfil(c)
 	return c:IsSetCard(0xcda4) and c:IsAbleToHand()
 end

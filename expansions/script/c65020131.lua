@@ -2,7 +2,7 @@
 function c65020131.initial_effect(c)
 	 --fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcCode4(c,65020113,65020115,65020117,65020119,false,false)
+	aux.AddFusionProcCode4(c,65020127,65020128,65020129,65020130,false,false)
 	--spsummon condition
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_SINGLE)
@@ -38,7 +38,6 @@ function c65020131.initial_effect(c)
 	c:RegisterEffect(e4)
 	local e5=e4:Clone()
 	e5:SetCategory(CATEGORY_NEGATE)
-	e5:SetCountLimit(1)
 	e5:SetCondition(c65020131.con)
 	e5:SetCost(c65020131.cost)
 	e5:SetTarget(c65020131.tg)

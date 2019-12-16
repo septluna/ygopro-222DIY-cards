@@ -67,7 +67,7 @@ function cm.filter(c,e,tp)
 	return c:GetSummonPlayer()==1-tp and (not e or c:IsRelateToEffect(e))
 end
 function cm.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return eg:IsExists(cm.filter,1,nil,e,tp) end
+	if chk==0 then return eg:IsExists(cm.filter,1,nil,nil,tp) end
 	Duel.SetTargetCard(eg)
 	Duel.SetOperationInfo(0,CATEGORY_POSITION,eg,eg:GetCount(),0,0)
 end

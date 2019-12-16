@@ -2,14 +2,13 @@
 function c65020128.initial_effect(c)
 	--fusion material
 	c:EnableReviveLimit()
-	aux.AddFusionProcCode3(c,65020113,65020115,65020117,true,true)
+	aux.AddFusionProcFun2(c,c65020128.matfilter,aux.FilterBoolFunction(Card.IsFusionSetCard,0xcda4),true)
 	--change seq
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_TOGRAVE)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,65020128)
-	e1:SetCost(c65020128.cost)
 	e1:SetTarget(c65020128.tg)
 	e1:SetOperation(c65020128.op)
 	c:RegisterEffect(e1)
@@ -26,12 +25,11 @@ function c65020128.initial_effect(c)
 	e2:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
 	c:RegisterEffect(e2)
 end
+function c65020128.matfilter(c)
+	return c:IsFusionType(TYPE_FUSION) and c:IsFusionSetCard(0xcda4) and c:IsAttribute(ATTRIBUTE_EARTH)
+end
 function c65020128.tgfil(c)
 	return c:IsSetCard(0xcda4) and c:IsAbleToGrave()
-end
-function c65020128.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsDiscardable,tp,LOCATION_HAND,0,1,nil) end
-	Duel.DiscardHand(tp,Card.IsDiscardable,1,1,REASON_COST+REASON_DISCARD)
 end
 function c65020128.tg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE,tp,LOCATION_REASON_CONTROL)>0 and Duel.IsExistingMatchingCard(c65020128.tgfil,tp,LOCATION_DECK,0,1,nil) end

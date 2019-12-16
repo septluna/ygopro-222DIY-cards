@@ -14,6 +14,13 @@ function c81019004.initial_effect(c)
 	e2:SetTarget(c81019004.thtg)
 	e2:SetOperation(c81019004.thop)
 	c:RegisterEffect(e2)
+	--cannot be link material
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_SINGLE)
+	e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e3:SetCode(EFFECT_CANNOT_BE_LINK_MATERIAL)
+	e3:SetValue(1)
+	c:RegisterEffect(e3)
 end
 function c81019004.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsReason(REASON_SUMMON)
