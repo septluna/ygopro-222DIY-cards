@@ -60,7 +60,7 @@ function c33400402.thop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.RegisterEffect(e1,tp)
 end
 function c33400402.thfilter(c)
-	return (c:IsSetCard(0x341) or c:IsSetCard(0x5342)) and c:IsAbleToHand() and not c:IsCode(33400402)
+	return (c:IsSetCard(0x341) or c:IsSetCard(0x5342)) and c:IsType(TYPE_MONSTER) and c:IsAbleToHand() and not c:IsCode(33400402)
 end
 function c33400402.thcon1(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsExistingMatchingCard(c33400402.thfilter,tp,LOCATION_GRAVE,0,1,nil)
