@@ -87,7 +87,6 @@ function c1140001.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	else
 		te=tc:GetActivateEffect()
 	end
-	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
 	Duel.SendtoGrave(g,REASON_COST)
 	e:SetCategory(te:GetCategory())
 	e:SetProperty(te:GetProperty())
@@ -101,7 +100,6 @@ function c1140001.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	end
 	te:SetLabelObject(e:GetLabelObject())
 	e:SetLabelObject(te)
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,nil,0,0,0)
 end
 --
 function c1140001.op2(e,tp,eg,ep,ev,re,r,rp)
