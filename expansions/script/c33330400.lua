@@ -50,7 +50,7 @@ function rsnm.spop(e,tp)
 end
 function rsnm.spcfilter2(c,e)
 	local val=e:GetValue()
-	return c:IsSetCard(0x4552) and ((val==0 and c:IsAbleToDeckAsCost()) or (val==1 and c:IsAbleToGraveAsCost()))
+	return c:IsSetCard(0x4552) and ((val==0 and c:IsAbleToDeckAsCost()) or (val==1 and c:IsAbleToGraveAsCost())) and c~=e:GetHandler()
 end
 function rsnm.spcfilter3(c,tp)
 	return Duel.GetMZoneCount(tp,g,tp)>0
