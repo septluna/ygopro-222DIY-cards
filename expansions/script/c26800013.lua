@@ -32,7 +32,7 @@ function c26800013.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function c26800013.cfilter(c)
-	return c:IsFaceup() and c:IsAttribute(ATTRIBUTE_WIND) and ((c:IsType(TYPE_NORMAL) and c:IsLevel(8)) or (c:IsType(TYPE_FUSION) and not c:IsType(TYPE_EFFECT)))
+	return c:IsFaceup() and c:IsAttribute(ATTRIBUTE_WIND) and ((c:IsType(TYPE_NORMAL) and c:IsLevel(8)) or (c:IsType(TYPE_FUSION) and not c:IsType(TYPE_EFFECT)) or c:IsCode(81011009))
 end
 function c26800013.condition(e,tp,eg,ep,ev,re,r,rp)
 	if not Duel.IsExistingMatchingCard(c26800013.cfilter,tp,LOCATION_MZONE,0,1,nil) then return false end
