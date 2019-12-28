@@ -1,9 +1,9 @@
 --黑丝女仆·杜野凛世
 c26807002.dfc_front_side=26807002
 c26807002.dfc_back_side=26807003
-c26807002.card_code_list={81010004}
 require("expansions/script/c81000000")
 function c26807002.initial_effect(c)
+	aux.AddCodeList(c,81010004)
 	--synchro summon
 	aux.AddSynchroMixProcedure(c,aux.Tuner(Card.IsAttribute,ATTRIBUTE_WIND),nil,nil,aux.NonTuner(Card.IsAttribute,ATTRIBUTE_WIND),1,99,c26807002.syncheck)
 	c:EnableReviveLimit()

@@ -1,6 +1,6 @@
 --雨过天晴之地
-c81010058.card_code_list={81010004}
 function c81010058.initial_effect(c)
+	aux.AddCodeList(c,81010004)
 	--Activate
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_ACTIVATE)

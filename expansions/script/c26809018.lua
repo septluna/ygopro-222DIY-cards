@@ -1,6 +1,6 @@
 --Stargazer
-c26809018.card_code_list={81010004}
 function c26809018.initial_effect(c)
+	aux.AddCodeList(c,81010004)
 	--fusion material
 	c:EnableReviveLimit()
 	aux.AddFusionProcFun2(c,c26809018.mfilter1,c26809018.mfilter2,false)

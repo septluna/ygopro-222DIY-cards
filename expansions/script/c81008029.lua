@@ -1,6 +1,6 @@
 --绮丽景色·绫濑穗乃香
-c81008029.card_code_list={81010004}
 function c81008029.initial_effect(c)
+	aux.AddCodeList(c,81010004)
 	--special summon
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)

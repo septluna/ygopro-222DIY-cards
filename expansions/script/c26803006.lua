@@ -1,6 +1,6 @@
 --春雷花海
-c26803006.card_code_list={81010004}
 function c26803006.initial_effect(c)
+	aux.AddCodeList(c,81010004)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)

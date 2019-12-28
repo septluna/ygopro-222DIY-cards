@@ -1,6 +1,6 @@
 --月刊CLIMAX
-c26805006.card_code_list={81010004}
 function c26805006.initial_effect(c)
+	aux.AddCodeList(c,81010004)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)

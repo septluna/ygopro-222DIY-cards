@@ -1,6 +1,6 @@
 --夕町·杜野凛世
-c26807014.card_code_list={81010004}
 function c26807014.initial_effect(c)
+	aux.AddCodeList(c,81010004)
 	--xyz summon
 	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_WIND),7,2)
 	c:EnableReviveLimit()

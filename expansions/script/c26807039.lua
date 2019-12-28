@@ -1,6 +1,6 @@
 --华夜特急·小宫果穗
-c26807039.card_code_list={81010004}
 function c26807039.initial_effect(c)
+	aux.AddCodeList(c,81010004)
 	--spsummon
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)

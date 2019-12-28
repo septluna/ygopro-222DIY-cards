@@ -1,6 +1,6 @@
 --水晶之泪
-c81010042.card_code_list={81010004}
 function c81010042.initial_effect(c)
+	aux.AddCodeList(c,81010004)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)

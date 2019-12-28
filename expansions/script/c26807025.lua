@@ -1,6 +1,6 @@
 --决战天明·西城树里
-c26807025.card_code_list={81010004}
 function c26807025.initial_effect(c)
+	aux.AddCodeList(c,81010004)
 	--link summon
 	aux.AddLinkProcedure(c,nil,2,2,c26807025.lcheck)
 	c:EnableReviveLimit()

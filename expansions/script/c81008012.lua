@@ -1,6 +1,6 @@
 --奇妙发现·上条春菜
-c81008012.card_code_list={81010004}
 function c81008012.initial_effect(c)
+	aux.AddCodeList(c,81010004)
 	--link summon
 	aux.AddLinkProcedure(c,c81008012.mfilter,1,1)
 	c:EnableReviveLimit()

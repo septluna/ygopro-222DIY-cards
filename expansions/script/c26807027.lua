@@ -1,6 +1,6 @@
 --特立独行·有栖川夏叶
-c26807027.card_code_list={81010004}
 function c26807027.initial_effect(c)
+	aux.AddCodeList(c,81010004)
 	--salvage
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_TOHAND)

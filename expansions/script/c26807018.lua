@@ -1,6 +1,6 @@
 --印象派·杜野凛世
-c26807018.card_code_list={81010004}
 function c26807018.initial_effect(c)
+	aux.AddCodeList(c,81010004)
 	--link summon
 	c:EnableReviveLimit()
 	aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsLinkType,TYPE_TOKEN),2,2)

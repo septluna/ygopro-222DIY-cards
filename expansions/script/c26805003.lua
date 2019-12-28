@@ -1,6 +1,6 @@
 --凛凛凛世·杜野凛世
-c26805003.card_code_list={81010004}
 function c26805003.initial_effect(c)
+	aux.AddCodeList(c,81010004)
 	--synchro summon
 	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_WIND),aux.NonTuner(Card.IsAttribute,ATTRIBUTE_WIND),1)
 	c:EnableReviveLimit()

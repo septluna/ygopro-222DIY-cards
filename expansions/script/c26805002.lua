@@ -1,6 +1,6 @@
 --凛世花坛·杜野凛世
-c26805002.card_code_list={81010004}
 function c26805002.initial_effect(c)
+	aux.AddCodeList(c,81010004)
 	--fusion material
 	c:EnableReviveLimit()
 	aux.AddFusionProcFunRep(c,aux.FilterBoolFunction(Card.IsFusionAttribute,ATTRIBUTE_WIND),2,true)

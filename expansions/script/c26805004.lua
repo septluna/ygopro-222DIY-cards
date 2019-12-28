@@ -1,6 +1,6 @@
 --凛世秋千·杜野凛世
-c26805004.card_code_list={81010004}
 function c26805004.initial_effect(c)
+	aux.AddCodeList(c,81010004)
 	--link summon
 	aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsLinkAttribute,ATTRIBUTE_WIND),2)
 	c:EnableReviveLimit()

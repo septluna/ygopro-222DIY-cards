@@ -1,6 +1,6 @@
 --海滩铁板烧·小宫果穗
-c26805010.card_code_list={81010004}
 function c26805010.initial_effect(c)
+	aux.AddCodeList(c,81010004)
 	--summon with no tribute
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(26805010,0))

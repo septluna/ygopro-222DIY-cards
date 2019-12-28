@@ -1,6 +1,6 @@
 --辉蓝记忆·绫濑穗乃香
-c81008034.card_code_list={81010004}
 function c81008034.initial_effect(c)
+	aux.AddCodeList(c,81010004)
 	--search
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(81008034,0))

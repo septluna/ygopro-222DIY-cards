@@ -1,6 +1,6 @@
 --哥特风·杜野凛世
-c26805014.card_code_list={81010004}
 function c26805014.initial_effect(c)
+	aux.AddCodeList(c,81010004)
 	--synchro summon
 	aux.AddSynchroProcedure(c,nil,aux.NonTuner(nil),1)
 	c:EnableReviveLimit()
