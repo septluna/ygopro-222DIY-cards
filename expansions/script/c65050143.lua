@@ -3,6 +3,7 @@ function c65050143.initial_effect(c)
 	 aux.AddRitualProcGreater2(c,c65050143.ritual_filter)
 	--change effect
 	local e1=Effect.CreateEffect(c)
+	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_GRAVE_ACTION)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_CHAINING)
 	e1:SetRange(LOCATION_GRAVE)
