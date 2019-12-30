@@ -1,90 +1,103 @@
---虚拟主播 音音继Nene
+--近来安好
 function c81006034.initial_effect(c)
-	--destroy
+	--Activate
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(81006034,0))
-	e1:SetCategory(CATEGORY_DESTROY)
-	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetCountLimit(1,81006034)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DELAY)
-	e1:SetCondition(c81006034.descon)
-	e1:SetTarget(c81006034.destg)
-	e1:SetOperation(c81006034.desop)
+	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+	e1:SetType(EFFECT_TYPE_ACTIVATE)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetCountLimit(1,81006034+EFFECT_COUNT_CODE_OATH)
+	e1:SetTarget(c81006034.target)
+	e1:SetOperation(c81006034.activate)
 	c:RegisterEffect(e1)
-	--atk up
+	--search
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(81006034,1))
-	e2:SetCategory(CATEGORY_ATKCHANGE)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e2:SetRange(LOCATION_MZONE)
+	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+	e2:SetType(EFFECT_TYPE_IGNITION)
+	e2:SetRange(LOCATION_SZONE)
 	e2:SetCountLimit(1,81006934)
-	e2:SetCondition(c81006034.tatkcon)
-	e2:SetOperation(c81006034.tatkop)
+	e2:SetCondition(c81006034.condition)
+	e2:SetCost(c81006034.thcost)
+	e2:SetTarget(c81006034.thtg)
+	e2:SetOperation(c81006034.thop)
 	c:RegisterEffect(e2)
-	--draw
-	local e3=Effect.CreateEffect(c)
-	e3:SetDescription(aux.Stringid(81006034,2))
-	e3:SetCategory(CATEGORY_DRAW)
-	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
-	e3:SetCode(EVENT_BE_MATERIAL)
-	e3:SetCountLimit(1,81006928)
-	e3:SetCondition(c81006034.drcon)
-	e3:SetTarget(c81006034.drtg)
-	e3:SetOperation(c81006034.drop)
-	c:RegisterEffect(e3)
+	Duel.AddCustomActivityCounter(81006034,ACTIVITY_SUMMON,c81006034.counterfilter)
+	Duel.AddCustomActivityCounter(81006034,ACTIVITY_SPSUMMON,c81006034.counterfilter)
+	Duel.AddCustomActivityCounter(81006034,ACTIVITY_CHAIN,c81006034.chainfilter)
 end
-function c81006034.cfilter(c,tp)
-	return c:IsFaceup() and c:IsSetCard(0x445) and c:IsControler(tp)
+function c81006034.chainfilter(re,tp,cid)
+	return not re:IsActiveType(TYPE_MONSTER)
 end
-function c81006034.descon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(c81006034.cfilter,1,nil,tp)
+function c81006034.counterfilter(c)
+	return not c:IsType(TYPE_EFFECT)
 end
-function c81006034.destg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsOnField() end
-	if chk==0 then return Duel.IsExistingTarget(nil,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-	local g=Duel.SelectTarget(tp,nil,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
+function c81006034.filter(c)
+	return c:IsLevel(8) and c:IsAttribute(ATTRIBUTE_WIND) and c:IsType(TYPE_NORMAL) and c:IsAbleToHand()
 end
-function c81006034.desop(e,tp,eg,ep,ev,re,r,rp)
+function c81006034.target(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(c81006034.filter,tp,LOCATION_DECK,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+end
+function c81006034.activate(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end
-	local tc=Duel.GetFirstTarget()
-	if tc and tc:IsRelateToEffect(e) then
-		Duel.Destroy(tc,REASON_EFFECT)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+	local g=Duel.SelectMatchingCard(tp,c81006034.filter,tp,LOCATION_DECK,0,1,1,nil)
+	if g:GetCount()>0 then
+		Duel.SendtoHand(g,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,g)
 	end
 end
-function c81006034.tcfilter(c,tp)
-	return c:IsFaceup() and c:IsSetCard(0x344c) and c:IsControler(tp) and not c:IsCode(81006034)
+function c81006034.cfilter(c)
+	return c:IsFaceup() and c:IsAttribute(ATTRIBUTE_WIND) and not c:IsType(TYPE_EFFECT)
 end
-function c81006034.tatkcon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(c81006034.tcfilter,1,nil,tp)
+function c81006034.condition(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetFieldGroup(tp,LOCATION_MZONE,0)
+	return g:GetCount()>0 and g:FilterCount(c81006034.cfilter,nil)==g:GetCount()
 end
-function c81006034.tatkop(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) and c:IsFaceup() then
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_UPDATE_ATTACK)
-		e1:SetValue(500)
-		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_DISABLE)
-		c:RegisterEffect(e1)
+function c81006034.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsDiscardable,tp,LOCATION_HAND,0,1,e:GetHandler()) 
+		and Duel.GetCustomActivityCount(81006034,tp,ACTIVITY_SUMMON)==0
+		and Duel.GetCustomActivityCount(81006034,tp,ACTIVITY_SPSUMMON)==0 
+		and Duel.GetCustomActivityCount(81006034,tp,ACTIVITY_CHAIN)==0 end
+	Duel.DiscardHand(tp,Card.IsDiscardable,1,1,REASON_COST+REASON_DISCARD)
+	local e1=Effect.CreateEffect(e:GetHandler())
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_OATH)
+	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+	e1:SetReset(RESET_PHASE+PHASE_END)
+	e1:SetTargetRange(1,0)
+	e1:SetTarget(c81006034.sumlimit)
+	Duel.RegisterEffect(e1,tp)
+	local e2=e1:Clone()
+	e2:SetCode(EFFECT_CANNOT_SUMMON)
+	Duel.RegisterEffect(e2,tp)
+	local e4=Effect.CreateEffect(e:GetHandler())
+	e4:SetType(EFFECT_TYPE_FIELD)
+	e4:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_OATH)
+	e4:SetCode(EFFECT_CANNOT_ACTIVATE)
+	e4:SetTargetRange(1,0)
+	e4:SetValue(c81006034.aclimit)
+	e4:SetReset(RESET_PHASE+PHASE_END)
+	Duel.RegisterEffect(e4,tp)
+end
+function c81006034.sumlimit(e,c,sump,sumtype,sumpos,targetp,se)
+	return c:IsType(TYPE_EFFECT)
+end
+function c81006034.aclimit(e,re,tp)
+	return re:IsActiveType(TYPE_MONSTER)
+end
+function c81006034.thfilter(c)
+	return c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsAbleToHand()
+end
+function c81006034.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(c81006034.thfilter,tp,LOCATION_DECK,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+end
+function c81006034.thop(e,tp,eg,ep,ev,re,r,rp)
+	if not e:GetHandler():IsRelateToEffect(e) then return end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+	local g=Duel.SelectMatchingCard(tp,c81006034.thfilter,tp,LOCATION_DECK,0,1,1,nil)
+	if g:GetCount()>0 then
+		Duel.SendtoHand(g,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,g)
 	end
-end
-function c81006034.drcon(e,tp,eg,ep,ev,re,r,rp)
-	return bit.band(r,REASON_FUSION+REASON_SYNCHRO+REASON_LINK+REASON_XYZ)~=0
-end
-function c81006034.drtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
-	Duel.SetTargetPlayer(tp)
-	Duel.SetTargetParam(1)
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
-end
-function c81006034.drop(e,tp,eg,ep,ev,re,r,rp)
-	local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
-	Duel.Draw(p,d,REASON_EFFECT)
 end

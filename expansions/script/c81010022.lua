@@ -8,7 +8,7 @@ function c81010022.initial_effect(c)
 	c:RegisterEffect(e1)
 	--
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TODECK)
+	e2:SetCategory(CATEGORY_TOHAND)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_F)
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e2:SetRange(LOCATION_SZONE)
@@ -28,16 +28,16 @@ function c81010022.filter(c,tp)
 end
 function c81010022.operation(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end
-	if eg:IsExists(c81010022.filter,1,nil,tp) and Duel.IsExistingMatchingCard(Card.IsAbleToDeck,1-tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil) and Duel.SelectYesNo(1-tp,aux.Stringid(81010022,1)) then
-		local g=Duel.SelectMatchingCard(1-tp,Card.IsAbleToDeck,1-tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil)
+	if eg:IsExists(c81010022.filter,1,nil,tp) and Duel.IsExistingMatchingCard(Card.IsAbleToHand,1-tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil) and Duel.SelectYesNo(1-tp,aux.Stringid(81010022,1)) then
+		local g=Duel.SelectMatchingCard(1-tp,Card.IsAbleToHand,1-tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil)
 		if g:GetCount()>0 then
-			Duel.SendtoDeck(g,nil,1,REASON_EFFECT)
+			Duel.SendtoHand(g,nil,REASON_EFFECT)
 		end
 	end
-	if eg:IsExists(c81010022.filter,1,nil,1-tp) and Duel.IsExistingMatchingCard(Card.IsAbleToDeck,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil) and Duel.SelectYesNo(tp,aux.Stringid(81010022,1)) then
-		local g=Duel.SelectMatchingCard(tp,Card.IsAbleToDeck,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil)
+	if eg:IsExists(c81010022.filter,1,nil,1-tp) and Duel.IsExistingMatchingCard(Card.IsAbleToHand,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil) and Duel.SelectYesNo(tp,aux.Stringid(81010022,1)) then
+		local g=Duel.SelectMatchingCard(tp,Card.IsAbleToHand,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil)
 		if g:GetCount()>0 then
-			Duel.SendtoDeck(g,nil,1,REASON_EFFECT)
+			Duel.SendtoHand(g,nil,REASON_EFFECT)
 		end
 	end
 end

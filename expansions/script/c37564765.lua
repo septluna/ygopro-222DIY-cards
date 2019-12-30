@@ -996,6 +996,11 @@ function cm.PConditionFilterNanahira(c,e,tp,lscale,rscale,f,tc,eset)
 		and (PENDULUM_CHECKLIST&(0x1<<tp)==0 or aux.PConditionExtraFilter(c,e,tp,lscale,rscale,eset))
 		and not c:IsForbidden() and (not f or f(c,tc))
 end
+function cm.SetForceExtra(tp,res)
+	if forced_to_extra then
+		forced_to_extra[tp]=res
+	end
+end
 function cm.PendConditionNanahira()
 	return  function(e,c,og)
 				if c==nil then return true end
@@ -1010,7 +1015,9 @@ function cm.PendConditionNanahira()
 				local ft=Duel.GetUsableMZoneCount(tp)
 				if ft<=0 then return false end
 				local mft=Duel.GetMZoneCount(tp)
+				cm.SetForceExtra(tp,true)
 				local eft=Duel.GetLocationCountFromEx(tp)
+				cm.SetForceExtra(tp,false)
 				local g=nil
 				if og then
 					g=og:Filter(aux.PConditionFilter,1,nil,e,tp,lscale,rscale,eset)
@@ -1056,7 +1063,9 @@ function cm.PendOperationNanahira()
                                 local eset={Duel.IsPlayerAffectedByEffect(tp,EFFECT_EXTRA_PENDULUM_SUMMON)}
 				local ft=Duel.GetUsableMZoneCount(tp)
 				local mft=Duel.GetMZoneCount(tp)
+				cm.SetForceExtra(tp,true)
 				local eft=Duel.GetLocationCountFromEx(tp)
+				cm.SetForceExtra(tp,false)
 				if Duel.IsPlayerAffectedByEffect(tp,59822133) then
 					mft=math.min(1,mft)
 					mft=math.min(1,eft)
@@ -1138,6 +1147,7 @@ function cm.PendOperationNanahira()
 				sg:Merge(g)
 				Duel.HintSelection(Group.FromCards(c))
 				Duel.HintSelection(Group.FromCards(rpz))
+				cm.SetForceExtra(tp,true)
 			end
 end
 function cm.NanahiraPCardFilter(c)

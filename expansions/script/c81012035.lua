@@ -1,14 +1,14 @@
---游戏时光·爱米莉
+--圣诞快乐·爱米莉
 function c81012035.initial_effect(c)
-	--search
+	c:EnableReviveLimit()
+	--spsummon limit
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
-	e1:SetType(EFFECT_TYPE_IGNITION)
-	e1:SetRange(LOCATION_HAND)
-	e1:SetCountLimit(1,81012035)
-	e1:SetCost(c81012035.thcost)
-	e1:SetTarget(c81012035.thtg)
-	e1:SetOperation(c81012035.thop)
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetRange(LOCATION_MZONE)
+	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+	e1:SetTargetRange(1,1)
+	e1:SetTarget(c81012035.sumlimit)
 	c:RegisterEffect(e1)
 	--effect gain
 	local e2=Effect.CreateEffect(c)
@@ -25,24 +25,10 @@ function c81012035.initial_effect(c)
 	e3:SetOperation(c81012035.effop2)
 	c:RegisterEffect(e3)
 end
-function c81012035.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then return c:IsDiscardable() end
-	Duel.SendtoGrave(c,REASON_COST+REASON_DISCARD)
-end
-function c81012035.thfilter(c)
-	return c:IsCode(81012034) and c:IsAbleToHand()
-end
-function c81012035.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chk==0 then return Duel.IsExistingMatchingCard(c81012035.thfilter,tp,LOCATION_DECK,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
-end
-function c81012035.thop(e,tp,eg,ep,ev,re,r,rp,chk)
-	local tg=Duel.GetFirstMatchingCard(c81012035.thfilter,tp,LOCATION_DECK,0,nil)
-	if tg then
-		Duel.SendtoHand(tg,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,tg)
-	end
+function c81012035.sumlimit(e,c,sump,sumtype,sumpos,targetp,se)
+	local sc=se:GetHandler()
+	return not (sc:IsType(TYPE_RITUAL) and sc:IsType(TYPE_SPELL)) 
+		and c:IsSummonType(SUMMON_TYPE_RITUAL)
 end
 function c81012035.effcon(e,tp,eg,ep,ev,re,r,rp)
 	return (r==REASON_RITUAL) and e:GetHandler():GetReasonCard():IsType(TYPE_PENDULUM)
