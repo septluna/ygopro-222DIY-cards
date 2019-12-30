@@ -37,9 +37,16 @@ function cm.disop(e,tp)
 	end
 end
 function cm.skipcon(e,tp)
-	return Duel.GetCurrentPhase()==PHASE_MAIN1 and rscon.excard2(rscf.CheckSetCard,LOCATION_MZONE,0,1,nil,"Cochrot")
+	return Duel.GetCurrentPhase()==PHASE_MAIN1 and rscon.excard2(rscf.CheckSetCard,LOCATION_MZONE,0,1,nil,"Cochrot")(e,tp)
 end
 function cm.skipop(e,tp)
+	local e1=Effect.CreateEffect(e:GetHandler())
+	e1:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
+	e1:SetCode(EVENT_CHAIN_END)
+	e1:SetOperation(cm.skipop2)
+	Duel.RegisterEffect(e1,tp)
+end
+function cm.skipop2(e,tp)
 	local p=Duel.GetTurnPlayer()
 	Duel.SkipPhase(p,PHASE_MAIN1,RESET_PHASE+PHASE_END,1)
 	local e2=Effect.CreateEffect(e:GetHandler())
@@ -49,4 +56,5 @@ function cm.skipop(e,tp)
 	e2:SetTargetRange(1,0)
 	e2:SetReset(RESET_PHASE+PHASE_MAIN1)
 	Duel.RegisterEffect(e2,p)
+	e:Reset()
 end

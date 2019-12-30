@@ -46,7 +46,7 @@ function c26800012.cfilter(c)
 end
 function c26800012.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE+LOCATION_REMOVED) and chkc:IsControler(tp) and c26800012.thfilter(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(c26800012.thfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil) end
+	if chk==0 then return Duel.IsExistingTarget(c26800012.thfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil) and Duel.IsExistingMatchingCard(c26800012.cfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,1,nil) end
 	local cg=Duel.GetMatchingGroup(c26800012.cfilter,tp,LOCATION_MZONE+LOCATION_GRAVE,0,nil)
 	local ct=cg:GetCount()
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
