@@ -1,6 +1,6 @@
 --祟神『赤口大人』
-c11200042.card_code_list={11200029}
 function c11200042.initial_effect(c)
+	aux.AddCodeList(c,11200029)
 	--Activate
 	local e0=Effect.CreateEffect(c)
 	e0:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_FUSION_SUMMON+CATEGORY_DECKDES)

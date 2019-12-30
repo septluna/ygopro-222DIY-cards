@@ -1,6 +1,6 @@
 --两栖类的神明
-c11200030.card_code_list={11200029}
 function c11200030.initial_effect(c)
+	aux.AddCodeList(c,11200029)
 	--fusion material
 	c:EnableReviveLimit()
 	aux.AddFusionProcCodeFun(c,11200029,aux.FilterBoolFunction(Card.IsRace,RACE_AQUA),1,true,true)
