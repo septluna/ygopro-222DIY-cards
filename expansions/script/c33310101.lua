@@ -3,8 +3,8 @@ if not pcall(function() require("expansions/script/c10199990") end) then require
 local m,cm=rsof.DefineCard(33310101)
 function cm.initial_effect(c)
 	local e1=rsef.ACT(c)
-	local e2=rsef.QO(c,nil,{m,0},{1,0x1},"tg",nil,LOCATION_SZONE,nil,nil,rsop.target2(cm.fun,cm.copyfilter,"tg",LOCATION_DECK+LOCATION_HAND),cm.copyop)
-	local e3=rsef.QO(c,nil,{m,1},{1,0x1},"dis",nil,LOCATION_SZONE,nil,nil,rsop.target(aux.disfilter1,"dis",0,LOCATION_ONFIELD),cm.disop)
+	local e2=rsef.QO(c,nil,{m,0},{1,0x1},"tg",nil,LOCATION_SZONE,nil,nil,rsop.target2(cm.fun,cm.copyfilter,"tg",LOCATION_DECK),cm.copyop)
+	local e3=rsef.QO(c,nil,{m,1},{1,0x1},"dis",nil,LOCATION_SZONE,rscon.excard2(Card.IsType,LOCATION_MZONE,0,1,nil,TYPE_RITUAL),nil,rsop.target(aux.disfilter1,"dis",0,LOCATION_ONFIELD),cm.disop)
 	local e4=rsef.QO(c,nil,{m,2},{1,0x1},nil,nil,LOCATION_SZONE,cm.skipcon,nil,nil,cm.skipop)
 end
 function cm.copyfilter(c,e,tp)
@@ -13,7 +13,7 @@ function cm.copyfilter(c,e,tp)
 end
 function cm.copyop(e,tp)
 	rsof.SelectHint(tp,"tg")
-	local tc=Duel.SelectMatchingCard(tp,cm.copyfilter,tp,LOCATION_DECK+LOCATION_HAND,0,1,1,nil):GetFirst()
+	local tc=Duel.SelectMatchingCard(tp,cm.copyfilter,tp,LOCATION_DECK,0,1,1,nil):GetFirst()
 	if not tc or Duel.SendtoGrave(tc,REASON_EFFECT)<=0 or not tc:IsLocation(LOCATION_GRAVE) then return end
 	local te=tc:GetActivateEffect()
 	local op=te:GetOperation()
