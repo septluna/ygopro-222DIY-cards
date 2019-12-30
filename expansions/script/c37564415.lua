@@ -53,5 +53,5 @@ function cm.exop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function cm.drfilter(c,e)
-	returnc:IsCanOverlay() and not c:IsImmuneToEffect(e)
+	return c:IsCanOverlay() and not c:IsImmuneToEffect(e)
 end
