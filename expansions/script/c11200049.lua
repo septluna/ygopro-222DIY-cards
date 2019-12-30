@@ -1,6 +1,6 @@
 --土著神『宝永四年的赤蛙』
-c11200049.card_code_list={11200029}
 function c11200049.initial_effect(c)
+	aux.AddCodeList(c,11200029)
 	--activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)

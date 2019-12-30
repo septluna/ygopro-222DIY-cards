@@ -1,6 +1,6 @@
 --开宴『二拜二拍一拜』
-c11200044.card_code_list={11200029}
 function c11200044.initial_effect(c)
+	aux.AddCodeList(c,11200029)
 	--activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)

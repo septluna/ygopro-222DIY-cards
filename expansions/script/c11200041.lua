@@ -1,6 +1,6 @@
 --土著神『小小青蛙不输风雨』
-c11200041.card_code_list={11200029}
 function c11200041.initial_effect(c)
+	aux.AddCodeList(c,11200029)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_DRAW+CATEGORY_REMOVE+CATEGORY_HANDES)

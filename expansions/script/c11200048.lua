@@ -1,6 +1,6 @@
 --蛙狩『蛙以口鸣，方致蛇祸』
-c11200048.card_code_list={11200029}
 function c11200048.initial_effect(c)
+	aux.AddCodeList(c,11200029)
 	--counter
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_COUNTER)

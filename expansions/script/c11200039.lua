@@ -1,6 +1,6 @@
 --丰作之地
-c11200039.card_code_list={11200029}
 function c11200039.initial_effect(c)
+	aux.AddCodeList(c,11200029)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
