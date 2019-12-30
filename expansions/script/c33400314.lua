@@ -35,7 +35,7 @@ function c33400314.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function c33400314.spfilter(c,fc,tp)
-	return c:IsReleasableByEffect() and c:IsSetCard(0x5341)  and Duel.GetLocationCountFromEx(tp,tp,c,fc)>0 
+	return c:IsReleasable() and c:IsSetCard(0x5341)  and Duel.GetLocationCountFromEx(tp,tp,c,fc)>0 
 end
 function c33400314.sprcon(e,c)
 	if c==nil then return true end
