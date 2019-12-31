@@ -19,15 +19,15 @@ function c65020162.initial_effect(c)
 	e2:SetOperation(c65020162.op)
 	c:RegisterEffect(e2)
 end
-function c65020162.costfil(c)
+function c65020162.costfil(c,tp)
 	return c:IsSetCard(0xada8) and not c:IsPublic() and Duel.IsExistingMatchingCard(c65020162.thfil,tp,LOCATION_DECK,0,1,nil,c:GetCode())
 end
 function c65020162.thfil(c,code)
 	return (c:GetCode()==code+4 or c:GetCode()==code-4) and c:IsSetCard(0xada8) and c:IsAbleToHand()
 end
 function c65020162.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c65020162.costfil,tp,LOCATION_HAND,0,1,nil) end
-	local g=Duel.SelectMatchingCard(tp,c65020162.costfil,tp,LOCATION_HAND,0,1,1,nil)
+	if chk==0 then return Duel.IsExistingMatchingCard(c65020162.costfil,tp,LOCATION_HAND,0,1,nil,tp) end
+	local g=Duel.SelectMatchingCard(tp,c65020162.costfil,tp,LOCATION_HAND,0,1,1,nil,tp)
 	local gc=g:GetFirst()
 	Duel.ConfirmCards(1-tp,gc)
 	Duel.ShuffleHand(tp)

@@ -1,5 +1,6 @@
 --渺奏迷景-仙境
 function c65072000.initial_effect(c)
+	aux.AddCodeList(c,65072000)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
@@ -8,7 +9,6 @@ function c65072000.initial_effect(c)
 	e1:SetOperation(c65072000.op)
 	c:RegisterEffect(e1)
 end
-c65072000.card_code_list={65072000}
 function c65072000.fil1(c)
 	return aux.IsCodeListed(c,65072000) and not c:IsForbidden() and c:IsType(TYPE_FIELD)
 end

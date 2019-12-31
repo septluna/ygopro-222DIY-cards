@@ -1,5 +1,6 @@
 --渺奏迷景曲-钟爱一生
 function c65072012.initial_effect(c)
+	aux.AddCodeList(c,65072000)
 	--give effect
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
@@ -10,7 +11,6 @@ function c65072012.initial_effect(c)
 	e1:SetOperation(c65072012.op)
 	c:RegisterEffect(e1)
 end
-c65072012.card_code_list={65072000}
 function c65072012.tg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsCode(65071999) end
 	if chk==0 then return Duel.IsExistingTarget(Card.IsCode,tp,LOCATION_MZONE,0,1,nil,65071999) end

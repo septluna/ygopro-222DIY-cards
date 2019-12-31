@@ -1,5 +1,6 @@
 --揭露幻想的黄昏
 function c65030085.initial_effect(c)
+	aux.AddCodeList(c,65030086)
 	--link summon
 	aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsLinkType,TYPE_EFFECT),3,3,c65030085.lcheck)
 	c:EnableReviveLimit()
@@ -29,7 +30,6 @@ function c65030085.initial_effect(c)
 	e3:SetOperation(c65030085.op3)
 	c:RegisterEffect(e3)
 end
-c65030085.card_code_list={65030086}
 function c65030085.lcheck(g,lc)
 	return g:IsExists(Card.IsLinkType,1,nil,TYPE_SYNCHRO)
 end

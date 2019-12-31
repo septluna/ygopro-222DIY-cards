@@ -1,5 +1,6 @@
 --星间牵落的银丝
 function c65030017.initial_effect(c)
+	aux.AddCodeList(c,65030020)
 	--Activate
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_ACTIVATE)
@@ -28,7 +29,6 @@ function c65030017.initial_effect(c)
 	e2:SetOperation(c65030017.atkop)
 	c:RegisterEffect(e2)
 end
-c65030017.card_code_list={65030020}
 function c65030017.costfil(c)
 	return c:IsFaceup() and c:IsType(TYPE_SPELL) and c:IsType(TYPE_CONTINUOUS) and c:IsReleasable() and aux.IsCodeListed(c,65030020)
 end

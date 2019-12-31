@@ -1,5 +1,6 @@
 --渺奏迷景曲-少女之歌
 function c65072013.initial_effect(c)
+	aux.AddCodeList(c,65072000)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_ATKCHANGE)
@@ -13,7 +14,6 @@ function c65072013.initial_effect(c)
 	e1:SetOperation(c65072013.activate)
 	c:RegisterEffect(e1)
 end
-c65072013.card_code_list={65072000}
 function c65072013.condition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetCurrentPhase()~=PHASE_DAMAGE or not Duel.IsDamageCalculated()
 end

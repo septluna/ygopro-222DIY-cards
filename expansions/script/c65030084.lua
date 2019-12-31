@@ -1,5 +1,6 @@
 --辉煌的旋转碎片
 function c65030084.initial_effect(c)
+	aux.AddCodeList(c,65030086)
 	 --synchro summon
 	aux.AddSynchroProcedure(c,nil,aux.NonTuner(c65030084.synfil),2)
 	c:EnableReviveLimit()
@@ -48,7 +49,6 @@ function c65030084.initial_effect(c)
 	c:RegisterEffect(e3)
 	Duel.AddCustomActivityCounter(65030084,ACTIVITY_CHAIN,c65030084.chainfilter)
 end
-c65030084.card_code_list={65030086}
 function c65030084.synfil(c)
 	return aux.IsCodeListed(c,65030086) and c:IsType(TYPE_SYNCHRO)
 end

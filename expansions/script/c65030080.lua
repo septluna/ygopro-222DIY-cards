@@ -1,5 +1,6 @@
 --青蓝青色的踏步
 function c65030080.initial_effect(c)
+	aux.AddCodeList(c,65030086)
 	--pendulum summon
 	aux.EnablePendulumAttribute(c)
 	--merry-go-round
@@ -17,7 +18,6 @@ function c65030080.initial_effect(c)
 	c:RegisterEffect(e2)
 	Duel.AddCustomActivityCounter(65030080,ACTIVITY_CHAIN,c65030080.chainfilter)
 end
-c65030080.card_code_list={65030086}
 function c65030080.chainfilter(re,tp,cid)
 	local rc=re:GetHandler()
 	return not (rc:IsType(TYPE_MONSTER) and not aux.IsCodeListed(rc,65030086))

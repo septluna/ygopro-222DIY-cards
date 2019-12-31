@@ -1,5 +1,6 @@
 --郁蓝色的望窗
 function c65030087.initial_effect(c)
+	aux.AddCodeList(c,65030086)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
@@ -10,7 +11,6 @@ function c65030087.initial_effect(c)
 	e1:SetOperation(c65030087.op)
 	c:RegisterEffect(e1)
 end
-c65030087.card_code_list={65030086}
 function c65030087.con(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsChainNegatable(ev) and re:IsActiveType(TYPE_MONSTER)
 end

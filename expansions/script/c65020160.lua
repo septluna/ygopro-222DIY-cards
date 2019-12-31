@@ -72,7 +72,7 @@ function c65020160.rop(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end
 	local g=Duel.SelectMatchingCard(tp,c65020160.rfil,tp,LOCATION_DECK,0,1,1,nil)
 	if g:GetCount()>0 then
-		Duel.SendtoHand(g,0,tp,tp,false,false,POS_FACEUP)
+		Duel.SendtoHand(g,tp,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)
 	end
 end

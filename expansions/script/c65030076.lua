@@ -1,5 +1,6 @@
 --雨后的寂寥街道
 function c65030076.initial_effect(c)
+	aux.AddCodeList(c,65030086)
 	--pendulum summon
 	aux.EnablePendulumAttribute(c)
 	--merry-go-round
@@ -17,7 +18,6 @@ function c65030076.initial_effect(c)
 	c:RegisterEffect(e2)
 	Duel.AddCustomActivityCounter(65030076,ACTIVITY_CHAIN,c65030076.chainfilter)
 end
-c65030076.card_code_list={65030086}
 function c65030076.chainfilter(re,tp,cid)
 	local rc=re:GetHandler()
 	return not (rc:IsType(TYPE_MONSTER) and not aux.IsCodeListed(rc,65030086))

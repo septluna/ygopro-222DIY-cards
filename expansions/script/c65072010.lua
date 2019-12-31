@@ -1,5 +1,6 @@
 --渺奏迷景-少女水天
 function c65072010.initial_effect(c)
+	aux.AddCodeList(c,65072000)
 	--spsummon
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_TOKEN)
@@ -10,7 +11,6 @@ function c65072010.initial_effect(c)
 	e1:SetOperation(c65072010.activate)
 	c:RegisterEffect(e1)
 end
-c65072010.card_code_list={65072000}
 function c65072010.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,65071999,0,0x4011,2100,2100,6,RACE_FAIRY,ATTRIBUTE_LIGHT,POS_FACEUP) end

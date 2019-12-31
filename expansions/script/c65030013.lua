@@ -1,5 +1,6 @@
 --晴朗海滨的高远天空
 function c65030013.initial_effect(c)
+	aux.AddCodeList(c,65030020)
 	--Activate
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_ACTIVATE)
@@ -29,7 +30,6 @@ function c65030013.initial_effect(c)
 	e2:SetOperation(c65030013.atkop)
 	c:RegisterEffect(e2)
 end
-c65030013.card_code_list={65030020}
 function c65030013.atkcon(e,tp,eg,ep,ev,re,r,rp)
 	local b=Duel.GetAttacker()
 	local ph=Duel.GetCurrentPhase()

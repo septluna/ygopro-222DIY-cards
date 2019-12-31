@@ -1,5 +1,6 @@
 --渺奏迷景曲-凝望至高
 function c65072007.initial_effect(c)
+	aux.AddCodeList(c,65072000)
 	--tohand
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SEARCH+CATEGORY_TOHAND)
@@ -10,7 +11,6 @@ function c65072007.initial_effect(c)
 	e1:SetOperation(c65072007.activate)
 	c:RegisterEffect(e1)
 end
-c65072007.card_code_list={65072000}
 
 function c65072007.filter(c)
 	return aux.IsCodeListed(c,65072000) and c:IsAbleToHand()

@@ -1,5 +1,6 @@
 --无可逃离的终焉
 function c65030090.initial_effect(c)
+	aux.AddCodeList(c,65030086)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_DISABLE)
@@ -11,7 +12,6 @@ function c65030090.initial_effect(c)
 	e1:SetOperation(c65030090.activate)
 	c:RegisterEffect(e1)
 end
-c65030090.card_code_list={65030086}
 function c65030090.costfil(c)
 	return aux.IsCodeListed(c,65030086) and c:IsFaceup() and c:IsAbleToDeck()
 end
