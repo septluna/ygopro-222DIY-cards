@@ -91,7 +91,7 @@ function cm.eqop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) and tc:IsType(TYPE_MONSTER) and tc:IsControler(1-tp) then
-		if c:IsFaceup() and c:IsRelateToEffect(e) then
+		--if c:IsFaceup() and c:IsRelateToEffect(e) then
 			if not Duel.Equip(tp,tc,c,false) then return end
 			--Add Equip limit
 			tc:RegisterFlagEffect(m,RESET_EVENT+0x1fe0000,0,0)
@@ -111,7 +111,7 @@ function cm.eqop(e,tp,eg,ep,ev,re,r,rp)
 			e2:SetReset(RESET_EVENT+0x1fe0000)
 			e2:SetValue(cm.repval)
 			tc:RegisterEffect(e2)
-		else Duel.SendtoGrave(tc,REASON_RULE) end
+		--else Duel.SendtoGrave(tc,REASON_RULE) end
 	end
 end
 function cm.repval(e,re,r,rp)

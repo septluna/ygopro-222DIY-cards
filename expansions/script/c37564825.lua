@@ -57,8 +57,8 @@ function cm.eqop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
 	if not (tc:IsRelateToEffect(e) and tc:IsFaceup()) then return end
-	if c:IsFaceup() and c:IsRelateToEffect(e) then
-		if Duel.Equip(tp,tc,c)==0 then return end
+	--if c:IsFaceup() and c:IsRelateToEffect(e) then
+		if not Duel.Equip(tp,tc,c) then return end
 		local e2=Effect.CreateEffect(c)
 		e2:SetType(EFFECT_TYPE_SINGLE)
 		e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
@@ -66,7 +66,7 @@ function cm.eqop(e,tp,eg,ep,ev,re,r,rp)
 		e2:SetValue(cm.eqlimit)
 		e2:SetReset(RESET_EVENT+0x1fe0000)
 		tc:RegisterEffect(e2)
-	else Duel.SendtoGrave(tc,REASON_RULE) end
+	--else Duel.SendtoGrave(tc,REASON_RULE) end
 end
 function cm.eqlimit(e,c)
 	return e:GetOwner()==c
