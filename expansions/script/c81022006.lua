@@ -1,6 +1,6 @@
 --本番出演
-c81022006.card_code_list={81022000}
 function c81022006.initial_effect(c)
+	aux.AddCodeList(c,81022000)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)

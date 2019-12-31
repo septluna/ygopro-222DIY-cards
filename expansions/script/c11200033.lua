@@ -1,6 +1,6 @@
 --或许很烦人的谜之神明
-c11200033.card_code_list={11200029}
 function c11200033.initial_effect(c)
+	aux.AddCodeList(c,11200029)
 	c:EnableReviveLimit()
 	aux.AddFusionProcCodeFun(c,11200029,aux.FilterBoolFunction(Card.IsRace,RACE_AQUA),2,true,true)
 	--code

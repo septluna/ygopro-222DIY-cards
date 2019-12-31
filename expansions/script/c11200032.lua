@@ -1,6 +1,6 @@
 --名存实亡的神明
-c11200032.card_code_list={11200029}
 function c11200032.initial_effect(c)
+	aux.AddCodeList(c,11200029)
 	--xyz summon
 	aux.AddXyzProcedure(c,nil,2,2)
 	c:EnableReviveLimit()

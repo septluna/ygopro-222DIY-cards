@@ -1,5 +1,6 @@
 --土著神的顶点
 function c11200047.initial_effect(c)
+	aux.AddCodeList(c,11200029)
 	--xyz summon
 	aux.AddXyzProcedure(c,nil,2,2,c11200047.ovfilter,aux.Stringid(11200047,0),2,c11200047.xyzop)
 	c:EnableReviveLimit()

@@ -1,5 +1,6 @@
 --安宁无人的海滨
 function c65030075.initial_effect(c)
+	aux.AddCodeList(c,65030086)
 	--pendulum summon
 	aux.EnablePendulumAttribute(c)
 	--Tuner
@@ -22,7 +23,6 @@ function c65030075.initial_effect(c)
 	e2:SetOperation(c65030075.scop)
 	c:RegisterEffect(e2)
 end
-c65030075.card_code_list={65030086}
 function c65030075.confil(c)
 	return c:IsLocation(LOCATION_MZONE) and aux.IsCodeListed(c,65030086) and not c:IsType(TYPE_TUNER)
 end

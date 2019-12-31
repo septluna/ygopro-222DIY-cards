@@ -1,5 +1,6 @@
 --树荫围绕的遥远耀光
 function c65030012.initial_effect(c)
+	aux.AddCodeList(c,65030020)
 	--Activate
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_ACTIVATE)
@@ -27,7 +28,6 @@ function c65030012.initial_effect(c)
 	e2:SetOperation(c65030012.edop)
 	c:RegisterEffect(e2)
 end
-c65030012.card_code_list={65030020}
 function c65030012.ntfil(c)
 	return not c:IsType(TYPE_SPELL)
 end

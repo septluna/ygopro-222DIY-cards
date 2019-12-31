@@ -1,5 +1,6 @@
 --诉说的灿烂阳光
 function c65030079.initial_effect(c)
+	aux.AddCodeList(c,65030086)
 	--pendulum summon
 	aux.EnablePendulumAttribute(c)
 	--Tuner
@@ -22,7 +23,6 @@ function c65030079.initial_effect(c)
 	e2:SetOperation(c65030079.scop)
 	c:RegisterEffect(e2)
 end
-c65030079.card_code_list={65030086}
 function c65030079.confil(c)
 	return c:IsLocation(LOCATION_MZONE) and aux.IsCodeListed(c,65030086) and not c:IsType(TYPE_TUNER)
 end

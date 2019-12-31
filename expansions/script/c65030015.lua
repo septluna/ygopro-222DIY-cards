@@ -1,5 +1,6 @@
 --云上的高远星座
 function c65030015.initial_effect(c)
+	aux.AddCodeList(c,65030020)
 	--Activate
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_ACTIVATE)
@@ -30,7 +31,6 @@ function c65030015.initial_effect(c)
 	e2:SetOperation(c65030015.atkop)
 	c:RegisterEffect(e2)
 end
-c65030015.card_code_list={65030020}
 function c65030015.atkcon(e,tp,eg,ep,ev,re,r,rp)
 	local b=Duel.GetAttacker()
 	local ph=Duel.GetCurrentPhase()

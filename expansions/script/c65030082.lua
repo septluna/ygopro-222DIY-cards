@@ -1,5 +1,6 @@
 --无人知晓的角落
 function c65030082.initial_effect(c)
+	aux.AddCodeList(c,65030086)
 	c:EnableReviveLimit()
 	aux.EnablePendulumAttribute(c,false)
 	aux.AddSynchroProcedure(c,nil,aux.NonTuner(c65030082.synfil),1)
@@ -33,7 +34,6 @@ function c65030082.initial_effect(c)
 	e6:SetOperation(c65030082.penop)
 	c:RegisterEffect(e6)
 end
-c65030082.card_code_list={65030086}
 function c65030082.synfil(c)
 	return aux.IsCodeListed(c,65030086)
 end

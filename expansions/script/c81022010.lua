@@ -1,6 +1,6 @@
 --惩罚游戏·天空桥朋花
-c81022010.card_code_list={81022000}
 function c81022010.initial_effect(c)
+	aux.AddCodeList(c,81022000)
 	c:EnableReviveLimit()
 	--code
 	local e0=Effect.CreateEffect(c)

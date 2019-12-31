@@ -1,6 +1,6 @@
 --神具『泄矢的铁轮』
-c11200046.card_code_list={11200029}
 function c11200046.initial_effect(c)
+	aux.AddCodeList(c,11200029)
 	--Equip limit
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_SINGLE)

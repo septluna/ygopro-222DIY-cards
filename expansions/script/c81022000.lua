@@ -1,6 +1,6 @@
 --天空桥朋花
-c81022000.card_code_list={81022000}
 function c81022000.initial_effect(c)
+	aux.AddCodeList(c,81022000)
 	c:EnableReviveLimit()
 	--remove
 	local e1=Effect.CreateEffect(c)

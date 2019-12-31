@@ -1,6 +1,6 @@
 --特别恩赐
-c81022004.card_code_list={81022000}
 function c81022004.initial_effect(c)
+	aux.AddCodeList(c,81022000)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)

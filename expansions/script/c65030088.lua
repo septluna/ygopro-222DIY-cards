@@ -1,5 +1,6 @@
 --分断的转折
 function c65030088.initial_effect(c)
+	aux.AddCodeList(c,65030086)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_TOGRAVE+CATEGORY_DRAW)
@@ -12,7 +13,6 @@ function c65030088.initial_effect(c)
 	e1:SetOperation(c65030088.op)
 	c:RegisterEffect(e1)
 end
-c65030088.card_code_list={65030086}
 function c65030088.egfil(c,tp)
 	return aux.IsCodeListed(c,65030086) and c:IsPreviousPosition(POS_FACEUP) and c:GetPreviousControler()==tp and c:IsLocation(LOCATION_DECK)
 end

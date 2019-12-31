@@ -1,5 +1,6 @@
 --渺奏迷景曲-地久天长
 function c65072014.initial_effect(c)
+	aux.AddCodeList(c,65072000)
 	--destroy
 	local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_DESTROY)

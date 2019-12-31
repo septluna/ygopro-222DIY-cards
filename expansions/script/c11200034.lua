@@ -1,6 +1,6 @@
 --赤口的土著神
-c11200034.card_code_list={11200029}
 function c11200034.initial_effect(c)
+	aux.AddCodeList(c,11200029)
 	c:EnableReviveLimit()
 	aux.AddFusionProcCodeFun(c,11200029,aux.FilterBoolFunction(Card.IsRace,RACE_AQUA),3,true,true)
 	--code

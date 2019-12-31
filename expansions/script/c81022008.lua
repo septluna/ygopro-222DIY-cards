@@ -1,6 +1,6 @@
 --大开杀戒
-c81022008.card_code_list={81022000}
 function c81022008.initial_effect(c)
+	aux.AddCodeList(c,81022000)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_TOGRAVE)

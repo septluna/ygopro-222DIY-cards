@@ -1,5 +1,6 @@
 --现实坠落
 function c65030086.initial_effect(c)
+	aux.AddCodeList(c,65030086)
 	 --Activate
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_ACTIVATE)
@@ -28,7 +29,6 @@ function c65030086.initial_effect(c)
 	e2:SetOperation(c65030086.tfop)
 	c:RegisterEffect(e2)
 end
-c65030086.card_code_list={65030086}
 function c65030086.egfil(c,tp)
 	return c:GetPreviousControler()==tp and c:IsLocation(LOCATION_DECK)
 end

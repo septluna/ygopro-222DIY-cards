@@ -1,5 +1,6 @@
 --霞色的华美青空
 function c65030083.initial_effect(c)
+	aux.AddCodeList(c,65030086)
 	--synchro summon
 	aux.AddSynchroMixProcedure(c,aux.NonTuner(c65030083.synfil),nil,nil,aux.Tuner(nil),2,99)
 	c:EnableReviveLimit()
@@ -35,7 +36,6 @@ function c65030083.initial_effect(c)
 	e5:SetOperation(c65030083.op)
 	c:RegisterEffect(e5)
 end
-c65030083.card_code_list={65030086}
 function c65030083.synfil(c)
 	return aux.IsCodeListed(c,65030086) and c:IsType(TYPE_SYNCHRO)
 end

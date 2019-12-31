@@ -1,5 +1,6 @@
 --锈色的独行前路
 function c65030089.initial_effect(c)
+	aux.AddCodeList(c,65030086)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
@@ -9,7 +10,6 @@ function c65030089.initial_effect(c)
 	e1:SetOperation(c65030089.op)
 	c:RegisterEffect(e1)
 end
-c65030089.card_code_list={65030086}
 function c65030089.b1fil(c,e,tp)
 	return aux.IsCodeListed(c,65030086) and c:IsType(TYPE_MONSTER) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 end

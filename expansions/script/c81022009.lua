@@ -1,6 +1,6 @@
 --照单全收
-c81022009.card_code_list={81022000}
 function c81022009.initial_effect(c)
+	aux.AddCodeList(c,81022000)
 	--Activate(summon)
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_DISABLE_SUMMON+CATEGORY_DESTROY)

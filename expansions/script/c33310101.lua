@@ -4,7 +4,7 @@ local m,cm=rsof.DefineCard(33310101)
 function cm.initial_effect(c)
 	local e1=rsef.ACT(c)
 	local e2=rsef.QO(c,nil,{m,0},{1,0x1},"tg",nil,LOCATION_SZONE,nil,nil,rsop.target2(cm.fun,cm.copyfilter,"tg",LOCATION_DECK),cm.copyop)
-	local e3=rsef.QO(c,nil,{m,1},{1,0x1},"dis",nil,LOCATION_SZONE,nil,nil,rsop.target(aux.disfilter1,"dis",0,LOCATION_ONFIELD),cm.disop)
+	local e3=rsef.QO(c,nil,{m,1},{1,0x1},"dis",nil,LOCATION_SZONE,rscon.excard2(Card.IsType,LOCATION_MZONE,0,1,nil,TYPE_RITUAL),nil,rsop.target(aux.disfilter1,"dis",0,LOCATION_ONFIELD),cm.disop)
 	local e4=rsef.QO(c,nil,{m,2},{1,0x1},nil,nil,LOCATION_SZONE,cm.skipcon,nil,nil,cm.skipop)
 end
 function cm.copyfilter(c,e,tp)
@@ -37,9 +37,16 @@ function cm.disop(e,tp)
 	end
 end
 function cm.skipcon(e,tp)
-	return Duel.GetCurrentPhase()==PHASE_MAIN1 and rscon.excard2(rscf.CheckSetCard,LOCATION_MZONE,0,1,nil,"Cochrot")
+	return Duel.GetCurrentPhase()==PHASE_MAIN1 and rscon.excard2(rscf.CheckSetCard,LOCATION_MZONE,0,1,nil,"Cochrot")(e,tp)
 end
 function cm.skipop(e,tp)
+	local e1=Effect.CreateEffect(e:GetHandler())
+	e1:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
+	e1:SetCode(EVENT_CHAIN_END)
+	e1:SetOperation(cm.skipop2)
+	Duel.RegisterEffect(e1,tp)
+end
+function cm.skipop2(e,tp)
 	local p=Duel.GetTurnPlayer()
 	Duel.SkipPhase(p,PHASE_MAIN1,RESET_PHASE+PHASE_END,1)
 	local e2=Effect.CreateEffect(e:GetHandler())
@@ -49,4 +56,5 @@ function cm.skipop(e,tp)
 	e2:SetTargetRange(1,0)
 	e2:SetReset(RESET_PHASE+PHASE_MAIN1)
 	Duel.RegisterEffect(e2,p)
+	e:Reset()
 end

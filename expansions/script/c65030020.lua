@@ -1,5 +1,6 @@
 --眩耀奇景
 function c65030020.initial_effect(c)
+	aux.AddCodeList(c,65030020)
 	--Activate
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_ACTIVATE)
@@ -28,7 +29,6 @@ function c65030020.initial_effect(c)
 	e2:SetOperation(c65030020.edop)
 	c:RegisterEffect(e2)
 end
-c65030020.card_code_list={65030020}
 function c65030020.aclimit(e,re,tp)
 	return not re:GetHandler():IsImmuneToEffect(e)
 end

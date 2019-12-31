@@ -1,5 +1,6 @@
 --渺奏迷景-幻想之风
 function c65072001.initial_effect(c)
+	aux.AddCodeList(c,65072000)
 	--change field
 	local e0=Effect.CreateEffect(c)
 	e0:SetCategory(CATEGORY_TOGRAVE)
@@ -42,7 +43,6 @@ function c65072001.initial_effect(c)
 	e4:SetValue(TYPE_NORMAL)
 	c:RegisterEffect(e4)
 end
-c65072001.card_code_list={65072000}
 function c65072001.ccon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()~=tp
 end
