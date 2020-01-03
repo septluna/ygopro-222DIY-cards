@@ -40,7 +40,7 @@ function cm.initial_effect(c)
 			return c:IsType(TYPE_XYZ) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 		end,tp,LOCATION_EXTRA,0,nil)
 		local z=c:GetLinkedZone(tp)&0xff
-		local ft=Duel.GetLocationCountFromEx(tp,tp,c:GetLinkedGroup())
+		local ft=Duel.GetLocationCountFromEx(tp,tp,c:GetLinkedGroup(),TYPE_XYZ)
 		if ft<=0 or ft>#mg then return end
 		local spg=Group.CreateGroup()
 		for i=0,6 do
