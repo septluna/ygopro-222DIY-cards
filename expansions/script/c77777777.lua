@@ -50,7 +50,7 @@ function cm.initial_effect(c)
 	end
 	local function synchro_tg(e,tp,eg,ep,ev,re,r,rp,chk)
 		if chk==0 then
-			if Duel.GetLocationCountFromEx(tp)<=0 then return false end
+			if Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_FUSION)<=0 then return false end
 			local mg=Duel.GetMatchingGroup(s_mat_filter,tp,LOCATION_GRAVE,0,nil)
 			local sg=Duel.GetMatchingGroup(s_fus_filter,tp,LOCATION_EXTRA,0,nil,e,tp)
 			return Senya.CheckGroup(mg,s_group_check,nil,2,2,sg)
