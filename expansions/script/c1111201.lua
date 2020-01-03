@@ -36,7 +36,7 @@ function c1111201.cost2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToDeckAsCost,tp,LOCATION_HAND,0,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local sg=Duel.SelectMatchingCard(tp,Card.IsAbleToDeckAsCost,tp,LOCATION_HAND,0,1,1,nil)
-	Duel.SendtoDeck(sg,nil,1,REASON_COST)
+	Duel.SendtoDeck(sg,nil,2,REASON_COST)
 end
 --
 function c1111201.tfilter2(c)
