@@ -209,7 +209,7 @@ function cm.exgoal(g,tp,fc)
 	return Duel.GetLocationCountFromEx(tp,tp,g,fc)>0
 end
 function cm.CheckSummonLocation(c,tp)
-	if c:IsLocation(LOCATION_EXTRA) then return Duel.GetLocationCountFromEx(tp)>0 end
+	if c:IsLocation(LOCATION_EXTRA) then return Duel.GetLocationCountFromEx(tp,tp,nil,c)>0 end
 	return Duel.GetMZoneCount(tp)>0
 end
 function cm.AND(...)

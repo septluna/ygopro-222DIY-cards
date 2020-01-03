@@ -53,7 +53,7 @@ function cm.sprcon(e,c)
 	if c==nil then return true end
 	local tp=c:GetControler()
 	local mg=Duel.GetMatchingGroup(cm.sprfilter,tp,LOCATION_REMOVED,0,nil,c)
-	return Duel.GetLocationCountFromEx(tp)>0 and c:CheckFusionMaterial(mg,nil,PLAYER_NONE)
+	return Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_FUSION and c:CheckFusionMaterial(mg,nil,PLAYER_NONE)
 end
 function cm.sprop(e,tp,eg,ep,ev,re,r,rp,c)
 	local mg=Duel.GetMatchingGroup(cm.sprfilter,tp,LOCATION_REMOVED,0,nil,c)
