@@ -41,7 +41,7 @@ function cm.spcon(e,c)
 	if c==nil then return true end
 	local tp=c:GetControler()
 	local g=Duel.GetMatchingGroup(cm.spfilter1,tp,LOCATION_GRAVE+LOCATION_HAND,0,nil)
-	return Duel.GetLocationCountFromEx(tp)>0
+	return Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_XYZ)>0
 		and g:GetClassCount(Card.GetCode)>=5
 end
 function cm.spop(e,tp,eg,ep,ev,re,r,rp,c)

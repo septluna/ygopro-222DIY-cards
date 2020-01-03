@@ -158,7 +158,7 @@ function cm.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		local loc=0
 		if Duel.GetMZoneCount(tp)>0 then loc=loc+LOCATION_HAND end
-		if Duel.GetLocationCountFromEx(tp)>0 then loc=loc+LOCATION_EXTRA end
+		if Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_PENDULUM)>0 then loc=loc+LOCATION_EXTRA end
 		if loc==0 then return false end
 		local g=nil
 		if og then
@@ -174,7 +174,7 @@ function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 				if not cm.target(e,tp,eg,ep,ev,re,r,rp,0) then return end
 				local sg=Group.CreateGroup()
 				local ft1=math.max(Duel.GetMZoneCount(tp),2)
-				local ft2=math.max(Duel.GetLocationCountFromEx(tp),2)
+				local ft2=math.max(Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_PENDULUM),2)
 				local ft=math.max(Duel.GetUsableMZoneCount(tp),2)
 				if Duel.IsPlayerAffectedByEffect(tp,59822133) then
 					if ft1>0 then ft1=1 end

@@ -1016,7 +1016,7 @@ function cm.PendConditionNanahira()
 				if ft<=0 then return false end
 				local mft=Duel.GetMZoneCount(tp)
 				cm.SetForceExtra(tp,true)
-				local eft=Duel.GetLocationCountFromEx(tp)
+				local eft=Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_PENDULUM)
 				cm.SetForceExtra(tp,false)
 				local g=nil
 				if og then
@@ -1064,7 +1064,7 @@ function cm.PendOperationNanahira()
 				local ft=Duel.GetUsableMZoneCount(tp)
 				local mft=Duel.GetMZoneCount(tp)
 				cm.SetForceExtra(tp,true)
-				local eft=Duel.GetLocationCountFromEx(tp)
+				local eft=Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_PENDULUM)
 				cm.SetForceExtra(tp,false)
 				if Duel.IsPlayerAffectedByEffect(tp,59822133) then
 					mft=math.min(1,mft)

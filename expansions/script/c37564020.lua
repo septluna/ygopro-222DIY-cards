@@ -24,7 +24,7 @@ function cm.spfilter2(c,e,tp,code,rk)
 end
 function cm.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and cm.thfilter(chkc,e,tp) end
-	if chk==0 then return Duel.GetLocationCountFromEx(tp)>0
+	if chk==0 then return Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_XYZ)>0
 		and Duel.IsExistingTarget(cm.thfilter,tp,LOCATION_MZONE,0,1,nil,e,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local g=Duel.SelectTarget(tp,cm.thfilter,tp,LOCATION_MZONE,0,1,1,nil,e,tp)
@@ -33,7 +33,7 @@ end
 function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) then
-		if Duel.GetLocationCountFromEx(tp)<=0 then return end
+		if Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_XYZ)<=0 then return end
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 		local sg=Duel.SelectMatchingCard(tp,cm.spfilter2,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,tc:GetCode(),tc:GetRank())
 		local mg=sg:GetFirst()

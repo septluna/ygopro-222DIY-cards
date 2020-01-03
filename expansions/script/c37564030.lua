@@ -118,7 +118,7 @@ function cm.atkop(e,tp,eg,ep,ev,re,r,rp)
 		if dr:IsAttribute(ATTRIBUTE_WIND) then
 			Duel.Draw(tp,2,REASON_EFFECT)
 		end
-		if dr:IsAttribute(ATTRIBUTE_EARTH) and Duel.GetLocationCountFromEx(tp)>0 and Duel.IsExistingMatchingCard(cm.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) then
+		if dr:IsAttribute(ATTRIBUTE_EARTH) and Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_XYZ)>0 and Duel.IsExistingMatchingCard(cm.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) then
 			if Duel.SelectYesNo(tp,aux.Stringid(37564030,4)) then
 				Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 				local g=Duel.SelectMatchingCard(tp,cm.spfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)

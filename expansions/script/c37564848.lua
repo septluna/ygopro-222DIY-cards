@@ -71,7 +71,6 @@ function cm.filter2(c,e,tp,m,f)
 end
 function cm.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		if Duel.GetLocationCountFromEx(tp)<=0 then return false end
 		local mg1=Senya.GetFusionMaterial(tp,LOCATION_DECK,nil,cm.mfilter,nil)
 		local res=Duel.IsExistingMatchingCard(cm.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,mg1,nil)
 		if not res then
@@ -88,7 +87,6 @@ function cm.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function cm.activate(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCountFromEx(tp)<=0 then return end
 	if not e:GetHandler():IsRelateToEffect(e) then return end
 	local mg1=Senya.GetFusionMaterial(tp,LOCATION_DECK,nil,cm.mfilter,nil,e)
 	local sg1=Duel.GetMatchingGroup(cm.filter2,tp,LOCATION_EXTRA,0,nil,e,tp,mg1,nil)

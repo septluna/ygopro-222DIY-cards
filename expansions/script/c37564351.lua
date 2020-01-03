@@ -86,7 +86,7 @@ function cm.operation1(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function cm.filter(c,e,tp)
-	return c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:IsCode(37564331) and Duel.GetLocationCountFromEx(tp)>0
+	return c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:IsCode(37564331) and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0
 end
 function cm.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(cm.filter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end

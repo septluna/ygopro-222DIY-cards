@@ -41,9 +41,14 @@ function cm.rmtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,0,tp,LOCATION_EXTRA)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,#g,0,0)
 end
-function cm.gcheck(g,mft,eft)
-	local ect=g:FilterCount(Card.IsLocation,nil,LOCATION_EXTRA)
-	return ect<=eft and #g-ect<=mft
+function cm.gcheck(g,mft,eft1,eft2)
+	local ect1=g:FilterCount(function(c)
+		return c:IsLocation(LOCATION_EXTRA) and c:IsFacedown() and not c:IsType(TYPE_LINK)
+	end,nil)
+	local ect2=g:FilterCount(function(c)
+		return c:IsLocation(LOCATION_EXTRA) and c(:IsFaceup() or c:IsType(TYPE_LINK))
+	end,nil)
+	return ect1<=eft1 and ect2<=eft2 and #g-ect1-ect2<=mft
 end
 function cm.RegisterBuff(c,ec)
 	local e1=Effect.CreateEffect(ec)
@@ -79,11 +84,22 @@ function cm.rmop(e,tp,eg,ep,ev,re,r,rp)
 	local sg=Duel.GetMatchingGroup(cm.sfilter,tp,LOCATION_DECK+LOCATION_EXTRA,0,nil,e,tp)
 	local ft=math.min(Duel.GetUsableMZoneCount(tp),ct)
 	local mft=Duel.GetMZoneCount(tp)
-	local eft=c29724053 and Duel.IsPlayerAffectedByEffect(tp,29724053) and math.min(c29724053[tp],(Duel.GetLocationCountFromEx(tp))) or Duel.GetLocationCountFromEx(tp)
+	local eft1=c29724053 and Duel.IsPlayerAffectedByEffect(tp,29724053) and math.min(c29724053[tp],(Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_XYZ))) or Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_XYZ)
+	local eft2=c29724053 and Duel.IsPlayerAffectedByEffect(tp,29724053) and math.min(c29724053[tp],(Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_PENDULUM))) or Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_PENDULUM)
 	local tg=Senya.SelectGroup(tp,HINTMSG_SPSUMMON,sg,cm.gcheck,nil,1,ft,mft,eft)
-	local etg=tg:Filter(Card.IsLocation,nil,LOCATION_EXTRA)
-	tg:Sub(etg)
-	for tc in aux.Next(etg) do
+	local etg1=g:Filter(function(c)
+		return c:IsLocation(LOCATION_EXTRA) and c:IsFacedown() and not c:IsType(TYPE_LINK)
+	end)
+	local etg2=g:Filter(function(c)
+		return c:IsLocation(LOCATION_EXTRA) and c(:IsFaceup() or c:IsType(TYPE_LINK))
+	end,nil)
+	tg:Sub(etg1)
+	tg:Sub(etg2)
+	for tc in aux.Next(etg2) do
+		Duel.SpecialSummonStep(tc,0,tp,tp,false,false,POS_FACEUP)
+		cm.RegisterBuff(tc,e:GetHandler())
+	end
+	for tc in aux.Next(etg1) do
 		Duel.SpecialSummonStep(tc,0,tp,tp,false,false,POS_FACEUP)
 		cm.RegisterBuff(tc,e:GetHandler())
 	end
