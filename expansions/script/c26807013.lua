@@ -16,16 +16,16 @@ function c26807013.initial_effect(c)
 	e2:SetTarget(c26807013.target)
 	e2:SetOperation(c26807013.operation)
 	c:RegisterEffect(e2)
-	--Rank Up
+	--spsummon
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(26807013,1))
-	e3:SetType(EFFECT_TYPE_IGNITION)
 	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e3:SetType(EFFECT_TYPE_IGNITION)
 	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e3:SetRange(LOCATION_SZONE)
 	e3:SetCountLimit(1,26807913)
-	e3:SetTarget(c26807013.starget)
-	e3:SetOperation(c26807013.soperation)
+	e3:SetTarget(c26807013.sptg1)
+	e3:SetOperation(c26807013.spop1)
 	c:RegisterEffect(e3)
 end
 function c26807013.cfilter(c)
@@ -52,33 +52,32 @@ function c26807013.operation(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
 end
-function c26807013.stgfilter(c,e,tp)
-	local att=c:GetAttribute()
-	if not (c:IsFaceup() and c:IsAttack(2200) and c:IsDefense(600)
-		and Duel.GetLocationCountFromEx(tp,tp,c)>0 and aux.MustMaterialCheck(c,tp,EFFECT_MUST_BE_XMATERIAL)) then return false end
-	return Duel.IsExistingMatchingCard(c26807013.sspfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,att,c)
+function c26807013.spfilter1(c,e,tp)
+	return c:IsFaceup() and c:IsAttack(2200) and c:IsDefense(600)
+		and Duel.IsExistingMatchingCard(c26807013.spfilter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,c,c:GetAttribute())
+		and aux.MustMaterialCheck(c,tp,EFFECT_MUST_BE_XMATERIAL)
 end
-function c26807013.sspfilter(c,e,tp,att,mc)
-	return c:IsAttack(2200) and c:IsDefense(600) and c:IsRank(6) and c:IsType(TYPE_XYZ) and c:IsAttribute(att) and mc:IsCanBeXyzMaterial(c,tp)
-		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
+function c26807013.spfilter2(c,e,tp,mc,att)
+	return c:IsType(TYPE_XYZ) and c:IsAttack(2200) and c:IsDefense(600) and c:IsRank(6) and c:IsAttribute(att) and mc:IsCanBeXyzMaterial(c)
+		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) and Duel.GetLocationCountFromEx(tp,tp,mc,c)>0
 end
-function c26807013.starget(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and c26807013.stgfilter(chkc,e,tp) end
-	if chk==0 then return Duel.IsExistingTarget(c26807013.stgfilter,tp,LOCATION_MZONE,0,1,nil,e,tp) end
+function c26807013.sptg1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and c26807013.spfilter1(chkc,e,tp) end
+	if chk==0 then return Duel.IsExistingTarget(c26807013.spfilter1,tp,LOCATION_MZONE,0,1,nil,e,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
-	Duel.SelectTarget(tp,c26807013.stgfilter,tp,LOCATION_MZONE,0,1,1,nil,e,tp)
+	Duel.SelectTarget(tp,c26807013.spfilter1,tp,LOCATION_MZONE,0,1,1,nil,e,tp)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
-function c26807013.soperation(e,tp,eg,ep,ev,re,r,rp)
+function c26807013.spop1(e,tp,eg,ep,ev,re,r,rp)
+	if not e:GetHandler():IsRelateToEffect(e) then return end
 	local tc=Duel.GetFirstTarget()
-	if not tc:IsRelateToEffect(e) or not tc:IsControler(tp)
-		or Duel.GetLocationCountFromEx(tp,tp,tc)<=0 or not aux.MustMaterialCheck(c,tp,EFFECT_MUST_BE_XMATERIAL) then return end
+	if tc:IsFacedown() or not tc:IsRelateToEffect(e) or tc:IsControler(1-tp) or tc:IsImmuneToEffect(e) then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SelectMatchingCard(tp,c26807013.sspfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,tc:GetRank()+2,tc)
+	local g=Duel.SelectMatchingCard(tp,c26807013.spfilter2,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,tc,tc:GetAttribute())
 	local sc=g:GetFirst()
 	if sc then
 		local mg=tc:GetOverlayGroup()
-		if mg:GetCount()>0 then
+		if mg:GetCount()~=0 then
 			Duel.Overlay(sc,mg)
 		end
 		sc:SetMaterial(Group.FromCards(tc))

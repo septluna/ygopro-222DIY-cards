@@ -62,32 +62,31 @@ function c26807031.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.DiscardHand(tp,Card.IsDiscardable,1,1,REASON_COST+REASON_DISCARD)
 end
 function c26807031.spfilter(c,e,tp,mc)
-	return c:IsAttack(2200) and c:IsDefense(600) and c:IsAttribute(ATTRIBUTE_WATER) and mc:IsCanBeXyzMaterial(c) and c:IsType(TYPE_XYZ)
-		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
+	return c:IsAttack(2200) and c:IsDefense(600) and c:IsAttribute(ATTRIBUTE_WATER) and c:IsType(TYPE_XYZ) and mc:IsCanBeXyzMaterial(c)
+		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) and Duel.GetLocationCountFromEx(tp,tp,mc,c)>0
 end
 function c26807031.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetLocationCountFromEx(tp,tp,e:GetHandler())>0
-		and aux.MustMaterialCheck(e:GetHandler(),tp,EFFECT_MUST_BE_XMATERIAL)
-		and Duel.IsExistingMatchingCard(c26807031.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,e:GetHandler()) end
+	local c=e:GetHandler()
+	if chk==0 then return aux.MustMaterialCheck(c,tp,EFFECT_MUST_BE_XMATERIAL)
+		and Duel.IsExistingMatchingCard(c26807031.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,c) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c26807031.spop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if Duel.GetLocationCountFromEx(tp,tp,c)>0 and aux.MustMaterialCheck(c,tp,EFFECT_MUST_BE_XMATERIAL) then
-		if c:IsFaceup() and c:IsRelateToEffect(e) and c:IsControler(tp) and not c:IsImmuneToEffect(e) then
-			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-			local g=Duel.SelectMatchingCard(tp,c26807031.spfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,c)
-			local sc=g:GetFirst()
-			if sc then
-				local mg=c:GetOverlayGroup()
-				if mg:GetCount()~=0 then
-					Duel.Overlay(sc,mg)
-				end
-				sc:SetMaterial(Group.FromCards(c))
-				Duel.Overlay(sc,Group.FromCards(c))
-				Duel.SpecialSummon(sc,SUMMON_TYPE_XYZ,tp,tp,false,false,POS_FACEUP)
-				sc:CompleteProcedure()
+	if not aux.MustMaterialCheck(c,tp,EFFECT_MUST_BE_XMATERIAL) then return end
+	if c:IsFaceup() and c:IsRelateToEffect(e) and c:IsControler(tp) and not c:IsImmuneToEffect(e) then
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+		local g=Duel.SelectMatchingCard(tp,c26807031.spfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,c)
+		local sc=g:GetFirst()
+		if sc then
+			local mg=c:GetOverlayGroup()
+			if mg:GetCount()~=0 then
+				Duel.Overlay(sc,mg)
 			end
+			sc:SetMaterial(Group.FromCards(c))
+			Duel.Overlay(sc,Group.FromCards(c))
+			Duel.SpecialSummon(sc,SUMMON_TYPE_XYZ,tp,tp,false,false,POS_FACEUP)
+			sc:CompleteProcedure()
 		end
 	end
 end

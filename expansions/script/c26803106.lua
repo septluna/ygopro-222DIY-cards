@@ -31,7 +31,7 @@ function c26803106.cfilter(c,tp)
 	return c:GetSummonLocation()==LOCATION_EXTRA
 end
 function c26803106.descon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(c26803106.cfilter,1,nil,tp)
+	return not eg:IsContains(e:GetHandler()) and eg:IsExists(c26803106.cfilter,1,nil,tp)
 end
 function c26803106.destg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()

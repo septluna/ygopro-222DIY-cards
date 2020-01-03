@@ -54,22 +54,19 @@ function c81000007.aclimit(e,re,tp)
 	return re:IsActiveType(TYPE_MONSTER)
 end
 function c81000007.filter0(c)
-	return (c:IsLocation(LOCATION_MZONE) or c:IsFaceup()) and c:IsCanBeFusionMaterial() and c:IsAbleToDeck()
+	return (c:IsLocation(LOCATION_ONFIELD+LOCATION_GRAVE) or c:IsFaceup()) and c:IsType(TYPE_MONSTER) and c:IsCanBeFusionMaterial() and c:IsAbleToDeck()
 end
 function c81000007.filter1(c,e)
-	return (c:IsLocation(LOCATION_MZONE) or c:IsFaceup()) and c:IsCanBeFusionMaterial() and c:IsAbleToDeck() and not c:IsImmuneToEffect(e)
+	return (c:IsLocation(LOCATION_ONFIELD+LOCATION_GRAVE) or c:IsFaceup()) and c:IsType(TYPE_MONSTER) and c:IsCanBeFusionMaterial() and c:IsAbleToDeck() and not c:IsImmuneToEffect(e)
 end
 function c81000007.filter2(c,e,tp,m,f,chkf)
 	return c:IsType(TYPE_FUSION) and not c:IsType(TYPE_EFFECT) and (not f or f(c))
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,false) and c:CheckFusionMaterial(m,nil,chkf)
 end
-function c81000007.filter3(c)
-	return c:IsType(TYPE_MONSTER) and c:IsCanBeFusionMaterial() and c:IsAbleToDeck()
-end
 function c81000007.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		local chkf=tp
-		local mg=Duel.GetMatchingGroup(c81000007.filter0,tp,LOCATION_MZONE+LOCATION_REMOVED+LOCATION_GRAVE,0,nil)
+		local mg=Duel.GetMatchingGroup(c81000007.filter0,tp,LOCATION_ONFIELD+LOCATION_GRAVE+LOCATION_REMOVED,0,nil)
 		local res=Duel.IsExistingMatchingCard(c81000007.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,mg,nil,chkf)
 		if not res then
 			local ce=Duel.GetChainMaterial(tp)
@@ -83,10 +80,11 @@ function c81000007.target(e,tp,eg,ep,ev,re,r,rp,chk)
 		return res
 	end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,1,tp,LOCATION_ONFIELD+LOCATION_GRAVE+LOCATION_REMOVED)
 end
 function c81000007.activate(e,tp,eg,ep,ev,re,r,rp)
 	local chkf=tp
-	local mg=Duel.GetMatchingGroup(c81000007.filter1,tp,LOCATION_MZONE+LOCATION_REMOVED+LOCATION_GRAVE,0,nil,e)
+	local mg=Duel.GetMatchingGroup(aux.NecroValleyFilter(c81000007.filter1),tp,LOCATION_ONFIELD+LOCATION_GRAVE+LOCATION_REMOVED,0,nil,e)
 	local sg1=Duel.GetMatchingGroup(c81000007.filter2,tp,LOCATION_EXTRA,0,nil,e,tp,mg,nil,chkf)
 	local mg3=nil
 	local sg2=nil

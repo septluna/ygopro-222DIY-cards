@@ -11,23 +11,22 @@ function c26806048.initial_effect(c)
 	e1:SetOperation(c26806048.activate)
 	c:RegisterEffect(e1)
 end
-function c26806048.cfilter(c,tp)
-	return c:IsAttack(2200) and c:IsDefense(600) and Duel.GetLocationCountFromEx(tp,tp,c)>0
+function c26806048.cfilter(c,tp,mc)
+	return c:IsAttack(2200) and c:IsDefense(600) and Duel.GetLocationCountFromEx(tp,tp,mc,c)>0
 end
 function c26806048.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.CheckReleaseGroup(tp,c26806048.cfilter,1,nil,tp) end
 	local g=Duel.SelectReleaseGroup(tp,c26806048.cfilter,1,1,nil,tp)
 	Duel.Release(g,REASON_COST)
 end
-function c26806048.filter(c,e,tp)
-	return c:IsAttack(2200) and c:IsDefense(600) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+function c26806048.filter(c,e,tp,mc)
+	return c:IsAttack(2200) and c:IsDefense(600) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and Duel.GetLocationCountFromEx(tp,tp,mc,c)>0
 end
 function c26806048.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c26806048.filter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c26806048.activate(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCountFromEx(tp)<=0 then return end
 	local c=e:GetHandler()
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local tc=Duel.SelectMatchingCard(tp,c26806048.filter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp):GetFirst()

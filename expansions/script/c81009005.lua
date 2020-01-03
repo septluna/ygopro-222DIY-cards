@@ -41,8 +41,9 @@ end
 function c81009005.spfilter2(c,e,tp,m,f,chkf)
 	return (not f or f(c)) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_FUSION,tp,false,true) and c:CheckFusionMaterial(m,nil,chkf)
 end
-function c81009005.spfilter3(c,e,tp,chkf)
+function c81009005.spfilter3(c,e,tp,chkf,rc)
 	if not c:IsType(TYPE_FUSION) or not c:IsAbleToExtra() then return false end
+	if Duel.GetLocationCountFromEx(tp,tp,rc,c)<=0 then return false end
 	local mg=Duel.GetMatchingGroup(c81009005.spfilter0,tp,LOCATION_GRAVE,0,c)
 	local res=c81009005.spfilter2(c,e,tp,mg,nil,chkf)
 	if not res then
@@ -58,15 +59,16 @@ function c81009005.spfilter3(c,e,tp,chkf)
 end
 function c81009005.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local chkf=PLAYER_NONE
-	if chk==0 then return Duel.GetLocationCountFromEx(tp,tp,e:GetHandler())>0
-		and Duel.IsExistingMatchingCard(c81009005.spfilter3,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil,e,tp,chkf) end
-	Duel.SetOperationInfo(0,CATEGORY_TOEXTRA,nil,1,tp,LOCATION_GRAVE)
+	if chk==0 then return Duel.IsPlayerCanRemove(tp)
+		and Duel.IsExistingMatchingCard(c81009005.spfilter3,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil,e,tp,chkf,e:GetHandler()) end
+	Duel.SetOperationInfo(0,CATEGORY_TOEXTRA,nil,1,tp,LOCATION_GRAVE+LOCATION_REMOVED)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c81009005.spop(e,tp,eg,ep,ev,re,r,rp)
+	if not Duel.IsPlayerCanRemove(tp) then return end
 	local chkf=tp
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(c81009005.spfilter3),tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil,e,tp,chkf)
+	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(c81009005.spfilter3),tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil,e,tp,chkf,nil)
 	local tc=g:GetFirst()
 	if tc and Duel.SendtoDeck(tc,nil,2,REASON_EFFECT)~=0 and tc:IsLocation(LOCATION_EXTRA) then
 		local mg1=Duel.GetMatchingGroup(c81009005.spfilter1,tp,LOCATION_GRAVE,0,nil,e)
@@ -80,7 +82,7 @@ function c81009005.spop(e,tp,eg,ep,ev,re,r,rp)
 			local mf=ce:GetValue()
 			mgchk2=c81009005.spfilter2(tc,e,tp,mg2,mf,chkf)
 		end
-		if (Duel.GetLocationCountFromEx(tp)>0 and mgchk1) or mgchk2 then
+		if mgchk1 or mgchk2 then
 			if mgchk1 and (not mgchk2 or not Duel.SelectYesNo(tp,ce:GetDescription())) then
 				local mat1=Duel.SelectFusionMaterial(tp,tc,mg1,nil,chkf)
 				tc:SetMaterial(mat1)

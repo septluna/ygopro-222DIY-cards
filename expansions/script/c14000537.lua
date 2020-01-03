@@ -21,7 +21,7 @@ end
 function cm.filter(c,e,tp)
 	return c:IsFaceup() and c:IsRace(RACE_SPELLCASTER) and c:IsAttribute(ATTRIBUTE_DARK) and c:IsAbleToRemove()
 		and Duel.IsExistingMatchingCard(cm.tfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp)
-		and Duel.GetLocationCountFromEx(tp,tp,c)>0
+		and Duel.GetLocationCountFromEx(tp,tp,c,0)>0
 end
 function cm.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE+LOCATION_GRAVE) and cm.filter(chkc,e,tp) end
