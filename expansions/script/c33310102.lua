@@ -3,7 +3,7 @@ if not pcall(function() require("expansions/script/c10199990") end) then require
 local m,cm=rsof.DefineCard(33310102)
 function cm.initial_effect(c)
 	local e1=rsef.ACT(c,nil,nil,nil,"sp,rm",nil,nil,nil,cm.tg,cm.act)
-	local e2=rsef.I(c,{m,0},nil,"td,th","tg",LOCATION_GRAVE,nil,nil,rstg.target({cm.tdfilter,"td",LOCATION_REMOVED },rsop.list(Card.IsAbleToHand,"th")),cm.tdop)
+	local e2=rsef.I(c,{m,0},{1,m},"td,th","tg",LOCATION_GRAVE,nil,nil,rstg.target({cm.tdfilter,"td",LOCATION_REMOVED },rsop.list(Card.IsAbleToHand,"th")),cm.tdop)
 end
 function cm.spfilter(c,e,tp)
 	return c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_RITUAL,tp,false,true) and c:CheckSetCard("Cochrot") and Duel.IsExistingMatchingCard(cm.matfilter,tp,LOCATION_HAND+LOCATION_MZONE+LOCATION_GRAVE,0,1,c,c,e,tp)
