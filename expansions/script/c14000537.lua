@@ -15,13 +15,12 @@ function cm.initial_effect(c)
 	e1:SetOperation(cm.activate)
 	c:RegisterEffect(e1)
 end
-function cm.tfilter(c,e,tp)
-	return c:IsCode(14000538) and c:IsCanBeSpecialSummoned(e,0,tp,true,false)
+function cm.tfilter(c,e,tp,mc)
+	return c:IsCode(14000538) and c:IsCanBeSpecialSummoned(e,0,tp,true,false) and Duel.GetLocationCountFromEx(tp,tp,mc,c)>0
 end
 function cm.filter(c,e,tp)
 	return c:IsFaceup() and c:IsRace(RACE_SPELLCASTER) and c:IsAttribute(ATTRIBUTE_DARK) and c:IsAbleToRemove()
-		and Duel.IsExistingMatchingCard(cm.tfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp)
-		and Duel.GetLocationCountFromEx(tp,tp,c,0)>0
+		and Duel.IsExistingMatchingCard(cm.tfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,c)
 end
 function cm.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE+LOCATION_GRAVE) and cm.filter(chkc,e,tp) end
