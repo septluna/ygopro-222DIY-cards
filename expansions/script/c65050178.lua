@@ -46,11 +46,10 @@ function c65050178.filter1(c,e,tp)
 	local rk=c:GetRank()
 	return c:IsSetCard(0x6da8) and c:IsFaceup() and c:IsType(TYPE_XYZ)
 		and Duel.IsExistingMatchingCard(c65050178.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,c,rk+3)
-		and Duel.GetLocationCountFromEx(tp,tp,c)>0
 		and aux.MustMaterialCheck(c,tp,EFFECT_MUST_BE_XMATERIAL)
 end
 function c65050178.filter2(c,e,tp,mc,rk)
-	return c:IsRank(rk) and c:IsSetCard(0x6da8) and mc:IsCanBeXyzMaterial(c)
+	return c:IsRank(rk) and c:IsSetCard(0x6da8) and mc:IsCanBeXyzMaterial(c) and Duel.GetLocationCountFromEx(tp,tp,mc,c)>0
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 end
 function c65050178.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

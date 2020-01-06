@@ -51,7 +51,7 @@ function c65030080.remfil(c,g)
 	return g:IsContains(c)
 end
 function c65030080.spfil(c,e,tp)
-	return c:IsFaceup() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsFaceup() and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and Duel.GetLocationCountFromEx(tp,tp,nil,c)
 end
 function c65030080.op(e,tp,eg,ep,ev,re,r,rp)
 	if not (Duel.GetMatchingGroupCount(Card.IsAbleToDeck,tp,LOCATION_EXTRA,0,nil)>0) then return end
@@ -71,7 +71,7 @@ function c65030080.op(e,tp,eg,ep,ev,re,r,rp)
 		g:Remove(c65030080.remfil,nil,teg)
 		Duel.SendtoExtraP(teg,tp,REASON_EFFECT)
 		Duel.SendtoGrave(g,REASON_EFFECT)
-		if not (Duel.GetLocationCountFromEx(tp)>0 and Duel.IsPlayerCanSpecialSummon(tp)) then return end
+		if not Duel.IsPlayerCanSpecialSummon(tp) then return end
 		if Duel.IsExistingMatchingCard(c65030080.spfil,tp,LOCATION_EXTRA,0,1,nil,e,tp) then
 			local g=Duel.SelectMatchingCard(tp,c65030080.spfil,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)
 			Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)

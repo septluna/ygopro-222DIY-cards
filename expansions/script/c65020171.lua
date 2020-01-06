@@ -32,14 +32,13 @@ function c65020171.accon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(c65020171.acfil,1,nil,tp)
 end
 function c65020171.acsfil(c,e,tp)
-	return c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) and c:IsSetCard(65020163)
+	return c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) and c:IsSetCard(65020163) and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0
 end
 function c65020171.actg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c65020171.acsfil,tp,LOCATION_EXTRA,0,1,nil,e,tp) and Duel.GetLocationCountFromEx(tp)>0 end
+	if chk==0 then return Duel.IsExistingMatchingCard(c65020171.acsfil,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c65020171.acop(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCountFromEx(tp)<=0 then return end
 	local g=Duel.GetFirstMatchingCard(c65020171.acsfil,tp,LOCATION_EXTRA,0,nil,e,tp)
 	local tc=g:GetFirst()
 	if tc then

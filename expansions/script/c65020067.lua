@@ -54,11 +54,11 @@ function c65020067.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	c:RegisterFlagEffect(65020067,RESET_CHAIN,0,1)
 end
 function c65020067.xyzfilter2(c,mg)
-	return c:IsXyzSummonable(mg) and c:IsType(TYPE_XYZ)
+	return c:IsXyzSummonable(mg) and c:IsType(TYPE_XYZ) and Duel.GetLocationCountFromEx(tp,tp,mg,c)>0
 end 
 
 function c65020067.xyzfilter1(c,tp)
-	return c:IsSetCard(0x9da3) and c:IsFaceup() and not c:IsType(TYPE_TOKEN) and Duel.GetLocationCountFromEx(tp,tp,c)>0
+	return c:IsSetCard(0x9da3) and c:IsFaceup() and not c:IsType(TYPE_TOKEN) 
 end
 function c65020067.xyztg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then 

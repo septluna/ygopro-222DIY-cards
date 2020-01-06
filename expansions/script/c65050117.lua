@@ -23,12 +23,11 @@ function c65050117.filter1(c,e,tp)
 	local rk=c:GetRank()
 	return c:IsFaceup() and c:IsType(TYPE_XYZ)
 		and Duel.IsExistingMatchingCard(c65050117.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,c,rk+4)
-		and Duel.GetLocationCountFromEx(tp,tp,c)>0
 		and aux.MustMaterialCheck(c,tp,EFFECT_MUST_BE_XMATERIAL) and c:IsSetCard(0x3da8)
 end
 function c65050117.filter2(c,e,tp,mc,rk)
 	return c:IsRank(rk) and mc:IsCanBeXyzMaterial(c)
-		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) and c:IsSetCard(0x3da8)
+		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) and c:IsSetCard(0x3da8) and Duel.GetLocationCountFromEx(tp,tp,mc,c)>0
 end
 function c65050117.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and c65050117.filter1(chkc,e,tp) end

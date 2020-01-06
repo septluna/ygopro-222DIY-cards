@@ -19,11 +19,10 @@ function c65050027.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function c65050027.filter(c,e,tp)
-	return c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:IsType(TYPE_NORMAL) and c:IsFaceup()
+	return c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:IsType(TYPE_NORMAL) and c:IsFaceup() and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0
 end
 function c65050027.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetLocationCountFromEx(tp)>0
-		and Duel.IsExistingMatchingCard(c65050027.filter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
+	if chk==0 then return Duel.IsExistingMatchingCard(c65050027.filter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c65050027.activate(e,tp,eg,ep,ev,re,r,rp)

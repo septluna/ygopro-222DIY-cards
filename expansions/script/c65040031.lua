@@ -13,10 +13,10 @@ end
 function c65040031.tgfil(c,e,tp)
 	local code=c:GetOriginalCode()
 	local rk=c:GetOriginalRank()
-	return c:IsFaceup() and aux.MustMaterialCheck(c,tp,EFFECT_MUST_BE_XMATERIAL) and c:IsType(TYPE_XYZ) and Duel.GetLocationCountFromEx(tp,tp,c)>0 and Duel.IsExistingMatchingCard(c65040031.xyzfil,tp,LOCATION_EXTRA,0,1,nil,e,tp,code,rk,c) and not c:IsImmuneToEffect(e)
+	return c:IsFaceup() and aux.MustMaterialCheck(c,tp,EFFECT_MUST_BE_XMATERIAL) and c:IsType(TYPE_XYZ) and Duel.IsExistingMatchingCard(c65040031.xyzfil,tp,LOCATION_EXTRA,0,1,nil,e,tp,code,rk,c) and not c:IsImmuneToEffect(e)
 end
 function c65040031.xyzfil(c,e,tp,code,rk,matc)
-	return c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,true,false) and c:GetRank()>rk and c:IsCode(code) and matc:IsCanBeXyzMaterial(c)
+	return c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,true,false) and c:GetRank()>rk and c:IsCode(code) and matc:IsCanBeXyzMaterial(c) and Duel.GetLocationCountFromEx(tp,tp,matc,c)>0
 end
 function c65040031.tg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return c65040031.tgfil(chkc,e,tp) and chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) end

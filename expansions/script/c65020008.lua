@@ -94,7 +94,7 @@ function c65020008.pcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsExistingMatchingCard(Card.IsSetCard,tp,LOCATION_PZONE,0,1,e:GetHandler(),0x9da1)
 end
 function c65020008.pfilter(c,e,tp,scl1,scl2)
-	return c:IsSetCard(0x9da1) and c:IsType(TYPE_MONSTER) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:GetLevel()>scl1 and c:GetLevel()<scl2 and c:IsFaceup()
+	return c:IsSetCard(0x9da1) and c:IsType(TYPE_MONSTER) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:GetLevel()>scl1 and c:GetLevel()<scl2 and c:IsFaceup() and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0 
 end
 function c65020008.ptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then 
@@ -104,20 +104,20 @@ function c65020008.ptg(e,tp,eg,ep,ev,re,r,rp,chk)
 		local scl1=tc1:GetLeftScale()
 		local scl2=tc2:GetRightScale()
 		if scl1>scl2 then scl1,scl2=scl2,scl1 end
-		return Duel.IsExistingMatchingCard(c65020008.pfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,scl1,scl2) and Duel.GetLocationCountFromEx(tp)>0 
+		return Duel.IsExistingMatchingCard(c65020008.pfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,scl1,scl2) 
 	end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c65020008.pop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if Duel.GetLocationCountFromEx(tp)<=0 or not c:IsRelateToEffect(e) then return end
+	if not c:IsRelateToEffect(e) then return end
 	local tc1=Duel.GetFieldCard(tp,LOCATION_PZONE,0)
 		local tc2=Duel.GetFieldCard(tp,LOCATION_PZONE,1)
 		if not tc1 or not tc2 then return false end
 		local scl1=tc1:GetLeftScale()
 		local scl2=tc2:GetRightScale()
 		if scl1>scl2 then scl1,scl2=scl2,scl1 end
-	local num=Duel.GetLocationCountFromEx(tp)
+	local num=Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_PENDULUM)
 	local num2=Duel.GetMatchingGroupCount(c65020008.pfilter,tp,LOCATION_EXTRA,0,nil,e,tp,scl1,scl2)
 	if num>num2 then num=num2 end
 	local g=Duel.SelectMatchingCard(tp,c65020008.pfilter,tp,LOCATION_EXTRA,0,num,num,nil,e,tp,scl1,scl2)

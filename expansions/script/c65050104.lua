@@ -38,12 +38,11 @@ end
 function c65050104.filter1(c,e,tp)
 	return c:IsFaceup() and c:IsType(TYPE_XYZ)
 		and Duel.IsExistingMatchingCard(c65050104.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,c)
-		and Duel.GetLocationCountFromEx(tp,tp,c)>0
 		and aux.MustMaterialCheck(c,tp,EFFECT_MUST_BE_XMATERIAL) and c:IsSetCard(0x3da8) 
 end
 function c65050104.filter2(c,e,tp,mc)
 	return mc:IsCanBeXyzMaterial(c)
-		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) and c:IsSetCard(0x3da8)
+		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) and c:IsSetCard(0x3da8) and Duel.GetLocationCountFromEx(tp,tp,mc,c)>0
 end
 function c65050104.condition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsExistingMatchingCard(c65050104.filter1,tp,LOCATION_MZONE,0,1,nil,e,tp)

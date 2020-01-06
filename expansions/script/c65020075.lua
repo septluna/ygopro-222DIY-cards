@@ -39,17 +39,16 @@ function c65020075.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c65020075.filter(c,e,tp)
 	return c:IsSetCard(0x9da3) and c:IsType(TYPE_XYZ) and not c:IsCode(65020075) and e:GetHandler():IsCanBeXyzMaterial(c)
-		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
+		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) and Duel.GetLocationCountFromEx(tp,tp,e:GetHandler(),c)>0
 end
 function c65020075.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetLocationCountFromEx(tp,tp,e:GetHandler())>0
-		and aux.MustMaterialCheck(e:GetHandler(),tp,EFFECT_MUST_BE_XMATERIAL)
+	if chk==0 then return aux.MustMaterialCheck(e:GetHandler(),tp,EFFECT_MUST_BE_XMATERIAL)
 		and Duel.IsExistingMatchingCard(c65020075.filter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c65020075.spop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if Duel.GetLocationCountFromEx(tp,tp,c)<=0 or not aux.MustMaterialCheck(c,tp,EFFECT_MUST_BE_XMATERIAL) then return end
+	if not aux.MustMaterialCheck(c,tp,EFFECT_MUST_BE_XMATERIAL) then return end
 	if c:IsFacedown() or not c:IsRelateToEffect(e) or c:IsControler(1-tp) or c:IsImmuneToEffect(e) then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c65020075.filter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,c:GetRank()+1)
@@ -74,23 +73,30 @@ function c65020075.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
 	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
 end
-function c65020075.desfilter(c)
-	return c:IsType(TYPE_TRAP) and c:IsFaceup() 
+function c65020075.desfilter(c,tp)
+	return c:IsType(TYPE_TRAP) and c:IsFaceup() and Duel.IsExistingTarget(aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,c)
 end
 function c65020075.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return false end
-	if chk==0 then return Duel.IsExistingTarget(c65020075.desfilter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,e:GetHandler())
-		and Duel.IsExistingTarget(aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,2,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-	local g1=Duel.SelectTarget(tp,c65020075.desfilter,tp,LOCATION_ONFIELD,0,1,1,e:GetHandler())
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
+	if chk==0 then return Duel.IsExistingTarget(c65020075.desfilter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil,tp) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
+	local g1=Duel.SelectTarget(tp,c65020075.desfilter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil,tp)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
 	local g2=Duel.SelectTarget(tp,aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,g1)
 	g1:Merge(g2)
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g1,2,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g1,2,0,0)
 end
 function c65020075.thop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS):Filter(Card.IsRelateToEffect,nil,e)
 	if g:GetCount()>0 then
+		local sg=g:Filter(Card.IsStatus,nil,STATUS_ACTIVATED)
+		if sg:GetCount()>0 then
+			local sc=sg:GetFirst()
+			while sc do
+				sc:CancelToGrave()
+				sc=sg:GetNext()
+			end
+		end
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 	end
 end

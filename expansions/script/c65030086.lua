@@ -41,7 +41,7 @@ function c65030086.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	c:RegisterFlagEffect(65030086,RESET_CHAIN,0,1)
 end
 function c65030086.tgfil(c,e,tp)
-	return ((c:IsLocation(LOCATION_HAND+LOCATION_GRAVE) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0) or (c:IsLocation(LOCATION_EXTRA) and c:IsFaceup() and Duel.GetLocationCountFromEx(tp)>0)) and aux.IsCodeListed(c,65030086) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return ((c:IsLocation(LOCATION_HAND+LOCATION_GRAVE) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0) or (c:IsLocation(LOCATION_EXTRA) and c:IsFaceup() and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0)) and aux.IsCodeListed(c,65030086) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c65030086.tg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c65030086.tgfil,tp,LOCATION_HAND+LOCATION_GRAVE+LOCATION_EXTRA,0,1,nil,e,tp) end

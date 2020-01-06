@@ -50,7 +50,7 @@ function c65060009.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function c65060009.spop(e,tp,eg,ep,ev,re,r,rp)
-	local ft=Duel.GetLocationCountFromEx(tp)
+	local ft=Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_LINK)
 	local mt=Duel.GetMatchingGroupCount(c65060009.spfil,tp,LOCATION_EXTRA,0,nil,e,tp)
 	if mt>ft then mt=ft end
 	if Duel.IsPlayerAffectedByEffect(tp,59822133) then mt=1 end
