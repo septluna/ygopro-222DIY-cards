@@ -1,5 +1,6 @@
 --混沌领主 姬塔
 function c47501005.initial_effect(c)
+    aux.AddCodeList(c,47500000)
     --material
     c:EnableReviveLimit() 
     aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsCode,47500000),8,2)
@@ -62,7 +63,6 @@ function c47501005.initial_effect(c)
     c:RegisterEffect(e7)
 end
 c47501005.pendulum_level=8
-c47501005.card_code_list={47500000}
 function c47501005.mfilter(c)
     return c:IsLevel(8)
 end

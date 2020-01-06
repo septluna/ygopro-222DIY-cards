@@ -68,7 +68,7 @@ function c47530004.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c47530004.spop(e,tp,eg,ep,ev,re,r,rp)
     local zone=aux.GetMultiLinkedZone(tp)
-    if Duel.GetLocationCountFromEx(tp)<=0 or zone==0 then return end
+    if zone==0 then return end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
     local g=Duel.SelectMatchingCard(tp,c47530004.spfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,zone)
     if g:GetCount()>0 then

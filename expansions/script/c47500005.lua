@@ -1,5 +1,6 @@
 --武士 姬塔
 function c47500005.initial_effect(c)
+    aux.AddCodeList(c,47500000)
     --pendulum summon
     aux.EnablePendulumAttribute(c)
     --Double Attack
@@ -58,7 +59,6 @@ function c47500005.initial_effect(c)
     e6:SetOperation(c47500005.spop)
     c:RegisterEffect(e6)
 end
-c47500005.card_code_list={47500000}
 function c47500005.cfilter(c)
     return (aux.IsCodeListed(c,47500000) or c:IsCode(47500000)) and c:IsAbleToGraveAsCost()
 end

@@ -1,7 +1,6 @@
 --姬塔
-local m=47500000
-local cm=_G["c"..m]
 function c47500000.initial_effect(c)
+    aux.AddCodeList(c,47500000)
     --pendulum summon
     aux.EnablePendulumAttribute(c)
     --splimit
@@ -24,7 +23,6 @@ function c47500000.initial_effect(c)
     e2:SetOperation(c47500000.penop)
     c:RegisterEffect(e2)  
 end
-c47500000.card_code_list={47500000}
 function c47500000.pefilter(c)
     return (aux.IsCodeListed(c,47500000) or c:IsCode(47500000)) or c:IsSetCard(0x5d0)
 end

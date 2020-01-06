@@ -1,5 +1,6 @@
 --斯巴达 姬塔
 function c47500103.initial_effect(c)
+    aux.AddCodeList(c,47500000)
     aux.EnablePendulumAttribute(c,false)
     --fusion material
     c:EnableReviveLimit()
@@ -56,7 +57,6 @@ function c47500103.initial_effect(c)
     e8:SetOperation(c47500103.disop2)
     c:RegisterEffect(e8) 
 end
-c47500103.card_code_list={47500000}
 function c47500103.pefilter(c)
     return c:IsRace(RACE_WARRIOR) or c:IsRace(RACE_SPELLCASTER)
 end

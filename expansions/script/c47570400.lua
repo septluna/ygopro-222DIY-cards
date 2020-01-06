@@ -211,12 +211,11 @@ function c47570400.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
     Duel.Release(e:GetHandler(),REASON_COST)
 end
 function c47570400.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duel.IsExistingMatchingCard(c47570400.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 end
+    if chk==0 then return Duel.IsExistingMatchingCard(c47570400.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) and Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_FUSION)>0 end
     Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c47570400.spop(e,tp,eg,ep,ev,re,r,rp)
-    local ft=Duel.GetLocationCountFromEx(tp)
-    if ft<=0 or not aux.MustMaterialCheck(nil,tp,EFFECT_MUST_BE_SMATERIAL) then return end
+    if Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_FUSION)<=0 or not aux.MustMaterialCheck(nil,tp,EFFECT_MUST_BE_SMATERIAL) then return end
     if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
     local g=Duel.SelectMatchingCard(tp,c47570400.spfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)

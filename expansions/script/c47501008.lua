@@ -1,5 +1,6 @@
 --极乐净土 姬塔
 function c47501008.initial_effect(c)
+    aux.AddCodeList(c,47500000)
     --pendulum summon
     aux.EnablePendulumAttribute(c)
     --fusion material

@@ -1,5 +1,6 @@
 --狂战士 姬塔
 function c47501002.initial_effect(c)
+    aux.AddCodeList(c,47500000)
     --material
     c:EnableReviveLimit() 
     aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsRace,RACE_WARRIOR),8,2)
@@ -64,7 +65,6 @@ function c47501002.initial_effect(c)
     c:RegisterEffect(e6)
 end
 c47501002.pendulum_level=8
-c47501002.card_code_list={47500000}
 function c47501002.mfilter(c,xyzc)
     return c:IsLevel(8) and c:IsRace(RACE_WARRIOR)
 end

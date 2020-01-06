@@ -1,5 +1,6 @@
 --义贼 姬塔
 function c47501009.initial_effect(c)
+    aux.AddCodeList(c,47500000)
     --material
     c:EnableReviveLimit() 
     aux.AddXyzProcedureLevelFree(c,c47501009.mfilter,c47501009.xyzcheck,2,2)
@@ -53,7 +54,6 @@ function c47501009.initial_effect(c)
     c:RegisterEffect(e5) 
 end
 c47501009.pendulum_level=8
-c47501009.card_code_list={47500000}
 function c47501009.mfilter(c)
     return c:IsLevel(8)
 end

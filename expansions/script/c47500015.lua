@@ -1,5 +1,6 @@
 --黑猫道士 姬塔
 function c47500015.initial_effect(c)
+    aux.AddCodeList(c,47500000)
     c:EnableCounterPermit(0x1)
     c:EnableReviveLimit()
     --pendulum summon
@@ -60,7 +61,6 @@ function c47500015.initial_effect(c)
     e6:SetOperation(c47500015.spop)
     c:RegisterEffect(e6)
 end
-c47500015.card_code_list={47500000}
 function c47500015.mfilter(c)
     return c:IsCode(47500000) and c:IsFaceup()
 end

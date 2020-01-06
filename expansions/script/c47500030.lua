@@ -1,5 +1,6 @@
 --空域图
 function c47500030.initial_effect(c)
+    aux.AddCodeList(c,47500000)
     --Activate
     local e0=Effect.CreateEffect(c)
     e0:SetType(EFFECT_TYPE_ACTIVATE)
@@ -30,7 +31,6 @@ function c47500030.initial_effect(c)
     e5:SetValue(c47500030.effectfilter)
     c:RegisterEffect(e5)
 end
-c47500030.card_code_list={47500000}
 function c47500030.costfilter(c)
     return aux.IsCodeListed(c,47500000) and c:IsReleasable() and c:IsType(TYPE_PENDULUM)
 end

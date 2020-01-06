@@ -1,5 +1,6 @@
 --红莲之王 姬塔
 function c47500023.initial_effect(c)
+    aux.AddCodeList(c,47500000)
     --link summon
     c:EnableReviveLimit()
     aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsType,TYPE_EFFECT),3,4,c47500023.lcheck)   
@@ -36,7 +37,6 @@ function c47500023.initial_effect(c)
     e4:SetCode(EVENT_BE_BATTLE_TARGET)
     c:RegisterEffect(e4)
 end
-c47500023.card_code_list={47500000}
 function c47500023.lfilter(c)
     return c:IsAttribute(ATTRIBUTE_DARK) and c:IsCode(47500000)
 end

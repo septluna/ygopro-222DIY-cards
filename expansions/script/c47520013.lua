@@ -153,13 +153,13 @@ function c47520013.filter(c,e,tp)
     return c:IsCode(47520015) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_SYNCHRO,tp,false,false)
 end
 function c47520013.awtg(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duel.GetLocationCountFromEx(tp)>0
+    if chk==0 then return Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_SYNCHRO)>0
         and aux.MustMaterialCheck(nil,tp,EFFECT_MUST_BE_SMATERIAL)
         and Duel.IsExistingMatchingCard(c47520013.filter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
     Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c47520013.awop(e,tp,eg,ep,ev,re,r,rp)
-    if Duel.GetLocationCountFromEx(tp)<=0 or not aux.MustMaterialCheck(nil,tp,EFFECT_MUST_BE_SMATERIAL) then return end
+    if Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_SYNCHRO)<1 or not aux.MustMaterialCheck(nil,tp,EFFECT_MUST_BE_SMATERIAL) then return end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
     local g=Duel.SelectMatchingCard(tp,c47520013.filter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)
     local tc=g:GetFirst()

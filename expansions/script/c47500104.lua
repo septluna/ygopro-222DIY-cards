@@ -1,5 +1,6 @@
 --大魔导师 姬塔
 function c47500104.initial_effect(c)
+    aux.AddCodeList(c,47500000)
     --material
     c:EnableReviveLimit() 
     aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsType,TYPE_PENDULUM),8,2)
@@ -53,7 +54,6 @@ function c47500104.initial_effect(c)
     c:RegisterEffect(e6)
 end
 c47500104.pendulum_level=8
-c47500104.card_code_list={47500000}
 function c47500104.mfilter(c,xyzc)
     return c:IsLevel(8) and c:IsRace(RACE_SPELLCASTER)
 end

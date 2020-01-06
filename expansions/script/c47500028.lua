@@ -1,5 +1,6 @@
 --晓之空
 function c47500028.initial_effect(c)
+    aux.AddCodeList(c,47500000)
     --Activate
     local e1=Effect.CreateEffect(c)
     e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -10,7 +11,6 @@ function c47500028.initial_effect(c)
     e1:SetOperation(c47500028.activate)
     c:RegisterEffect(e1)    
 end
-c47500028.card_code_list={47500000}
 function c47500028.filter1(c,e,tp)
     local rk=c:GetRank()
     return rk>1 and c:IsFaceup() and c:IsType(TYPE_PENDULUM) and (aux.IsCodeListed(c,47500000) or c:IsSetCard(0x5d0)) and Duel.IsExistingMatchingCard(c47500028.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,c,rk,c:GetRace()) and Duel.GetLocationCountFromEx(tp,tp,c)>0 and aux.MustMaterialCheck(c,tp,EFFECT_MUST_BE_XMATERIAL)

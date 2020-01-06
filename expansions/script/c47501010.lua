@@ -1,5 +1,6 @@
 --天女 姬塔
 function c47501010.initial_effect(c)
+    aux.AddCodeList(c,47500000)
     --synchro summon
     aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsCode,47500000),aux.FilterBoolFunction(Card.IsType,TYPE_SYNCHRO),1,1)
     c:EnableReviveLimit()    
@@ -72,7 +73,6 @@ function c47501010.initial_effect(c)
     e8:SetTargetRange(LOCATION_MZONE,0)
     c:RegisterEffect(e8)
 end
-c47501010.card_code_list={47500000}
 function c47501010.pefilter(c)
     return c:IsRace(RACE_WARRIOR) or c:IsRace(RACE_SPELLCASTER)
 end

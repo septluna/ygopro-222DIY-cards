@@ -1,5 +1,6 @@
 --调查兵团 姬塔
 function c47500021.initial_effect(c)
+    aux.AddCodeList(c,47500000)
     --link summon
     c:EnableReviveLimit()
     aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsType,TYPE_MONSTER),2,3,c47500021.lcheck)   
@@ -29,7 +30,6 @@ function c47500021.initial_effect(c)
     e2:SetOperation(c47500021.thop)
     c:RegisterEffect(e2)
 end
-c47500021.card_code_list={47500000}
 function c47500021.lfilter(c)
     return c:IsCode(47500000)
 end

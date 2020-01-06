@@ -97,12 +97,12 @@ function c47530100.spfilter(c,e,tp)
     return c:IsRace(RACE_MACHINE) and c:IsAttribute(ATTRIBUTE_LIGHT) and c:IsLink(3) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c47530100.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duel.GetLocationCountFromEx(tp)>0
+    if chk==0 then return Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_LINK)>0
         and Duel.IsExistingMatchingCard(c47530100.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
     Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c47530100.spop(e,tp,eg,ep,ev,re,r,rp)
-    if Duel.GetLocationCountFromEx(tp)<=0 then return end
+    if Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_LINK)<=0 then return end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
     local g=Duel.SelectMatchingCard(tp,c47530100.spfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)
     if g:GetCount()>0 then

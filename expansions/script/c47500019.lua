@@ -1,5 +1,6 @@
 --姬塔 Re:Link
 function c47500019.initial_effect(c)
+    aux.AddCodeList(c,47500000)
     --link summon
     c:EnableReviveLimit()
     aux.AddLinkProcedure(c,c47500019.lfilter,2,2)
@@ -47,7 +48,6 @@ function c47500019.initial_effect(c)
     e5:SetValue(47500000)
     c:RegisterEffect(e5)
 end
-c47500019.card_code_list={47500000}
 function c47500019.lfilter(c)
     return c:GetOriginalCode()==47500000
 end

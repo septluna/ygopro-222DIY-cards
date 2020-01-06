@@ -1,5 +1,6 @@
 --机械师 姬塔
 function c47500011.initial_effect(c)
+    aux.AddCodeList(c,47500000)
     --pendulum summon
     aux.EnablePendulumAttribute(c)  
     --pendulum produce
@@ -49,7 +50,6 @@ function c47500011.initial_effect(c)
     e5:SetTarget(c47500011.splimit)
     c:RegisterEffect(e5)  
 end
-c47500011.card_code_list={47500000}
 function c47500011.splimit(e,c,tp,sumtp,sumpos)
     return not c:IsType(TYPE_PENDULUM)
 end

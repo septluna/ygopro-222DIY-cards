@@ -1,5 +1,6 @@
 --蝴蝶幻刃
 function c47551124.initial_effect(c)
+    aux.AddCodeList(c,47500000)
     --Activate
     local e1=Effect.CreateEffect(c)
     e1:SetCategory(CATEGORY_REMOVE+CATEGORY_DISABLE+CATEGORY_DAMAGE)
@@ -27,7 +28,6 @@ function c47551124.initial_effect(c)
     e3:SetCondition(c47551124.handcon)
     c:RegisterEffect(e3)
 end
-c47551124.card_code_list={47500000}
 function c47551124.filter(c)
     return c:IsType(TYPE_XYZ) and c:IsSetCard(0x5d0)
 end

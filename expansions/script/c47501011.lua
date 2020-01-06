@@ -1,5 +1,6 @@
 --剑豪 姬塔
 function c47501011.initial_effect(c)
+    aux.AddCodeList(c,47500000)
     aux.EnablePendulumAttribute(c,false)
     --fusion material
     c:EnableReviveLimit()
@@ -49,7 +50,6 @@ function c47501011.initial_effect(c)
     e4:SetValue(2)
     c:RegisterEffect(e4)
 end
-c47501011.card_code_list={47500000}
 function c47501011.pefilter(c)
     return c:IsRace(RACE_WARRIOR) or c:IsRace(RACE_SPELLCASTER)
 end

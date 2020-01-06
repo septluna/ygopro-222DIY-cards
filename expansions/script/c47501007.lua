@@ -1,5 +1,6 @@
 --猎犬 姬塔
 function c47501007.initial_effect(c)
+    aux.AddCodeList(c,47500000)
     aux.EnablePendulumAttribute(c,false)
     --fusion material
     c:EnableReviveLimit()
@@ -65,7 +66,6 @@ function c47501007.initial_effect(c)
     e6:SetOperation(c47501007.sop)
     c:RegisterEffect(e6)
 end
-c47501007.card_code_list={47500000}
 function c47501007.pefilter(c)
     return c:IsRace(RACE_WARRIOR) or c:IsRace(RACE_SPELLCASTER)
 end

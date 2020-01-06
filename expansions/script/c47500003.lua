@@ -1,7 +1,6 @@
 --枪神 姬塔
-local m=47500003
-local c47500003=_G["c"..m]
 function c47500003.initial_effect(c)
+    aux.AddCodeList(c,47500000)
     --pendulum summon
     aux.EnablePendulumAttribute(c) 
     --effect gian
@@ -49,7 +48,6 @@ function c47500003.initial_effect(c)
     e5:SetValue(47500000)
     c:RegisterEffect(e5)
 end
-c47500003.card_code_list={47500000}
 function c47500003.atkval(e,c)
     return c:GetEquipCount()-1
 end

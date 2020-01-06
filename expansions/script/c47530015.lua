@@ -59,11 +59,10 @@ function c47530015.spcon(e,tp,eg,ep,ev,re,r,rp)
     return c:IsPreviousLocation(LOCATION_MZONE) and c:IsSummonType(SUMMON_TYPE_XYZ)
 end
 function c47530015.spfilter2(c,e,tp)
-    return c:IsSetCard(0x5d5) and not c:IsType(TYPE_LINK) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+    return c:IsSetCard(0x5d5) and not c:IsType(TYPE_LINK) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0
 end
 function c47530015.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duel.GetLocationCountFromEx(tp)>0
-        and Duel.IsExistingMatchingCard(c47530015.spfilter2,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
+    if chk==0 then return Duel.IsExistingMatchingCard(c47530015.spfilter2,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
     Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c47530015.spop(e,tp,eg,ep,ev,re,r,rp)

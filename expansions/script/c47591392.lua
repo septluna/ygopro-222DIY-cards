@@ -14,7 +14,7 @@ function c47591392.filter(c,e,tp)
     return ((c:IsAttribute(ATTRIBUTE_FIRE) and c:IsRace(RACE_WARRIOR) and c:IsLevel(5)) or (c:IsAttribute(ATTRIBUTE_WATER) and c:IsRace(RACE_PSYCHO) and c:IsLevel(3)) or (c:IsAttribute(ATTRIBUTE_WIND) and c:IsRace(RACE_SPELLCASTER) and c:IsLevel(4))) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c47591392.target(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.GetLocationCountFromEx(tp)>0 and Duel.IsExistingMatchingCard(c47591392.filter,tp,LOCATION_DECK,0,1,nil,e,tp) end
+    if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_XYZ)>0 and Duel.IsExistingMatchingCard(c47591392.filter,tp,LOCATION_DECK,0,1,nil,e,tp) end
     Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK+LOCATION_EXTRA)
 end
 function c47591392.spfilter2(c,e,tp,mc)
@@ -22,7 +22,7 @@ function c47591392.spfilter2(c,e,tp,mc)
 end
 function c47591392.activate(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
-    if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 or Duel.GetLocationCountFromEx(tp)<1 then return end
+    if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 or Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_XYZ)<1 then return end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
     local g=Duel.SelectMatchingCard(tp,c47591392.filter,tp,LOCATION_DECK,0,1,1,nil,e,tp)
     local tc=g:GetFirst()

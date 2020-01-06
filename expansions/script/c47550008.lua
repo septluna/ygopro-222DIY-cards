@@ -1,5 +1,6 @@
 --苍空剑士 丽莎
 function c47550008.initial_effect(c)
+    aux.AddCodeList(c,47500000)
     --pendulum summon
     aux.EnablePendulumAttribute(c)
     --splimit
@@ -43,7 +44,6 @@ function c47550008.initial_effect(c)
     e4:SetOperation(c47550008.pspop)
     c:RegisterEffect(e4)   
 end
-c47550008.card_code_list={47500000}
 function c47550008.pefilter(c)
     return c:IsRace(RACE_WARRIOR) or c:IsSetCard(0x5da) or c:IsAttribute(ATTRIBUTE_WIND) or c:IsRace(RACE_SPELLCASTER)
 end

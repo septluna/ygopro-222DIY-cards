@@ -1,5 +1,6 @@
 --拳皇 姬塔
 function c47500101.initial_effect(c)
+    aux.AddCodeList(c,47500000)
     --synchro summon
     aux.AddSynchroMixProcedure(c,aux.Tuner(nil),aux.Tuner(nil),nil,aux.FilterBoolFunction(Card.IsCode,47500000),1,1)
     c:EnableReviveLimit() 
@@ -61,7 +62,6 @@ function c47500101.initial_effect(c)
     e8:SetOperation(c47500101.fop2)
     c:RegisterEffect(e8)
 end
-c47500101.card_code_list={47500000}
 function c47500101.pefilter(c)
     return c:IsRace(RACE_WARRIOR) or c:IsRace(RACE_SPELLCASTER) and c:IsLevel(8)
 end

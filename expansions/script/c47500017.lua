@@ -1,5 +1,6 @@
 --一般店员 姬塔
 function c47500017.initial_effect(c)
+    aux.AddCodeList(c,47500000)
     --link summon
     c:EnableReviveLimit()
     aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsCode,47500000),2,2)
@@ -29,7 +30,6 @@ function c47500017.initial_effect(c)
     e2:SetOperation(c47500017.drop)
     c:RegisterEffect(e2) 
 end
-c47500017.card_code_list={47500000}
 function c47500017.drcfilter(c,tp)
     return c:IsPreviousLocation(LOCATION_PZONE) and c:GetPreviousControler()==tp
 end

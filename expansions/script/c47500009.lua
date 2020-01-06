@@ -1,5 +1,6 @@
 --舞者 姬塔
 function c47500009.initial_effect(c)
+    aux.AddCodeList(c,47500000)
     --pendulum summon
     aux.EnablePendulumAttribute(c)
     --twin act
@@ -35,7 +36,6 @@ function c47500009.initial_effect(c)
     e5:SetValue(47500000)
     c:RegisterEffect(e5)
 end
-c47500009.card_code_list={47500000}
 function c47500009.dbfilter(c)
     return c:IsFaceup() and c:IsCode(47500000)
 end

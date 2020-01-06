@@ -55,11 +55,10 @@ function c47510007.psplimit(e,c,tp,sumtp,sumpos)
     return not c47510007.pefilter(c) and bit.band(sumtp,SUMMON_TYPE_PENDULUM)==SUMMON_TYPE_PENDULUM
 end
 function c47510007.spfilter(c,e,tp)
-    return (c:IsSetCard(0x5da) or c:IsSetCard(0x5de)) and not c:IsType(TYPE_LINK) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE)
+    return (c:IsSetCard(0x5da) or c:IsSetCard(0x5de)) and not c:IsType(TYPE_LINK) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE) and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0
 end
 function c47510007.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duel.GetLocationCountFromEx(tp,tp,e:GetHandler())>0
-        and Duel.IsExistingMatchingCard(c47510007.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
+    if chk==0 then return Duel.IsExistingMatchingCard(c47510007.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
     Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c47510007.spop(e,tp,eg,ep,ev,re,r,rp)
