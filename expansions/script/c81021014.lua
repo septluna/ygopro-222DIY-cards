@@ -27,7 +27,7 @@ function c81021014.rmcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.PayLPCost(tp,800)
 end
 function c81021014.rmfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0x818) and c:IsPosition(POS_FACEUP_ATTACK)
+	return c:IsFaceup() and c:IsSetCard(0x818) and c:IsPosition(POS_FACEUP_ATTACK) and c:IsCanChangePosition()
 end
 function c81021014.rmtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return false end

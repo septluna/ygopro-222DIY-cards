@@ -54,9 +54,7 @@ function c46270001.activate(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0
 		or not Duel.IsPlayerCanSpecialSummonMonster(tp,46270001,0xfc1,0x21,1500,1000,4,RACE_ZOMBIE,ATTRIBUTE_DARK) then return end
 	c:AddMonsterAttribute(TYPE_EFFECT+TYPE_TRAP)
-	Duel.SpecialSummonStep(c,1,tp,tp,true,false,POS_FACEUP)
-	c:AddMonsterAttributeComplete()
-	Duel.SpecialSummonComplete()
+	Duel.SpecialSummon(c,1,tp,tp,true,false,POS_FACEUP)
 end
 function c46270001.indcon(e)
 	return Duel.GetFieldGroup(e:GetHandlerPlayer(),LOCATION_GRAVE,0):FilterCount(Card.IsType,nil,TYPE_MONSTER)==0
