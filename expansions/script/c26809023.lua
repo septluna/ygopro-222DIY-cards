@@ -71,7 +71,7 @@ function c26809023.spop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c26809023.cfilter(c)
-	return c:IsType(TYPE_EFFECT)
+	return c:IsType(TYPE_EFFECT) and c:IsFaceup()
 end
 function c26809023.handcon(e)
 	local tp=e:GetHandlerPlayer()
