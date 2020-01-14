@@ -9,8 +9,8 @@ function c47530042.initial_effect(c)
     e1:SetCode(EVENT_SPSUMMON_SUCCESS)
     e1:SetCountLimit(1,47530042)
     e1:SetRange(LOCATION_PZONE)
-    e1:SetTarget(c47530042.sptg)
-    e1:SetOperation(c47530042.spop)
+    e1:SetTarget(c47530042.rbtg)
+    e1:SetOperation(c47530042.rbop)
     c:RegisterEffect(e1) 
     --spsummon
     local e2=Effect.CreateEffect(c)
@@ -21,9 +21,14 @@ function c47530042.initial_effect(c)
     e2:SetCode(EVENT_TO_GRAVE)
     e2:SetCountLimit(1,47530043)
     e2:SetCondition(c47530042.rtcon)
+    e2:SetCost(c47530042.cost)
     e2:SetTarget(c47530042.rttg)
     e2:SetOperation(c47530042.rtop)
     c:RegisterEffect(e2)
+    Duel.AddCustomActivityCounter(47530042,ACTIVITY_SPSUMMON,c47530042.counterfilter)
+end
+function c47530042.counterfilter(c)
+    return c:IsRace(RACE_MACHINE)
 end
 function c47530042.condition(e,tp,eg,ep,ev,re,r,rp)
     local c=eg:GetFirst()
@@ -53,23 +58,27 @@ function c47530042.rbop(e,tp,eg,ep,ev,re,r,rp)
         e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
         tc:RegisterEffect(e1)
     end
-    local e3=Effect.CreateEffect(c)
-    e3:SetType(EFFECT_TYPE_FIELD)
-    e3:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
-    e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_CANNOT_NEGATE)
-    e3:SetTargetRange(1,0)
-    e3:SetTarget(c47530042.splimit)
-    e3:SetReset(RESET_PHASE+PHASE_END)
-    Duel.RegisterEffect(e3,tp) 
-end
-function c47530042.splimit(e,c)
-    return not c:IsRace(RACE_MACHINE)
 end
 function c47530042.cfilter(c,tp)
     return c:IsRace(RACE_MACHINE) and c:IsPreviousLocation(LOCATION_ONFIELD)
 end
 function c47530042.rtcon(e,tp,eg,ep,ev,re,r,rp)
     return eg:IsExists(c47530042.cfilter,1,nil,tp)
+end
+function c47530042.cost(e,tp,eg,ep,ev,re,r,rp,chk)
+    if chk==0 then return Duel.GetCustomActivityCount(47530042,tp,ACTIVITY_SPSUMMON)==0 end
+    local e1=Effect.CreateEffect(e:GetHandler())
+    e1:SetType(EFFECT_TYPE_FIELD)
+    e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_OATH)
+    e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+    e1:SetReset(RESET_PHASE+PHASE_END)
+    e1:SetTargetRange(1,0)
+    e1:SetLabelObject(e)
+    e1:SetTarget(c47530042.splimit)
+    Duel.RegisterEffect(e1,tp)
+end
+function c47530042.splimit(e,c,sump,sumtype,sumpos,targetp,se)
+    return not c:IsRace(RACE_MACHINE)
 end
 function c47530042.rttg(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return eg:IsExists(c47530042.cfilter,1,nil,tp) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
@@ -88,12 +97,4 @@ function c47530042.rtop(e,tp,eg,ep,ev,re,r,rp)
             Duel.SendtoHand(g,nil,REASON_EFFECT)
         end
     end
-    local e3=Effect.CreateEffect(c)
-    e3:SetType(EFFECT_TYPE_FIELD)
-    e3:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
-    e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_CANNOT_NEGATE)
-    e3:SetTargetRange(1,0)
-    e3:SetTarget(c47530042.splimit)
-    e3:SetReset(RESET_PHASE+PHASE_END)
-    Duel.RegisterEffect(e3,tp) 
 end

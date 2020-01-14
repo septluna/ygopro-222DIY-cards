@@ -12,16 +12,18 @@ function c66915005.initial_effect(c)
     e22:SetCode(EFFECT_IMMUNE_EFFECT)
     e22:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
     e22:SetRange(LOCATION_MZONE)
+    e22:SetCondition(c66915005.conditions)
     e22:SetValue(c66915005.efilter)
     local e5=Effect.CreateEffect(c)
     e5:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_GRANT)
-    e5:SetRange(LOCATION_MZONE)
+    e5:SetRange(LOCATION_SZONE)
     e5:SetTargetRange(LOCATION_MZONE,0)
     e5:SetTarget(c66915005.eftg)
     e5:SetLabelObject(e22)
+    c:RegisterEffect(e5)
     --Activate
     local e11=Effect.CreateEffect(c)
-    e11:SetCategory(CATEGORY_NEGATE+CATEGORY_TODECK+CATEGORY_DESTROY)
+    e11:SetCategory(CATEGORY_NEGATE+CATEGORY_TODECK)
     e11:SetType(EFFECT_TYPE_QUICK_O)
     e11:SetCode(EVENT_CHAINING)
     e11:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL)
@@ -29,12 +31,13 @@ function c66915005.initial_effect(c)
     e11:SetCondition(c66915005.condition)
     e11:SetTarget(c66915005.target)
     e11:SetOperation(c66915005.activate)
-    local e5=Effect.CreateEffect(c)
-    e5:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_GRANT)
-    e5:SetRange(LOCATION_MZONE)
-    e5:SetTargetRange(LOCATION_MZONE,0)
-    e5:SetTarget(c66915005.eftg)
-    e5:SetLabelObject(e11)
+    local e55=Effect.CreateEffect(c)
+    e55:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_GRANT)
+    e55:SetRange(LOCATION_SZONE)
+    e55:SetTargetRange(LOCATION_MZONE,0)
+    e55:SetTarget(c66915005.eftg)
+    e55:SetLabelObject(e11)
+    c:RegisterEffect(e55)
     --spsummon limit
     local e2=Effect.CreateEffect(c)
     e2:SetType(EFFECT_TYPE_FIELD)
@@ -45,6 +48,12 @@ function c66915005.initial_effect(c)
     e2:SetTarget(c66915005.sumlimit)
     c:RegisterEffect(e2)   
 end
+function c66915005.cfilters(c)
+    return c:IsFaceup() and c:IsCode(66915001)
+end
+function c66915005.conditions(e,tp,eg,ep,ev,re,r,rp)
+    return Duel.IsExistingMatchingCard(c66915005.cfilters,tp,LOCATION_SZONE,0,1,nil)
+end
 function c66915005.sumlimit(e,c,sump,sumtype,sumpos,targetp)
     return c:IsLocation(LOCATION_EXTRA) and not c:IsSetCard(0x1374)
 end
@@ -53,28 +62,30 @@ function c66915005.eftg(e,c)
     return  c:IsSetCard(0x1374)
     and seq<5 and math.abs(e:GetHandler():GetSequence()-seq)==0
 end
-function c66915005.tgtg(e,c)
-    return e:GetHandler():GetLinkedGroup():IsContains(c) and c:IsType(TYPE_EFFECT) and c:IsSetCard(0x1374)
-end
 function c66915005.efilter(e,re,tp)
     return re:GetHandlerPlayer()~=e:GetHandlerPlayer()
 end
 function c66915005.cfilter(c)
     return c:IsFaceup() and c:IsSetCard(0x374) and c:IsType(TYPE_CONTINUOUS+TYPE_SPELL)
 end
+function c66915005.cfilterss(c)
+    return c:IsFaceup()  and c:IsCode(66915001) and c:IsAbleToHand()
+end
 function c66915005.condition(e,tp,eg,ep,ev,re,r,rp)
-    return Duel.IsExistingMatchingCard(c57831349.cfilter,tp,LOCATION_ONFIELD,0,1,nil)
-        and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE)) and Duel.IsChainNegatable(ev)
+    return Duel.IsExistingMatchingCard(c66915005.cfilter,tp,LOCATION_ONFIELD,0,1,nil) and Duel.IsExistingMatchingCard(c66915005.cfilterss,tp,LOCATION_ONFIELD,0,1,nil)
+    and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE)) and Duel.IsChainNegatable(ev)
 end
 function c66915005.target(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return true end
+    if chk==0 then return 
+    Duel.GetFlagEffect(tp,60018643)==0 end
+    Duel.RegisterFlagEffect(tp,60018643,RESET_CHAIN,0,1)
     Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
     if re:GetHandler():IsRelateToEffect(re) then
         Duel.SetOperationInfo(0,CATEGORY_TODECK,eg,1,0,0)
     end
 end
 function c66915005.desfilter(c)
-    return c:IsFaceup() and c:IsCode(66915001)
+    return c:IsFaceup() and c:IsCode(66915001) and c:IsAbleToHand()
 end
 function c66915005.activate(e,tp,eg,ep,ev,re,r,rp)
     local ec=re:GetHandler()

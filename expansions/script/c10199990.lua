@@ -18,7 +18,7 @@ if not RealSclVersion then
 	RealSclVersion.SummonFunction={}
 	rssf=RealSclVersion.SummonFunction
 	RealSclVersion.Code={}
-	rscode=RealSclVersion.Code
+	rscode=RealSclVersion.Code 
 	RealSclVersion.Value={} 
 	rsval=RealSclVersion.Value
 	RealSclVersion.Condition={}
@@ -65,6 +65,8 @@ if not RealSclVersion then
 	rscode.Extra_Xyz_Material   =   m+401 
   
 	rscode.Utility_Xyz_Material =   m+500
+
+	rscode.Previous_Set_Card = m+600
 
 	rsflag.flaglist={ EFFECT_FLAG_CARD_TARGET,EFFECT_FLAG_PLAYER_TARGET,EFFECT_FLAG_DELAY,EFFECT_FLAG_DAMAGE_STEP,EFFECT_FLAG_DAMAGE_CAL,
 	EFFECT_FLAG_IGNORE_IMMUNE,EFFECT_FLAG_SET_AVAILABLE,EFFECT_FLAG_IGNORE_RANGE,EFFECT_FLAG_SINGLE_RANGE,EFFECT_FLAG_BOTH_SIDE, 
@@ -133,6 +135,46 @@ function rsef.SV(cardtbl,code,val,range,con,resettbl,flag,desctbl,ctlimittbl)
 	if desctbl then flag2=flag2|EFFECT_FLAG_CLIENT_HINT end
 	return rsef.Register(cardtbl,EFFECT_TYPE_SINGLE,code,desctbl,ctlimittbl,nil,flag2,range,con,nil,nil,nil,val,nil,nil,resettbl)
 end
+--Single Val Effect: attribute base set (new)
+function rsef.SV_ATTRIBUTE(cardtbl,atttbl,valtbl,con,resettbl,flag,desctbl,ctlimittbl)
+	--case set 
+	local codetblset={"atk","def","atkf","deff","batk","bdef"}  
+	local codetblset2={EFFECT_SET_ATTACK,EFFECT_SET_DEFENSE,EFFECT_SET_ATTACK_FINAL,EFFECT_SET_DEFENSE_FINAL,EFFECT_SET_BASE_ATTACK,EFFECT_SET_BASE_DEFENSE }
+	--case change 
+	local codetblchange={"lv","rk","ls","rs","code","att","race","type","fusatt"}
+	local codetblchange2={EFFECT_CHANGE_LEVEL,EFFECT_CHANGE_RANK,EFFECT_CHANGE_LSCALE,EFFECT_CHANGE_RSCALE,EFFECT_CHANGE_CODE,EFFECT_CHANGE_ATTRIBUTE,EFFECT_CHANGE_RACE,EFFECT_CHANGE_TYPE,EFFECT_CHANGE_FUSION_ATTRIBUTE }
+	--case updata
+	local codetblup={"atk+","def+","lv+","rk+","ls+","rs+"}
+	local codetblup2={EFFECT_UPDATE_ATTACK,EFFECT_UPDATE_DEFENSE,EFFECT_UPDATE_LEVEL,EFFECT_UPDATE_RANK,EFFECT_UPDATE_LSCALE,EFFECT_UPDATE_RSCALE }
+	--case add 
+	local codetbladd={"code+","att+","race+","set+","type+","fusatt+","fuscode+","fusset+","linkatt+","linkrace+","linkcode+","linkset+"}
+	local codetbladd2={EFFECT_ADD_CODE,EFFECT_ADD_ATTRIBUTE,EFFECT_ADD_RACE,EFFECT_ADD_SETCODE,EFFECT_ADD_TYPE,EFFECT_ADD_FUSION_ATTRIBUTE,EFFECT_ADD_FUSION_CODE,EFFECT_ADD_FUSION_SETCODE,EFFECT_ADD_LINK_ATTRIBUTE,EFFECT_ADD_LINK_RACE,EFFECT_ADD_LINK_CODE,EFFECT_ADD_LINK_SETCODE }
+
+	local totallist=rsof.Table_Mix(codetblset,codetblchange,codetblup,codetbladd)
+	local totallist2=rsof.Table_Mix(codetblset2,codetblchange2,codetblup2,codetbladd2)
+
+	local effectcodetbl,effectvaluetbl=rsof.Table_Suit(atttbl,totallist,totallist2,valtbl)   
+	local resulteffecttbl={}
+	local rangelist={}
+	rangelist["pzone"]={EFFECT_CHANGE_LSCALE,EFFECT_CHANGE_RSCALE,EFFECT_UPDATE_LSCALE,EFFECT_UPDATE_RSCALE }
+	rangelist["nil"]={table.unpack(codetblset2)}
+	for k,effectcode in ipairs(effectcodetbl) do
+		local range=rsef.GetRegisterRange(cardtbl)
+		if rsof.Table_List(rangelist["pzone"],effectcode) then range=LOCATION_PZONE end
+		if rsof.Table_List(rangelist["nil"],effectcode) then range=nil end 
+		if effectvaluetbl[k] then
+			local e1=nil
+			if type(effectvaluetbl[k])~="string" then
+				e1=rsef.SV(cardtbl,effectcode,effectvaluetbl[k],range,con,resettbl,flag,desctbl)
+			else -- use for set code
+				e1=rsef.SV(cardtbl,effectcode,0,range,con,resettbl,flag,desctbl)
+				rsef.rsvalinfo[e1]=effectvaluetbl[k]
+			end
+			table.insert(resulteffecttbl,e1)
+		end
+	end
+	return table.unpack(resulteffecttbl)   
+end 
 --Single Val Effect: Cannot destroed 
 function rsef.SV_INDESTRUCTABLE(cardtbl,indstbl,valtbl,con,resettbl,flag,desctbl,ctlimittbl)
 	local codetbl1={"battle","effect","ct","all"}
@@ -163,80 +205,26 @@ function rsef.SV_IMMUNE_EFFECT(cardtbl,val,con,resettbl,flag,desctbl)
 	local range=rsef.GetRegisterRange(cardtbl)
 	return rsef.SV(cardtbl,EFFECT_IMMUNE_EFFECT,val,range,con,resettbl,flag,desctbl)
 end
---Single Val Effect: Update some buff attribute 
-function rsef.SV_UPDATE(cardtbl,uptypetbl,valtbl,con,resettbl,flag,desctbl)
-	local codetbl1={"atk","def","lv","rk","ls","rs"}
-	local codetbl2={ EFFECT_UPDATE_ATTACK,EFFECT_UPDATE_DEFENSE,EFFECT_UPDATE_LEVEL,EFFECT_UPDATE_RANK,EFFECT_UPDATE_LSCALE,EFFECT_UPDATE_RSCALE } 
-	local effectcodetbl,effectvaluetbl=rsof.Table_Suit(uptypetbl,codetbl1,codetbl2,valtbl)
-	local resulteffecttbl={}
-	local range=nil
-	for k,effectcode in ipairs(effectcodetbl) do 
-		if not resettbl then
-			if effectcode~=EFFECT_UPDATE_LSCALE and effectcode~=EFFECT_UPDATE_RSCALE then range=LOCATION_MZONE 
-			else range=LOCATION_PZONE 
-			end
-		end
-		if effectvaluetbl[k] and effectvaluetbl[k]~=0 then
-			local e1=rsef.SV(cardtbl,effectcode,effectvaluetbl[k],range,con,resettbl,flag,desctbl)
-			table.insert(resulteffecttbl,e1)
-		end
-	end
-	return table.unpack(resulteffecttbl)
-end 
 --Single Val Effect: Directly set ATK & DEF 
 function rsef.SV_SET(cardtbl,settypetbl,valtbl,con,resettbl,flag,desctbl)
-	local codetbl1={"atk","batk","atkf","def","bdef","deff"}
-	local codetbl2={ EFFECT_SET_ATTACK,EFFECT_SET_BASE_ATTACK,EFFECT_SET_ATTACK_FINAL,EFFECT_SET_DEFENSE,EFFECT_SET_BASE_DEFENSE,EFFECT_SET_DEFENSE_FINAL } 
-	local effectcodetbl,effectvaluetbl=rsof.Table_Suit(settypetbl,codetbl1,codetbl2,valtbl)
-	local resulteffecttbl={}
-	for k,effectcode in ipairs(effectcodetbl) do
-		if effectvaluetbl[k] then
-			local e1=rsef.SV(cardtbl,effectcode,effectvaluetbl[k],nil,con,resettbl,flag,desctbl)
-			table.insert(resulteffecttbl,e1)
-		end
-	end
-	return table.unpack(resulteffecttbl)
+	return rsef.SV_ATTRIBUTE(cardtbl,settypetbl,valtbl,con,resettbl,flag,desctbl)
 end
 --Single Val Effect: Directly set other card attribute,except ATK & DEF
 function rsef.SV_CHANGE(cardtbl,changetypetbl,valtbl,con,resettbl,flag,desctbl)
-	local codetbl1={"lv","lvf","rk","rkf","code","att","race","type","fusatt","ls","rs"}
-	local codetbl2={ EFFECT_CHANGE_LEVEL,EFFECT_CHANGE_LEVEL_FINAL,EFFECT_CHANGE_RANK,EFFECT_CHANGE_RANK_FINAL,EFFECT_CHANGE_CODE,EFFECT_CHANGE_ATTRIBUTE,EFFECT_CHANGE_RACE,EFFECT_CHANGE_TYPE,EFFECT_CHANGE_FUSION_ATTRIBUTE,EFFECT_CHANGE_LSCALE,EFFECT_CHANGE_RSCALE } 
-	local effectcodetbl,effectvaluetbl=rsof.Table_Suit(changetypetbl,codetbl1,codetbl2,valtbl)
-	local resulteffecttbl={}
-	local range=nil
-	for k,effectcode in ipairs(effectcodetbl) do
-		if not resettbl then
-			if effectcode~=EFFECT_CHANGE_LSCALE and uptype~=EFFECT_CHANGE_RSCALE then range=LOCATION_MZONE 
-			else range=LOCATION_PZONE 
-			end
-		end
-		if effectvaluetbl[k] then
-			local e1=rsef.SV(cardtbl,effectcode,effectvaluetbl[k],range,con,resettbl,flag,desctbl)
-			table.insert(resulteffecttbl,e1)
-		end
-	end
-	return table.unpack(resulteffecttbl)
+	return rsef.SV_ATTRIBUTE(cardtbl,changetypetbl,valtbl,con,resettbl,flag,desctbl)
 end
---Single Val Effect: Add some card attribute
-function rsef.SV_ADD(cardtbl,addtypetbl,valtbl,con,resettbl,flag,desctbl)
-	local codetbl1={"att","race","code","set","type","fusatt","fuscode","fusset","linkatt","linkrace","linkcode","linkset"}
-	local codetbl2={ EFFECT_ADD_ATTRIBUTE,EFFECT_ADD_RACE,EFFECT_ADD_CODE,EFFECT_ADD_SETCODE,EFFECT_ADD_TYPE,EFFECT_ADD_FUSION_ATTRIBUTE,EFFECT_ADD_FUSION_CODE,EFFECT_ADD_FUSION_SETCODE,EFFECT_ADD_LINK_ATTRIBUTE,EFFECT_ADD_LINK_RACE,EFFECT_ADD_LINK_CODE,EFFECT_ADD_LINK_SETCODE }
-	local effectcodetbl,effectvaluetbl=rsof.Table_Suit(addtypetbl,codetbl1,codetbl2,valtbl)
-	local resulteffecttbl={}
-	for k,effectcode in ipairs(effectcodetbl) do
-		local range=rsef.GetRegisterRange(cardtbl)
-		if effectvaluetbl[k] then
-			local e1=nil
-			if type(effectvaluetbl[k])~="string" then
-				e1=rsef.SV(cardtbl,effectcode,effectvaluetbl[k],range,con,resettbl,flag,desctbl)
-			else -- use for set code
-				e1=rsef.SV(cardtbl,effectcode,0,range,con,resettbl,flag,desctbl)
-				rsef.rsvalinfo[e1]=effectvaluetbl[k]
-			end
-			table.insert(resulteffecttbl,e1)
-		end
+--Single Val Effect: Update attribute 
+function rsef.SV_UPDATE(cardtbl,uptypetbl,valtbl,con,resettbl,flag,desctbl)
+	local stringlist=rsof.String_Number_To_Table(uptypetbl)
+	local stringlist2={}
+	for _,string in pairs(stringlist) do
+		table.insert(stringlist2,string.."+")
 	end
-	return table.unpack(resulteffecttbl)
+	return rsef.SV_ATTRIBUTE(cardtbl,stringlist2,valtbl,con,resettbl,flag,desctbl)
+end 
+--Single Val Effect: Add attribute
+function rsef.SV_ADD(cardtbl,addtypetbl,valtbl,con,resettbl,flag,desctbl)
+	return rsef.SV_UPDATE(cardtbl,addtypetbl,valtbl,con,resettbl,flag,desctbl)
 end
 --Single Val Effect: Material limit
 function rsef.SV_CANNOT_BE_MATERIAL(cardtbl,lmattypetbl,valtbl,con,resettbl,flag,desctbl)
@@ -1285,6 +1273,55 @@ function rsef.Register(cardtbl,effecttype,effectcode,desctbl,ctlimittbl,cate,fla
 	return e,fid
 end
 -------------#######Summon Function#########-----------------
+--Register qucik attribute buff in cards
+function rscf.QuickBuff(reglist,...)
+	local c1,c2=rsef.GetRegisterCard(reglist)
+	local bufflist={...}
+	local reset=rsreset.est
+	local reset2=c1~=c2 and rsreset.est or rsreset.est_d
+	if #bufflist&1==1 then
+		reset=bufflist[#bufflist]
+		reset2=c1~=c2 and bufflist[#bufflist] or bufflist[#bufflist]|RESET_DISABLE 
+	end
+	local setlist={"atk","def","batk","bdef","atkf","deff"} 
+	local uplist={"atk+","def+","lv+","rk+"}
+	local changelist={"lv","rk","code","set","att","race"} 
+	local addlist={"code+","set+","att+","race+"}
+	local limitlist={"dis","dise","tri","atk","atkan","datk","ress","resns","td","th","cp","cost"} 
+	local matlimitlist={"fus","syn","xyz","link"}
+	local leavelist={"leave"}
+	local phaselist={"ep","sp"}
+	local funlist=rsof.Table_Mix(setlist,uplist,changelist,addlist,limitlist,matlimitlist,leavelist)
+	local funlistatt=rsof.Table_Mix(setlist,uplist,changelist,addlist)
+	--local nulllist={}
+	--for i=1,#stringlist do 
+		--table.insert(nulllist,"hape")
+	--end
+	local effectlist={}
+	for index,value in pairs(bufflist) do
+		if index&1==1 then
+			local vallist=type(bufflist[index+1])~=table and {bufflist[index+1]} or bufflist[index+1]
+			local stringlist=rsof.String_Number_To_Table(value)
+			local _,effectvaluelist=rsof.Table_Suit(value,funlist,{},vallist)
+			for k,codestring in pairs(stringlist) do
+				if rsof.Table_List(funlistatt,codestring) then
+					e1=rsef.SV_ATTRIBUTE(reglist,codestring,effectvaluelist[k],nil,reset2)
+				end
+				if rsof.Table_List(limitlist,codestring) then
+					e1=rsef.SV_LIMIT(reglist,codestring,effectvaluelist[k],nil,reset,"cd")
+				end
+				if rsof.Table_List(matlimitlist,codestring) then
+					e1=rsef.SV_CANNOT_BE_MATERIAL(reglist,codestring,effectvaluelist[k],nil,reset,"cd")
+				end
+				if rsof.Table_List(leavelist,codestring) then
+					e1=rsef.SV_REDIRECT(reglist,codestring,effectvaluelist[k],nil,rsreset.ered,"cd")
+				end 
+				table.insert(effectlist,e1)  
+			end
+		end
+	end
+	return table.unpack(effectlist)
+end
 --Summon Function: Quick Special Summon buff
 --valtbl:{atk,def,lv} 
 --waytbl:{way,resettbl} 
@@ -2134,7 +2171,7 @@ end
 function rscost.releaseself(mzone,exmzone)
 	return function(e,tp,eg,ep,ev,re,r,rp,chk)
 		local c=e:GetHandler()
-		if chk==0 then return c:IsReleasable() and (not mzone or Duel.GetMZoneCount(tp,c,tp)>0) and (not exmzone or Duel.GetLocationCountFromEx(tp,tp,c)>0) end
+		if chk==0 then return c:IsReleasable() and (not mzone or Duel.GetMZoneCount(tp,c,tp)>0) and (not exmzone or Duel.GetLocationCountFromEx(tp,tp,c,exmzone)>0) end
 		Duel.Release(c,REASON_COST)
 	end
 end
@@ -2153,6 +2190,34 @@ function rscost.regflag(flagcode,resettbl)
 	end
 end
 -------------#########Quick Condition#######-----------------
+--Condition: Reason (or) 
+function rscon.reason(reason1,...)
+	local reasonlist={reason1,...}
+	return function(e,tp,eg)
+		local g=not eg and rsgf.Mix2(e:GetHandler()) or eg
+		return eg:IsExists(rscon.reason_filter_or,1,nil,reasonlist)
+	end
+end
+--Condition: Reason (and)
+function rscon.reason2(reason1,...)
+	local reasonlist={reason1,...}
+	return function(e,tp,eg)
+		local g=not eg and rsgf.Mix2(e:GetHandler()) or eg
+		return eg:IsExists(rscon.reason_filter_and,1,nil,reasonlist)
+	end
+end 
+function rscon.reason_filter_or(c,reasonlist)
+	for _,reason in pairs(reasonlist) do
+		if c:IsReason(reason) then return true end
+	end
+	return false
+end
+function rscon.reason_filter_and(c,reasonlist)
+	for _,reason in pairs(reasonlist) do
+		if not c:IsReason(reason) then return false end
+	end
+	return true
+end
 --Condition in Self Turn
 function rscon.turns(e)
 	return Duel.GetTurnPlayer()==e:GetHandlerPlayer()
@@ -2161,22 +2226,60 @@ end
 function rscon.turno(e)
 	return Duel.GetTurnPlayer()~=e:GetHandlerPlayer()
 end 
+--Condition in Phase
+function rscon.phase(p1,...)
+	local parlist={p1,...}
+	--phase pass: PHASE_DRAW - PHASE_STANDBY - PHASE_MAIN1 - PHASE_BATTLE_START - PHASE_BATTLE_STEP - PHASE_DAMAGE (start) - PHASE_DAMAGE_CAL (before dcal - dcaling - after dcal) - PHASE_DAMAGE (end) - PHASE_BATTLE - PHASE_MAIN2 - PHASE_END
+	return function(e,p)
+		local tp=p or e:GetHandlerPlayer()
+		local turnp=Duel.GetTurnPlayer()
+		local phase_bp=function()
+			return Duel.GetCurrentPhase()>=PHASE_BATTLE_START and Duel.GetCurrentPhase()<=PHASE_BATTLE 
+		end
+		local phase_dam=function()
+			return Duel.GetCurrentPhase()==PHASE_DAMAGE or Duel.GetCurrentPhase()==PHASE_DAMAGE_CAL 
+		end
+		local phase_dambdcal=function()
+			return Duel.GetCurrentPhase()==PHASE_DAMAGE and not Duel.IsDamageCalculated()
+		end
+		local phase_ndcal=function()
+			return Duel.GetCurrentPhase()~=PHASE_DAMAGE or not Duel.IsDamageCalculated()
+		end
+		local stringlist={"dp","sp","m1","bp","bsp","dam","damndcal","dambdcal","dcal","ndcal","m2","ep"} 
+		local phaselist={PHASE_DRAW,PHASE_STANDBY,PHASE_MAIN1,phase_bp,PHASE_BATTLE_STEP,phase_dam,PHASE_DAMAGE,phase_dambdcal,PHASE_DAMAGE_CAL,phase_ndcal,PHASE_MAIN2,PHASE_END } 
+		local turnplayerlist={}
+		local parlist2=rsof.String_Number_To_Table(parlist) 
+		for _,pstring in pairs(parlist2) do
+			local _,splitstring=rsof.String_NoSymbol(pstring)
+			table.insert(turnplayerlist,splitstring)
+		end
+		local phaselist2=rsof.Table_Suit(parlist2,stringlist,phaselist)
+		for index,phase in pairs(phaselist2) do
+			if turnplayerlist[index] then 
+				if (turnplayerlist[index]=="_s" and turnp~=tp) or (turnplayerlist[index]=="_o" and turnp==tp ) then return false end
+			end
+			if type(phase)=="number" and Duel.GetCurrentPhase()==phase then return true 
+			elseif type(phase)=="function" and phase() then return true 
+			end
+		end 
+		return false 
+	end
+end
 --Condition in Main Phase
 function rscon.phmp(e)
-	local phase=Duel.GetCurrentPhase()
-	return phase==PHASE_MAIN1 or phase==PHASE_MAIN2 
+	return rscon.phase("m1,m2")
 end 
---Condition: Phase no damage calculate 
-function rscon.phndam(e)
-	return Duel.GetCurrentPhase()~=PHASE_DAMAGE or not Duel.IsDamageCalculated()
+--Condition: Phase no damage calculate , for change atk/def
+function rscon.adcon(e)
+	return rscon.phase("ndcal")
 end
 --Condition: Battle Phase 
 function rscon.phbp(e)
-	return Duel.GetCurrentPhase()>=PHASE_BATTLE_START and Duel.GetCurrentPhase()<=PHASE_BATTLE 
+	return rscon.phase("bp")
 end
---Condition: Phase damage calculate 
-function rscon.phdam(e)
-	return Duel.GetCurrentPhase()==PHASE_DAMAGE and not Duel.IsDamageCalculated()
+--Condition: Phase damage calculate,but not calculate 
+function rscon.dambdcal(e)
+	return rscon.phase("dambdcal")
 end
 --Condition in ADV or SP Summon Sucess
 function rscon.sumtype(sumtbl,sumfilter)
@@ -2647,6 +2750,9 @@ function rscf.CheckSetCardMainSet(c,settype,series1,...)
 	elseif settype=="org" then
 		codelist={c:GetOriginalCode()}
 		effectlist={}
+	elseif settype=="pre" then
+		codelist={c:GetPreviousCodeOnField()}
+		effectlist={c:IsHasEffect(EFFECT_ADD_SETCODE)} 
 	end
 	for _,effect in pairs(effectlist) do
 		local string=rsef.rsvalinfo[effect]
@@ -3197,10 +3303,10 @@ function rscf.XyzCustomOperation(mg,c,e,tp,checkog)
 		c.rs_xyz_material_action(mg,sg,c,e,tp)
 	--case 3, Base Alterf Xyz Procedure
 	elseif e:GetLabel()==1 then
-		Duel.Overlay(c,mg)
 		if #sg>0 then
 			Duel.Overlay(c,sg)
 		end
+		Duel.Overlay(c,mg)
 	--case 4, Base Normal Xyz Procedure
 	else
 		Duel.Overlay(c,mg)
@@ -3444,7 +3550,7 @@ function rscf.FilterFaceUp(f,...)
 				return f(target,table.unpack(ext_params)) and target:IsFaceup()
 			end
 end
---Card filter function: Get same original type 
+--Card filter function: Special Summon Filter
 function rscf.spfilter(f,...)
 	local ext_params={...}
 	return function(c,e,tp)
@@ -3454,7 +3560,7 @@ end
 function rscf.spfilter2(f,...)
 	local ext_params={...}
 	return function(c,e,tp)
-		return c:IsCanBeSpecialSummoned(e,0,tp,false,false) and (c:IsLocation(LOCATION_EXTRA) and Duel.GetLocationCountFromEx(tp)>0 or Duel.GetLocationCount(tp,LOCATION_MZONE)>0) and (not f or f(c,table.unpack(ext_params),e,tp))
+		return c:IsCanBeSpecialSummoned(e,0,tp,false,false) and (c:IsLocation(LOCATION_EXTRA) and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0 or Duel.GetLocationCount(tp,LOCATION_MZONE)>0) and (not f or f(c,table.unpack(ext_params),e,tp))
 	end
 end
 --Card function: Get same type base set
@@ -3490,19 +3596,49 @@ end
 function rscf.GetOriginalSameType(c,...)
 	return rscf.GetSameType_Base(c,"original",...)
 end
--------------#########RSV Other Function#######-----------------
+--Card Funcion: Check complex card type base set
+function rscf.IsComplexType_Base(c,waysting,type1,...)
+	local gettypefun=Card.GetType
+	if waystring=="previous" 
+		then gettypefun=Card.GetPreviousTypeOnField 
+	elseif waystring=="original" 
+		then gettypefun=Card.GetOriginalType
+	end
+	local typelist={type1,...}
+	for _,ctype in pairs(typelist) do
+		if gettypefun(c)&ctype==ctype then return true end
+	end
+end
+--Card Funcion: Check Complex card type
+function rscf.IsComplexType(c,...)
+	return rscf.IsComplexType_Base(c,nil,...)
+end
+Card.IsComplexType=rscf.IsComplexType
+--Card Funcion: Check Complex card previous type
+function rscf.IsPreviousComplexType(c,...)
+	return rscf.IsComplexType_Base(c,"previous",...)
+end
+Card.IsPreviousComplexType=rscf.IsPreviousComplexType
+--Card Funcion: Check Complex card original type
+function rscf.IsOriginalComplexType(c,...)
+	return rscf.IsComplexType_Base(c,"original",...)
+end
+Card.IsOriginalComplexType=rscf.IsOriginalComplexType
+--#######RSV Other Function#######-----------------
 --split the string, ues "," as delimiter
 function rsof.String_Split(stringinput,delimiter)  
-	if not delimiter then delimiter=',' end
+	delimiter=delimiter or ',' 
 	local pos,arr = 0, {}  
-	if delimiter~='_' then
+	--case string list 
+	if delimiter==',' then
 		for st,sp in function() return string.find(stringinput, delimiter, pos, true) end do  
 			table.insert(arr, string.sub(stringinput, pos, st - 1))  
 			pos = sp + 1  
 		end  
 		table.insert(arr, string.sub(stringinput, pos)) 
 		return arr
-	else
+	--case set code
+	elseif delimiter=='_' then
 		for st,sp in function() return string.find(stringinput, delimiter, pos, true) end do  
 			table.insert(arr, string.sub(stringinput, pos, st - 1))  
 			pos = sp + 1  
@@ -3520,6 +3656,25 @@ function rsof.String_Split(stringinput,delimiter)
 		return arr2
 	end 
 end  
+--get no symbol string (for rscf.ComplexFilter and rscon.phmp)
+function rsof.String_NoSymbol(string)
+	local len=string.len(string)
+	local symbolist1={"+","-","~","="}
+	local symbolist2={"++","--"}
+	local symbolist3={"_s","_o"}
+	local string2=string.sub(string,-2)
+	local string3=string.sub(string,-2)
+	local string1=string.sub(string2,-1)
+	if rsof.Table_List(symbolist2,string2) then
+		return string.sub(string,1,len-2),string2
+	elseif rsof.Table_List(symbolist1,string1) then
+		return string.sub(string,1,len-1),string1
+	elseif rsof.Table_List(symbolist3,string3) then
+		return string.sub(string,1,len-2),string3
+	else
+		return string
+	end
+end
 --Sting to Table (for different formats)
 --you can use "a,b,c" or {"a,b,c"} or {"a","b","c"} as same
 --return {"a","b","c"}
@@ -3536,7 +3691,7 @@ function rsof.String_Number_To_Table(value)
 				for _,v2 in ipairs(table2) do
 					table.insert(table1,v2) 
 				end
-			elseif type(v)=="number" then 
+			else 
 				table.insert(table1,v)
 			end
 		end
@@ -3616,24 +3771,38 @@ function rsof.Mix_Value_To_Table(valuelist1,stringlistindex,valuelistindex)
 	return numvalue,numvaluelist,stringlist
 end
 --other function: Find Intersection element in 2 table2
-function rsof.Table_Intersection(table1,table2)
-	local bool=false
+function rsof.Table_Intersection(table1,...)
 	local intersectionlist={}
-	for _,element1 in pairs(table1) do
-		if rsof.Table_List(table2,element1) and not rsof.Table_List(intersectionlist,element1) and type(element1)~="nil" then
-			bool=true
-			table.insert(intersectionlist,element1)
+	local tablelist={...}
+	for _,element1 in pairs(table1) do 
+		table.insert(intersectionlist,element1)
+		for _,table2 in pairs(tablelist) do
+			if not rsof.Table_List(table2,element1) then 
+				table.remove(intersectionlist)
+			break 
+			end
 		end
 	end
-	return bool,intersectionlist
+	return #intersectionlist>0,intersectionlist
 end
 --other function: Clone Table
-function rsof.Table_Clone(list)
+function rsof.Table_Clone(table)
 	local t2 = {}
-	for k,v in pairs(list) do
+	for k,v in pairs(table) do
 		t2[k] = v
 	end
 	return t2
+end
+--other function: Mix Table
+function rsof.Table_Mix(table1,...)
+	local resultlist={}
+	local list={table1,...}
+	for _,tab in pairs(list) do
+		for _,value in pairs(tab) do
+			table.insert(resultlist,value)
+		end
+	end
+	return resultlist
 end
 --other function: N effects select 1
 function rsof.SelectOption(p,...)
@@ -3673,20 +3842,21 @@ function rsof.SelectHint(p,cate)
 	Duel.Hint(HINT_SELECTMSG,p,hintmsg) 
 end
 --Other function: rsxx.IsXSetX
-function rsof.IsSet(setmeta,seriesstring)
-	setmeta.IsSet=function(c)
+function rsof.IsSet(setmeta,seriesstring,suffix)
+	suffix=suffix or ""
+	setmeta["IsSet"..suffix]=function(c)
 		return c:CheckSetCard(seriesstring)
 	end
-	setmeta.IsSetM=function(c)
+	setmeta["IsSetM"..suffix]=function(c)
 		return c:CheckSetCard(seriesstring) and c:IsType(TYPE_MONSTER)
 	end
-	setmeta.IsSetST=function(c)
+	setmeta["IsSetST"..suffix]=function(c)
 		return c:CheckSetCard(seriesstring) and c:IsType(TYPE_SPELL+TYPE_TRAP)
 	end
-	setmeta.IsLSet=function(c)
+	setmeta["IsLSet"..suffix]=function(c)
 		return c:CheckLinkSetCard(seriesstring)
 	end
-	setmeta.IsFSet=function(c)
+	setmeta["IsFSet"..suffix]=function(c)
 		return c:CheckFusionSetCard(seriesstring)
 	end
 end
