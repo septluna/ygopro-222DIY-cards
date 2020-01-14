@@ -24,15 +24,15 @@ function c81041013.initial_effect(c)
 	e2:SetCondition(c81041013.ctcon)
 	e2:SetOperation(c81041013.ctop)
 	c:RegisterEffect(e2)
-	--draw
+	--spsummon
 	local e3=Effect.CreateEffect(c)
-	e3:SetCategory(CATEGORY_DRAW)
+	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e3:SetType(EFFECT_TYPE_IGNITION)
-	e3:SetRange(LOCATION_MZONE)
-	e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
 	e3:SetCountLimit(1,81041913)
-	e3:SetTarget(c81041013.drtg)
-	e3:SetOperation(c81041013.drop)
+	e3:SetRange(LOCATION_MZONE)
+	e3:SetCondition(c81041013.condition)
+	e3:SetTarget(c81041013.target)
+	e3:SetOperation(c81041013.operation)
 	c:RegisterEffect(e3)
 end
 function c81041013.lvcost(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -77,25 +77,35 @@ function c81041013.ctop(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_DISABLE)
 	c:RegisterEffect(e1)
 end
-function c81041013.drtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsPlayerCanDraw(tp) and e:GetHandler():IsLevelAbove(4) end
-	local ht=Duel.GetFieldGroupCount(tp,LOCATION_HAND,0)
-	Duel.SetTargetPlayer(tp)
-	Duel.SetTargetParam(2-ht)
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,2-ht)
+function c81041013.condition(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.IsAbleToEnterBP()
 end
-function c81041013.drop(e,tp,eg,ep,ev,re,r,rp)
+function c81041013.filter(c)
+	return c:IsFaceup() and c:IsType(TYPE_RITUAL) and c:IsType(TYPE_PENDULUM) and not c:IsHasEffect(EFFECT_EXTRA_ATTACK)
+end
+function c81041013.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and c81041013.filter(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(c81041013.filter,tp,LOCATION_MZONE,0,1,nil) and e:GetHandler():IsLevelAbove(4) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
+	Duel.SelectTarget(tp,c81041013.filter,tp,LOCATION_MZONE,0,1,1,nil)
+end
+function c81041013.operation(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
+	local tc=Duel.GetFirstTarget()
 	if c:IsFacedown() or not c:IsRelateToEffect(e) or c:IsLevelBelow(3) then return end
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_SINGLE)
-	e0:SetCode(EFFECT_UPDATE_LEVEL)
-	e0:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_DISABLE)
-	e0:SetValue(-3)
-	c:RegisterEffect(e0)
-	local p=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER)
-	local ht=Duel.GetFieldGroupCount(p,LOCATION_HAND,0)
-	if ht<2 then
-		Duel.Draw(p,2-ht,REASON_EFFECT)
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetCode(EFFECT_UPDATE_LEVEL)
+	e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_DISABLE)
+	e1:SetValue(-3)
+	c:RegisterEffect(e1)
+	if tc:IsRelateToEffect(e) then
+		local e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+		e1:SetCode(EFFECT_EXTRA_ATTACK)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
+		e1:SetValue(1)
+		tc:RegisterEffect(e1)
 	end
 end

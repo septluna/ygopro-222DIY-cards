@@ -20,7 +20,7 @@ function c26807058.costfilter(c)
 	return bit.band(c:GetType(),0x81)==0x81 and c:IsFaceup() and c:IsAbleToGraveAsCost()
 end
 function c26807058.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c26807058.costfilter,tp,LOCATION_EXTRA+LOCATION_MZONE,0,1,nil) and Duel.GetCustomActivityCount(26807058,tp,ACTIVITY_SPSUMMON)==0 end
+	if chk==0 then return Duel.IsExistingMatchingCard(c26807058.costfilter,tp,LOCATION_EXTRA+LOCATION_HAND+LOCATION_MZONE,0,1,nil) and Duel.GetCustomActivityCount(26807058,tp,ACTIVITY_SPSUMMON)==0 end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
 	local g=Duel.SelectMatchingCard(tp,c26807058.costfilter,tp,LOCATION_EXTRA+LOCATION_MZONE,0,1,1,nil)
 	Duel.SendtoGrave(g,REASON_COST)

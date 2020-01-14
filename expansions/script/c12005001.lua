@@ -19,7 +19,7 @@ function c12005001.initial_effect(c)
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_TODECK)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e2:SetType(EFFECT_TYPE_QUICK_O)
-        e2:SetCode(EVENT_FREE_CHAIN)
+		e2:SetCode(EVENT_FREE_CHAIN)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,12005101+EFFECT_COUNT_CODE_DUEL)
 	e2:SetTarget(c12005001.target)
@@ -45,7 +45,7 @@ function c12005001.operation(e,tp,eg,ep,ev,re,r,rp)
 	if g:GetCount()<=0 then return end
 	Duel.ConfirmCards(tp,g)
 	local sg=g:Filter(c12005001.spfilter,nil,e,tp)
-	if tc:IsRelateToEffect(e) and tc:IsAbleToExtra() and Duel.GetLocationCountFromEx(tp,tp,tc)>0 and sg:GetCount()>0 and Duel.SelectYesNo(tp,aux.Stringid(12005001,2)) and Duel.SendtoDeck(tc,nil,2,REASON_EFFECT)~=0 then
+	if tc:IsRelateToEffect(e) and tc:IsAbleToExtra() and Duel.GetLocationCountFromEx(tp,tp,tc,TYPE_LINK)>0 and sg:GetCount()>0 and Duel.SelectYesNo(tp,aux.Stringid(12005001,2)) and Duel.SendtoDeck(tc,nil,2,REASON_EFFECT)~=0 then
 	  local sg2=sg:RandomSelect(tp,1)
 	  Duel.SpecialSummon(sg2,SUMMON_TYPE_LINK,tp,tp,false,false,POS_FACEUP)
 	  sg2:GetFirst():CompleteProcedure()

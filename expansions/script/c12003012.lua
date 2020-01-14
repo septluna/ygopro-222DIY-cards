@@ -59,7 +59,7 @@ function c12003012.operation1(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c12003012.cfilter1(c,e,tp)
-	return c:IsRace(RACE_SEASERPENT) and c:IsReleasable() and Duel.GetLocationCountFromEx(tp,tp,Group.FromCards(c))>0
+	return c:IsRace(RACE_SEASERPENT) and c:IsReleasable() and Duel.GetLocationCountFromEx(tp,tp,Group.FromCards(c),c)>0
 end
 function c12003012.spfilter(c,e,tp)
 	return c:IsType(TYPE_LINK) and c:IsCode(12003010,12003003) and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_LINK,tp,false,false)

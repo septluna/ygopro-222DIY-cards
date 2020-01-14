@@ -35,14 +35,14 @@ function c12005006.filter1(c)
 	return c:IsSetCard(0xfbb)
 end
 function c12005006.sfilter(c,e,tp)
-	return c:IsCode(12005010) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsCode(12005010) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0
 end
 function c12005006.operation(e,tp,eg,ep,ev,re,r,rp)
 	local tc=re:GetHandler()
 	if not tc:IsDisabled() then
 		if Duel.NegateEffect(ev) and Duel.IsExistingMatchingCard(c12005006.filter1,tp,LOCATION_HAND,0,1,nil) then
 			local sc=Duel.GetFirstMatchingCard(c12005006.sfilter,tp,LOCATION_EXTRA,0,nil,e,tp)
-			if sc and Duel.GetLocationCountFromEx(tp)>0 and Duel.SelectYesNo(tp,aux.Stringid(12005006,1)) then
+			if sc and Duel.SelectYesNo(tp,aux.Stringid(12005006,1)) then
 			local g=Duel.SelectMatchingCard(tp,c12005006.filter1,tp,LOCATION_HAND,0,1,1,nil)
 				Duel.BreakEffect()
 				Duel.SendtoGrave(g,REASON_EFFECT)

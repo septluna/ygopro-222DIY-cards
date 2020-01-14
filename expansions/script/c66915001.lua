@@ -1,12 +1,5 @@
 --璀璨的星辉
 function c66915001.initial_effect(c)
-    local e2=Effect.CreateEffect(c)
-    e2:SetType(EFFECT_TYPE_SINGLE)
-    e2:SetRange(LOCATION_SZONE)
-    e2:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_CANNOT_DISABLE)
-    e2:SetCode(EFFECT_LINK_SPELL_KOISHI)
-    e2:SetValue(LINK_MARKER_TOP_RIGHT+LINK_MARKER_TOP_LEFT)
-    c:RegisterEffect(e2) 
     local e3=Effect.CreateEffect(c)
     e3:SetType(EFFECT_TYPE_SINGLE)
     e3:SetCode(EFFECT_REMAIN_FIELD)
@@ -16,6 +9,7 @@ function c66915001.initial_effect(c)
     e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
     e1:SetType(EFFECT_TYPE_ACTIVATE)
     e1:SetCode(EVENT_FREE_CHAIN)
+    e1:SetCountLimit(2,66915001)
     e1:SetCondition(c66915001.spcon)
     e1:SetTarget(c66915001.target)
     e1:SetOperation(c66915001.spop)
@@ -97,8 +91,10 @@ function c66915001.seqop(e,tp,eg,ep,ev,re,r,rp)
     end
 end
 function c66915001.eftg(e,c)
-    local lg=e:GetHandler():GetLinkedGroup()
-    return c:IsType(TYPE_EFFECT) and c:IsSetCard(0x1374) and lg:IsContains(c)
+    local seq=c:GetSequence()
+    return c:IsType(TYPE_EFFECT) and c:IsSetCard(0x1374)
+        and seq<5 and math.abs(e:GetHandler():GetSequence()-seq)==1 or 
+        math.abs(e:GetHandler():GetSequence()-seq)==-1
 end
 function c66915001.sumlimit(e,c,sump,sumtype,sumpos,targetp)
     return c:IsLocation(LOCATION_EXTRA) and not c:IsSetCard(0x1374)

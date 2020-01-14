@@ -1,9 +1,9 @@
---可可莉柯特·地狱尖啸者
+--可 可 莉 柯 特 · 地 狱 尖 啸 者
 if not pcall(function() require("expansions/script/c10199990") end) then require("script/c10199990") end
 local m,cm=rsof.DefineCard(33310104,"Cochrot")
 function cm.initial_effect(c)
 	c:EnableReviveLimit()
-	local e1=rsef.QO(c,nil,{m,0},{1,m},"se,th,rm,dish,ga",nil,LOCATION_HAND,nil,nil,rsop.target({aux.FilterBoolFunction(Card.IsDiscardable,REASON_EFFECT),"dish",LOCATION_HAND },{cm.thfilter,"th",LOCATION_DECK }),cm.thop) 
+	local e1=rsef.QO(c,nil,{m,0},{1,m},"se,th,rm,dish,ga",nil,LOCATION_HAND,nil,nil,rsop.target({aux.FilterBoolFunction(Card.IsDiscardable,REASON_EFFECT),"dish",LOCATION_HAND },{cm.thfilter,"th",LOCATION_DECK+LOCATION_GRAVE }),cm.thop) 
 	--act limit
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
@@ -23,7 +23,7 @@ function cm.thop(e,tp)
 	local ct=Duel.DiscardHand(tp,Card.IsDiscardable,1,1,REASON_EFFECT,nil,REASON_EFFECT)
 	if ct==0 then return end
 	rsof.SelectHint(tp,"th")
-	local g=Duel.SelectMatchingCard(tp,cm.thfilter,tp,LOCATION_DECK,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,cm.thfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil)
 	if #g<=0 or Duel.SendtoHand(g,nil,REASON_EFFECT)<=0 then return end
 	Duel.ConfirmCards(1-tp,g)
 	local rg=Duel.GetMatchingGroup(aux.NecroValleyFilter(Card.IsAbleToRemove),tp,LOCATION_GRAVE,0,nil)

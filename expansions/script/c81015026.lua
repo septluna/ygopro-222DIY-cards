@@ -6,50 +6,135 @@ function c81015026.initial_effect(c)
 	c:EnableReviveLimit()
 	--tograve
 	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(81015026,1))
 	e1:SetCategory(CATEGORY_DECKDES)
 	e1:SetType(EFFECT_TYPE_IGNITION)
-	e1:SetCountLimit(1,81015026)
 	e1:SetRange(LOCATION_MZONE)
+	e1:SetCountLimit(1,81015026)
 	e1:SetCondition(Tenka.ReikaCon)
 	e1:SetTarget(c81015026.target)
 	e1:SetOperation(c81015026.operation)
 	c:RegisterEffect(e1)
-	--change battle target
+	--lock
 	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetCode(EVENT_BE_BATTLE_TARGET)
+	e2:SetDescription(aux.Stringid(81015026,0))
+	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_MZONE)
-	e2:SetCondition(c81015026.cbcon)
-	e2:SetCost(c81015026.cbcost)
+	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e2:SetCountLimit(1)
 	e2:SetTarget(c81015026.cbtg)
 	e2:SetOperation(c81015026.cbop)
 	c:RegisterEffect(e2)
 end
 function c81015026.matfilter(c)
-	return c:IsLevel(6)
-end
-function c81015026.cbcon(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	local bt=eg:GetFirst()
-	return r~=REASON_REPLACE and c~=bt and bt:IsFaceup() and bt:GetControler()==c:GetControler() and bt:IsSetCard(0x81a)
+	return c:IsLinkSetCard(0x81a) and not c:IsLinkType(TYPE_LINK)
 end
 function c81015026.cfilter(c)
-	return c:GetSequence()<5 and c:IsAbleToGraveAsCost()
-end
-function c81015026.cbcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c81015026.cfilter,tp,LOCATION_SZONE,0,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-	local g=Duel.SelectMatchingCard(tp,c81015026.cfilter,tp,LOCATION_SZONE,0,1,1,nil)
-	Duel.SendtoGrave(g,REASON_COST)
+	return c:IsFacedown() and c:GetSequence()<5
 end
 function c81015026.cbtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetAttacker():GetAttackableTarget():IsContains(e:GetHandler()) end
+	if chkc then return chkc:IsControler(1-tp) and chkc:IsLocation(LOCATION_SZONE) and c81015026.cfilter(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(c81015026.cfilter,tp,0,LOCATION_SZONE,1,e:GetHandler()) end
+	Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(81015026,2))
+	Duel.SelectTarget(tp,c81015026.cfilter,tp,0,LOCATION_SZONE,1,1,e:GetHandler())
 end
 function c81015026.cbop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) and not Duel.GetAttacker():IsImmuneToEffect(e) then
-		Duel.ChangeAttackTarget(c)
+	local tc=Duel.GetFirstTarget()
+	if c:IsRelateToEffect(e) and tc:IsFacedown() and tc:IsRelateToEffect(e) then
+		c:SetCardTarget(tc)
+		e:SetLabelObject(tc)
+		c:ResetFlagEffect(81015026)
+		tc:ResetFlagEffect(81015026)
+		local fid=c:GetFieldID()
+		c:RegisterFlagEffect(81015026,RESET_EVENT+RESETS_STANDARD,0,1,fid)
+		tc:RegisterFlagEffect(81015026,RESET_EVENT+RESETS_STANDARD,0,1,fid)
+		local e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetProperty(EFFECT_FLAG_OWNER_RELATE)
+		e1:SetCode(EFFECT_CANNOT_TRIGGER)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DRAW)
+		e1:SetLabelObject(tc)
+		e1:SetCondition(c81015026.rcon)
+		e1:SetValue(1)
+		tc:RegisterEffect(e1)
+		--End of e1
+		local e2=Effect.CreateEffect(c)
+		e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		e2:SetCode(EVENT_PHASE+PHASE_END)
+		e2:SetCountLimit(1)
+		e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DRAW)
+		e2:SetLabel(fid)
+		e2:SetLabelObject(e1)
+		e2:SetCondition(c81015026.rstcon)
+		e2:SetOperation(c81015026.rstop)
+		Duel.RegisterEffect(e2,tp)
+		--return to hand
+		local e3=Effect.CreateEffect(c)
+		e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		e3:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
+		e3:SetCode(EVENT_PHASE+PHASE_END)
+		e3:SetCountLimit(1)
+		e3:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DRAW)
+		e3:SetLabel(fid)
+		e3:SetLabelObject(tc)
+		e3:SetCondition(c81015026.agcon)
+		e3:SetOperation(c81015026.agop)
+		Duel.RegisterEffect(e3,1-tp)
+		--activate check
+		local e4=Effect.CreateEffect(c)
+		e4:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+		e4:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+		e4:SetCode(EVENT_CHAINING)
+		e4:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DRAW)
+		e4:SetLabel(fid)
+		e4:SetLabelObject(e3)
+		e4:SetOperation(c81015026.rstop2)
+		Duel.RegisterEffect(e4,tp)
 	end
+end
+function c81015026.rcon(e)
+	return e:GetOwner():IsHasCardTarget(e:GetHandler()) and e:GetHandler():GetFlagEffect(81015026)~=0
+end
+function c81015026.rstcon(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local tc=e:GetLabelObject():GetLabelObject()
+	if tc:GetFlagEffectLabel(81015026)==e:GetLabel()
+		and c:GetFlagEffectLabel(81015026)==e:GetLabel() then
+		return not c:IsDisabled()
+	else
+		e:Reset()
+		return false
+	end
+end
+function c81015026.rstop(e,tp,eg,ep,ev,re,r,rp)
+	local te=e:GetLabelObject()
+	te:Reset()
+	Duel.HintSelection(Group.FromCards(e:GetHandler()))
+end
+function c81015026.agcon(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local tc=e:GetLabelObject()
+	if tc:GetFlagEffectLabel(81015026)==e:GetLabel()
+		and c:GetFlagEffectLabel(81015026)==e:GetLabel() then
+		return not c:IsDisabled()
+	else
+		e:Reset()
+		return false
+	end
+end
+function c81015026.agop(e,tp,eg,ep,ev,re,r,rp)
+	local tc=e:GetLabelObject()
+	Duel.SendtoDeck(tc,nil,2,REASON_EFFECT)
+end
+function c81015026.rstop2(e,tp,eg,ep,ev,re,r,rp)
+	local tc=eg:GetFirst()
+	if tc:GetFlagEffectLabel(81015026)~=e:GetLabel() then return end
+	local c=e:GetHandler()
+	c:CancelCardTarget(tc)
+	local te=e:GetLabelObject()
+	tc:ResetFlagEffect(81015026)
+	if te then te:Reset() end
 end
 function c81015026.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsPlayerCanDiscardDeck(tp,5)

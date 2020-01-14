@@ -92,7 +92,7 @@ function c12008003.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.Release(g,REASON_COST)
 end
 function c12008003.rfilter(c)
-	return c:IsRace(RACE_MACHINE) and Duel.GetLocationCountFromEx(tp,tp,c)>0
+	return c:IsRace(RACE_MACHINE) and Duel.GetLocationCountFromEx(tp,tp,c,TYPE_FUSION)>0
 end
 function c12008003.spfilter(c,e,tp)
 	return c:IsType(TYPE_FUSION) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:IsSetCard(0xfb1)
@@ -102,7 +102,7 @@ function c12008003.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c12008003.operation(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCountFromEx(tp)<=0 then return end
+	if Duel.GetLocationCountFromEx(tp,tp,e:GetHandler(),TYPE_FUSION)<=0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c12008003.spfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)
 	if g:GetCount()>0 then

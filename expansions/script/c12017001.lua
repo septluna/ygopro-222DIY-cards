@@ -44,7 +44,7 @@ function c12017001.distg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		local chkf=tp
 		local mg1=Duel.GetMatchingGroup(c12017001.filter0,tp,LOCATION_GRAVE,0,nil)
-		local res=Duel.GetLocationCountFromEx(tp)>0
+		local res=Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_FUSION)>0
 			and Duel.IsExistingMatchingCard(c12017001.filter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,mg1,nil,c,chkf)
 		if not res then
 			local ce=Duel.GetChainMaterial(tp)
@@ -74,7 +74,7 @@ function c12017001.disop(e,tp,eg,ep,ev,re,r,rp)
 		local mf=ce:GetValue()
 		sg2=Duel.GetMatchingGroup(c12017001.filter2,tp,LOCATION_EXTRA,0,nil,e,tp,mg2,mf,c,chkf)
 	end
-	if (Duel.GetLocationCountFromEx(tp)>0 and sg1:GetCount()>0) or (sg2~=nil and sg2:GetCount()>0) then
+	if (Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_FUSION) and sg1:GetCount()>0) or (sg2~=nil and sg2:GetCount()>0) then
 		local sg=sg1:Clone()
 		if sg2 then sg:Merge(sg2) end
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)

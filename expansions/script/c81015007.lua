@@ -3,10 +3,11 @@ require("expansions/script/c81000000")
 function c81015007.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_REMOVE)
+	e1:SetCategory(CATEGORY_TOGRAVE)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
-	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetCountLimit(1,81015007)
+	e1:SetCondition(c81015007.condition)
 	e1:SetTarget(c81015007.target)
 	e1:SetOperation(c81015007.activate)
 	c:RegisterEffect(e1)
@@ -16,7 +17,7 @@ function c81015007.initial_effect(c)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
 	e2:SetRange(LOCATION_GRAVE)
-	e2:SetCountLimit(1,81015007)
+	e2:SetCountLimit(1,81015907)
 	e2:SetCondition(c81015007.drcon)
 	e2:SetCost(c81015007.drcost)
 	e2:SetTarget(c81015007.drtg)
@@ -28,30 +29,30 @@ function c81015007.initial_effect(c)
 	e3:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 	e3:SetCode(EFFECT_QP_ACT_IN_NTPHAND)
 	e3:SetRange(LOCATION_HAND)
-	e3:SetCondition(c81015007.handcon)
+	e3:SetCondition(Tenka.ReikaCon)
 	c:RegisterEffect(e3)
 end
-function c81015007.sfilter(c)
+function c81015007.eeilter(c)
 	return c:IsFaceup() and c:IsSetCard(0x81a)
 end
-function c81015007.handcon(e)
-	return Duel.IsExistingMatchingCard(c81015007.sfilter,c:GetControler(),LOCATION_MZONE,0,1,nil)
+function c81015007.condition(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.IsExistingMatchingCard(c81015007.eeilter,tp,LOCATION_MZONE,0,1,nil)
 end
-function c81015007.filter(c)
-	return c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsAbleToRemove()
+function c81015007.tgfilter(c,tp)
+	return Duel.IsExistingMatchingCard(c81015007.gyfilter,tp,0,LOCATION_MZONE,1,nil,c:GetColumnGroup())
+end
+function c81015007.gyfilter(c,g)
+	return g:IsContains(c)
 end
 function c81015007.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsOnField() and c81015007.filter(chkc) and chkc~=e:GetHandler() end
-	if chk==0 then return Duel.IsExistingTarget(c81015007.filter,tp,LOCATION_ONFIELD,0,1,e:GetHandler()) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectTarget(tp,c81015007.filter,tp,LOCATION_ONFIELD,0,1,1,e:GetHandler())
-	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,1,0,0)
+	if chk==0 then return Duel.IsExistingMatchingCard(c81015007.tgfilter,tp,0,LOCATION_SZONE,1,nil,tp) end
+	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,0,1-tp,LOCATION_MZONE)
 end
 function c81015007.activate(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) then
-		Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)
-	end
+	local pg=Duel.SelectMatchingCard(tp,c81015007.tgfilter,tp,0,LOCATION_SZONE,1,1,nil,tp)
+	if pg:GetCount()==0 then return end
+	local g=Duel.GetMatchingGroup(c81015007.gyfilter,tp,0,LOCATION_MZONE,nil,pg:GetFirst():GetColumnGroup())
+	Duel.SendtoGrave(g,REASON_EFFECT)
 end
 function c81015007.drcon(e,tp,eg,ep,ev,re,r,rp)
 	return Tenka.ReikaCon(e) and aux.exccon(e)

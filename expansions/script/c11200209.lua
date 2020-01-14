@@ -11,20 +11,20 @@ function c11200209.initial_effect(c)
 	e0:SetRange(LOCATION_ONFIELD+LOCATION_REMOVED)
 	e0:SetValue(11200103)
 	c:RegisterEffect(e0)
-	--damage
+	--remove
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_DAMAGE+CATEGORY_DECKDES)
-	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e1:SetProperty(EFFECT_FLAG_DELAY)
-	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e1:SetCategory(CATEGORY_REMOVE)
+	e1:SetType(EFFECT_TYPE_QUICK_O)
+	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,11200209)
-	e1:SetCondition(c11200209.damcon)
-	e1:SetTarget(c11200209.damtg)
-	e1:SetOperation(c11200209.damop)
+	e1:SetTarget(c11200209.rmtg)
+	e1:SetOperation(c11200209.rmop)
 	c:RegisterEffect(e1)
 	--special summon
 	local e3=Effect.CreateEffect(c)
-	e3:SetCategory(CATEGORY_TOHAND+CATEGORY_TODECK)
+	e3:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_TODECK)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e3:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
 	e3:SetCode(EVENT_REMOVE)
@@ -33,38 +33,46 @@ function c11200209.initial_effect(c)
 	e3:SetOperation(c11200209.spop)
 	c:RegisterEffect(e3)
 end
-function c11200209.damcon(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():IsSummonType(SUMMON_TYPE_FUSION)
+function c11200209.cfilter(c)
+	return c:IsFaceup() and c:IsType(TYPE_PENDULUM) and c:IsAbleToRemove()
 end
-function c11200209.damfilter(c)
-	return ((c:IsSetCard(0x46) and c:IsType(TYPE_SPELL)) or c:GetType()==0x82) and c:IsAbleToRemove()
-end
-function c11200209.damtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c11200209.damfilter,tp,LOCATION_GRAVE+LOCATION_DECK,0,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,1200)
-end
-function c11200209.damop(e,tp,eg,ep,ev,re,r,rp)
+function c11200209.rmtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chkc then return chkc:IsAbleToRemove() end
+	if chk==0 then return Duel.IsExistingTarget(c11200209.cfilter,tp,LOCATION_MZONE,0,1,nil)
+		and Duel.IsExistingTarget(Card.IsAbleToRemove,tp,0,LOCATION_ONFIELD,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(c11200209.damfilter),tp,LOCATION_GRAVE+LOCATION_DECK,0,1,1,nil)
-	local tc=g:GetFirst()
-	if g:GetCount()>0 and Duel.Remove(g,POS_FACEUP,REASON_EFFECT)~=0 and tc:IsLocation(LOCATION_REMOVED) then
-		Duel.Damage(1-tp,1200,REASON_EFFECT)
+	local g1=Duel.SelectTarget(tp,c11200209.cfilter,tp,LOCATION_MZONE+LOCATION_PZONE,0,1,1,nil)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+	local g2=Duel.SelectTarget(tp,Card.IsAbleToRemove,tp,0,LOCATION_ONFIELD,1,1,nil)
+	g1:Merge(g2)
+	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g1,2,0,0)
+end
+function c11200209.rmop(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
+	local tg=g:Filter(Card.IsRelateToEffect,nil,e)
+	if tg:GetCount()>0 then
+		Duel.Remove(tg,POS_FACEUP,REASON_EFFECT)
 	end
 end
 function c11200209.thfilter(c)
-	return c:IsAbleToDeck() and not c:IsCode(11200209)
+	return c:IsCode(11200209) and c:IsAbleToHand()
 end
 function c11200209.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c11200209.thfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,e:GetHandler())
-		and e:GetHandler():IsAbleToHand() end
-	local g=Duel.GetMatchingGroup(c11200209.thfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,e:GetHandler())
+	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToDeck,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,e:GetHandler())
+		and Duel.IsExistingMatchingCard(c11200209.thfilter,tp,LOCATION_DECK,0,1,nil) end
+	local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,e:GetHandler())
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,1,0,0)
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,e:GetHandler(),1,0,0)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function c11200209.spop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectMatchingCard(tp,c11200209.thfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,aux.ExceptThisCard(e))
+	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToDeck,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,3,aux.ExceptThisCard(e))
 	if g:GetCount()>0 and Duel.SendtoDeck(g,nil,0,REASON_EFFECT)~=0 then
-		Duel.SendtoHand(e:GetHandler(),nil,REASON_EFFECT)
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+		local g=Duel.SelectMatchingCard(tp,c11200209.thfilter,tp,LOCATION_DECK,0,1,1,nil)
+		if g:GetCount()>0 then
+			Duel.SendtoHand(g,nil,REASON_EFFECT)
+			Duel.ConfirmCards(1-tp,g)
+		end
 	end
 end

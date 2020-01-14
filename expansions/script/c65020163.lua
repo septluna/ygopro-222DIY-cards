@@ -72,7 +72,7 @@ function c65020163.filter1(c,e,tp)
 end
 function c65020163.filter2(c,e,tp,mc,rk)
 	return c:IsRank(rk) and c:IsSetCard(0xcda8) and mc:IsCanBeXyzMaterial(c)
-		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)and Duel.GetLocationCountFromEx(tp,tp,mc,c)>0
+		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)and Duel.GetLocationCountFromEx(tp,tp,mc,c)>0 and not c:IsCode(65020163)
 end
 function c65020163.target2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return c65020163.filter1(e:GetHandler(),e,tp) and e:GetHandler():GetFlagEffect(65020163)==0 end

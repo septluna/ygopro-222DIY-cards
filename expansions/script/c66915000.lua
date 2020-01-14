@@ -1,4 +1,4 @@
---星辉女神
+--星曜女神·薇莉艾拉
 local m=66915000
 local cm=_G["c"..m]
 function cm.initial_effect(c)
@@ -27,7 +27,17 @@ function cm.initial_effect(c)
     e22:SetRange(LOCATION_MZONE)
     e22:SetCode(EFFECT_UPDATE_ATTACK)
     e22:SetValue(cm.val)
-    c:RegisterEffect(e2)   
+    c:RegisterEffect(e22) 
+    --draw
+    local e3=Effect.CreateEffect(c)
+    e3:SetCategory(CATEGORY_DRAW+CATEGORY_TOHAND)
+    e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+    e3:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL)
+    e3:SetCode(EVENT_LEAVE_FIELD)
+    e3:SetCondition(cm.spcon)
+    e3:SetTarget(cm.drtg)
+    e3:SetOperation(cm.drop)
+    c:RegisterEffect(e3)  
 end
 function cm.val(e,c)
     return c:GetEquipCount()*100
@@ -62,3 +72,28 @@ end
 function cm.eqlimit(e,c)
     return e:GetOwner()==c
 end
+function cm.cfilter(c)
+    return c:IsFaceup() and c:IsCode(66915001)
+end
+function cm.spcon(e,tp,eg,ep,ev,re,r,rp)
+    local c=e:GetHandler()
+    return c:IsPreviousPosition(POS_FACEUP) and c:IsPreviousLocation(LOCATION_ONFIELD) and Duel.IsExistingMatchingCard(cm.cfilter,tp,LOCATION_SZONE,0,1,nil)
+end
+function cm.drtg(e,tp,eg,ep,ev,re,r,rp,chk)
+    if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
+    Duel.SetTargetPlayer(tp)
+    Duel.SetTargetParam(1)
+    Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
+    Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_SZONE)
+end
+function cm.pfilter(c)
+    return c:IsFaceup() and c:IsCode(66915001) and c:IsAbleToHand()
+end
+function cm.drop(e,tp,eg,ep,ev,re,r,rp)
+    local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
+    if Duel.Draw(p,d,REASON_EFFECT)~=0 and Duel.SelectYesNo(tp,aux.Stringid(m,1)) then
+        local g=Duel.SelectMatchingCard(tp,cm.pfilter,tp,LOCATION_SZONE,0,1,1,nil)
+        Duel.SendtoHand(g,nil,REASON_EFFECT)
+        Duel.ConfirmCards(1-tp,g)
+    end
+end     

@@ -60,36 +60,36 @@ function cm.initial_effect(c)
 	end)
 	c:RegisterEffect(e2)
 end
-function cm.spfilter(c,fc)
-	return c:IsAttack(2000) and c:IsCanBeFusionMaterial(fc)
+function cm.rfilter(c,tp,sc)
+	return c:IsFaceup() and c:IsAttack(2000) and c:IsReleasable() and Duel.GetLocationCountFromEx(tp,tp,c,sc)>0 and c:IsCanBeFusionMaterial(sc,SUMMON_TYPE_SPECIAL)
 end
-function cm.spfilter_(c,fc)
-	return c:IsAttack(2000) and c:IsCanBeFusionMaterial(fc) and c:IsFaceup()
-end
-function cm.spfilter1(c,tp,g)
-	return g:IsExists(cm.spfilter2,1,c,tp,c)
-end
-function cm.spfilter2(c,tp,mc)
-	return Duel.GetLocationCountFromEx(tp,tp,Group.FromCards(c,mc))>0
+function cm.mzfilter(c,tp,sc)
+	return c:IsFaceup() and c:IsAttack(2000) and c:IsReleasable() and Duel.GetLocationCountFromEx(tp,tp,c,sc)>0 and c:IsCanBeFusionMaterial(sc,SUMMON_TYPE_SPECIAL)
 end
 function cm.spcon(e,c)
 	if c==nil then return true end
 	local tp=c:GetControler()
-	local g=Duel.GetReleaseGroup(tp):Filter(cm.spfilter,nil,c)
-	local g2=Duel.GetReleaseGroup(1-tp):Filter(cm.spfilter_,nil,c)
-	g1:Merge(g2)
-	return g:IsExists(cm.spfilter1,1,nil,tp,g)
+	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
+	local ct=-ft+1
+	if ct>2 then return false end
+	if ct>0 and not Duel.IsExistingMatchingCard(cm.mzfilter,tp,LOCATION_MZONE,0,ct,nil) then return false end
+	return Duel.IsExistingMatchingCard(cm.rfilter,tp,LOCATION_MZONE,LOCATION_MZONE,2,nil)
 end
 function cm.spop(e,tp,eg,ep,ev,re,r,rp,c)
-	local g=Duel.GetReleaseGroup(tp):Filter(cm.spfilter,nil,c)
-	local g2=Duel.GetReleaseGroup(1-tp):Filter(cm.spfilter_,nil,c)
-	g1:Merge(g2)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
-	local g1=g:FilterSelect(tp,cm.spfilter1,1,1,nil,tp,g)
-	local mc=g1:GetFirst()
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
-	local g2=g:FilterSelect(tp,cm.spfilter2,1,1,mc,tp,mc)
-	g1:Merge(g2)
-	c:SetMaterial(g1)
-	Duel.Release(g1,REASON_COST+REASON_FUSION+REASON_MATERIAL)
+	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
+	local ct=-ft+1
+	if ct<0 then ct=0 end
+	local g=Group.CreateGroup()
+	if ct>0 then
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
+		local sg=Duel.SelectMatchingCard(tp,cm.mzfilter,tp,LOCATION_MZONE,0,ct,ct,nil)
+		g:Merge(sg)
+	end
+	if ct<2 then
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
+		local sg=Duel.SelectMatchingCard(tp,cm.rfilter,tp,LOCATION_MZONE,LOCATION_MZONE,2-ct,2-ct,g:GetFirst())
+		g:Merge(sg)
+	end
+	c:SetMaterial(g)
+	Duel.Release(g,REASON_COST)
 end

@@ -19,8 +19,7 @@ function c81011010.initial_effect(c)
 	--lv
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(81011010,1))
-	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetCode(EVENT_FREE_CHAIN)
+	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,81011910)
 	e2:SetCost(c81011010.lvcost)
@@ -52,17 +51,6 @@ function c81011010.desop(e,tp,eg,ep,ev,re,r,rp)
 	if (opt==0 and tc:IsType(TYPE_MONSTER)) or (opt==1 and tc:IsType(TYPE_SPELL)) or (opt==2 and tc:IsType(TYPE_TRAP)) then
 		Duel.Remove(dc,POS_FACEUP,REASON_EFFECT)
 	end
-	local e1=Effect.CreateEffect(e:GetHandler())
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
-	e1:SetTargetRange(1,0)
-	e1:SetTarget(c81011010.splimit)
-	e1:SetReset(RESET_PHASE+PHASE_END)
-	Duel.RegisterEffect(e1,tp)
-end
-function c81011010.splimit(e,c)
-	return not (c:IsRace(RACE_SPELLCASTER) and c:IsAttribute(ATTRIBUTE_DARK))
 end
 function c81011010.lvcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsReleasable() end
@@ -95,4 +83,7 @@ function c81011010.lvop(e,tp,eg,ep,ev,re,r,rp)
 	e2:SetTarget(c81011010.splimit)
 	e2:SetReset(RESET_PHASE+PHASE_END)
 	Duel.RegisterEffect(e2,tp)
+end
+function c81011010.splimit(e,c)
+	return not c:IsRace(RACE_SPELLCASTER)
 end

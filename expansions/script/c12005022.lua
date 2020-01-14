@@ -29,9 +29,9 @@ function c12005022.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c12005022.cfilter(chkc) and chkc~=c end
 	if chk==0 then return Duel.IsPlayerCanDraw(tp,1)
-		and Duel.IsExistingTarget(c12005022.cfilter,tp,LOCATION_GRAVE,0,2,c) and c:IsAbleToDeck() end
+		and Duel.IsExistingTarget(c12005022.cfilter,tp,LOCATION_GRAVE,0,1,c) and c:IsAbleToDeck() end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectTarget(tp,c12005022.cfilter,tp,LOCATION_GRAVE,0,2,2,c)
+	local g=Duel.SelectTarget(tp,c12005022.cfilter,tp,LOCATION_GRAVE,0,1,2,c)
 	local rg=g:Clone()
 	rg:AddCard(c)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,rg,rg:GetCount(),0,0)
@@ -43,7 +43,7 @@ function c12005022.tdop(e,tp,eg,ep,ev,re,r,rp)
 	local tg=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
 	local sg=tg:Filter(Card.IsRelateToEffect,nil,e)
 	sg:AddCard(c)
-	 if Duel.SendtoDeck(sg,nil,2,REASON_EFFECT)>1 then
+	 if Duel.SendtoDeck(sg,nil,2,REASON_EFFECT)>0 then
 		local og=Duel.GetOperatedGroup()
 		if og:IsExists(Card.IsLocation,1,nil,LOCATION_DECK) then
 		   Duel.ShuffleDeck(tp)

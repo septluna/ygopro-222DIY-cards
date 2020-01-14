@@ -26,7 +26,7 @@ function c66915002.initial_effect(c)
     c:RegisterEffect(e3)  
 end
 function c66915002.filter(c)
-    return (c:GetType()==TYPE_SPELL+TYPE_CONTINUOUS or c:GetType()==TYPE_TRAP+TYPE_CONTINUOUS) and c:IsSSetable() and c:IsSetCard(0x374)
+    return ((c:GetType()==TYPE_SPELL+TYPE_CONTINUOUS or c:GetType()==TYPE_TRAP+TYPE_CONTINUOUS)and c:IsSetCard(0x374)) and c:IsSSetable() or c:IsCode(66915001)
 end
 function c66915002.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
     if chkc then return chkc:IsLocation(LOCATION_DECK) and chkc:IsControler(tp) and c66915002.filter(chkc) end

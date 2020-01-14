@@ -29,6 +29,42 @@ function c12003008.initial_effect(c)
 	e1:SetTarget(c12003008.distg)
 	e1:SetOperation(c12003008.disop)
 	c:RegisterEffect(e1)
+	--remove
+	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(12003008,2))
+	e1:SetCategory(CATEGORY_TOHAND)
+	e1:SetType(EFFECT_TYPE_IGNITION)
+	e1:SetRange(LOCATION_HAND)
+	e1:SetCountLimit(1,12003008)
+	e1:SetCost(c12003008.rmcost)
+	e1:SetTarget(c12003008.rmtg)
+	e1:SetOperation(c12003008.rmop)
+	c:RegisterEffect(e1)
+end
+function c12003008.costfilter(c)
+	return c:IsAttribute(ATTRIBUTE_WATER) and c:IsDiscardable()
+end
+function c12003008.rmcost(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if chk==0 then return c:IsDiscardable()
+		and Duel.IsExistingMatchingCard(c12003008.costfilter,tp,LOCATION_HAND,0,1,c) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DISCARD)
+	local g=Duel.SelectMatchingCard(tp,c12003008.costfilter,tp,LOCATION_HAND,0,1,1,c)
+	g:AddCard(c)
+	Duel.SendtoGrave(g,REASON_COST+REASON_DISCARD)
+end
+function c12003008.rmtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToRemove,tp,0,LOCATION_HAND,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,1-tp,LOCATION_HAND)
+end
+function c12003008.rmop(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_HAND,nil)
+	if g:GetCount()==0 then return end
+	Duel.ConfirmCards(tp,g)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+	local tc=g:Select(tp,1,1,nil):GetFirst()
+	Duel.SendtoHand(tc,nil,REASON_EFFECT)
+	Duel.ConfirmCards(1-tp,tc)
 end
 function c12003008.spfilter(c,ft)
 	return c:IsFaceup() and c:IsRace(RACE_SEASERPENT) and c:IsLevelAbove(8) and not c:IsCode(12003008) and c:IsAbleToHandAsCost()

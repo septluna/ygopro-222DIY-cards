@@ -1,7 +1,7 @@
 --曙光的魔物 牙月拉结尔
 function c12005016.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,nil,aux.FilterBoolFunction(Card.IsSetCard,0xfbb),1)
+	aux.AddSynchroProcedure(c,nil,aux.FilterBoolFunction(Card.IsSetCard,0xfbb+0x1fbd),1)
 	c:EnableReviveLimit()
 	--remove
 	local e1=Effect.CreateEffect(c)

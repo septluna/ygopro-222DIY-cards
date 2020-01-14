@@ -1,7 +1,7 @@
 --战斗形态·椎名咪玉
 function c81011038.initial_effect(c)
 	--synchro summon
-	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsRace,RACE_SPELLCASTER),aux.NonTuner(Card.IsAttribute,ATTRIBUTE_DARK),1)
+	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsAttribute,ATTRIBUTE_DARK),aux.NonTuner(Card.IsRace,RACE_SPELLCASTER),1)
 	c:EnableReviveLimit()
 	--draw
 	local e1=Effect.CreateEffect(c)
@@ -45,17 +45,6 @@ function c81011038.drop(e,tp,eg,ep,ev,re,r,rp)
 	if (opt==0 and tc:IsType(TYPE_MONSTER)) or (opt==1 and tc:IsType(TYPE_SPELL)) or (opt==2 and tc:IsType(TYPE_TRAP)) then
 		Duel.Draw(p,d,REASON_EFFECT)
 	end
-	local e1=Effect.CreateEffect(e:GetHandler())
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
-	e1:SetTargetRange(1,0)
-	e1:SetTarget(c81011038.splimit)
-	e1:SetReset(RESET_PHASE+PHASE_END)
-	Duel.RegisterEffect(e1,tp)
-end
-function c81011038.splimit(e,c)
-	return not (c:IsRace(RACE_SPELLCASTER) and c:IsAttribute(ATTRIBUTE_DARK))
 end
 function c81011038.thfilter(c,e,tp)
 	return c:IsRace(RACE_SPELLCASTER) and c:IsAttribute(ATTRIBUTE_DARK) and c:IsLevelBelow(4) and (c:IsAbleToHand() or c:IsCanBeSpecialSummoned(e,0,tp,false,false))
@@ -110,4 +99,7 @@ function c81011038.acop(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetTarget(c81011038.splimit)
 	e1:SetReset(RESET_PHASE+PHASE_END)
 	Duel.RegisterEffect(e1,tp)
+end
+function c81011038.splimit(e,c)
+	return not c:IsRace(RACE_SPELLCASTER)
 end

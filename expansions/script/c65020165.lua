@@ -107,5 +107,7 @@ function c65020165.activate(e,tp,eg,ep,ev,re,r,rp)
 		Duel.Overlay(sc,Group.FromCards(tc))
 		Duel.SpecialSummon(sc,SUMMON_TYPE_XYZ,tp,tp,false,false,POS_FACEUP)
 		sc:CompleteProcedure()
+	else
+		Duel.SendtoGrave(e:GetHandler(),REASON_EFFECT)
 	end
 end

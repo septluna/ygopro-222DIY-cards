@@ -17,7 +17,7 @@ function c12008029.initial_effect(c)
 	--spsummon
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(12008029,1))
-	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
+	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_TO_GRAVE)
@@ -49,7 +49,7 @@ end
 function c12008029.spfilter(c,e,tp)
 	local mg=Duel.GetMatchingGroup(Card.IsLevelAbove,tp,LOCATION_MZONE,0,nil,0)
 	mg:AddCard(c)
-	return c:IsFaceup() and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:IsSetCard(0x1fb3) and ( Duel.IsExistingMatchingCard(Card.IsXyzSummonable,tp,LOCATION_EXTRA,0,1,nil,nil) or   Duel.IsExistingMatchingCard(Card.IsXyzSummonable,tp,LOCATION_EXTRA,0,1,nil,mg) ) and Duel.GetLocationCountFromEx(tp,tp,mg)>0
+	return c:IsFaceup() and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:IsSetCard(0x1fb3) and ( Duel.IsExistingMatchingCard(Card.IsXyzSummonable,tp,LOCATION_EXTRA,0,1,nil,nil) or   Duel.IsExistingMatchingCard(Card.IsXyzSummonable,tp,LOCATION_EXTRA,0,1,nil,mg) ) and Duel.GetLocationCountFromEx(tp,tp,mg,TYPE_XYZ)>0
 end
 function c12008029.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local mg=Duel.GetMatchingGroup(c12008029.mfilter,tp,LOCATION_MZONE,0,nil)

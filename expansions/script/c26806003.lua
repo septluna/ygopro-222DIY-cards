@@ -1,7 +1,7 @@
 --彼此的世界·海伊
 function c26806003.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,nil,6,2)
+	aux.AddXyzProcedure(c,c26806003.mfilter,6,2)
 	c:EnableReviveLimit()
 	--special summon (hand)
 	local e1=Effect.CreateEffect(c)
@@ -27,6 +27,9 @@ function c26806003.initial_effect(c)
 	e2:SetOperation(c26806003.operation)
 	c:RegisterEffect(e2)
 end
+function c26806003.mfilter(c)
+	return c:IsAttack(2200) and c:IsDefense(600)
+end
 function c26806003.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_XYZ)
 end
@@ -47,8 +50,8 @@ function c26806003.spop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c26806003.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
-	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
+	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,2,REASON_COST) end
+	e:GetHandler():RemoveOverlayCard(tp,2,2,REASON_COST)
 end
 function c26806003.operation(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

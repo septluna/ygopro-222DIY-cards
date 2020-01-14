@@ -46,13 +46,13 @@ function c12010004.spfilter(c,e,tp)
 	return c:IsSetCard(0xfba) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:IsType(TYPE_PENDULUM)
 end
 function c12010004.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chk==0 then return Duel.GetLocationCountFromEx(tp)>0
+	if chk==0 then return Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_XYZ)>0
 		and Duel.IsExistingTarget(c12010004.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c12010004.spop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if Duel.GetLocationCountFromEx(tp)<=0 then return false end
+	if Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_XYZ)<=0 then return false end
 	if not Duel.IsExistingTarget(c12010004.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) then return false end
 	local g=Duel.SelectMatchingCard(tp,c12010004.spfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)
 	local tc=g:GetFirst()

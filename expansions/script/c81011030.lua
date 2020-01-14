@@ -21,14 +21,14 @@ function c81011030.initial_effect(c)
 	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e3:SetCountLimit(1,81011030)
 	e3:SetCondition(aux.exccon)
-	e3:SetCost(c81011030.spcost)
+	e3:SetCost(aux.bfgcost)
 	e3:SetTarget(c81011030.sptg)
 	e3:SetOperation(c81011030.spop)
 	c:RegisterEffect(e3)
 	Duel.AddCustomActivityCounter(81011030,ACTIVITY_SPSUMMON,c81011030.counterfilter)
 end
 function c81011030.counterfilter(c)
-	return c:IsRace(RACE_SPELLCASTER) and c:IsAttribute(ATTRIBUTE_DARK)
+	return c:IsRace(RACE_SPELLCASTER)
 end
 function c81011030.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetCustomActivityCount(81011030,tp,ACTIVITY_SPSUMMON)==0 end
@@ -42,26 +42,13 @@ function c81011030.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.RegisterEffect(e1,tp)
 end
 function c81011030.splimit(e,c,sump,sumtype,sumpos,targetp,se)
-	return not (c:IsRace(RACE_SPELLCASTER) and c:IsAttribute(ATTRIBUTE_DARK))
+	return not c:IsRace(RACE_SPELLCASTER)
 end
 function c81011030.sttg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetFieldGroupCount(tp,0,LOCATION_DECK)>2 end
 end
 function c81011030.stop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.SortDecktop(tp,1-tp,3)
-end
-function c81011030.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetCustomActivityCount(81011030,tp,ACTIVITY_SPSUMMON)==0
-		and aux.bfgcost(e,tp,eg,ep,ev,re,r,rp,0) end
-	local e1=Effect.CreateEffect(e:GetHandler())
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_OATH)
-	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
-	e1:SetReset(RESET_PHASE+PHASE_END)
-	e1:SetTargetRange(1,0)
-	e1:SetTarget(c81011030.splimit)
-	Duel.RegisterEffect(e1,tp)
-	aux.bfgcost(e,tp,eg,ep,ev,re,r,rp,1)
 end
 function c81011030.spfilter1(c,e,tp)
 	return c:IsFaceup() and c:IsRace(RACE_SPELLCASTER) and c:IsAttribute(ATTRIBUTE_DARK) and c:IsRankBelow(6) and c:IsType(TYPE_XYZ)
