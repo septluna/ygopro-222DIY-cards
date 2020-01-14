@@ -33,7 +33,7 @@ function c11200103.thfilter(c)
 	return c:IsCode(11200106,11200112) and c:IsAbleToHand()
 end
 function c11200103.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chk==0 then return Duel.IsExistingMatchingCard(c11200103.thfilter1,tp,LOCATION_DECK,0,1,nil) end
+	if chk==0 then return Duel.IsExistingMatchingCard(c11200103.thfilter,tp,LOCATION_DECK,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function c11200103.thop(e,tp,eg,ep,ev,re,r,rp,chk)
