@@ -22,6 +22,7 @@ function cm.initial_effect(c)
     e11:SetType(EFFECT_TYPE_QUICK_O)
     e11:SetCode(EVENT_FREE_CHAIN)
     e11:SetRange(LOCATION_MZONE)
+    e11:SetCountLimit(1,m)
     e11:SetHintTiming(TIMING_BATTLE_START)
     e11:SetCondition(cm.condition)
     e11:SetTarget(cm.thtg)
@@ -43,7 +44,7 @@ end
 function cm.thop(e,tp,eg,ep,ev,re,r,rp)
     local ct=e:GetHandler():GetAttack()
     local lp=Duel.GetLP(1-tp)
-    if Duel.GetFieldGroupCount(c:GetControler(),0,LOCATION_ONFIELD)>0 and Duel.GetFieldGroupCount(c:GetControler(),0,LOCATION_HAND)>0 then
+    if Duel.GetFieldGroupCount(1-tp,0,LOCATION_ONFIELD)>0 and Duel.GetFieldGroupCount(1-tp,0,LOCATION_HAND)>0 then
      if ct>=lp then ct=lp end
      Duel.SetLP(1-tp,lp-ct)
     else

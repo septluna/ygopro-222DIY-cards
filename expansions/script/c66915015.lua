@@ -31,7 +31,7 @@ end
 function cm.cost(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return Duel.IsExistingMatchingCard(cm.cfilter,tp,LOCATION_SZONE,0,1,nil) end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
-    local g=Duel.SelectMatchingCard(tp,cm.filter,tp,LOCATION_SZONE,0,1,1,nil)
+    local g=Duel.SelectMatchingCard(tp,cm.cfilter,tp,LOCATION_SZONE,0,1,1,nil)
     Duel.SendtoGrave(g,REASON_COST)
     if Duel.IsExistingMatchingCard(cm.cfilters,tp,LOCATION_GRAVE+LOCATION_MZONE,0,1,nil) then
        Duel.SetChainLimit(aux.FALSE)
@@ -41,7 +41,7 @@ function cm.cfilters(c)
     return c:IsFaceup() and c:IsCode(66915020)
 end
 function cm.cfilter(c)
-    return c:IsFaceup() and c:IsCode(66915001)
+    return c:IsFaceup() and c:IsCode(66915001) and c:IsAbleToGraveAsCost()
 end
 function cm.con(e,tp,eg,ep,ev,re,r,rp)
     return Duel.IsAbleToEnterBP() or (Duel.GetCurrentPhase()>=PHASE_BATTLE_START and Duel.GetCurrentPhase()<=PHASE_BATTLE) 

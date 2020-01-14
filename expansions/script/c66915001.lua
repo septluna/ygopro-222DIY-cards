@@ -50,12 +50,12 @@ function c66915001.filters(c,e,tp)
     return c:IsSetCard(0x374) and c:IsFaceup() 
 end
 function c66915001.target(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duel.GetLocationCountFromEx(tp)>0
+    if chk==0 then return Duel.GetLocationCountFromEx(tp,tp,c)>0
         and Duel.IsExistingMatchingCard(c66915001.filter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
     Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c66915001.spop(e,tp,eg,ep,ev,re,r,rp)
-    if Duel.GetLocationCountFromEx(tp)<=0 then return end
+    if Duel.GetLocationCountFromEx(tp,tp,c)<=0 then return end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
     local g=Duel.SelectMatchingCard(tp,c66915001.filter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)
     if g:GetCount()>0 then
@@ -93,8 +93,7 @@ end
 function c66915001.eftg(e,c)
     local seq=c:GetSequence()
     return c:IsType(TYPE_EFFECT) and c:IsSetCard(0x1374)
-        and seq<5 and math.abs(e:GetHandler():GetSequence()-seq)==1 or 
-        math.abs(e:GetHandler():GetSequence()-seq)==-1
+        and seq<5 and math.abs(e:GetHandler():GetSequence()-seq)==1
 end
 function c66915001.sumlimit(e,c,sump,sumtype,sumpos,targetp)
     return c:IsLocation(LOCATION_EXTRA) and not c:IsSetCard(0x1374)
