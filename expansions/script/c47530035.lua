@@ -66,6 +66,7 @@ function c47530035.tetg(e,tp,eg,ep,ev,re,r,rp,chk)
     Duel.SetOperationInfo(0,CATEGORY_TOEXTRA,nil,1,tp,LOCATION_PZONE)
 end
 function c47530035.teop(e,tp,eg,ep,ev,re,r,rp)
+    local c=e:GetHandler()
     Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(47530035,3))
     local g=Duel.SelectMatchingCard(tp,c47530035.tefilter,tp,LOCATION_DECK,0,1,1,nil)
     local tc=g:GetFirst()

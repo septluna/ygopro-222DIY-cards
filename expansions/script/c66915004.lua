@@ -79,7 +79,7 @@ function c66915004.eftg(e,c)
     local seq=c:GetSequence()
     return  c:IsSetCard(0x1374)
     and seq<5 and math.abs(e:GetHandler():GetSequence()-seq)==0 or
-    math.abs(e:GetHandler():GetSequence()-seq)==1
+    e:GetHandler():GetSequence()-seq==-1
 end
 function c66915004.cfilter(c)
     return c:IsFaceup() and c:IsCode(66915001)
@@ -88,7 +88,7 @@ function c66915004.tgtg(e,c)
     local seq=c:GetSequence()
     return c:IsType(TYPE_EFFECT) and c:IsSetCard(0x1374)
         and seq<5 and math.abs(e:GetHandler():GetSequence()-seq)==0 or
-        math.abs(e:GetHandler():GetSequence()-seq)==1
+        e:GetHandler():GetSequence()-seq==-1
 end
 function c66915004.tglimit(e,c)
     return c~=e:GetHandler()

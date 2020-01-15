@@ -11,7 +11,7 @@ function c66915003.initial_effect(c)
     e22:SetType(EFFECT_TYPE_FIELD)
     e22:SetCode(EFFECT_UPDATE_ATTACK)
     e22:SetRange(LOCATION_SZONE)
-    e22:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
+    e22:SetTargetRange(LOCATION_MZONE,0)
     e22:SetTarget(c66915003.tgtg)
     e22:SetValue(1000)
     c:RegisterEffect(e22) 
@@ -31,6 +31,7 @@ function c66915003.initial_effect(c)
     e55:SetTargetRange(LOCATION_MZONE,0)
     e55:SetTarget(c66915003.eftg)
     e55:SetLabelObject(e222)
+    c:RegisterEffect(e55) 
     --chain attack
     local e3=Effect.CreateEffect(c)
     e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
@@ -63,7 +64,7 @@ function c66915003.eftg(e,c)
     local seq=c:GetSequence()
     return  c:IsSetCard(0x1374)
     and seq<5 and math.abs(e:GetHandler():GetSequence()-seq)==0 or 
-    math.abs(e:GetHandler():GetSequence()-seq)==-1
+    e:GetHandler():GetSequence()-seq==1
 end
 function c66915003.sumlimit(e,c,sump,sumtype,sumpos,targetp)
     return c:IsLocation(LOCATION_EXTRA) and not c:IsSetCard(0x1374)
@@ -86,6 +87,6 @@ end
 function c66915003.tgtg(e,c)
     local seq=c:GetSequence()
     return c:IsType(TYPE_EFFECT) and c:IsSetCard(0x1374)
-        and seq<5 and math.abs(e:GetHandler():GetSequence()-seq)==0 or
-        math.abs(e:GetHandler():GetSequence()-seq)==-1
+    and seq<5 and math.abs(e:GetHandler():GetSequence()-seq)==0 or
+    e:GetHandler():GetSequence()-seq==1
 end
