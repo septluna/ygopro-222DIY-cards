@@ -73,34 +73,32 @@ end
 function c81005001.sscon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()~=tp and (Duel.GetCurrentPhase()==PHASE_MAIN1 or Duel.GetCurrentPhase()==PHASE_MAIN2)
 end
-function c81005001.filter(c)
+function c81005001.filter(c,tp)
 	return c:IsType(TYPE_MONSTER) and c:IsAbleToHand()
+		and Duel.IsExistingMatchingCard(c81005001.filter2,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,c,c:GetCode())
 end
-function c81005001.filter1(c,g)
-	return g:IsExists(Card.IsCode,1,c,c:GetCode())
+function c81005001.filter2(c,code)
+	return c:IsType(TYPE_MONSTER) and c:IsCode(code) and c:IsAbleToHand()
 end
 function c81005001.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then
-		local g=Duel.GetMatchingGroup(c81005001.filter,tp,LOCATION_DECK,0,nil)
-		return g:IsExists(c81005001.filter1,1,nil,g)
-	end
+	if chk==0 then return Duel.IsExistingMatchingCard(c81005001.filter,tp,LOCATION_DECK,0,1,nil,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,2,tp,LOCATION_DECK)
 end
 function c81005001.operation(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(c81005001.filter,tp,LOCATION_DECK,0,nil)
-	local sg=g:Filter(c81005001.filter1,nil,g)
-	if sg:GetCount()==0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local hg=sg:Select(tp,1,1,nil)
-	local hc=sg:Filter(Card.IsCode,hg:GetFirst(),hg:GetFirst():GetCode()):GetFirst()
-	hg:AddCard(hc)
-	Duel.SendtoHand(hg,nil,REASON_EFFECT)
-	Duel.ConfirmCards(1-tp,hg)
-	local e1=Effect.CreateEffect(e:GetHandler())
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
-	e1:SetReset(RESET_PHASE+PHASE_END)
-	e1:SetTargetRange(1,0)
-	Duel.RegisterEffect(e1,tp)
+	local g1=Duel.SelectMatchingCard(tp,c81005001.filter,tp,LOCATION_DECK,0,1,1,nil,tp)
+	if g1:GetCount()<=0 then return end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+	local g2=Duel.SelectMatchingCard(tp,c81005001.filter2,tp,LOCATION_DECK,0,1,1,g1,g1:GetFirst():GetCode())
+	g1:Merge(g2)
+	if Duel.SendtoHand(g1,nil,REASON_EFFECT)>0 then
+		Duel.ConfirmCards(1-tp,g1)
+		local e1=Effect.CreateEffect(e:GetHandler())
+		e1:SetType(EFFECT_TYPE_FIELD)
+		e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+		e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+		e1:SetReset(RESET_PHASE+PHASE_END)
+		e1:SetTargetRange(1,0)
+		Duel.RegisterEffect(e1,tp)
+	end
 end

@@ -9,6 +9,8 @@ function cm.initial_effect(c)
 	local e3=rsef.RegisterClone(c,e2,"code",EVENT_SUMMON_SUCCESS)
 	local e4=rsef.RegisterClone(c,e2,"code",EVENT_FLIP_SUMMON_SUCCESS)
 	local e5=rsef.RegisterClone(c,e2,"code",EVENT_TO_GRAVE,"op",cm.limitop2)
+	local e7=rsef.FC(c,EVENT_CHAIN_END)
+	e7:SetOperation(cm.limitop3)
 	local e6=rsef.STO(c,EVENT_REMOVE,{m,1},{1,m+100},"th","de,dsp",nil,nil,rsop.target(cm.thfilter2,"th",LOCATION_GRAVE),cm.thop2)
 end
 function cm.thfilter(c)
@@ -37,18 +39,30 @@ end
 function cm.cfilter(c,tp)
 	return c:GetSummonPlayer()~=tp
 end
-function cm.limitop(e,tp,eg,ep,ev,re,r,rp)
-	if eg:IsExists(cm.cfilter,1,nil,tp) then
+function cm.limitop(e,tp,eg,ep,ev,re,r,rp)  
+	if not eg:IsExists(cm.cfilter,1,nil,tp) then return end
+	if Duel.GetCurrentChain()==0 then
 		Duel.SetChainLimitTillChainEnd(cm.chlimit)
+	elseif Duel.GetCurrentChain()==1 then
+		e:GetHandler():RegisterFlagEffect(m,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1)
 	end
 end
 function cm.cfilter2(c,tp)
 	return c:GetOwner()~=tp
 end
-function cm.limitop2(e,tp,eg,ep,ev,re,r,rp)
-	if eg:IsExists(cm.cfilter2,1,nil,tp) then
+function cm.limitop2(e,tp,eg,ep,ev,re,r,rp)  
+	if not eg:IsExists(cm.cfilter2,1,nil,tp) then return end
+	if Duel.GetCurrentChain()==0 then
+		Duel.SetChainLimitTillChainEnd(cm.chlimit)
+	elseif Duel.GetCurrentChain()==1 then
+		e:GetHandler():RegisterFlagEffect(m,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1)
+	end
+end
+function cm.limitop3(e,tp,eg,ep,ev,re,r,rp)
+	if e:GetHandler():GetFlagEffect(m)~=0 then
 		Duel.SetChainLimitTillChainEnd(cm.chlimit)
 	end
+	e:GetHandler():ResetFlagEffect(m)
 end
 function cm.chlimit(e,ep,tp)
 	return tp==ep

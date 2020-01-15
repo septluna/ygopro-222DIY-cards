@@ -54,7 +54,7 @@ function c81017009.spfilter(c,tp)
 		and c:IsAbleToChangeControler()
 end
 function c81017009.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and c81017009.spfilter(chkc,tp) end
+	if chkc then return chkc:IsControler(1-tp) and chkc:IsLocation(LOCATION_MZONE) and c81017009.spfilter(chkc,tp) end
 	if chk==0 then return e:GetHandler():IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE)
 		and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 		and Duel.IsExistingTarget(c81017009.spfilter,tp,0,LOCATION_MZONE,1,nil,tp) end
