@@ -72,7 +72,7 @@ function c47530035.teop(e,tp,eg,ep,ev,re,r,rp)
     local tc=g:GetFirst()
     if tc then
         Duel.SendtoExtraP(c,tp,REASON_EFFECT)
-        Duel.MoveToField(tc,tp,tp,LOCATION_SZONE,POS_FACEUP,false)
+        Duel.MoveToField(tc,tp,tp,LOCATION_SZONE,POS_FACEUP,true)
     end
 end
 function c47530035.xyzcon(e,tp,eg,ep,ev,re,r,rp)

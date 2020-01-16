@@ -22,7 +22,6 @@ function c33310159.initial_effect(c)
 	c:RegisterEffect(e2)
 	c33310159[c]=e1
 end
-
 function c33310159.ltg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsSetCard,tp,LOCATION_GRAVE+LOCATION_HAND,0,1,nil,0x55b) end
 end
@@ -48,31 +47,27 @@ function c33310159.mfilter(c,e,tp,eg,ep,ev,re,r,rp)
 		if tg and not tg(e,tp,eg,ep,ev,re,r,rp,0,nil,c) then return false end
 	return true
 end
-function c33310159.sffilter1(c)
-	return c:IsLocation(LOCATION_MZONE) and c:GetSequence()<5
-end
-function c33310159.sffilter2(c)
-	return c:IsLocation(LOCATION_SZONE) and c:GetSequence()<5
-end
 function c33310159.remfilter(c,tp)
 	return c:IsControler(1-tp) and (c:IsLocation(LOCATION_SZONE) or (c:IsLocation(LOCATION_MZONE) and c:GetSequence()<5))
 end
+function c33310159.desfilter(c,s,tp)
+	local seq=c:GetSequence()
+	return seq<5 and math.abs(seq-s)==1 and c:IsControler(tp)
+end
 function c33310159.sfilter(c)
 	local tp=c:GetControler()
-	local g=c:GetColumnGroup(1,1)
-	if g then
-		g=g:Filter(Card.IsControler,nil,tp)
-		if g then
-			if c:IsLocation(LOCATION_MZONE) then
-				g=g:Filter(c33310159.sffilter1,nil)
-			elseif c:IsLocation(LOCATION_SZONE) then
-				g=g:Filter(c33310159.sffilter2,nil)
-			end
-			g:Merge(c:GetColumnGroup())
-			if g then
-				g:Remove(c33310159.remfilter,nil,tp)
-			end
+	local g=c:GetColumnGroup()
+	if g:GetCount()>0 then
+		g:Remove(c33310159.remfilter,nil,tp)
+	end
+	if c:GetSequence()<5 then
+		local dg=Duel.GetMatchingGroup(c33310159.desfilter,tp,LOCATION_ONFIELD,0,nil,c:GetSequence(),tp)
+		if c:IsLocation(LOCATION_MZONE) then
+			dg:Filter(Card.IsLocation,nil,LOCATION_MZONE)
+		elseif c:IsLocation(LOCATION_SZONE) then
+			dg:Filter(Card.IsLocation,nil,LOCATION_SZONE)
 		end
+		g:Merge(dg)
 	end
 	return g:GetCount()>0
 end
@@ -105,23 +100,21 @@ function c33310159.eftg(e,tp,eg,ep,ev,re,r,rp,chk)
 		local g=Duel.SelectTarget(tp,c33310159.sfilter,tp,0,LOCATION_ONFIELD,1,1,nil)
 		e:SetCategory(CATEGORY_TOGRAVE)
 		local gc=g:GetFirst()
-		local gtp=gc:GetControler()
-	local gg=gc:GetColumnGroup(1,1)
-	if gg then
-		gg=gg:Filter(Card.IsControler,nil,gtp)
-		if gg then
-			if gc:IsLocation(LOCATION_MZONE) then
-				gg=gg:Filter(c33310159.sffilter1,nil)
-			elseif c:IsLocation(LOCATION_SZONE) then
-				gg=gg:Filter(c33310159.sffilter2,nil)
-			end
-			gg:Merge(gc:GetColumnGroup())
-			if gg then
-				gg:Remove(c33310159.remfilter,nil,gtp)
-			end
-		end
+		 local gtp=gc:GetControler()
+	local g=gc:GetColumnGroup()
+	if g:GetCount()>0 then
+		g:Remove(c33310159.remfilter,nil,gtp)
 	end
-		Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,gg,gg:GetCount(),0,0)
+	if gc:GetSequence()<5 then
+		local dg=Duel.GetMatchingGroup(c33310159.desfilter,gtp,LOCATION_ONFIELD,0,nil,gc:GetSequence(),gtp)
+		if gc:IsLocation(LOCATION_MZONE) then
+			dg:Filter(Card.IsLocation,nil,LOCATION_MZONE)
+		elseif gc:IsLocation(LOCATION_SZONE) then
+			dg:Filter(Card.IsLocation,nil,LOCATION_SZONE)
+		end
+		g:Merge(dg)
+	end
+		Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g,g:GetCount(),0,0)
 		op=1
 	end
 	e:SetLabel(op)
@@ -138,21 +131,19 @@ function c33310159.efop(e,tp,eg,ep,ev,re,r,rp)
 		local tc=Duel.GetFirstTarget()
 		if tc:IsRelateToEffect(e) then
 		local ttp=tc:GetControler()
-		local g=tc:GetColumnGroup(1,1)
-		if g then
-			g=g:Filter(Card.IsControler,nil,ttp)
-			if g then
-				if tc:IsLocation(LOCATION_MZONE) then
-					g=g:Filter(c33310159.sffilter1,nil)
-				elseif tc:IsLocation(LOCATION_SZONE) then
-					g=g:Filter(c33310159.sffilter2,nil)
-				end
-				g:Merge(tc:GetColumnGroup())
-				if g then
-					g:Remove(c33310159.remfilter,nil,ttp)
-				end
-			end
-		end   
+	local g=tc:GetColumnGroup()
+	if g:GetCount()>0 then
+		g:Remove(c33310159.remfilter,nil,ttp)
+	end
+	if tc:GetSequence()<5 then
+		local dg=Duel.GetMatchingGroup(c33310159.desfilter,ttp,LOCATION_ONFIELD,0,nil,tc:GetSequence(),ttp)
+		if tc:IsLocation(LOCATION_MZONE) then
+			dg:Filter(Card.IsLocation,nil,LOCATION_MZONE)
+		elseif tc:IsLocation(LOCATION_SZONE) then
+			dg:Filter(Card.IsLocation,nil,LOCATION_SZONE)
+		end
+		g:Merge(dg)
+	end  
 		if g:GetCount()>0 then
 			Duel.SendtoGrave(g,REASON_EFFECT)
 		end

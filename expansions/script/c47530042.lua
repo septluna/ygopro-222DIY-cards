@@ -39,18 +39,16 @@ function c47530042.spfilter(c,e,tp)
 end
 function c47530042.rbtg(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.IsExistingTarget(c47530042.spfilter,tp,LOCATION_GRAVE,0,1,nil,e,tp) end
-    local g=Duel.SelectTarget(tp,c47530042.lfilter,tp,LOCATION_MZONE,0,1,1,nil,e,tp)
     Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,1,1,0,0)
 end
 function c47530042.rbop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
-    local zone=bit.band(tc:GetLinkedZone(tp),0x1f)
     if not c:IsRelateToEffect(e) then return end
     local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(c47530042.spfilter),tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
     local tc=g:GetFirst()
-    if tc and zone~=0 then
+    if tc then
         Duel.Destroy(c,REASON_EFFECT)
-        Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP,zone)
+        Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)
         local e1=Effect.CreateEffect(e:GetHandler())
         e1:SetType(EFFECT_TYPE_SINGLE)
         e1:SetCode(EFFECT_XYZ_LEVEL)
