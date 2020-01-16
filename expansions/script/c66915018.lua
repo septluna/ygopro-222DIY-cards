@@ -32,11 +32,10 @@ function cm.atkcost(e,tp,eg,ep,ev,re,r,rp,chk)
     Duel.SendtoGrave(g,REASON_COST)
 end
 function cm.filter(c,e,tp)
-    return  c:IsCanBeSpecialSummoned(e,0,tp,true,false) and c:IsCode(66915019) or c:IsCode(66915020)
+    return  c:IsCanBeSpecialSummoned(e,0,tp,true,false) and c:IsCode(66915019) or c:IsCode(66915020) and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0
 end
-function cm.spcon(e,c)
-    return Duel.GetLocationCountFromEx(tp)>0 and
-        Duel.IsExistingMatchingCard(cm.filters,tp,LOCATION_SZONE,0,1,nil)
+function cm.spcon(e,tp,eg,ep,ev,re,r,rp)
+    return Duel.IsExistingMatchingCard(cm.filters,tp,LOCATION_SZONE,0,1,nil)
 end
 function cm.filters(c,e,tp)
     return c:IsSetCard(0x374) and c:IsFaceup() 
@@ -45,12 +44,10 @@ function cm.cfilter(c)
     return c:IsCode(66915001) and c:IsAbleToGraveAsCost()
 end
 function cm.target(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duel.GetLocationCountFromEx(tp)>0
-        and Duel.IsExistingMatchingCard(cm.filter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
+    if chk==0 then return Duel.IsExistingMatchingCard(cm.filter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
     Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function cm.spop(e,tp,eg,ep,ev,re,r,rp)
-    if Duel.GetLocationCountFromEx(tp)<=0 then return end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
     local g=Duel.SelectMatchingCard(tp,cm.filter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)
     if g:GetCount()>0 then
