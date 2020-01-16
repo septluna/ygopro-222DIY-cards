@@ -32,11 +32,14 @@ end
 function cm.filter(c)
     return c:IsSetCard(0x374) and c:IsType(TYPE_SPELL) or  c:IsType(TYPE_TRAP) and c:IsFaceup()
 end
+function cm.cfilter(c)
+    return c:IsFaceup() and c:IsCode(66915001)
+end
 function cm.val(e,c)
     return  Duel.GetMatchingGroupCount(cm.filter,c:GetControler(),LOCATION_SZONE,0,nil)*800
 end
 function cm.condition(e,tp,eg,ep,ev,re,r,rp)
-    return Duel.GetCurrentPhase()==PHASE_BATTLE_START and Duel.GetTurnPlayer()==tp
+    return Duel.IsExistingMatchingCard(cm.cfilter,tp,LOCATION_SZONE,0,1,nil) and Duel.GetCurrentPhase()==PHASE_BATTLE_START and Duel.GetTurnPlayer()==tp
 end
 function cm.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return true end

@@ -39,23 +39,19 @@ function c66915001.initial_effect(c)
     c:RegisterEffect(e2)
 end
 function c66915001.filter(c,e,tp)
-    return  c:IsCanBeSpecialSummoned(e,0,tp,true,false) and c:IsSetCard(0x1374)
+    return  c:IsCanBeSpecialSummoned(e,0,tp,true,false) and c:IsSetCard(0x1374)  and Duel.GetLocationCountFromEx(tp,tp,nil,c)>0
 end
-function c66915001.spcon(e,c)
-    if c==nil then return true end
-    return Duel.GetLocationCountFromEx(tp)>0 and
-        Duel.IsExistingMatchingCard(c66915001.filters,tp,LOCATION_SZONE,0,1,nil)
+function c66915001.spcon(e,tp,eg,ep,ev,re,r,rp)
+    return Duel.IsExistingMatchingCard(c66915001.filters,tp,LOCATION_SZONE,0,1,nil)
 end
-function c66915001.filters(c,e,tp)
+function c66915001.filters(c,e)
     return c:IsSetCard(0x374) and c:IsFaceup() 
 end
 function c66915001.target(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duel.GetLocationCountFromEx(tp,tp,c)>0
-        and Duel.IsExistingMatchingCard(c66915001.filter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
+    if chk==0 then return Duel.IsExistingMatchingCard(c66915001.filter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
     Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c66915001.spop(e,tp,eg,ep,ev,re,r,rp)
-    if Duel.GetLocationCountFromEx(tp,tp,c)<=0 then return end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
     local g=Duel.SelectMatchingCard(tp,c66915001.filter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)
     if g:GetCount()>0 then
