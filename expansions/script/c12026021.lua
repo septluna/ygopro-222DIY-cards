@@ -80,7 +80,7 @@ function c12026021.spop1(e,tp,eg,ep,ev,re,r,rp)
 	e12:SetValue(0xfbb)
 	g:GetFirst():RegisterEffect(e12)
 	Duel.BreakEffect()
-	if Duel.IsExistingMatchingCard(c12026021.ckfilter,tp,LOCATION_MZONE,0,1,nil) then
+	if Duel.IsExistingMatchingCard(c12026021.ckfilter,tp,LOCATION_MZONE,0,1,nil,tp) then
 		local fg=Duel.GetMatchingGroup(aux.NecroValleyFilter(c12026021.ffilter),tp,LOCATION_GRAVE,LOCATION_GRAVE,nil)
 			if fg:GetCount()>0 and Duel.SelectYesNo(tp,aux.Stringid(12026021,2)) then
 				  Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
