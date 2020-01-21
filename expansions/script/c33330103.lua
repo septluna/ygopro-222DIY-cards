@@ -44,19 +44,20 @@ end
 function c33330103.disop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.NegateEffect(ev)
 end
-function c33330103.hspfilter(c)
+function c33330103.hspfilter(c,tp)
 	return c:IsSetCard(0x55f)
 		and c:IsAbleToRemoveAsCost()
 end
-function c33330103.hspcon(e,c)
+function c33330103.hspcon(e,c,tp)
 	if c==nil then return true end
 	local tp=c:GetControler()
 	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-	return ft>0 and Duel.IsExistingMatchingCard(c33330103.hspfilter,tp,LOCATION_GRAVE,0,4,c)
+	return ft>0 and Duel.IsExistingMatchingCard(c33330103.hspfilter,tp,LOCATION_GRAVE,0,4,c,tp)
 end
 function c33330103.hspop(e,tp,eg,ep,ev,re,r,rp,c)
+	local c=e:GetHandler()
 	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-	local g=Duel.IsExistingMatchingCard(tp,c33330103.hspfilter,tp,LOCATION_GRAVE,0,4,4,c)
+	local g=Duel.SelectMatchingCard(tp,c33330103.hspfilter,tp,LOCATION_GRAVE,0,4,4,c,tp)
 	Duel.Remove(g,POS_FACEUP,REASON_COST)
 end
 function c33330103.actop(e,tp,eg,ep,ev,re,r,rp)
