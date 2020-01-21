@@ -2,6 +2,7 @@ local m=77757302
 local cm=_G["c"..m]
 Duel.LoadScript("c37564765.lua")
 function cm.initial_effect(c)
+    Senya.AddSummonMusic(c,m*16)
 	c:EnableReviveLimit()
 	local e4=Effect.CreateEffect(c)
 	e4:SetCategory(CATEGORY_SPECIAL_SUMMON)
