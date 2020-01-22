@@ -19,25 +19,30 @@ function cm.initial_effect(c)
 	e2:SetCountLimit(1)
 	e2:SetOperation(cm.lvop)
 	c:RegisterEffect(e2)
-	--selfdes
+	--666
 	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_SINGLE)
-	e3:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e3:SetRange(LOCATION_ONFIELD)
+	e3:SetType(EFFECT_TYPE_FIELD)
+	e3:SetRange(LOCATION_MZONE)
+	e3:SetTargetRange(0,LOCATION_ONFIELD)
 	e3:SetCode(EFFECT_SELF_DESTROY)
+	e3:SetCondition(cm.sdcon)
+	c:RegisterEffect(e3)
 	local e4=Effect.CreateEffect(c)
-	e4:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_GRANT)
+	e4:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e4:SetProperty(EFFECT_FLAG_DELAY)
+	e4:SetCode(EVENT_SSET)
 	e4:SetRange(LOCATION_MZONE)
-	e4:SetTargetRange(0,LOCATION_ONFIELD)
-	e4:SetCondition(cm.sdcon)
-	e4:SetLabelObject(e3)
+	e4:SetOperation(cm.desop)
 	c:RegisterEffect(e4)
-	--atklimit
-	local e5=Effect.CreateEffect(c)
-	e5:SetType(EFFECT_TYPE_SINGLE)
-	e5:SetCode(EFFECT_CANNOT_ATTACK)
-	e5:SetCondition(cm.atkcon)
+	local e5=e4:Clone()
+	e5:SetCode(EVENT_MSET)
 	c:RegisterEffect(e5)
+	--atklimit
+	local e6=Effect.CreateEffect(c)
+	e6:SetType(EFFECT_TYPE_SINGLE)
+	e6:SetCode(EFFECT_CANNOT_ATTACK)
+	e6:SetCondition(cm.atkcon)
+	c:RegisterEffect(e6)
 end
 function cm.atkval(e,c)
 	return c:GetLevel()*100
@@ -54,9 +59,21 @@ function cm.lvop(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetValue(lv)
 	e1:SetReset(RESET_EVENT+0xff0000)
 	c:RegisterEffect(e1)
+	if lv==666 then
+		local sg=Duel.GetMatchingGroup(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
+		Duel.Destroy(sg,REASON_EFFECT)
+	end
 end
 function cm.sdcon(e)
 	return e:GetHandler():GetLevel()==666
+end
+function cm.desop(e,tp,eg,ep,ev,re,r,rp)
+	if eg:IsExists(Card.IsControler,1,nil,tp) then return true end
+	Duel.Destroy(eg,REASON_EFFECT)
+end
+function cm.activate(e,tp,eg,ep,ev,re,r,rp)
+	local sg=Duel.GetMatchingGroup(Card.IsFacedown,tp,0,LOCATION_ONFIELD,nil)
+	Duel.Destroy(sg,REASON_EFFECT)
 end
 function cm.atkcon(e)
 	return e:GetHandler():GetLevel()>100 and e:GetHandler():GetLevel()<666
