@@ -1,14 +1,7 @@
 --魁札尔科亚特尔
+require("expansions/script/c81000000")
 function c81014012.initial_effect(c)
-	--summon with s/t
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_SINGLE)
-	e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e0:SetCode(EFFECT_ADD_EXTRA_TRIBUTE)
-	e0:SetTargetRange(LOCATION_SZONE,LOCATION_SZONE)
-	e0:SetTarget(aux.TargetBoolFunction(Card.IsType,TYPE_FIELD))
-	e0:SetValue(POS_FACEUP_ATTACK)
-	c:RegisterEffect(e0)
+	Tenka.MaidDragon(c)
 	--reflect damage
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_FIELD)

@@ -1,14 +1,7 @@
 --见习OL 艾露玛
+require("expansions/script/c81000000")
 function c81014011.initial_effect(c)
-	--summon with s/t
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e1:SetCode(EFFECT_ADD_EXTRA_TRIBUTE)
-	e1:SetTargetRange(LOCATION_SZONE,LOCATION_SZONE)
-	e1:SetTarget(aux.TargetBoolFunction(Card.IsType,TYPE_FIELD))
-	e1:SetValue(POS_FACEUP_ATTACK)
-	c:RegisterEffect(e1)
+	Tenka.MaidDragon(c)
 	--cannot activate
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD)
