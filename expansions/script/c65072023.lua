@@ -32,7 +32,7 @@ function c65072023.filter(c)
 end
 function c65072023.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	 Duel.Hint(11,0,aux.Stringid(65072023,0))
+	 Duel.Hint(21,0,aux.Stringid(65072023,0))
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,e:GetLabel(),tp,LOCATION_DECK)
 end
 function c65072023.activate(e,tp,eg,ep,ev,re,r,rp)

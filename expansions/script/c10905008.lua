@@ -103,7 +103,7 @@ function cm.operation2(e,tp,eg,ep,ev,re,r,rp)
     end
 end
 function cm.bgmop(e,tp,eg,ep,ev,re,r,rp)
-    Duel.Hint(11,0,aux.Stringid(m,0))
+    Duel.Hint(21,0,aux.Stringid(m,0))
 end
 function cm.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return true end

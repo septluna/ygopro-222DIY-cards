@@ -31,7 +31,7 @@ function c65072022.initial_effect(c)
 end
 function c65072022.music(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	Duel.Hint(11,0,aux.Stringid(65072022,0))
+	Duel.Hint(21,0,aux.Stringid(65072022,0))
 end
 function c65072022.discon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler()==Duel.GetAttacker() and e:GetHandler():IsRelateToBattle()

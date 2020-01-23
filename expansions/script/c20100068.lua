@@ -113,7 +113,7 @@ function cm.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function cm.spop(e,tp,eg,ep,ev,re,r,rp)
     if not Cirn9.Climax(e,tp,eg,ep,ev,re,r,rp) then return end
-    Duel.Hint(11,0,aux.Stringid(m,3))   
+    Duel.Hint(21,0,aux.Stringid(m,3))   
     local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
     if ft<=0 then return end
     local tid=Duel.GetTurnCount()

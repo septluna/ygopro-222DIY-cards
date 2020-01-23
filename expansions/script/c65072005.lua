@@ -14,7 +14,7 @@ end
 function c65072005.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,65071999,0,0x4011,2100,2100,6,RACE_FAIRY,ATTRIBUTE_LIGHT,POS_FACEUP) end
-	Duel.Hint(11,0,aux.Stringid(65072005,0))
+	Duel.Hint(21,0,aux.Stringid(65072005,0))
 	Duel.SetOperationInfo(0,CATEGORY_TOKEN,nil,1,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,0,0)
 end
@@ -83,6 +83,6 @@ function c65072005.tfop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.SelectMatchingCard(tp,c65072005.tffilter,tp,LOCATION_DECK,0,1,1,nil,tp):GetFirst()
 	if tc then
 		Duel.MoveToField(tc,tp,tp,LOCATION_SZONE,POS_FACEUP,true)
-		Duel.Hint(11,0,aux.Stringid(tc:GetCode(),0))
+		Duel.Hint(21,0,aux.Stringid(tc:GetCode(),0))
 	end
 end

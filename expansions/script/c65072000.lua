@@ -43,7 +43,7 @@ function c65072000.op(e,tp,eg,ep,ev,re,r,rp)
 		local tc=g1:GetFirst()
 		local code=tc:GetCode()
 		Duel.MoveToField(tc,tp,tp,LOCATION_SZONE,POS_FACEUP,true)
-		Duel.Hint(11,0,aux.Stringid(code,0))
+		Duel.Hint(21,0,aux.Stringid(code,0))
 	elseif m==1 and b2 then
 		Duel.DiscardHand(tp,Card.IsDiscardable,1,1,REASON_EFFECT+REASON_DISCARD,e:GetHandler())
 		local g2=Duel.SelectMatchingCard(tp,c65072000.fil2,tp,LOCATION_DECK,0,1,1,nil)

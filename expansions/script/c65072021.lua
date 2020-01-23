@@ -32,7 +32,7 @@ function c65072021.initial_effect(c)
 end
 function c65072021.music(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	Duel.Hint(11,0,aux.Stringid(65072021,0))
+	Duel.Hint(21,0,aux.Stringid(65072021,0))
 end
 function c65072021.discon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()==tp
@@ -101,4 +101,3 @@ function c65072021.tgop(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end
 	Duel.SendtoGrave(e:GetHandler(),REASON_EFFECT)
 end
-

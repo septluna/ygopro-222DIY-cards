@@ -20,7 +20,7 @@ end
 function c65072019.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,65071999,0,0x4011,2100,2100,6,RACE_FAIRY,ATTRIBUTE_LIGHT,POS_FACEUP) and Duel.IsExistingMatchingCard(c65072019.tgfil,tp,LOCATION_FZONE,0,1,nil) end
-	Duel.Hint(11,0,aux.Stringid(65072019,0))
+	Duel.Hint(21,0,aux.Stringid(65072019,0))
 	Duel.SetOperationInfo(0,CATEGORY_TOKEN,nil,1,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,0,0)
 end

@@ -32,7 +32,7 @@ function c65072029.initial_effect(c)
 end
 function c65072029.music(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	Duel.Hint(11,0,aux.Stringid(65072029,0))
+	Duel.Hint(21,0,aux.Stringid(65072029,0))
 end
 function c65072029.val(e,te)
 	return te:GetOwnerPlayer()==e:GetHandlerPlayer() and te:GetOwner()~=e:GetOwner()
@@ -88,4 +88,3 @@ function c65072029.tgop(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end
 	Duel.SendtoGrave(e:GetHandler(),REASON_EFFECT)
 end
-

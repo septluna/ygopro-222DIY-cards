@@ -17,7 +17,7 @@ function c65072007.filter(c)
 end
 function c65072007.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c65072007.filter,tp,LOCATION_DECK,0,1,nil) end
-	Duel.Hint(11,0,aux.Stringid(65072007,0))
+	Duel.Hint(21,0,aux.Stringid(65072007,0))
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function c65072007.activate(e,tp,eg,ep,ev,re,r,rp)

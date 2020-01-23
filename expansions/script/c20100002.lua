@@ -587,7 +587,7 @@ function Cirn9.opcon(e)
 	return Duel.GetTurnCount() == 1
 end
 function Cirn9.opop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(11,0,aux.Stringid(20100060,3))
+	Duel.Hint(21,0,aux.Stringid(20100060,3))
 end
 
 function Cirn9.ap1(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -645,7 +645,7 @@ end
 function Cirn9.RevueBgm(tp)
 	local fc=Duel.GetFieldCard(tp,LOCATION_SZONE,5)
 	local fcode=fc:GetOriginalCode()
-	Duel.Hint(11,0,aux.Stringid(fcode,0))
+	Duel.Hint(21,0,aux.Stringid(fcode,0))
 end
 function Cirn9.GetLine(c)
 	if c:IsLocation(LOCATION_FZONE) then return 99  end

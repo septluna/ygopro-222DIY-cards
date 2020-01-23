@@ -28,7 +28,7 @@ function c65072027.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c65072027.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	Duel.Hint(11,0,aux.Stringid(65072027,0))
+	Duel.Hint(21,0,aux.Stringid(65072027,0))
 	Duel.SetOperationInfo(0,CATEGORY_TOKEN,nil,1,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,0,0)
 end

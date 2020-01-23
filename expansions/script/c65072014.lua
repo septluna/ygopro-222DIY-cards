@@ -19,7 +19,7 @@ function c65072014.destg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return false end
 	if chk==0 then return Duel.IsExistingTarget(c65072014.desfilter,tp,LOCATION_ONFIELD,0,1,e:GetHandler())
 		and Duel.IsExistingTarget(aux.TRUE,tp,0,LOCATION_ONFIELD,1,nil) end
-	Duel.Hint(11,0,aux.Stringid(65072014,0))
+	Duel.Hint(21,0,aux.Stringid(65072014,0))
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
 	local g1=Duel.SelectTarget(tp,c65072014.desfilter,tp,LOCATION_ONFIELD,0,1,1,e:GetHandler())
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)

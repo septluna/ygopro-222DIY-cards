@@ -60,7 +60,7 @@ function c65072008.cop(e,tp,eg,ep,ev,re,r,rp)
 		local tc=g:GetFirst()
 		local code=tc:GetCode()
 		Duel.MoveToField(tc,tp,tp,LOCATION_SZONE,POS_FACEUP,true)
-		Duel.Hint(11,0,aux.Stringid(code,0))
+		Duel.Hint(21,0,aux.Stringid(code,0))
 		local e0=Effect.CreateEffect(e:GetHandler())
 		e0:SetType(EFFECT_TYPE_SINGLE)
 		e0:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
@@ -99,4 +99,3 @@ function c65072008.operation(e,tp,eg,ep,ev,re,r,rp)
 		tc=g:GetNext()
 	end
 end
-

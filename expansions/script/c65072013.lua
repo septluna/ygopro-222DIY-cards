@@ -20,7 +20,7 @@ end
 function c65072013.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsCode(65071999) and chkc:IsControler(tp) end
 	if chk==0 then return Duel.IsExistingTarget(Card.IsCode,tp,LOCATION_MZONE,0,1,nil,65071999) end
-	Duel.Hint(11,0,aux.Stringid(65072013,0))
+	Duel.Hint(21,0,aux.Stringid(65072013,0))
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
 	Duel.SelectTarget(tp,Card.IsCode,tp,LOCATION_MZONE,0,1,1,nil,65071999)
 end
@@ -46,4 +46,3 @@ function c65072013.activate(e,tp,eg,ep,ev,re,r,rp)
 		tc:RegisterEffect(e5)
 	end
 end
-

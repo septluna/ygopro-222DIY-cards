@@ -97,7 +97,7 @@ function cm.cltg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function cm.clop(e,tp,eg,ep,ev,re,r,rp)
 	if not Cirn9.Climax(e,tp,eg,ep,ev,re,r,rp) then return end
-	Duel.Hint(11,0,aux.Stringid(m,3)) 
+	Duel.Hint(21,0,aux.Stringid(m,3)) 
 	local tc=e:GetHandler()
 	if tc:IsFaceup() and tc:IsRelateToEffect(e) then
 		--local g=Duel.GetMatchingGroup(cm.atkfi lter,tp,LOCATION_MZONE,0,tc)

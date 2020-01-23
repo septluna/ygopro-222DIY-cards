@@ -32,7 +32,7 @@ function c65072028.initial_effect(c)
 end
 function c65072028.music(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	Duel.Hint(11,0,aux.Stringid(65072028,0))
+	Duel.Hint(21,0,aux.Stringid(65072028,0))
 end
 function c65072028.distg(e,c)
 	local ec=e:GetHandler()
