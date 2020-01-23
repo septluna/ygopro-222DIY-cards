@@ -49,6 +49,7 @@ function cm.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
         local mg=Duel.GetRitualMaterial(tp):Filter(cm.matfilter,c,c)
         local ft=Duel.GetMZoneCount(tp)
         if not c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_RITUAL,tp,false,true) then return false end
+		if c:IsLocation(LOCATION_EXTRA) and Duel.GetLocationCountFromEx(tp,tp,mg,c)==0 then return false end
         if ft>0 then
             return mg:CheckWithSumGreater(Card.GetRitualLevel,c:GetLevel(),c)
         else
