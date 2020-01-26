@@ -30,7 +30,8 @@ function c65072026.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=eg:Filter(c65072026.confil,nil)
 	local gn=g:GetCount()
 	if chk==0 then return Duel.IsExistingMatchingCard(c65072026.costfil,tp,LOCATION_DECK,0,1,nil) and Duel.IsExistingTarget(Card.IsAbleToDeck,tp,0,LOCATION_ONFIELD,1,nil,e) end
-	local num=Duel.GetMatchingGroup(c65072026.tgfil,tp,0,LOCATION_ONFIELD,nil)
+	Duel.Hint(HINT_MUSIC,0,aux.Stringid(65072026,0))
+	local num=Duel.GetMatchingGroup(c65072026.tgfil,tp,0,LOCATION_ONFIELD,nil,e)
 	if gn>num then gn=num end
 	local tgg=Duel.SelectMatchingCard(tp,c65072026.costfil,tp,LOCATION_DECK,0,1,gn,nil)
 	Duel.SendtoGrave(tgg,REASON_COST)

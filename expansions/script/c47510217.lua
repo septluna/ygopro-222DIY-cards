@@ -47,7 +47,6 @@ function c47510217.initial_effect(c)
     --indes
     local e5=Effect.CreateEffect(c)
     e5:SetType(EFFECT_TYPE_FIELD)
-    e5:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
     e5:SetCode(EFFECT_INDESTRUCTABLE_COUNT)
     e5:SetRange(LOCATION_EXTRA)
     e5:SetTargetRange(LOCATION_MZONE,0)
@@ -146,7 +145,7 @@ function c47510217.sumop(e,tp,eg,ep,ev,re,r,rp)
         Duel.SpecialSummon(g1,0,tp,tp,false,false,POS_FACEUP)
     end
 end
-function c47510217.indtg(c)
+function c47510217.indtg(e,c)
     return c:IsFaceup() and c:IsAttribute(ATTRIBUTE_EARTH)
 end
 function c47510217.indct(e,re,r,rp)

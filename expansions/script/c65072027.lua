@@ -17,6 +17,7 @@ function c65072027.costfil(c)
 end
 function c65072027.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c65072027.costfil,tp,LOCATION_DECK,0,1,nil) and Duel.GetMZoneCount(tp)>0 and Duel.IsPlayerCanSpecialSummonMonster(tp,65071999,0,0x4011,2100,2100,6,RACE_FAIRY,ATTRIBUTE_LIGHT,POS_FACEUP) end
+	Duel.Hint(HINT_MUSIC,0,aux.Stringid(65072027,0))
 	local num1=Duel.GetMatchingGroup(c65072027.costfil,tp,LOCATION_DECK,0,nil):GetClassCount(Card.GetCode)
 	local num2=Duel.GetMZoneCount(tp)
 	if num1>num2 then num1=num2 end
@@ -28,7 +29,6 @@ function c65072027.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c65072027.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	Duel.Hint(21,0,aux.Stringid(65072027,0))
 	Duel.SetOperationInfo(0,CATEGORY_TOKEN,nil,1,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,0,0)
 end

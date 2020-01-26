@@ -21,6 +21,7 @@ function c65072030.thfil(c)
 end
 function c65072030.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c65072030.thfil,tp,LOCATION_DECK,0,1,nil) end
+	Duel.Hint(HINT_MUSIC,0,aux.Stringid(65072030,0))
 	Duel.SetOperationInfo(0,CATEGORY_NEGATE,eg,1,0,0)
 end
 function c65072030.operation(e,tp,eg,ep,ev,re,r,rp)

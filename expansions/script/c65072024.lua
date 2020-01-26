@@ -20,6 +20,7 @@ function c65072024.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_REMOVED) and chkc:IsControler(tp) and c65072024.filter(chkc) end
 	if chk==0 then return Duel.IsPlayerCanDraw(tp,1)
 		and Duel.IsExistingTarget(c65072024.filter,tp,LOCATION_REMOVED,0,1,nil) end
+	Duel.Hint(HINT_MUSIC,0,aux.Stringid(65072024,0))
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local g=Duel.SelectTarget(tp,c65072024.filter,tp,LOCATION_REMOVED,0,1,num,nil)
 	e:SetLabel(g:GetCount())

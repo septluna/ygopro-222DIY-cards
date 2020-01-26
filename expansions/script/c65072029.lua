@@ -32,7 +32,7 @@ function c65072029.initial_effect(c)
 end
 function c65072029.music(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	Duel.Hint(21,0,aux.Stringid(65072029,0))
+	Duel.Hint(HINT_MUSIC,0,aux.Stringid(65072029,0))
 end
 function c65072029.val(e,te)
 	return te:GetOwnerPlayer()==e:GetHandlerPlayer() and te:GetOwner()~=e:GetOwner()
@@ -84,7 +84,16 @@ function c65072029.tgtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,e:GetHandler(),1,0,0)
 end
+function c65072029.tgopfil(c)
+	return c:IsReleasableByEffect() and c:IsCode(65071999)
+end
 function c65072029.tgop(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end
-	Duel.SendtoGrave(e:GetHandler(),REASON_EFFECT)
+	if Duel.IsExistingMatchingCard(c65072029.tgopfil,tp,LOCATION_MZONE,0,1,nil) then
+		local g=Duel.SelectMatchingCard(tp,c65072029.tgopfil,tp,LOCATION_MZONE,0,1,1,nil)
+		Duel.Release(g,REASON_EFFECT)
+	else
+		Duel.SendtoGrave(e:GetHandler(),REASON_EFFECT)
+	end
 end
+

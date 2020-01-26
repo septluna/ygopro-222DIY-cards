@@ -20,6 +20,7 @@ function c65072023.thfil(c)
 end
 function c65072023.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c65072023.costfil,tp,LOCATION_GRAVE,0,1,nil) and Duel.IsExistingMatchingCard(c65072016.thfil,tp,LOCATION_DECK,0,1,nil) end
+	Duel.Hint(HINT_MUSIC,0,aux.Stringid(65072023,0))
 	local num1=Duel.GetMatchingGroup(c65072023.costfil,tp,LOCATION_GRAVE,0,nil):GetClassCount(Card.GetCode)
 	local num2=Duel.GetMatchingGroupCount(c65072023.thfil,tp,LOCATION_DECK,0,nil)
 	if num1>num2 then num1=num2 end
@@ -32,7 +33,6 @@ function c65072023.filter(c)
 end
 function c65072023.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
-	 Duel.Hint(21,0,aux.Stringid(65072023,0))
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,e:GetLabel(),tp,LOCATION_DECK)
 end
 function c65072023.activate(e,tp,eg,ep,ev,re,r,rp)

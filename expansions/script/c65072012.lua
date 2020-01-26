@@ -14,7 +14,7 @@ end
 function c65072012.tg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsCode(65071999) end
 	if chk==0 then return Duel.IsExistingTarget(Card.IsCode,tp,LOCATION_MZONE,0,1,nil,65071999) end
-	Duel.Hint(21,0,aux.Stringid(65072012,0))
+	Duel.Hint(HINT_MUSIC,0,aux.Stringid(65072012,0))
 	local g=Duel.SelectTarget(tp,Card.IsCode,tp,LOCATION_MZONE,0,1,1,nil,65071999)
 end
 function c65072012.op(e,tp,eg,ep,ev,re,r,rp)
