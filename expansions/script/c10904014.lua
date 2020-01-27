@@ -66,9 +66,8 @@ function cm.spop(e,tp,eg,ep,ev,re,r,rp)
     if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
     local c=e:GetHandler()
     if c:IsRelateToEffect(e) and Duel.IsPlayerCanSpecialSummonMonster(tp,m,0,0x11,0,0,6,RACE_SPELLCASTER,ATTRIBUTE_DARK) then
-        c:AddMonsterAttribute(TYPE_NORMAL)
+        c:AddMonsterAttribute(TYPE_NORMAL,ATTRIBUTE_DARK,RACE_SPELLCASTER,6,0,0)
         Duel.SpecialSummonStep(c,0,tp,tp,true,false,POS_FACEUP)
-        c:AddMonsterAttributeComplete()
         Duel.SpecialSummonComplete()
     end
 end
