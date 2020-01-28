@@ -77,7 +77,7 @@ function c12026000.scon1(e)
 	return not Duel.IsExistingMatchingCard(Card.IsType,tp,0,LOCATION_MZONE,1,nil,TYPE_MONSTER)
 end
 function c12026000.splimit1(e,c,sump,sumtype,sumpos,targetp,se)
-	return c:IsLevelBelow(4)
+	return c:IsLevelAbove(5)
 end
 function c12026000.splimit(e,c,sump,sumtype,sumpos,targetp,se)
 	if c:IsType(TYPE_FUSION) then return not c:IsLocation(LOCATION_EXTRA) or not se:GetHandler():IsType(TYPE_SPELL) end
