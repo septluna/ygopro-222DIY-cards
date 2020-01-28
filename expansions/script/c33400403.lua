@@ -44,7 +44,7 @@ function c33400403.thop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ConfirmCards(1-tp,g)
 	end 
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-	local g2=Duel.SelectMatchingCard(tp,c33400403.thfilter,tp,LOCATION_ONFIELD,0,1,1,nil)
+	local g2=Duel.SelectMatchingCard(tp,nil,tp,LOCATION_ONFIELD,0,1,1,nil)
 	Duel.Destroy(g2,REASON_EFFECT)
 end
 
