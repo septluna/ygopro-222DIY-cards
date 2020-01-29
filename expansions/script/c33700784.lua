@@ -114,7 +114,7 @@ if cm then
 function cm.initial_effect(c)
 	--link summon
 	c:EnableReviveLimit()
-	aux.AddLinkProcedure(c,cm.lfilter,2,2)
+	aux.AddLinkProcedure(c,cm.lfilter(c:GetControler()),2,2)
 	--extra link
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_FIELD)
@@ -167,8 +167,10 @@ function cm.thop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SSet(tp,tc)
 	end
 end
-function cm.lfilter(c)
-	return c:IsLinkRace(RACE_CYBERSE+RACE_MACHINE) or c:IsType(TYPE_TRAP)
+function cm.lfilter(tp)
+	return function(c)
+		return c:IsLinkRace(RACE_CYBERSE+RACE_MACHINE) or (c:IsType(TYPE_TRAP) and c:IsControler(tp))
+	end
 end
 function cm.matval(e,c,mg)
 	return c:IsCode(m)

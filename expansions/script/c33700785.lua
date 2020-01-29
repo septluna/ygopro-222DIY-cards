@@ -4,7 +4,7 @@ local m=33700785
 local cm=_G["c"..m]
 function cm.initial_effect(c)
 	--link summon
-	aux.AddLinkProcedure(c,cm.lfilter,2,2)
+	aux.AddLinkProcedure(c,cm.lfilter(c:GetControler()),2,2)
 	c:EnableReviveLimit()
 	--extra link
 	local e0=Effect.CreateEffect(c)
@@ -58,8 +58,10 @@ function cm.thop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SSet(tp,tc)
 	end
 end
-function cm.lfilter(c)
-	return c:IsLinkRace(RACE_CYBERSE+RACE_MACHINE) or c:IsType(TYPE_SPELL)
+function cm.lfilter(tp)
+	return function(c)
+		return c:IsLinkRace(RACE_CYBERSE+RACE_MACHINE) or (c:IsType(TYPE_SPELL) and c:IsControler(tp))
+	end
 end
 function cm.matval(e,c,mg,mc)
 	if c~=e:GetHandler() then return false end
