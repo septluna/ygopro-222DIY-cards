@@ -33,9 +33,9 @@ end
 function c81016008.drtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c81016008.tdfilter(chkc) end
 	if chk==0 then return Duel.IsPlayerCanDraw(tp,1)
-		and Duel.IsExistingTarget(c81016008.tdfilter,tp,LOCATION_GRAVE,0,3,nil) end
+		and Duel.IsExistingTarget(c81016008.tdfilter,tp,LOCATION_GRAVE,0,3,e:GetHandler()) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectTarget(tp,c81016008.tdfilter,tp,LOCATION_GRAVE,0,3,3,nil)
+	local g=Duel.SelectTarget(tp,c81016008.tdfilter,tp,LOCATION_GRAVE,0,3,3,e:GetHandler())
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,3,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
 end
