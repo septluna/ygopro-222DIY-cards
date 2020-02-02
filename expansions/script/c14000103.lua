@@ -113,7 +113,6 @@ function cm.operation(e,tp,eg,ep,ev,re,r,rp)
 				Duel.ConfirmCards(1-tp,tc)
 			else
 				Duel.SSet(tp,tc)
-				Duel.ConfirmCards(1-tp,tc)
 				local e1=Effect.CreateEffect(e:GetHandler())
 				e1:SetType(EFFECT_TYPE_SINGLE)
 				e1:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
