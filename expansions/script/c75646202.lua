@@ -1,5 +1,6 @@
 --未知的纹章
 function c75646202.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646152)
 	c:SetUniqueOnField(1,0,75646202)
 	c:EnableCounterPermit(0x1b)
 	--Activate

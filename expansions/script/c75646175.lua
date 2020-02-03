@@ -1,5 +1,6 @@
 --崩坏神格 寄生人形
 function c75646175.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646150,75646174,75646209)
 	c:EnableCounterPermit(0x1b)
 	--Activate
 	local e1=Effect.CreateEffect(c)
@@ -40,7 +41,7 @@ function c75646175.initial_effect(c)
 	e5:SetOperation(c75646175.thop)
 	c:RegisterEffect(e5)
 end
-c75646175.card_code_list={75646000,75646174,75646209}
+c75646175.card_code_list={75646000,75646150,75646174,75646209}
 function c75646175.eqlimit(e,c)
 	return c:IsSetCard(0x2c0)
 end

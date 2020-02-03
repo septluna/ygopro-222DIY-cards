@@ -1,5 +1,6 @@
 --崩坏神格 盘龙
 function c75646182.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646155)
 	c:SetUniqueOnField(1,0,75646182)
 	--Activate
 	local e1=Effect.CreateEffect(c)

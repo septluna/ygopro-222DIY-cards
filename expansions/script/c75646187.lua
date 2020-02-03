@@ -1,5 +1,6 @@
 --崩坏神格 布伦希尔德
 function c75646187.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646187)
 	c:EnableCounterPermit(0x1b)
 	--Activate
 	local e1=Effect.CreateEffect(c)

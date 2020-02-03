@@ -1,5 +1,6 @@
 --崩坏神格 战神无双
 function c75646179.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646155,75646208)
 	c:SetUniqueOnField(1,0,75646179)
 	--Activate
 	local e1=Effect.CreateEffect(c)

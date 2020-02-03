@@ -1,5 +1,6 @@
 --崩坏神格 巴罗尔
 function c75646254.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646155)
 	c:SetUniqueOnField(1,0,75646254)
 	--Activate
 	local e1=Effect.CreateEffect(c)
@@ -77,7 +78,7 @@ function c75646254.coinop(e,tp,eg,ep,ev,re,r,rp)
 	end   
 	Duel.SetCoinResult(table.unpack(res))
 end
-function c75646254.coinop1(e,tp,eg,ep,ev,re,r,rp)	
+function c75646254.coinop1(e,tp,eg,ep,ev,re,r,rp)   
 	local ec=e:GetHandler():GetEquipTarget()
 	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetType(EFFECT_TYPE_SINGLE)

@@ -20,7 +20,6 @@ function c12008019.initial_effect(c)
 	e3:SetType(EFFECT_TYPE_IGNITION)
 	e3:SetRange(LOCATION_GRAVE)
 	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e3:SetCountLimit(1,12008119)
 	e3:SetTarget(c12008019.tdtg)
 	e3:SetOperation(c12008019.tdop)
 	c:RegisterEffect(e3)
@@ -42,7 +41,7 @@ function c12008019.spfilter(c,e,tp)
 end
 function c12008019.spop(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end
-	if Duel.Draw(tp,1,REASON_EFFECT)==0 then return end
+	if Duel.Draw(tp,2,REASON_EFFECT)==0 then return end
 	local tc=Duel.GetOperatedGroup():GetFirst()
 	Duel.ConfirmCards(1-tp,tc)
 	if tc:IsSetCard(0x1fb3) and tc:IsType(TYPE_MONSTER) then

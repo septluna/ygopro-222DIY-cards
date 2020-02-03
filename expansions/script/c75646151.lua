@@ -1,5 +1,6 @@
 --崩坏神格 莉芙
 function c75646151.initial_effect(c)
+	aux.AddCodeList(c,75646151)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -24,7 +25,6 @@ function c75646151.initial_effect(c)
 	e3:SetValue(500)
 	c:RegisterEffect(e3)
 end
-c75646151.card_code_list={75646151}
 function c75646151.condition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0)==0
 end

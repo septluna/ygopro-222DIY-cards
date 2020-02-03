@@ -1,5 +1,6 @@
 --崩坏神格 索尔之锤
 function c75646164.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646164,75646208)
 	c:EnableCounterPermit(0x1b)
 	--Activate
 	local e1=Effect.CreateEffect(c)

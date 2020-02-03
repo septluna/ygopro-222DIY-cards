@@ -1,5 +1,6 @@
 --崩坏神格 
 function c75646156.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646153,75646209)
 	c:SetUniqueOnField(1,0,75646156)
 	--Activate
 	local e1=Effect.CreateEffect(c)

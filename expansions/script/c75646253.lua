@@ -1,5 +1,6 @@
 --崩坏神格 桃乐丝
 function c75646253.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646253)
 	c:EnableCounterPermit(0x1b)
 	--Activate
 	local e1=Effect.CreateEffect(c)

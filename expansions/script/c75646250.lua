@@ -1,5 +1,6 @@
 --崩坏神格 伊登
 function c75646250.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646152,75646208)
 	c:EnableCounterPermit(0x1b)
 	--Activate
 	local e1=Effect.CreateEffect(c)

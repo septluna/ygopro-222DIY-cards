@@ -1,5 +1,6 @@
 --崩坏神格 犹大誓约
 function c75646150.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646150)
 	c:EnableCounterPermit(0x1b)
 	--Activate
 	local e1=Effect.CreateEffect(c)
@@ -45,7 +46,7 @@ function c75646150.initial_effect(c)
 	c:RegisterEffect(e5)
 end
 --75646000(shenge) 75646001(yuangubingqi)
-c75646150.card_code_list={75646000,75646150}
+--c75646150.card_code_list={75646000,75646150}
 function c75646150.eqlimit(e,c)
 	return c:IsSetCard(0x2c0)
 end

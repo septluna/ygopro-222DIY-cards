@@ -3,6 +3,7 @@ local m=17050901
 local cm=_G["c"..m]
 function cm.initial_effect(c)
 	c:EnableReviveLimit()
+	--xyz summon
 	local e0=Effect.CreateEffect(c)
 	e0:SetProperty(EFFECT_FLAG_UNCOPYABLE)
 	e0:SetType(EFFECT_TYPE_FIELD)
@@ -12,30 +13,28 @@ function cm.initial_effect(c)
 				if c==nil then return true end
 				if c:IsType(TYPE_PENDULUM) and c:IsFaceup() then return false end
 				local tp=c:GetControler()
-				local ft=Duel.GetLocationCountFromEx(tp)
-				local ct=-ft
-				local nmb=Duel.GetFieldGroup(tp,LOCATION_MZONE+LOCATION_HAND+LOCATION_GRAVE,0)
+				local zone=Duel.GetFieldGroup(tp,LOCATION_MZONE+LOCATION_GRAVE,0)
 				local minc=2
-				local maxc=99
+				local maxc=zone:GetCount() 
 				if min then
 					if min>minc then minc=min end
 					if max<maxc then maxc=max end
 					if minc>maxc then return false end
 				end
-				return ct<minc and Duel.CheckXyzMaterial(c,cm.xyzfilter,7,minc,maxc,nmb)
-		end)
+				return Duel.CheckXyzMaterial(c,cm.xyzfilter,7,minc,maxc,zone)
+			end)
 	e0:SetTarget(function(e,tp,eg,ep,ev,re,r,rp,chk,c,og,min,max)
 				if og and not min then
 					return true
 				end
-				local nmb=Duel.GetFieldGroup(tp,LOCATION_MZONE+LOCATION_HAND+LOCATION_GRAVE,0)
-				local minc=2
-				local maxc=99
+				local zone=Duel.GetFieldGroup(tp,LOCATION_MZONE+LOCATION_GRAVE,0)
+				local minc=minc
+				local maxc=zone:GetCount() 
 				if min then
 					if min>minc then minc=min end
 					if max<maxc then maxc=max end
 				end
-				local g=Duel.SelectXyzMaterial(tp,c,cm.xyzfilter,7,minc,maxc,nmb)
+				local g=Duel.SelectXyzMaterial(tp,c,cm.xyzfilter,7,minc,maxc,zone)
 				if g then
 					g:KeepAlive()
 					e:SetLabelObject(g)
@@ -54,7 +53,6 @@ function cm.initial_effect(c)
 					Duel.SendtoGrave(sg,REASON_RULE)
 					c:SetMaterial(og)
 					Duel.Overlay(c,og)
-					Duel.ShuffleHand(tp)
 				else
 					local mg=e:GetLabelObject()
 					local sg=Group.CreateGroup()
@@ -67,10 +65,9 @@ function cm.initial_effect(c)
 					Duel.SendtoGrave(sg,REASON_RULE)
 					c:SetMaterial(mg)
 					Duel.Overlay(c,mg)
-					Duel.ShuffleHand(tp)
 					mg:DeleteGroup()
-				end	
-end)
+				end
+			end)
 	e0:SetValue(SUMMON_TYPE_XYZ)
 	c:RegisterEffect(e0)
 	--spsummon proc
@@ -79,6 +76,7 @@ end)
 	e1:SetCode(EFFECT_SPSUMMON_PROC)
 	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
 	e1:SetRange(LOCATION_PZONE)
+	e1:SetCountLimit(1,17050901)
 	e1:SetCondition(cm.hspcon)
 	e1:SetOperation(cm.hspop)
 	c:RegisterEffect(e1)
@@ -100,17 +98,17 @@ end)
 	--ntr
 	local e4=Effect.CreateEffect(c)
 	e4:SetCategory(CATEGORY_CONTROL)
-	e4:SetDescription(aux.Stringid(m,0))
+	e4:SetDescription(aux.Stringid(17050901,0))
 	e4:SetType(EFFECT_TYPE_IGNITION)
 	e4:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e4:SetRange(LOCATION_MZONE)
 	e4:SetCost(cm.cost)
-	e4:SetTarget(cm.settg)
-	e4:SetOperation(cm.setop)
+	e4:SetTarget(cm.cttg)
+	e4:SetOperation(cm.ctop)
 	c:RegisterEffect(e4)
 	--pendulum
 	local e6=Effect.CreateEffect(c)
-	e6:SetDescription(aux.Stringid(m,2))
+	e6:SetDescription(aux.Stringid(17050901,1))
 	e6:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e6:SetCode(EVENT_DESTROYED)
 	e6:SetProperty(EFFECT_FLAG_DELAY)
@@ -122,10 +120,10 @@ end
 cm.pendulum_level=7
 function cm.xyzfilter(c)
 	return (c:IsFaceup() or not c:IsLocation(LOCATION_MZONE))
-		and (c:IsRace(RACE_REPTILE) or not c:IsLocation(LOCATION_HAND+LOCATION_GRAVE))
+		and (c:IsRace(RACE_REPTILE) or not c:IsLocation(LOCATION_GRAVE))
 end
 function cm.spfilter(c,ft)
-	return c:IsFaceup() 
+	return c:IsFaceup() and c:IsRace(RACE_REPTILE)
 		and (ft>0 or c:GetSequence()<5)
 end
 function cm.hspcon(e,c)
@@ -139,23 +137,30 @@ function cm.hspop(e,tp,eg,ep,ev,re,r,rp,c)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 	local g=Duel.SelectMatchingCard(tp,cm.spfilter,tp,LOCATION_MZONE,0,1,1,nil,ft)
 	local sc=g:GetFirst()
-	Duel.Overlay(e:GetHandler(),sc)
+	local sg1=sc:GetOverlayGroup()
+	Duel.Overlay(c,sg1)
+	Duel.Overlay(c,sc)
 end
 function cm.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,2,REASON_COST) end
-	e:GetHandler():RemoveOverlayCard(tp,2,2,REASON_COST)
+	local lg=e:GetHandler():GetOverlayGroup()
+	if chk==0 then return lg:IsExists(Card.IsAbleToRemove,2,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+	local g=lg:FilterSelect(tp,Card.IsAbleToRemove,2,2,nil)
+	Duel.Remove(g,POS_FACEUP,REASON_COST)
 end
-function cm.settg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and cm.filter(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(cm.filter,tp,0,LOCATION_MZONE,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SET)
-	local g=Duel.SelectTarget(tp,cm.filter,tp,0,LOCATION_MZONE,1,1,nil)
+function cm.ctfilter(c)
+	return c:IsFaceup() and c:IsControlerCanBeChanged()
+end
+function cm.cttg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and cm.ctfilter(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(cm.ctfilter,tp,0,LOCATION_MZONE,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONTROL)
+	local g=Duel.SelectTarget(tp,cm.ctfilter,tp,0,LOCATION_MZONE,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_CONTROL,g,1,0,0)
 end
-function cm.setop(e,tp,eg,ep,ev,re,r,rp)
+function cm.ctop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) then
-		Duel.ChangePosition(tc,POS_FACEDOWN_DEFENSE)
 		Duel.GetControl(tc,tp)
 	end
 end

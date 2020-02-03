@@ -62,12 +62,17 @@ function c65031015.thfil(c)
 	return c:IsSetCard(0x3da3) and c:IsAbleToDeck()
 end
 function c65031015.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c65031015.thfil,tp,LOCATION_GRAVE,0,1,nil) end
+	if chk==0 then return e:GetHandler():IsAbleToDeck() end
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,1,0,LOCATION_GRAVE)
 	Duel.SetOperationInfo(0,CATEGORY_RECOVER,0,0,tp,500)
 end
 function c65031015.thop(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.SelectMatchingCard(tp,c65031015.thfil,tp,LOCATION_GRAVE,0,1,3,nil)
+	if not e:GetHandler():IsRelateToEffect(e) then return end
+	local g=Group.FromCards(e:GetHandler())
+	if Duel.IsExistingMatchingCard(c65031015.thfil,tp,LOCATION_GRAVE,0,1,nil) and Duel.SelectYesNo(tp,aux.Stringid(65031015,0)) then
+		local sg=Duel.SelectMatchingCard(tp,c65031015.thfil,tp,LOCATION_GRAVE,0,1,2,e:GetHandler())
+		g:Merge(sg)
+	end
 	if g:GetCount()>0 then
 		local num=Duel.SendtoDeck(g,nil,2,REASON_EFFECT)
 		Duel.Recover(tp,num*500,REASON_EFFECT)

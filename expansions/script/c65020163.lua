@@ -2,7 +2,7 @@
 function c65020163.initial_effect(c)
 	--xyz summon
 	c:EnableReviveLimit()
-	aux.AddXyzProcedureLevelFree(c,nil,c65020163.xyzcheck,2,99)
+	aux.AddXyzProcedureLevelFree(c,c65020163.xyzlvf,c65020163.xyzcheck,2,99)
 	--search
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(65020163,1))
@@ -25,13 +25,14 @@ function c65020163.initial_effect(c)
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(65020163,2))
 	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
-	e3:SetType(EFFECT_TYPE_QUICK_O)
-	e3:SetCode(EVENT_FREE_CHAIN)
+	e3:SetType(EFFECT_TYPE_IGNITION)
 	e3:SetRange(LOCATION_MZONE)
-	e3:SetCondition(c65020163.con)
 	e3:SetTarget(c65020163.target2)
 	e3:SetOperation(c65020163.activate)
 	c:RegisterEffect(e3)
+end
+function c65020163.xyzlvf(c)
+	return c:GetLevel()>1
 end
 function c65020163.xyzcheck(g)
 	return g:GetClassCount(Card.GetLevel)==1
@@ -61,9 +62,7 @@ function c65020163.operation(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 
-function c65020163.con(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetCurrentPhase()==PHASE_MAIN1 or Duel.GetCurrentPhase()==PHASE_MAIN2
-end
+
 function c65020163.filter1(c,e,tp)
 	local rk=c:GetRank()
 	return c:IsFaceup() and c:IsType(TYPE_XYZ)

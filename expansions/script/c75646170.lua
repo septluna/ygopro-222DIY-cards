@@ -1,5 +1,6 @@
 --崩坏神格 赫卡特的纹章
 function c75646170.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646152)
 	c:SetUniqueOnField(1,0,75646202)
 	c:EnableCounterPermit(0x1b)
 	--Activate

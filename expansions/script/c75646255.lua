@@ -1,5 +1,6 @@
 --崩坏神格 箩蒂
 function c75646255.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646155)
 	c:SetUniqueOnField(1,0,75646255)
 	--Activate
 	local e1=Effect.CreateEffect(c)

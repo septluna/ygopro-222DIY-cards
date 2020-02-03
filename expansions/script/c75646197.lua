@@ -1,5 +1,8 @@
 --崩坏神格 缪娜
+c75646197.dfc_front_side=75646197
+c75646197.dfc_back_side=75646261
 function c75646197.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646180)
 	c:EnableCounterPermit(0x1b)
 	--Activate
 	local e1=Effect.CreateEffect(c)
@@ -14,7 +17,7 @@ function c75646197.initial_effect(c)
 	e3:SetCategory(CATEGORY_ATKCHANGE+CATEGORY_DISABLE)
 	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e3:SetCode(EVENT_ATTACK_ANNOUNCE)
-	e3:SetRange(LOCATION_SZONE)	
+	e3:SetRange(LOCATION_SZONE) 
 	e3:SetCondition(c75646197.con)
 	e3:SetTarget(c75646197.tg)
 	e3:SetOperation(c75646197.op)
@@ -36,6 +39,15 @@ function c75646197.initial_effect(c)
 	e5:SetTarget(c75646197.thtg)
 	e5:SetOperation(c75646197.thop)
 	c:RegisterEffect(e5)
+	--Change
+	local e7=Effect.CreateEffect(c)
+	e7:SetDescription(aux.Stringid(75646260,1))
+	e7:SetType(EFFECT_TYPE_IGNITION)
+	e7:SetRange(LOCATION_SZONE)
+	e7:SetCost(c75646197.chcost)
+	e7:SetTarget(c75646197.changetg)
+	e7:SetOperation(c75646197.changeop)
+	c:RegisterEffect(e7)
 end
 c75646197.card_code_list={75646000,75646180}
 function c75646197.eqlimit(e,c)
@@ -122,4 +134,27 @@ function c75646197.thop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)
 	end
+end
+function c75646197.costfilter(c)
+	return c:IsCode(75646266) and c:IsAbleToGraveAsCost()
+end
+function c75646197.chcost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(c75646197.costfilter,tp,LOCATION_HAND,0,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+	local cg=Duel.SelectMatchingCard(tp,c75646197.costfilter,tp,LOCATION_HAND,0,1,1,nil)
+	Duel.SendtoGrave(cg,REASON_COST)
+end
+function c75646197.changetg(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if chk==0 then return c.dfc_back_side and c.dfc_front_side==c:GetOriginalCode() end
+	Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
+end
+function c75646197.changeop(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if not c:IsRelateToEffect(e) or c:IsFacedown() or c:IsImmuneToEffect(e) then return end
+	local tcode=c.dfc_back_side
+	c:SetEntityCode(tcode,true)
+	c:ReplaceEffect(tcode,0,0)
+	Duel.Equip(tp,c,e:GetHandler():GetEquipTarget(),true)
+	c:AddCounter(0x1b,2)
 end

@@ -1,5 +1,6 @@
 --崩坏神格 刻音
 function c75646166.initial_effect(c)
+	aux.AddCodeList(c,75646164)
 	c:EnableCounterPermit(0x1b)
 	--Activate
 	local e1=Effect.CreateEffect(c)

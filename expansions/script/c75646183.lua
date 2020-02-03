@@ -1,5 +1,6 @@
 --崩坏神格 锦鲤
 function c75646183.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646155)
 	c:SetUniqueOnField(1,0,75646183)
 	--Activate
 	local e1=Effect.CreateEffect(c)
@@ -86,15 +87,18 @@ end
 function c75646183.cfilter3(c,tp)
 	return c:IsFaceup() and Duel.IsExistingMatchingCard(c75646183.cfilter2,tp,LOCATION_ONFIELD,0,2,c,c:GetCode())
 end
+function c75646183.cfilter4(c)
+	return c:IsFaceup() and c:IsCode(75646182)
+end
 function c75646183.effcon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.IsExistingMatchingCard(c75646183.cfilter1,tp,LOCATION_ONFIELD,0,1,nil,tp)
+	return Duel.IsExistingMatchingCard(c75646183.cfilter1,tp,LOCATION_ONFIELD,0,1,nil,tp) or Duel.IsExistingMatchingCard(c75646183.cfilter4,tp,LOCATION_SZONE,0,1,nil,tp)
 end
 function c75646183.atkcon(e,tp,eg,ep,ev,re,r,rp)
 	local a=Duel.GetAttacker()
 	if not a:IsControler(tp) then
 		a=Duel.GetAttackTarget()
 	end
-	return a and a:IsSetCard(0x2c0) and Duel.IsExistingMatchingCard(c75646183.cfilter3,tp,LOCATION_ONFIELD,0,1,nil,tp)
+	return a and a:IsSetCard(0x2c0) and (Duel.IsExistingMatchingCard(c75646183.cfilter3,tp,LOCATION_ONFIELD,0,1,nil,tp) or Duel.IsExistingMatchingCard(c75646183.cfilter4,tp,LOCATION_SZONE,0,1,nil,tp))
 end
 function c75646183.atkop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_CARD,0,75646183)

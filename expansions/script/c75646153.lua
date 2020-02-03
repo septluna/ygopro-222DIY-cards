@@ -1,5 +1,6 @@
 --崩坏神格 赛琳娜
 function c75646153.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646153)
 	c:SetUniqueOnField(1,0,75646153)
 	--Activate
 	local e1=Effect.CreateEffect(c)
@@ -43,7 +44,7 @@ function c75646153.initial_effect(c)
 	c:RegisterEffect(e5)
 end
 --75646000(shenge) 75646153(fuzhuang)
-c75646153.card_code_list={75646000,75646153}
+--c75646153.card_code_list={75646000,75646153}
 function c75646153.eqlimit(e,c)
 	return c:IsSetCard(0x2c0)
 end

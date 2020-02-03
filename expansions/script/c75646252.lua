@@ -1,6 +1,7 @@
 --崩坏神格 幻梦境
 function c75646252.initial_effect(c)
-	c:SetUniqueOnField(1,0,75646158)
+	aux.AddCodeList(c,75646000,75646155)
+	c:SetUniqueOnField(1,0,75646252)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_EQUIP)

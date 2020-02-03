@@ -4,6 +4,7 @@ function c33310156.initial_effect(c)
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
 	e1:SetCode(EVENT_SUMMON_SUCCESS)
+	e1:SetCountLimit(1,33310156)
 	e1:SetCondition(c33310156.spcon)
 	e1:SetOperation(c33310156.spop)
 	c:RegisterEffect(e1)
@@ -61,13 +62,12 @@ function c33310156.filter(c)
 end
 function c33310156.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
-		and Duel.IsExistingMatchingCard(c33310156.filter,tp,LOCATION_HAND,0,1,nil) and Duel.GetFlagEffect(tp,33310156)==0
+		and Duel.IsExistingMatchingCard(c33310156.filter,tp,LOCATION_HAND,0,1,nil)
 end
 function c33310156.spop(e,tp,eg,ep,ev,re,r,rp)
 	if not Duel.SelectYesNo(tp,aux.Stringid(33310156,0)) then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c33310156.filter,tp,LOCATION_HAND,0,1,1,nil)
 	Duel.Summon(tp,g:GetFirst(),true,nil)
-	Duel.RegisterFlagEffect(tp,33310156,RESET_PHASE+PHASE_END,0,1)
 end
 

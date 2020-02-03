@@ -1,5 +1,6 @@
 --崩坏神格 女娲氏
 function c75646198.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646182,75646198)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_EQUIP)

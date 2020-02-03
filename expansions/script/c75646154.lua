@@ -1,5 +1,8 @@
 --崩坏神格 亚巴顿
+c75646154.dfc_front_side=75646154
+c75646154.dfc_back_side=75646262
 function c75646154.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646154)
 	c:EnableCounterPermit(0x1b)
 	--Activate
 	local e1=Effect.CreateEffect(c)
@@ -43,8 +46,17 @@ function c75646154.initial_effect(c)
 	e5:SetTarget(c75646154.thtg)
 	e5:SetOperation(c75646154.thop)
 	c:RegisterEffect(e5)
+	--Change
+	local e7=Effect.CreateEffect(c)
+	e7:SetDescription(aux.Stringid(75646154,1))
+	e7:SetType(EFFECT_TYPE_IGNITION)
+	e7:SetRange(LOCATION_SZONE)
+	e7:SetCost(c75646154.chcost)
+	e7:SetTarget(c75646154.changetg)
+	e7:SetOperation(c75646154.changeop)
+	c:RegisterEffect(e7)
 end
-c75646154.card_code_list={75646000,75646154}
+--c75646154.card_code_list={75646000,75646154}
 function c75646154.eqlimit(e,c)
 	return c:IsSetCard(0x2c0)
 end
@@ -114,7 +126,7 @@ function c75646154.op(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c75646154.efcon(e,tp,eg,ep,ev,re,r,rp)
-	return rp==1-tp and (re:GetActivateLocation()==LOCATION_GRAVE or re:GetActivateLocation()==LOCATION_HAND) 
+	return rp==tp and (re:GetActivateLocation()==LOCATION_GRAVE or re:GetActivateLocation()==LOCATION_HAND) 
 end
 function c75646154.efcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.CheckLPCost(tp,500) end
@@ -166,4 +178,27 @@ function c75646154.thop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)
 	end
+end
+function c75646154.costfilter(c)
+	return c:IsCode(75646266) and c:IsAbleToGraveAsCost()
+end
+function c75646154.chcost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(c75646154.costfilter,tp,LOCATION_HAND,0,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+	local cg=Duel.SelectMatchingCard(tp,c75646154.costfilter,tp,LOCATION_HAND,0,1,1,nil)
+	Duel.SendtoGrave(cg,REASON_COST)
+end
+function c75646154.changetg(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if chk==0 then return c.dfc_back_side and c.dfc_front_side==c:GetOriginalCode() end
+	Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
+end
+function c75646154.changeop(e,tp,eg,ep,ev,re,r,rp,chk)
+	local c=e:GetHandler()
+	if not c:IsRelateToEffect(e) or c:IsFacedown() or c:IsImmuneToEffect(e) then return end
+	local tcode=c.dfc_back_side
+	c:SetEntityCode(tcode,true)
+	c:ReplaceEffect(tcode,0,0)
+	Duel.Equip(tp,c,e:GetHandler():GetEquipTarget(),true)
+	c:AddCounter(0x1b,2)
 end

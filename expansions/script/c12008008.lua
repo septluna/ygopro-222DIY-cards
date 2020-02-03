@@ -1,7 +1,7 @@
 --3色翠神，波恋达斯
 function c12008008.initial_effect(c)
 	--link summon
-	aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsLinkSetCard,0x1fb3),2,99,c12008008.lcheck)
+	aux.AddLinkProcedure(c,nil,2,99,c12008008.lcheck)
 	c:EnableReviveLimit()
 	--cannot release
 	local e1=Effect.CreateEffect(c)

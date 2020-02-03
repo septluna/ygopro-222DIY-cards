@@ -3,14 +3,6 @@ function c11200209.initial_effect(c)
 	--pendulum summon
 	aux.EnablePendulumAttribute(c)
 	c:EnableReviveLimit()
-	--code
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_SINGLE)
-	e0:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e0:SetCode(EFFECT_CHANGE_CODE)
-	e0:SetRange(LOCATION_ONFIELD+LOCATION_REMOVED)
-	e0:SetValue(11200103)
-	c:RegisterEffect(e0)
 	--remove
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_REMOVE)

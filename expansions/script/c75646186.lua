@@ -1,5 +1,6 @@
 --崩坏神格 奏冥曲
 function c75646186.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646155,75646157,75646180)
 	c:SetUniqueOnField(1,0,75646186)
 	--Activate
 	local e1=Effect.CreateEffect(c)

@@ -1,5 +1,7 @@
 --落花邀约·梦前菜菜
-function c81011044.initial_effect(c)
+local m=81011044
+local cm=_G["c"..m]
+function cm.initial_effect(c)
 	--xyz summon
 	c:EnableReviveLimit()
 	aux.AddXyzProcedure(c,nil,4,2,nil,nil,99)
@@ -7,44 +9,42 @@ function c81011044.initial_effect(c)
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_SINGLE)
 	e0:SetCode(EFFECT_EXTRA_ATTACK)
-	e0:SetValue(c81011044.ctval)
+	e0:SetValue(cm.ctval)
 	c:RegisterEffect(e0)
-	--xyz material
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_IGNITION)
-	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e3:SetRange(LOCATION_MZONE)
-	e3:SetCountLimit(1,81011044)
-	e3:SetCost(c81011044.cost)
-	e3:SetTarget(c81011044.mattg)
-	e3:SetOperation(c81011044.matop)
-	c:RegisterEffect(e3)
+	--no damage
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_QUICK_O)
+	e1:SetCode(EVENT_CHAINING)
+	e1:SetRange(LOCATION_MZONE)
+	e1:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL)
+	e1:SetCondition(aux.damcon1)
+	e1:SetCost(cm.cost)
+	e1:SetOperation(cm.operation)
+	c:RegisterEffect(e1)
 end
-function c81011044.ctval(e,c)
+function cm.ctval(e,c)
 	local oc=e:GetHandler():GetOverlayCount()
-	return math.max(0,oc-1)
+	return math.max(0,oc)
 end
-function c81011044.cost(e,tp,eg,ep,ev,re,r,rp,chk)
+function cm.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
 	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
 end
-function c81011044.matfilter(c)
-	return c:IsFaceup() and c:IsType(TYPE_XYZ) and not c:IsCode(81011044)
+function cm.operation(e,tp,eg,ep,ev,re,r,rp)
+	local cid=Duel.GetChainInfo(ev,CHAININFO_CHAIN_ID)
+	local e1=Effect.CreateEffect(e:GetHandler())
+	e1:SetType(EFFECT_TYPE_FIELD)
+	e1:SetCode(EFFECT_REFLECT_DAMAGE)
+	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+	e1:SetTargetRange(1,0)
+	e1:SetLabel(cid)
+	e1:SetValue(cm.refcon)
+	e1:SetReset(RESET_CHAIN)
+	Duel.RegisterEffect(e1,tp)
 end
-function c81011044.mattg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and c81011044.matfilter(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(c81011044.matfilter,tp,LOCATION_MZONE,0,1,nil)
-		and Duel.IsExistingMatchingCard(Card.IsCanOverlay,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-	Duel.SelectTarget(tp,c81011044.matfilter,tp,LOCATION_MZONE,0,1,1,nil)
-end
-function c81011044.matop(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetFirstTarget()
-	if tc and tc:IsFaceup() and tc:IsRelateToEffect(e) and not tc:IsImmuneToEffect(e) then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
-		local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(Card.IsCanOverlay),tp,LOCATION_HAND+LOCATION_GRAVE,0,1,1,nil)
-		if g:GetCount()>0 then
-			Duel.Overlay(tc,g)
-		end
-	end
+function cm.refcon(e,re,val,r,rp,rc)
+	local cc=Duel.GetCurrentChain()
+	if cc==0 or bit.band(r,REASON_EFFECT)==0 then return end
+	local cid=Duel.GetChainInfo(0,CHAININFO_CHAIN_ID)
+	return cid==e:GetLabel()
 end

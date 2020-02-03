@@ -23,7 +23,7 @@ function c1170011.sfilter1(c,e,tp)
 	return c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_RITUAL,tp,false,false)
 end
 function c1170011.dfilter1(c)
-	return c:IsCode(1192018) and c:IsAbleToHand()
+	return c:IsCode(1192018,1192020) and c:IsAbleToHand()
 end
 function c1170011.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()

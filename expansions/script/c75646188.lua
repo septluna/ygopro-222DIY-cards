@@ -1,5 +1,6 @@
 --崩坏神格 芬里尔獠牙
 function c75646188.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646188,75646208)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_EQUIP)

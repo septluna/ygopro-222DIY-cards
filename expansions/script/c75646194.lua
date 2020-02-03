@@ -1,5 +1,6 @@
 --崩坏神格 怪异杀手
 function c75646194.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646155)
 	c:SetUniqueOnField(1,0,75646158)
 	--Activate
 	local e1=Effect.CreateEffect(c)
@@ -83,7 +84,7 @@ function c75646194.damop(e,tp,eg,ep,ev,re,r,rp)
 		att=bit.rshift(att,1)
 	end
 	Duel.Hint(HINT_CARD,0,75646194)
-	Duel.SetLP(1-tp,Duel.GetLP(1-tp)-ct*200)
+	Duel.SetLP(1-tp,Duel.GetLP(1-tp)-ct*150)
 end
 function c75646194.cfilter(c)
 	return aux.IsCodeListed(c,75646000) and c:IsAbleToRemoveAsCost()

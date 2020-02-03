@@ -1,5 +1,6 @@
 --崩坏神格 娜兹
 function c75646257.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646155)
 	c:SetUniqueOnField(1,0,75646257)
 	--Activate
 	local e1=Effect.CreateEffect(c)

@@ -1,5 +1,6 @@
 --崩坏神格 柯罗诺斯
 function c75646157.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646155,75646157)
 	c:EnableCounterPermit(0x2c0)
 	c:SetUniqueOnField(1,0,75646157)
 	--Activate
@@ -45,7 +46,7 @@ function c75646157.initial_effect(c)
 	e5:SetOperation(c75646157.thop)
 	c:RegisterEffect(e5)
 end
---75646000(shenge) 75646027(huizhang)
+--75646000(shenge) 
 c75646157.card_code_list={75646000,75646155,75646157}
 function c75646157.eqlimit(e,c)
 	return c:IsSetCard(0x2c0)

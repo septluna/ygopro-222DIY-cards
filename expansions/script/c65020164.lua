@@ -30,6 +30,7 @@ function c65020164.initial_effect(c)
 	e3:SetCode(EVENT_PHASE+PHASE_END)
 	e3:SetRange(LOCATION_MZONE)
 	e3:SetCountLimit(1)
+	e3:SetCondition(c65020164.con2)
 	e3:SetTarget(c65020164.target2)
 	e3:SetOperation(c65020164.activate)
 	c:RegisterEffect(e3)
@@ -65,6 +66,9 @@ end
 function c65020164.filter2(c,e,tp,mc)
 	return c:IsCode(65020163) and mc:IsCanBeXyzMaterial(c)
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) and ((Duel.GetLocationCountFromEx(tp,tp,mc,c)>0 and c:IsLocation(LOCATION_EXTRA)) or (Duel.GetMZoneCount(tp,mc,tp)>0 and c:IsLocation(LOCATION_GRAVE)))
+end
+function c65020164.con2(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.GetTurnPlayer()~=tp
 end
 function c65020164.target2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end

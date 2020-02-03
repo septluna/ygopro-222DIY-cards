@@ -1,5 +1,6 @@
 --崩坏神格 希露
 function c75646152.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646152)
 	c:EnableCounterPermit(0x1b)
 	--Activate
 	local e1=Effect.CreateEffect(c)
@@ -39,7 +40,7 @@ function c75646152.initial_effect(c)
 	c:RegisterEffect(e5)
 end
 --75646000(shen ge) 75646152(pu tong)
-c75646152.card_code_list={75646000,75646152}
+--c75646152.card_code_list={75646000,75646152}
 function c75646152.eqlimit(e,c)
 	return c:IsSetCard(0x2c0)
 end

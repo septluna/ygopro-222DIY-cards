@@ -91,5 +91,6 @@ function c65040008.activate(e,tp,eg,ep,ev,re,r,rp)
 	if g:GetCount()>0 then
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)
+		Duel.SetLP(tp,Duel.GetLP(tp)/2)
 	end
 end

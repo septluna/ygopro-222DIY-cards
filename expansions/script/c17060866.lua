@@ -25,6 +25,7 @@ function cm.initial_effect(c)
 	e3:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e3:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e3:SetProperty(EFFECT_FLAG_DELAY)
 	e3:SetCountLimit(1,17060866)
 	e3:SetCondition(cm.sptcon)
 	e3:SetTarget(cm.spttg)
@@ -63,14 +64,14 @@ function cm.sptcon(e,tp,eg,ep,ev,re,r,rp)
 end
 function cm.spttg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetMZoneCount(tp)>0
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,17060867,0,0x4011,0,0,1,RACE_PSYCHO,ATTRIBUTE_FIRE) end
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,17060867,0,0x4011,0,0,1,RACE_CYBERSE,ATTRIBUTE_FIRE) end
 	Duel.SetOperationInfo(0,CATEGORY_TOKEN,nil,1,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,0,0)
 end
 function cm.sptop(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e)
 		or Duel.GetMZoneCount(tp)<=0
-		or not Duel.IsPlayerCanSpecialSummonMonster(tp,17060867,0,0x4011,0,0,1,RACE_PSYCHO,ATTRIBUTE_FIRE) then return end
+		or not Duel.IsPlayerCanSpecialSummonMonster(tp,17060867,0,0x4011,0,0,1,RACE_CYBERSE,ATTRIBUTE_FIRE) then return end
 	local token=Duel.CreateToken(tp,17060867)
 	Duel.SpecialSummon(token,0,tp,tp,false,false,POS_FACEUP)
 	local e1=Effect.CreateEffect(e:GetHandler())

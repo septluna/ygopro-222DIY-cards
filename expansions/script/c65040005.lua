@@ -61,26 +61,29 @@ function c65040005.spop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function c65040005.cfilter2(c,ft,e,tp)
-	return c:IsSetCard(0x3da3) and c:IsReleasable() and (ft>0 or (ft<=0 and c:IsLocation(LOCATION_MZONE))) and Duel.IsExistingMatchingCard(c65040005.tgfil,tp,LOCATION_HAND,0,1,c,e,tp)
+	return c:IsSetCard(0x3da3) and c:IsReleasable() and (ft>0 or (ft<=0 and c:IsLocation(LOCATION_MZONE))) and Duel.IsExistingMatchingCard(c65040005.tgfil,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,c,e,tp)
 end
 function c65040005.spcost2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
 	if chk==0 then return ft>-1 and Duel.IsExistingMatchingCard(c65040005.cfilter2,tp,LOCATION_HAND+LOCATION_MZONE,0,1,e:GetHandler(),ft,e,tp) end
 	local sg=Duel.SelectMatchingCard(tp,c65040005.cfilter2,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,e:GetHandler(),ft,e,tp)
 	Duel.Release(sg,REASON_COST)
+	e:SetLabelObject(sg)
+	sg:KeepAlive()
 end
 
 function c65040005.tgfil(c,e,tp)
-	return c:IsSetCard(0x3da3) and c:IsType(TYPE_MONSTER) and c:IsLevelBelow(8) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) 
+	return c:IsSetCard(0x3da3) and c:IsType(TYPE_MONSTER) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) 
 end
 
 function c65040005.sptg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c65040005.tgfil,tp,LOCATION_HAND,0,1,nil,e,tp) end
+	if chk==0 then return true end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,0,0)
 end
 function c65040005.spop2(e,tp,eg,ep,ev,re,r,rp)
+	local sg=e:GetLabelObject()
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
-	local g=Duel.SelectMatchingCard(tp,c65040005.tgfil,tp,LOCATION_HAND,0,1,1,nil,e,tp)
+	local g=Duel.SelectMatchingCard(tp,c65040005.tgfil,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,1,sg,e,tp)
 	if g:GetCount()>0 then
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end

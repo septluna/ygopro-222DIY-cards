@@ -1,5 +1,6 @@
 --崩坏神格 卢西恩密藏
 function c75646165.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646165)
 	c:EnableCounterPermit(0x1b)
 	--Activate
 	local e1=Effect.CreateEffect(c)

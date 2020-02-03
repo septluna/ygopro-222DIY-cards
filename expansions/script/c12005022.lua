@@ -84,7 +84,7 @@ end
 function c12005022.activate(e,tp,eg,ep,ev,re,r,rp)
 	local c,rc=e:GetHandler(),re:GetHandler()
 	if Duel.Damage(1-tp,100,REASON_EFFECT)<=0 then return end
-	local b1=c:IsAbleToDeck() and Duel.IsExistingMatchingCard(c12005022.spfilter,tp,LOCATION_HAND,0,1,nil,e,tp) and re:IsHasCategory(CATEGORY_SPECIAL_SUMMON)
+	local b1=Duel.IsExistingMatchingCard(c12005022.spfilter,tp,LOCATION_HAND,0,1,nil,e,tp) and re:IsHasCategory(CATEGORY_SPECIAL_SUMMON)
 	local b2=re:IsHasCategory(CATEGORY_DRAW+CATEGORY_TOHAND)
 	local b3=(re:IsHasCategory(CATEGORY_DESTROY+CATEGORY_REMOVE) or ex) and Duel.IsExistingMatchingCard(Card.IsAbleToGrave,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil)
 	local b4=re:IsHasCategory(CATEGORY_DISABLE+CATEGORY_NEGATE+CATEGORY_DISABLE_SUMMON)
@@ -93,7 +93,7 @@ function c12005022.activate(e,tp,eg,ep,ev,re,r,rp)
 	if b1 and Duel.SelectYesNo(tp,aux.Stringid(12005022,1)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 		local sg=Duel.SelectMatchingCard(tp,c12005022.spfilter,tp,LOCATION_HAND,0,1,1,nil,e,tp)
-		if Duel.SpecialSummon(sg,0,tp,tp,false,false)~=0 and c:IsRelateToEffect(e) then
+		if Duel.SpecialSummon(sg,0,tp,tp,false,false,POS_FACEUP)~=0 and c:IsRelateToEffect(e) then
 			c:CancelToGrave(true)
 			Duel.SendtoDeck(c,nil,0,REASON_EFFECT)
 		end

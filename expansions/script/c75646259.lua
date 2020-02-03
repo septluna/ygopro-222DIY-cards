@@ -1,5 +1,6 @@
 --崩坏神格 普西芬妮
 function c75646259.initial_effect(c)
+	aux.AddCodeList(c,75646000,75646153)
 	c:SetUniqueOnField(1,0,75646259)
 	--Activate
 	local e1=Effect.CreateEffect(c)
