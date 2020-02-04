@@ -39,7 +39,7 @@ function c12008009.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function c12008009.sprfilter(c,sc)
-	return c:IsCanBeLinkMaterial(sc) and c:IsRace(RACE_SEASERPENT) and Duel.IsExistingMatchingCard(c12008009.sprfilter1,tp,LOCATION_MZONE+LOCATION_HAND,0,c) and Duel.GetLocationCountFromEx(tp,tp,c,TYPE_LINK)>0
+	return c:IsCanBeLinkMaterial(sc) and c:IsRace(RACE_SEASERPENT) and Duel.IsExistingMatchingCard(c12008009.sprfilter1,tp,LOCATION_MZONE+LOCATION_HAND,0,1,c) and Duel.GetLocationCountFromEx(tp,tp,c,TYPE_LINK)>0
 end
 function c12008009.sprfilter1(c,sc)
 	return c:IsCanBeLinkMaterial(sc) and c:IsRace(RACE_MACHINE) and Duel.GetLocationCountFromEx(tp,tp,c,TYPE_LINK)>0
