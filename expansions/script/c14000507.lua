@@ -39,50 +39,20 @@ function cm.initial_effect(c)
 	e4:SetOperation(cm.costop)
 	c:RegisterEffect(e4)
 end
-cm.loaded_metatable_list=cm.loaded_metatable_list or {}
-function cm.LoadMetatable(code)
-	local m1=_G["c"..code]
-	if m1 then return m1 end
-	local m2=cm.loaded_metatable_list[code]
-	if m2 then return m2 end
-	_G["c"..code]={}
-	if pcall(function() dofile("expansions/script/c"..code..".lua") end) or pcall(function() dofile("script/c"..code..".lua") end) then
-		local mt=_G["c"..code]
-		_G["c"..code]=nil
-		if mt then
-			cm.loaded_metatable_list[code]=mt
-			return mt
-		end
-	else
-		_G["c"..code]=nil
-	end
-end
-function cm.check_link_set_SPO(c)
-	local codet={c:GetLinkCode()}
-	for j,code in pairs(codet) do
-		local mt=cm.LoadMetatable(code)
-		if mt then
-			for str,v in pairs(mt) do   
-				if type(str)=="string" and str:find("_Spositch") and v then return true end
-			end
-		end
-	end
-	return false
-end
 function cm.lfilter(c)
-	return c:IsLinkType(TYPE_TUNER) and cm.check_link_set_SPO(c)
+	return c:IsLinkType(TYPE_TUNER)
 end
 function cm.lcheck(g,lc)
-	return g:IsExists(cm.lfilter,1,nil)
+	return g:IsExists(cm.lfilter,1,nil) and g:GetClassCount(Card.GetLinkAttribute)==g:GetCount()
 end
 function cm.qpcon(e)
 	return e:GetHandler():GetSequence()>4
 end
 function cm.costtg(e,te,tp)
 	local tc=te:GetHandler()
-	return Duel.GetLocationCount(tp,LOCATION_SZONE)>0 and Duel.GetTurnPlayer()~=e:GetHandlerPlayer()
+	return tc and Duel.GetLocationCount(tp,LOCATION_SZONE)>1 and Duel.GetTurnPlayer()~=e:GetHandlerPlayer()
 		and tc:IsLocation(LOCATION_HAND) and tc:GetEffectCount(m)>0
-		and (tc:GetEffectCount(EFFECT_QP_ACT_IN_NTPHAND)<=tc:GetEffectCount(m) and (tc:IsType(TYPE_QUICKPLAY) or tc:IsHasProperty(EFFECT_FLAG2_SPOSITCH)))
+		and (tc:GetEffectCount(EFFECT_QP_ACT_IN_NTPHAND)<=tc:GetEffectCount(m) and (tc:IsType(TYPE_QUICKPLAY) or spo.named(tc)))
 end
 function cm.costop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

@@ -1,5 +1,6 @@
 --临魔蝶彩
 function c33310155.initial_effect(c)
+	c:SetSPSummonOnce(33310155)
 	--spsummon
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
