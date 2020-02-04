@@ -49,6 +49,13 @@ function cm.initial_effect(c)
 		e5:SetOperation(cm.addcount)
 		Duel.RegisterEffect(e5,0)
 	end
+	local e6=Effect.CreateEffect(c)
+	e6:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
+	e6:SetProperty(EFFECT_FLAG_DELAY)
+	e6:SetCode(EVENT_BATTLE_DESTROYING)
+	e6:SetCondition(aux.bdocon)
+	e6:SetOperation(cm.bdop)
+	c:RegisterEffect(e6)
 end
 function cm.immcon(e)
 	local c=e:GetHandler()
@@ -74,13 +81,6 @@ function cm.eaop(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetValue(500)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_DISABLE)
 		c:RegisterEffect(e1)
-		if not (ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE) or c:GetAttackAnnouncedCount()==0 then return end
-		if Duel.GetAttacker()==c then
-			local sg=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_ONFIELD,nil)
-			if #sg>0 then
-				Duel.Destroy(sg,REASON_EFFECT)
-			end
-		end
 	end
 end
 function cm.resetcount(e,tp,eg,ep,ev,re,r,rp)
@@ -98,5 +98,11 @@ function cm.damop(e,tp,eg,ep,ev,re,r,rp)
 		local ct=cm[0]*500
 		Duel.Hint(HINT_CARD,0,m)
 		Duel.Damage(1-tp,ct,REASON_EFFECT)
+	end
+end
+function cm.bdop(e,tp,eg,ep,ev,re,r,rp)
+	local sg=Duel.GetMatchingGroup(aux.TRUE,tp,0,LOCATION_ONFIELD,nil)
+	if #sg>0 then
+		Duel.Destroy(sg,REASON_EFFECT)
 	end
 end
