@@ -48,7 +48,7 @@ function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 		for i=1,2 do
 			local token=Duel.CreateToken(tp,m+1)
 			Duel.SpecialSummonStep(token,0,tp,tp,false,false,POS_FACEUP) 
-			token:AddCounter(0x1015,1)
+			token:AddCounter(0x1015,2)
 		end
 		Duel.SpecialSummonComplete()
 	end
@@ -60,7 +60,7 @@ function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 	   for i=1,ct1 do
 			local token=Duel.CreateToken(tp,m+1)
 			Duel.SpecialSummonStep(token,0,tp,1-tp,false,false,POS_FACEUP) 
-			token:AddCounter(0x1015,1)   
+			token:AddCounter(0x1015,2)   
 		end
 		Duel.SpecialSummonComplete()
    end 

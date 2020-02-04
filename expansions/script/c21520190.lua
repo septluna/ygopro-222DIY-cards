@@ -8,7 +8,7 @@ function c21520190.initial_effect(c)
 	e1:SetRange(LOCATION_HAND+LOCATION_GRAVE)
 	e1:SetCountLimit(7,21520190)
 	e1:SetCondition(c21520190.spcon)
-	e1:SetOperation(c21520190.spop)
+--	e1:SetOperation(c21520190.spop)
 	c:RegisterEffect(e1)
 	--atk & def
 	local e3=Effect.CreateEffect(c)
