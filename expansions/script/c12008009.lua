@@ -56,7 +56,7 @@ function c12008009.linkop(e,tp,eg,ep,ev,re,r,rp,c)
 	if g:GetCount()>0 then
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
 	local cc1=g:Select(tp,1,1,nil)
-	local cc2=Duel.SelectMatchingCard(tp,c11113170.sprfilter1,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,cc1)
+	local cc2=Duel.SelectMatchingCard(tp,c12008009.sprfilter1,tp,LOCATION_HAND+LOCATION_MZONE,0,1,1,cc1)
 	cc1:Merge(cc2)
 	Duel.Release(cc1,REASON_EFFECT)
 	end
