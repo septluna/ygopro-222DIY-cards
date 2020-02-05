@@ -11,3 +11,22 @@ end
 function Amana.atcon(e)
 	return e:GetHandler():GetAttack()>=2000
 end
+--majsoul
+function Amana.Majsoul(c)
+	Duel.EnableGlobalFlag(GLOBALFLAG_SELF_TOGRAVE)
+	local e0=Effect.CreateEffect(c)
+	e0:SetType(EFFECT_TYPE_SINGLE)
+	e0:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+	e0:SetCode(EFFECT_SELF_TOGRAVE)
+	e0:SetRange(LOCATION_MZONE)
+	e0:SetCondition(Amana.tgcon)
+	c:RegisterEffect(e0)
+end
+function Amana.cfilter(c)
+	return c:IsFaceup() and c:IsCode(26818000,26818001)
+end
+function Amana.tgcon(e)
+	local tp=e:GetHandlerPlayer()
+	return Duel.GetCurrentPhase()==PHASE_END
+		and not Duel.IsExistingMatchingCard(Amana.cfilter,tp,LOCATION_MZONE,0,1,nil)
+end
