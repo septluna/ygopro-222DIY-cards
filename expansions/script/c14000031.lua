@@ -10,7 +10,6 @@ function cm.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_PREDRAW)
 	e1:SetCondition(cm.actcon)
-	e1:SetCost(cm.actcost)
 	e1:SetTarget(cm.target)
 	e1:SetOperation(cm.activate)
 	c:RegisterEffect(e1)
@@ -32,9 +31,7 @@ function cm.counterfilter(c)
 	return c:GetSummonLocation()~=LOCATION_EXTRA
 end
 function cm.actcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.GetLP(tp)>14 and Duel.GetCustomActivityCount(m,tp,ACTIVITY_SPSUMMON)==0 and Duel.GetCustomActivityCount(m,1-tp,ACTIVITY_CHAIN)==0 end
-	local lp=Duel.GetLP(tp)
-	Duel.PayLPCost(tp,lp-14)
+	if chk==0 then return Duel.GetCustomActivityCount(m,tp,ACTIVITY_SPSUMMON)==0 and Duel.GetCustomActivityCount(m,1-tp,ACTIVITY_CHAIN)==0 end
 	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
@@ -67,18 +64,7 @@ function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 		local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(cm.spfilter),tp,LOCATION_HAND+LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,e,tp)
 		if #g>0 then
-			if Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)~=0 then
-				local turnp=Duel.GetTurnPlayer()
-				Duel.SkipPhase(turnp,PHASE_STANDBY,RESET_PHASE+PHASE_END,1)
-				Duel.SkipPhase(turnp,PHASE_MAIN1,RESET_PHASE+PHASE_END,1)
-				local e1=Effect.CreateEffect(e:GetHandler())
-				e1:SetType(EFFECT_TYPE_FIELD)
-				e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-				e1:SetCode(EFFECT_CANNOT_EP)
-				e1:SetTargetRange(1,0)
-				e1:SetReset(RESET_PHASE+PHASE_MAIN1+RESET_SELF_TURN)
-				Duel.RegisterEffect(e1,tp)
-			end
+			Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 		end
 	end
 	local e2=Effect.CreateEffect(e:GetHandler())

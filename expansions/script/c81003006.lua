@@ -33,14 +33,14 @@ function c81003006.damfilter(c,tp)
 	return c:IsType(TYPE_SPELL+TYPE_TRAP) and c:GetOwner()==1-tp
 end
 function c81003006.damtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c81003006.damfilter,tp,LOCATION_ONFIELD,0,1,nil) end
+	if chk==0 then return Duel.IsExistingMatchingCard(c81003006.damfilter,tp,LOCATION_ONFIELD,0,1,nil,tp) end
 	Duel.SetTargetPlayer(1-tp)
-	local ct=Duel.GetMatchingGroupCount(c81003006.damfilter,tp,LOCATION_ONFIELD,0,nil)
+	local ct=Duel.GetMatchingGroupCount(c81003006.damfilter,tp,LOCATION_ONFIELD,0,nil,tp)
 	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,ct*400)
 end
 function c81003006.damop(e,tp,eg,ep,ev,re,r,rp)
 	local p=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER)
-	local ct=Duel.GetMatchingGroupCount(c81003006.damfilter,tp,LOCATION_ONFIELD,0,nil)
+	local ct=Duel.GetMatchingGroupCount(c81003006.damfilter,tp,LOCATION_ONFIELD,0,nil,tp)
 	Duel.Damage(p,ct*400,REASON_EFFECT)
 end
 function c81003006.eqcon(e,tp,eg,ep,ev,re,r,rp,chk)

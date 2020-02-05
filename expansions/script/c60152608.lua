@@ -339,11 +339,12 @@ function c60152608.e5op(e,tp,eg,ep,ev,re,r,rp)
     if tc:IsRelateToEffect(e) then
 		if e:GetHandler():GetColumnGroupCount()==0 then
 			Duel.SendtoHand(tc,nil,REASON_EFFECT)
-			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-			local g=Duel.SelectMatchingCard(tp,nil,tp,0,LOCATION_GRAVE,1,1,nil)
+			local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,0,LOCATION_GRAVE,nil)
 			if g:GetCount()>0 and Duel.SelectYesNo(tp,aux.Stringid(60152603,1)) then
-				Duel.HintSelection(g)
-				Duel.SendtoDeck(g,nil,2,REASON_EFFECT)
+				Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+				local sg=g:Select(tp,1,1,nil)
+				Duel.HintSelection(sg)
+				Duel.SendtoDeck(sg,nil,2,REASON_EFFECT)
 			end
 		else
 			Duel.SendtoHand(tc,nil,REASON_EFFECT)
