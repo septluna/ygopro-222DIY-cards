@@ -14,6 +14,7 @@ end
 --majsoul
 function Amana.Majsoul(c)
 	Duel.EnableGlobalFlag(GLOBALFLAG_SELF_TOGRAVE)
+	aux.AddCodeList(c,26818000,26818001)
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_SINGLE)
 	e0:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
