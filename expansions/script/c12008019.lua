@@ -44,12 +44,9 @@ function c12008019.spop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.Draw(tp,2,REASON_EFFECT)==0 then return end
 	local tc=Duel.GetOperatedGroup():GetFirst()
 	Duel.ConfirmCards(1-tp,tc)
-	if tc:IsSetCard(0x1fb3) and tc:IsType(TYPE_MONSTER) then
-		Duel.BreakEffect()
-	else
-		Duel.BreakEffect()
+        local gg=tc:Filter(Card.IsSetCard,nil,0x1fb3)
+        tc:Sub(gg)
 		Duel.SendtoGrave(tc,REASON_EFFECT+REASON_DISCARD)
-	end
 	Duel.ShuffleHand(tp)
 end
 function c12008019.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
