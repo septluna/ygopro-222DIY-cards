@@ -1,5 +1,6 @@
 --炫灵姬启奏
 function c12016020.initial_effect(c)
+        aux.AddCodeList(c,12016001,12016002,12016003)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -21,7 +22,6 @@ function c12016020.initial_effect(c)
 	e2:SetOperation(c12016020.activate1)
 	c:RegisterEffect(e2)
 end
-c12016020.fit_monster={12016001,12016002,12016003}
 function c12016020.filter(c,e,tp,m1,m2,ft)
 	if not c:IsSetCard(0xfb9) or bit.band(c:GetType(),0x81)~=0x81
 		or not c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_RITUAL,tp,false,true) then return false end
