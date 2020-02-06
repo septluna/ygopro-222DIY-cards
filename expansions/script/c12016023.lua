@@ -1,5 +1,6 @@
 --小女不才
 function c12016023.initial_effect(c)
+	aux.AddCodeList(c,12016000)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_DECKDES)
@@ -20,7 +21,6 @@ function c12016023.initial_effect(c)
 	e2:SetOperation(c12016023.activate1)
 	c:RegisterEffect(e2)
 end
-c12016023.fit_monster={12016000}
 function c12016023.dfilter(c)
 	return c:IsType(TYPE_SPIRIT) and c:IsLevelAbove(1) and c:IsAbleToGrave()
 end
