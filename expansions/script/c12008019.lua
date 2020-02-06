@@ -42,7 +42,7 @@ end
 function c12008019.spop(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end
 	if Duel.Draw(tp,2,REASON_EFFECT)==0 then return end
-	local tc=Duel.GetOperatedGroup():GetFirst()
+	local tc=Duel.GetOperatedGroup()
 	Duel.ConfirmCards(1-tp,tc)
         local gg=tc:Filter(Card.IsSetCard,nil,0x1fb3)
         tc:Sub(gg)
