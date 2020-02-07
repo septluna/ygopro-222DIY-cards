@@ -39,6 +39,7 @@ function c33330217.ac(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_IMMUNE_EFFECT)
 		e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+		e1:SetRange(LOCATION_ONFIELD)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 		e1:SetValue(c33330217.efilter)
 		tc:RegisterEffect(e1)
@@ -60,7 +61,7 @@ function c33330217.op(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c33330217.efilter(e,te)
-	if not te:IsHasProperty(EFFECT_FLAG_CARD_TARGET) then return false end
-	local g=Duel.GetChainInfo(ev,CHAININFO_TARGET_CARDS)
-	return g and g:IsContains(e:GetHandler()) 
+	local c=e:GetHandler()
+	local ec=te:GetHandler()
+	return (te:IsHasProperty(EFFECT_FLAG_CARD_TARGET) and c:IsRelateToEffect(te)) or ec:IsHasCardTarget(c)
 end
