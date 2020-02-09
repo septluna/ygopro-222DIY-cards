@@ -38,7 +38,7 @@ function c12010014.cfilter(c,tc,tp)
 end
 function c12010014.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if chk==0 then return Duel.GetCustomActivityCount(12010013,tp,ACTIVITY_SPSUMMON)==0 and e:GetHandler():IsReleasable() and Duel.IsExistingMatchingCard(c12010013.cfilter,tp,LOCATION_MZONE+LOCATION_HAND,0,1,c,tc,tp) end
+	if chk==0 then return Duel.GetCustomActivityCount(12010014,tp,ACTIVITY_SPSUMMON)==0 and e:GetHandler():IsReleasable() and Duel.IsExistingMatchingCard(c12010013.cfilter,tp,LOCATION_MZONE+LOCATION_HAND,0,1,c,tc,tp) end
 	local g=Duel.SelectMatchingCard(tp,c12010013.cfilter,tp,LOCATION_MZONE+LOCATION_HAND,0,1,1,c,tc,tp)
 	g:AddCard(c)
 	Duel.Release(g,REASON_COST)
