@@ -3,13 +3,6 @@ local m=33400100
 local cm=_G["c"..m]
 function cm.initial_effect(c)
 	 c:EnableCounterPermit(0x34f)
-	--Activate
-	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
-	e1:SetType(EFFECT_TYPE_ACTIVATE)
-	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetOperation(cm.activate)
-	c:RegisterEffect(e1)
 	--counter
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
@@ -55,19 +48,6 @@ function cm.counter(e,tp,eg,ep,ev,re,r,rp)
 end
 function cm.cfilter(c)
 	return c:IsPreviousLocation(LOCATION_ONFIELD)
-end
-function cm.filter(c)
-	return c:IsCode(33400113) and c:IsAbleToHand()
-end
-function cm.activate(e,tp,eg,ep,ev,re,r,rp)
-	if not e:GetHandler():IsRelateToEffect(e) then return end
-	local g=Duel.GetMatchingGroup(cm.filter,tp,LOCATION_DECK,0,nil)
-	if g:GetCount()>0 and Duel.SelectYesNo(tp,aux.Stringid(m,0)) then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-		local sg=g:Select(tp,1,1,nil)
-		Duel.SendtoHand(sg,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,sg)
-	end
 end
 
 function cm.ctp(e,tp,eg,ep,ev,re,r,rp)
