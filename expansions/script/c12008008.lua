@@ -20,7 +20,7 @@ function c12008008.initial_effect(c)
 	e3:SetCode(EFFECT_UPDATE_ATTACK)
 	e3:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 	e3:SetRange(LOCATION_MZONE)
-	e3:SetCondition(c12008008.condition)
+	-- e3:SetCondition(c12008008.condition)
 	e3:SetValue(c12008008.atkval)
 	c:RegisterEffect(e3)  
 	--immune
