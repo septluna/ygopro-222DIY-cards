@@ -111,7 +111,7 @@ function c12026001.drop2(e,tp,eg,ep,ev,re,r,rp)
 	e:Reset()
 end
 function c12026001.xyzfilter(c,e,tp,xyzc)
-	return c:IsSetCard(0xfba) and c:IsType(TYPE_XYZ) xyzc:IsCanBeXyzMaterial(c)
+	return c:IsSetCard(0xfba) and c:IsType(TYPE_XYZ) and xyzc:IsCanBeXyzMaterial(c)
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 end
 function c12026001.xyztg(e,tp,eg,ep,ev,re,r,rp,chk)
