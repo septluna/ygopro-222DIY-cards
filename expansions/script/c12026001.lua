@@ -111,13 +111,13 @@ function c12026001.drop2(e,tp,eg,ep,ev,re,r,rp)
 	e:Reset()
 end
 function c12026001.xyzfilter(c,e,tp,xyzc)
-	return c:IsSetCard(0xfba) and xyzc:IsCanBeXyzMaterial(c)
+	return c:IsSetCard(0xfba) and c:IsType(TYPE_XYZ) xyzc:IsCanBeXyzMaterial(c)
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false)
 end
 function c12026001.xyztg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local tc=eg:GetFirst()
 	if chk==0 then return Duel.GetLocationCountFromEx(tp,tp,e:GetHandler())>0
-		and aux.MustMaterialCheck(e:GetHandler(),tp,EFFECT_MUST_BE_XMATERIAL)
+		and aux.MustMaterialCheck(tc,tp,EFFECT_MUST_BE_XMATERIAL)
 		and Duel.IsExistingMatchingCard(c12026001.xyzfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,tc) end
 	Duel.SetTargetCard(tc)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
@@ -126,18 +126,18 @@ function c12026001.xyzop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) then return end
 	local tc=eg:GetFirst()
-	if Duel.GetLocationCountFromEx(tp,tp,tc)<=0 or not aux.MustMaterialCheck(tc,tp,EFFECT_MUST_BE_XMATERIAL) then return end
+	if Duel.GetLocationCountFromEx(tp,tp,tc,TYPE_XYZ)<=0 or not aux.MustMaterialCheck(tc,tp,EFFECT_MUST_BE_XMATERIAL) then return end
 	if tc:IsFacedown() or not tc:IsRelateToEffect(e) or tc:IsControler(1-tp) or tc:IsImmuneToEffect(e) then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c12026001.xyzfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,tc)
 	local sc=g:GetFirst()
-	if sc then
-		local mg=c:GetOverlayGroup()
+	if sc and sc:IsType(TYPE_XYZ) then
+		local mg=tc:GetOverlayGroup()
 		if mg:GetCount()~=0 then
 			Duel.Overlay(sc,mg)
 		end
-		sc:SetMaterial(Group.FromCards(c))
-		Duel.Overlay(sc,Group.FromCards(c))
+		sc:SetMaterial(Group.FromCards(tc))
+		Duel.Overlay(sc,Group.FromCards(tc))
 		Duel.SpecialSummon(sc,SUMMON_TYPE_XYZ,tp,tp,false,false,POS_FACEUP)
 		sc:CompleteProcedure()
 	end
