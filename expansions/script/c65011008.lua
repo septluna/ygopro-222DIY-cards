@@ -104,15 +104,14 @@ function c65011008.disop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function c65011008.filter1(c,tp)
-	return c.material and Duel.IsExistingMatchingCard(c65011008.filter2,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil,c) and c:IsSetCard(0x3da2)
+	return Duel.IsExistingMatchingCard(c65011008.filter2,tp,LOCATION_DECK,0,1,nil,c) and c:IsSetCard(0x3da2)
 end
 function c65011008.filter2(c,fc)
-	if c:IsForbidden() or not c:IsAbleToHand() then return false end
-	return c:IsCode(table.unpack(fc.material))
+	return aux.IsMaterialListCode(fc,c:GetCode()) and c:IsAbleToHand()
 end
 function c65011008.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c65011008.filter1,tp,LOCATION_EXTRA,0,1,nil,tp) end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function c65011008.activate(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONFIRM)
@@ -120,7 +119,7 @@ function c65011008.activate(e,tp,eg,ep,ev,re,r,rp)
 	if cg:GetCount()==0 then return end
 	Duel.ConfirmCards(1-tp,cg)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(c65011008.filter2),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,cg:GetFirst())
+	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(c65011008.filter2),tp,LOCATION_DECK,0,1,1,nil,cg:GetFirst())
 	local tc=g:GetFirst()
 	if not tc then return end
 	if Duel.SendtoHand(tc,nil,REASON_EFFECT)~=0 and tc:IsLocation(LOCATION_HAND) then
@@ -137,5 +136,5 @@ function c65011008.activate(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c65011008.aclimit(e,re,tp)
-	return re:GetHandler():IsCode(e:GetLabel()) and re:IsActiveType(TYPE_MONSTER) and not re:GetHandler():IsImmuneToEffect(e)
+	return re:GetHandler():IsCode(e:GetLabel()) and re:IsActiveType(TYPE_MONSTER)
 end

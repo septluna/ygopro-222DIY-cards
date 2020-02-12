@@ -47,10 +47,10 @@ function c65011014.thop(e,tp,eg,ep,ev,re,r,rp)
 end
 function c65011014.filter2(c,fc)
 	if not c:IsAbleToGraveAsCost() then return false end
-	return c:IsCode(table.unpack(fc.material))
+	return aux.IsMaterialListCode(fc,c:GetCode())
 end
 function c65011014.filter1(c,tp)
-	return c.material and Duel.IsExistingMatchingCard(c65011014.filter2,tp,LOCATION_DECK,0,1,nil,c)
+	return Duel.IsExistingMatchingCard(c65011014.filter2,tp,LOCATION_DECK,0,1,nil,c)
 end
 function c65011014.costg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c65011014.filter1,tp,LOCATION_EXTRA,0,1,nil,tp) end
