@@ -20,7 +20,7 @@ function c12008008.initial_effect(c)
 	e3:SetCode(EFFECT_UPDATE_ATTACK)
 	e3:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 	e3:SetRange(LOCATION_MZONE)
-	-- e3:SetCondition(c12008008.condition)
+	e3:SetCondition(c12008008.condition)
 	e3:SetValue(c12008008.atkval)
 	c:RegisterEffect(e3)  
 	--immune
@@ -47,7 +47,7 @@ function c12008008.initial_effect(c)
 	c:RegisterEffect(e5)
 end
 function c12008008.condition(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetLP(0)<Duel.GetLP(1)
+	return Duel.GetLP(0)>Duel.GetLP(1)
 end
 function c12008008.filter(c,lp)
 	return c:IsFacedown() or (c:IsFaceup() and c:GetAttack()>0 and c:GetAttack()<=lp)
