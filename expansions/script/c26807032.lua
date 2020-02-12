@@ -75,9 +75,9 @@ function c26807032.cfilter(c,tp)
 	return c:GetOwner()==1-tp and c:IsAbleToRemoveAsCost()
 end
 function c26807032.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c26807032.cfilter,tp,LOCATION_ONFIELD,0,1,nil,tp) end
+	if chk==0 then return Duel.IsExistingMatchingCard(c26807032.cfilter,tp,LOCATION_ONFIELD,0,1,e:GetHandler(),tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectMatchingCard(tp,c26807032.cfilter,tp,LOCATION_ONFIELD,0,1,1,nil,tp)
+	local g=Duel.SelectMatchingCard(tp,c26807032.cfilter,tp,LOCATION_ONFIELD,0,1,1,e:GetHandler(),tp)
 	Duel.Remove(g,POS_FACEDOWN,REASON_COST)
 end
 function c26807032.setlimit(e,c,tp)

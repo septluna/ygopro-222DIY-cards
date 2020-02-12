@@ -31,8 +31,8 @@ function c65030018.costfil(c)
 	return c:IsFaceup() and c:IsType(TYPE_SPELL) and c:IsType(TYPE_CONTINUOUS) and c:IsReleasable() and aux.IsCodeListed(c,65030020)
 end
 function c65030018.accost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c65030018.costfil,tp,LOCATION_SZONE,0,1,nil) end
-	local g=Duel.SelectMatchingCard(tp,c65030018.costfil,tp,LOCATION_SZONE,0,1,1,nil)
+	if chk==0 then return Duel.IsExistingMatchingCard(c65030018.costfil,tp,LOCATION_SZONE,0,1,e:GetHandler()) end
+	local g=Duel.SelectMatchingCard(tp,c65030018.costfil,tp,LOCATION_SZONE,0,1,1,e:GetHandler())
 	Duel.Release(g,REASON_COST)
 end
 function c65030018.disconfil(c)
