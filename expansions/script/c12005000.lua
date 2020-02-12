@@ -36,7 +36,7 @@ function c12005000.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,e:GetHandler(),1,0,0)
 end
 function c12005000.filter(c)
-	return c:IsSetCard(0xfbc) and c:IsType(TYPE_SPELL+TYPE_CONTINUOUS)
+	return c:IsCode(12010037) and c:IsType(TYPE_SPELL+TYPE_CONTINUOUS)
 end
 function c12005000.spop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
