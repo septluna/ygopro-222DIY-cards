@@ -49,7 +49,7 @@ function c12008023.spop(e,tp,eg,ep,ev,re,r,rp,mg)
 		Duel.ConfirmCards(tp,g)
 		Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(12008023,1))
 		local tg=g:FilterSelect(tp,Card.IsType,1,1,nil,TYPE_MONSTER)
-		local atk1=tg:GetFirst():GetAttack()
+		local atk1=tg:GetFirst():GetBaseAttack()
 		local atk2=cg:GetAttack()
 		if atk1>=atk2 then return end
 		 local ts=Duel.GetMatchingGroup(c12008023.thfilter2,tp,LOCATION_DECK+LOCATION_GRAVE,0,nil)
