@@ -33,7 +33,7 @@ function c12008001.initial_effect(c)
 	end
 end
 function c12008001.tgfilter(c,race,atk,e,tp)
-	return c:GetAttack()==atk and c:IsRace(race) and (c:IsLocation(LOCATION_HAND) or c:IsFaceup()) and Duel.IsExistingMatchingCard(c12008001.tgfilter2,tp,LOCATION_HAND+LOCATION_MZONE,LOCATION_MZONE,1,c,race,atk,e,tp) and Duel.GetLocationCountFromEx(tp,tp,TYPE_XYZ)>0 and c:IsAbleToGrave()
+	return c:GetAttack()==atk and c:IsRace(race) and (c:IsLocation(LOCATION_HAND) or c:IsFaceup()) and Duel.IsExistingMatchingCard(c12008001.tgfilter2,tp,LOCATION_HAND+LOCATION_MZONE,LOCATION_MZONE,1,c,race,atk,e,tp) and Duel.GetLocationCountFromEx(tp,tp,c,TYPE_XYZ)>0 and c:IsAbleToGrave()
 end
 function c12008001.tgfilter2(c,race,atk,e,tp)
 	return c:GetAttack()==atk and c:IsRace(race) and (c:IsLocation(LOCATION_HAND) or c:IsFaceup()) and Duel.IsExistingMatchingCard(c12008001.spfilter2,tp,LOCATION_EXTRA,0,1,nil,e,tp) and c:IsAbleToGrave()
