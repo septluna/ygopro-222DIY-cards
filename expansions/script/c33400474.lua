@@ -74,7 +74,7 @@ function c33400474.operation(e,tp,eg,ep,ev,re,r,rp)
 		e2:SetCode(EVENT_PHASE+PHASE_END)
 		e2:SetCountLimit(1)
 		e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
-		e2:SetLabelObject(tc)
+		e2:SetLabelObject(tc1)
 		e2:SetCondition(c33400474.descon)
 		e2:SetOperation(c33400474.desop)
 		Duel.RegisterEffect(e2,tp)
@@ -91,5 +91,7 @@ function c33400474.descon(e,tp,eg,ep,ev,re,r,rp)
 end
 function c33400474.desop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=e:GetLabelObject()
-	Duel.Remove(tc,REASON_EFFECT)
+	Duel.Remove(tc,0,REASON_EFFECT)
 end
+
+

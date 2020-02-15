@@ -67,7 +67,7 @@ function c81014033.sprfilter(c)
 	return c:IsFaceup() and c:IsType(TYPE_RITUAL) and c:IsType(TYPE_PENDULUM) and not c:IsCode(81014033)
 end
 function c81014033.incon(e)
-	local tp=c:GetControler()
+	local tp=e:GetHandlerPlayer()
 	return Duel.IsExistingMatchingCard(c81014033.sprfilter,tp,LOCATION_MZONE,0,1,nil)
 end
 function c81014033.cfilter(c)

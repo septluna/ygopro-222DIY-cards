@@ -101,6 +101,7 @@ function c26806053.asptg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c26806053.aspop(e,tp,eg,ep,ev,re,r,rp)
 	local zone=c26806053.acheckzone(tp)
+	if not e:GetHandler():IsRelateToEffect(e) then return end
 	if zone==0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c26806053.aspfilter,tp,LOCATION_GRAVE,0,1,1,nil,e,tp,zone)

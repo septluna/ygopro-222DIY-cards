@@ -150,6 +150,7 @@ function c81010003.attg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.SelectTarget(tp,c81010003.filter,tp,LOCATION_MZONE,0,1,1,nil)
 end
 function c81010003.atop(e,tp,eg,ep,ev,re,r,rp)
+	if not e:GetHandler():IsRelateToEffect(e) then return end
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) then
 		local e1=Effect.CreateEffect(e:GetHandler())

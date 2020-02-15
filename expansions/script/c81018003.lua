@@ -83,6 +83,7 @@ function c81018003.atktg(e,tp,eg,ep,ev,re,r,rp,chk)
 	end
 end
 function c81018003.atkop(e,tp,eg,ep,ev,re,r,rp)
+	if not e:GetHandler():IsRelateToEffect(e) then return end
 	local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_MZONE,nil)
 	if g:GetCount()>0 then
 		local sc=g:GetFirst()

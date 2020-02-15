@@ -25,7 +25,6 @@ end
 function c33400107.activate(e,tp,eg,ep,ev,re,r,rp)
 	 local tg=Duel.SelectMatchingCard(tp,nil,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
 	 local tc=tg:GetFirst()
-	 if  tc:IsRelateToEffect(e) then   
 		Duel.SendtoGrave(tc,REASON_EFFECT)
 		if Duel.IsExistingMatchingCard(c33400107.filter1,tp,LOCATION_GRAVE,0,3,nil) and Duel.SelectYesNo(tp,aux.Stringid(33400107,0)) then
 		local c=e:GetHandler()
@@ -46,7 +45,6 @@ function c33400107.activate(e,tp,eg,ep,ev,re,r,rp)
 		e2:SetReset(RESET_PHASE+PHASE_END)
 		Duel.RegisterEffect(e2,tp)
 		end
-	end
    Duel.RegisterFlagEffect(tp,33400101,RESET_EVENT+RESET_PHASE+PHASE_END,0,0)
 end
 function c33400107.filter1(c)

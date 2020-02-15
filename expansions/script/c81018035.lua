@@ -61,6 +61,7 @@ function c81018035.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c81018035.spop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
+	if not e:GetHandler():IsRelateToEffect(e) then return end
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c81018035.spfilter,tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
@@ -101,6 +102,7 @@ function c81018035.atktg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	Duel.SelectTarget(tp,c81018035.cbfilter,tp,LOCATION_MZONE,0,1,1,nil)
 end
 function c81018035.atkop(e,tp,eg,ep,ev,re,r,rp)
+	if not e:GetHandler():IsRelateToEffect(e) then return end
 	local tc=Duel.GetFirstTarget()
 	if tc:IsFaceup() and tc:IsRelateToEffect(e) then
 		local e1=Effect.CreateEffect(e:GetHandler())

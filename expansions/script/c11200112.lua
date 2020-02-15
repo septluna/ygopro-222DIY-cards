@@ -94,7 +94,7 @@ end
 function c11200112.psptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		local chkf=tp
-		local mg1=Duel.GetMatchingGroup(c11200112.pfilter0,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil)
+		local mg1=Duel.GetMatchingGroup(c11200112.pfilter0,tp,LOCATION_REMOVED,0,nil)
 		local res=Duel.IsExistingMatchingCard(c11200112.pfilter2,tp,LOCATION_EXTRA,0,1,nil,e,tp,mg1,nil,chkf)
 		if not res then
 			local ce=Duel.GetChainMaterial(tp)
@@ -108,12 +108,12 @@ function c11200112.psptg(e,tp,eg,ep,ev,re,r,rp,chk)
 		return res
 	end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,1,tp,LOCATION_GRAVE+LOCATION_REMOVED)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,1,tp,LOCATION_REMOVED)
 end
 function c11200112.pspop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local chkf=tp
-	local mg1=Duel.GetMatchingGroup(c11200112.pfilter1,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,nil,e)
+	local mg1=Duel.GetMatchingGroup(c11200112.pfilter1,tp,LOCATION_REMOVED,0,nil,e)
 	local sg1=Duel.GetMatchingGroup(c11200112.pfilter2,tp,LOCATION_EXTRA,0,nil,e,tp,mg1,nil,chkf)
 	local mg2=nil
 	local sg2=nil

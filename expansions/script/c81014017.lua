@@ -65,6 +65,7 @@ function c81014017.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,0,0)
 end
 function c81014017.spop(e,tp,eg,ep,ev,re,r,rp)
+	if not e:GetHandler():IsRelateToEffect(e) then return end
 	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0
 		or not Duel.IsPlayerCanSpecialSummonMonster(tp,81014018,0,0x4011,1550,1050,4,RACE_FAIRY,ATTRIBUTE_LIGHT) then return end
 	local token=Duel.CreateToken(tp,81014018)

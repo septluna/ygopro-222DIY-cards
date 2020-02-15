@@ -15,22 +15,21 @@ function c33400106.cfilter(c,e,tp)
 	return c:IsSetCard(0x3341) and c:IsType(TYPE_MONSTER) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c33400106.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chk==0 then return  Duel.IsExistingTarget(c33400106.cfilter,tp,LOCATION_GRAVE,0,1,nil,e,tp)
-	and Duel.IsCanRemoveCounter(tp,1,0,0x34f,2,REASON_COST)
-	end
+	local mc=Duel.GetLocationCount(tp,LOCATION_MZONE)
 	local sc=Duel.GetMatchingGroupCount(c33400106.cfilter,tp,LOCATION_GRAVE,0,nil,e,tp)
-	if chk==0 then return sc>0  end
-	local cn=Duel.GetCounter(tp,1,0,0x34f)
+	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_GRAVE) and c33400106.cfilter(chkc) end
+	if chk==0 then return  Duel.IsExistingTarget(c33400106.cfilter,tp,LOCATION_GRAVE,0,1,nil,e,tp)
+	and Duel.IsCanRemoveCounter(tp,1,0,0x34f,2,REASON_COST) and mc>0 and sc>0
+	end
 	local lvt={} 
-	 if cn>=2 and sc>=1 then lvt[1]=1	end
-	 if cn>=2 and sc>=2 and Duel.GetFlagEffect(tp,33400101)>=2 then lvt[2]=2 end
+	 lvt[1]=1  
+	if  sc>1 and mc>1 and Duel.GetFlagEffect(tp,33400101)>=2 then lvt[2]=2 end
 	Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(33400106,1))
 	local sc1=Duel.AnnounceNumber(tp,table.unpack(lvt))
 	Duel.RemoveCounter(tp,1,0,0x34f,2,REASON_COST)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectTarget(tp,c33400106.cfilter,tp,LOCATION_GRAVE,0,sc1,sc1,nil,e,tp)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,g,g:GetCount(),0,0)
-	local v=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS):Filter(Card.IsRelateToEffect,nil,e)
 end
 function c33400106.activate(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS):Filter(Card.IsRelateToEffect,nil,e)
