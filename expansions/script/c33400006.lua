@@ -1,5 +1,6 @@
 --时崎狂三---战斗启幕者
 function c33400006.initial_effect(c)
+c:EnableCounterPermit(0x34f)
 	--link summon
 	aux.AddLinkProcedure(c,c33400006.mfilter,1)
 	c:EnableReviveLimit()

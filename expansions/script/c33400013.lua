@@ -1,5 +1,6 @@
 --时崎狂三 校服
 function c33400013.initial_effect(c)
+c:EnableCounterPermit(0x34f)
 	 --synchro summon
 	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsSetCard,0x341),aux.NonTuner(nil),1)
 	c:EnableReviveLimit()

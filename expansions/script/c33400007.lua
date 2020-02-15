@@ -1,5 +1,6 @@
 --时崎狂三-祈福
 function c33400007.initial_effect(c)
+c:EnableCounterPermit(0x34f)
 	 --link summon
 	aux.AddLinkProcedure(c,nil,2,2,c33400007.lcheck)
 	c:EnableReviveLimit()

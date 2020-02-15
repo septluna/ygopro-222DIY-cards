@@ -1,5 +1,6 @@
 --时崎狂三-时间女王
 function c33400012.initial_effect(c)
+c:EnableCounterPermit(0x34f)
 	--synchro summon
 	aux.AddSynchroProcedure(c,aux.FilterBoolFunction(Card.IsSetCard,0x341),c33400012.sfilter,1)
 	c:EnableReviveLimit()

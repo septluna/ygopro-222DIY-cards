@@ -1,5 +1,6 @@
 --时崎狂三-暗影之主
 function c33400009.initial_effect(c)
+c:EnableCounterPermit(0x34f)
 	--link summon
 	aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsSetCard,0x341),2,99,c33400009.lcheck)
 	c:EnableReviveLimit()

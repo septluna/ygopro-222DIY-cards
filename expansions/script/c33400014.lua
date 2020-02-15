@@ -1,5 +1,6 @@
 --时崎狂三 奇袭
 function c33400014.initial_effect(c)
+c:EnableCounterPermit(0x34f)
 	--xyz summon
 	aux.AddXyzProcedure(c,aux.FilterBoolFunction(Card.IsSetCard,0x3341),8,2)
 	c:EnableReviveLimit()

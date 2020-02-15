@@ -1,5 +1,6 @@
 --时崎狂三-梦魇
 function c33400010.initial_effect(c)
+c:EnableCounterPermit(0x34f)
 	  --link summon
 	aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsSetCard,0x341),3,99,c33400010.lcheck)
 	c:EnableReviveLimit()
