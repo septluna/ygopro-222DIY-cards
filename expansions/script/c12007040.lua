@@ -93,7 +93,7 @@ function cm.target(e,c)
     local c=e:GetHandler()
     local g,te=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS,CHAININFO_TRIGGERING_EFFECT)
     return not (te and te:IsHasProperty(EFFECT_FLAG_CARD_TARGET))
-        or not (g and g:IsContains(c)) and c:IsSetCard(0xfb2)
+        or not (g and g:IsContains(c)) 
 end
 function cm.efilter(e,te)
     return te:GetOwnerPlayer()~=e:GetHandlerPlayer()
