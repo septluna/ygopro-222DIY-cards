@@ -19,7 +19,7 @@ end
 function c33400474.cfilter(c,e,tp)
 	local nm
 	if c:IsType(TYPE_XYZ) then nm=c:GetRank()
-	elseif c:IsType(TYPE_LINK) then nm=2*(c:GetLinkMarker())
+	elseif c:IsType(TYPE_LINK) then nm=2*(c:GetLink())
 	else nm=c:GetLevel()
 	end   
 	return c:IsSetCard(0x341) and c:IsAbleToRemoveAsCost() and Duel.IsExistingMatchingCard(c33400474.filter,tp,LOCATION_EXTRA,0,1,nil,e,tp,nm) 
@@ -48,7 +48,7 @@ function c33400474.operation(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	local nm
 	if tc:IsType(TYPE_XYZ) then nm=tc:GetRank()
-	elseif tc:IsType(TYPE_LINK) then nm=2*(tc:GetLinkMarker())
+	elseif tc:IsType(TYPE_LINK) then nm=2*(tc:GetLink())
 	else nm=tc:GetLevel()
 	end   
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
