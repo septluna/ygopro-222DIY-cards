@@ -20,7 +20,7 @@ function c12008008.initial_effect(c)
 	e3:SetCode(EFFECT_UPDATE_ATTACK)
 	e3:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 	e3:SetRange(LOCATION_MZONE)
-	e3:SetCondition(c12008008.condition)
+	--e3:SetCondition(c12008008.condition)
 	e3:SetValue(c12008008.atkval)
 	c:RegisterEffect(e3)  
 	--immune
@@ -95,9 +95,10 @@ function c12008008.efilter(e,te)
 	return te:GetOwner()~=e:GetOwner()
 end
 function c12008008.atkval(e,c)
-	local tp=c:GetControler()
-	local lp1,lp2=Duel.GetLP(tp),Duel.GetLP(1-tp)
-	return math.abs(lp1-lp2)
+	local lps=Duel.GetLP(c:GetControler())
+        local lpo=Duel.GetLP(1-c:GetControler())
+        if lps>=lpo then return 0
+        else return lpo-lps end
 end
 function c12008008.lcheck(g)
 	return g:GetClassCount(Card.GetLinkRace)==g:GetCount()
