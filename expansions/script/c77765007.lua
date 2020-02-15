@@ -144,7 +144,8 @@ end
 
 function cm.PushNewEffect(p,code,e)
 	if not cm[p][code] then
-		cm[p][code]={}
+		--cm[p][code]={}
+        return
 	end
 	--Debug.Message(code)
 	table.insert(cm[p][code],e)
