@@ -59,6 +59,7 @@ function c12010046.repop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c12010046.spcon(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler() 
 	return e:GetHandler():IsPreviousLocation(LOCATION_ONFIELD) and c:IsReason(REASON_EFFECT) and c:GetReasonPlayer()==1-tp  and e:GetHandler():GetOverlayCount()~=0
 end
 function c12010046.spfilter(c,e,tp)
