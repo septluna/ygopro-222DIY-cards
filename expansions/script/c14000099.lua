@@ -44,14 +44,9 @@ function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 		else
 			Duel.ChangePosition(tc,POS_FACEDOWN)
 		end
-	elseif tc:IsType(TYPE_TOKEN) then
-		return
-	elseif tc:IsType(TYPE_PENDULUM) then
+	end
+	if not tc:IsType(TYPE_TOKEN) and (tc:IsFaceup() or not tc:IsLocation(LOCATION_REMOVED)) then
 		Duel.Remove(tc,POS_FACEDOWN,REASON_RULE)
-	elseif tc:IsFaceup() or not tc:IsLocation(LOCATION_REMOVED) then
-		Duel.Remove(tc,POS_FACEDOWN,REASON_RULE)
-	else
-		return
 	end
 	Duel.BreakEffect()
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)

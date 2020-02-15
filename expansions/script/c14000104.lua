@@ -64,7 +64,7 @@ function cm.poscon(e)
 	return e:GetHandler():IsAttackPos()
 end
 function cm.filter(c,e,tp)
-	return c:GetSummonPlayer()==1-tp and (not e or c:IsRelateToEffect(e))
+	return c:GetSummonPlayer()==1-tp and (not e or c:IsRelateToEffect(e)) and not c:IsType(TYPE_TOKEN)
 end
 function cm.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return eg:IsExists(cm.filter,1,nil,nil,tp) end
@@ -75,9 +75,8 @@ function cm.operation(e,tp,eg,ep,ev,re,r,rp)
 	local g=eg:Filter(cm.filter,nil,e,tp)
 	local tc=g:GetFirst()
 	while tc do
-		if Duel.GetLocationCount(1-tp,LOCATION_SZONE)>0 and tc:IsCanTurnSet() and not tc:IsType(TYPE_PENDULUM) then
-			if Duel.MoveToField(tc,tp,1-tp,LOCATION_SZONE,POS_FACEDOWN,true)~=0 and not tc:IsType(TYPE_TOKEN) then
-				Duel.ConfirmCards(1-tp,tc)
+		if Duel.GetLocationCount(1-tp,LOCATION_SZONE)>0 and tc:IsCanTurnSet() and not tc:IsType(TYPE_PENDULUM+TYPE_TOKEN) then
+			if Duel.MoveToField(tc,tp,1-tp,LOCATION_SZONE,POS_FACEDOWN,true)~=0  then
 				local e1=Effect.CreateEffect(e:GetHandler())
 				e1:SetCode(EFFECT_CHANGE_TYPE)
 				e1:SetType(EFFECT_TYPE_SINGLE)
@@ -85,17 +84,12 @@ function cm.operation(e,tp,eg,ep,ev,re,r,rp)
 				e1:SetReset(RESET_EVENT+RESETS_STANDARD-RESET_TURN_SET)
 				e1:SetValue(TYPE_SPELL+TYPE_CONTINUOUS)
 				tc:RegisterEffect(e1)
-			elseif tc:IsType(TYPE_TOKEN) then
-				local c=e:GetHandler()
 			else
 				Duel.Remove(tc,POS_FACEDOWN,REASON_RULE)
 			end
-		elseif tc:IsType(TYPE_TOKEN) then
-			local c=e:GetHandler()
-		elseif tc:IsFaceup() or not tc:IsLocation(LOCATION_REMOVED) then
+		end
+		if not tc:IsType(TYPE_TOKEN) and (tc:IsFaceup() or not tc:IsLocation(LOCATION_REMOVED)) then
 			Duel.Remove(tc,POS_FACEDOWN,REASON_RULE)
-		else
-			local c=e:GetHandler()
 		end
 		tc=g:GetNext()
 	end
