@@ -66,7 +66,8 @@ end
 function cm.ctop(e,tp,eg,ep,ev,re,r,rp)
 	local ct=e:GetLabelObject():GetLabel()
 	if ct>0 and Duel.IsExistingMatchingCard(cm.ctfilter,tp,LOCATION_ONFIELD,0,1,nil) then
-		local tc=Duel.SelectMatchingCard(tp,cm.ctfilter,tp,LOCATION_ONFIELD,0,1,1,nil)
-		tc:AddCounter(0x34f,ct)
+		local tc1=Duel.SelectMatchingCard(tp,cm.ctfilter,tp,LOCATION_ONFIELD,0,1,1,nil)
+		local tc=tc1:GetFirst()
+		tc:AddCounter(0x34f,ct,true)
 	end
 end

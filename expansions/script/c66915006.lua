@@ -32,46 +32,23 @@ function cm.initial_effect(c)
     e111:SetOperation(cm.operations)
     c:RegisterEffect(e111)
 end
-function cm.filters(c,p)
-    local tp=c:GetControler()
-    if c:IsType(TYPE_FIELD) then return false end
-    if not c:IsSetCard(0x374) then return false end
-    if c:IsLocation(LOCATION_PZONE) and c:IsType(TYPE_PENDULUM) then   return Duel.CheckLocation(tp,LOCATION_PZONE,0) or Duel.CheckLocation(tp,LOCATION_PZONE,1) end
-    for i=0,4 do
-        if c:IsLocation(LOCATION_SZONE) and not c:IsType(TYPE_PENDULUM) and Duel.CheckLocation(tp,LOCATION_SZONE,i) then return true end
-        if c:IsLocation(LOCATION_MZONE) and Duel.CheckLocation(tp,LOCATION_MZONE,i) then return true end
-    end
-    return false
+function cm.seqfilter(c)
+    return c:IsFaceup() and c:IsSetCard(0x374) and c:IsType(TYPE_CONTINUOUS) and c:IsType(TYPE_SPELL) or c:IsType(TYPE_TRAP)
 end
 function cm.tg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-    if chkc then return chkc:IsOnField() and cm.filters(chkc,tp) end
-    if chk==0 then return Duel.IsExistingTarget(cm.filters,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil,tp) end
-    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOFIELD)
-    local g=Duel.SelectTarget(tp,cm.filters,tp,LOCATION_SZONE,LOCATION_SZONE,1,1,nil,tp)
+    if chkc then return chkc:IsLocation(LOCATION_SZONE) and chkc:IsControler(tp) and cm.seqfilter(chkc) end
+    if chk==0 then return Duel.IsExistingTarget(cm.seqfilter,tp,LOCATION_SZONE,0,1,nil)
+        and Duel.GetLocationCount(tp,LOCATION_SZONE,tp,LOCATION_REASON_CONTROL)>0 end
+    Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(m,1))
+    Duel.SelectTarget(tp,cm.seqfilter,tp,LOCATION_SZONE,0,1,1,nil)
 end
-function cm.op(e,p,eg,ep,ev,re,r,rp)
-    if not e:GetHandler():IsRelateToEffect(e) then return end
+function cm.op(e,tp,eg,ep,ev,re,r,rp)
     local tc=Duel.GetFirstTarget()
-    local tp=tc:GetControler()
-    local nseq=0
-    if not tc:IsRelateToEffect(e) then return end
-    local seq=tc:GetSequence()
-    if tc:IsLocation(LOCATION_PZONE) and tc:IsType(TYPE_PENDULUM) and 
-       (Duel.CheckLocation(tp,LOCATION_PZONE,0) or Duel.CheckLocation(tp,LOCATION_PZONE,1)) then
-       if seq==0 then nseq=4
-       else nseq=0
-       end  
-    end
-    if tc:IsLocation(LOCATION_SZONE) and not tc:IsType(TYPE_PENDULUM) then
-       if tc:IsControler(p) then
-          local s=Duel.SelectDisableField(p,1,LOCATION_SZONE,0,0)
-          nseq=math.log(s,2)-8
-       else
-          local s=Duel.SelectDisableField(p,1,0,LOCATION_SZONE,0)/0x10000
-          nseq=math.log(s,2)-8
-       end
-    end
-    Duel.MoveSequence(tc,nseq)
+    if not tc:IsRelateToEffect(e) or tc:IsControler(1-tp) or Duel.GetLocationCount(tp,LOCATION_SZONE)<=0 then return end
+    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOZONE)
+    local s=Duel.SelectDisableField(tp,1,LOCATION_SZONE,0,0)
+    local nseq=math.log(s,2)-8
+    Duel.MoveSequence(tc,nseq)  
 end
 function cm.filter(c,e,tp)
     return c:IsFaceup() and c:IsSetCard(0x374) and c:IsAbleToDeck()
