@@ -8,7 +8,7 @@ function cm.initial_effect(c)
 	e1:SetCategory(CATEGORY_SEARCH+CATEGORY_TOHAND)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetCountLimit(1,m+10000+EFFECT_COUNT_CODE_OATH)
+	e1:SetCondition(cm.thcon2)
 	e1:SetOperation(cm.activate)
 	c:RegisterEffect(e1)
 	--to hand   
@@ -32,8 +32,11 @@ function cm.initial_effect(c)
 	e4:SetOperation(aux.chainreg)
 	c:RegisterEffect(e4)
 end
+function cm.thcon2(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.GetFlagEffect(tp,m)==0
+end
 function cm.thfilter1(c)
-	return c:IsSetCard(0x3340) and c:IsAbleToHand()
+	return  c:IsSetCard(0x3340) and c:IsAbleToHand()
 end
 function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end
@@ -43,6 +46,7 @@ function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 		local sg=g:Select(tp,1,1,nil)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,sg)
+		Duel.RegisterFlagEffect(tp,m,RESET_EVENT+RESET_PHASE+PHASE_END,0,0)
 	end
 end
 function cm.thcon(e,tp,eg,ep,ev,re,r,rp)
