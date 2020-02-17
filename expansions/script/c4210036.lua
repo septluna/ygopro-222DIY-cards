@@ -62,13 +62,13 @@ function c4210036.spcon(e,c)
 	if c==nil then return true end
 		local mg1=Duel.GetMatchingGroup(c4210036.relfilter,tp,LOCATION_MZONE+LOCATION_HAND,0,e:GetHandler())
 		local mg2=Duel.GetMatchingGroup(c4210036.repfilter,tp,LOCATION_REMOVED,0,nil)
-		local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)		
+		local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)	   
 		return Duel.IsExistingMatchingCard(c4210036.filter,tp,LOCATION_MZONE+LOCATION_HAND,0,1,nil,e,tp,mg1,mg2,ft)
 			and Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_HAND,0,1,nil,4210028)
 			and (e:GetHandler():IsLocation(LOCATION_HAND) or (e:GetHandler():IsLocation(LOCATION_GRAVE) and Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_HAND,0,1,nil,4210024)))
 end
 function c4210036.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==1 then return true end	
+	if chk==1 then return true end  
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,e:GetHandler():GetLocation())
 end
 function c4210036.spop(e,tp,eg,ep,ev,re,r,rp)
@@ -103,7 +103,7 @@ function c4210036.spop(e,tp,eg,ep,ev,re,r,rp)
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
 			local mat2=mg:SelectWithSumEqual(tp,Card.GetLevel,6,0,99,tc)
 			mat:Merge(mat2)
-		end				
+		end			 
 		local rm= mat:Filter(Card.IsLocation,tp,LOCATION_REMOVED)
 		Duel.SendtoDeck(rm,nil,0,REASON_COST)
 		Duel.Release(mat,REASON_COST+REASON_RELEASE)
@@ -149,9 +149,9 @@ function c4210036.operation(e,tp,eg,ep,ev,re,r,rp)
 				Duel.RaiseEvent(showcard,0x1420042a,e,REASON_COST,tp,0,0)
 				Duel.ShuffleHand(tp)
 				Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-				local cd = Duel.SelectMatchingCard(tp,c4210036.cdrmfilter,tp,LOCATION_REMOVED,0,1,1,nil,e,tp)
-				Duel.ConfirmCards(1-tp,cd)
+				local cd = Duel.SelectMatchingCard(tp,c4210036.cdrmfilter,tp,LOCATION_REMOVED,0,1,1,nil,e,tp)				
 				Duel.SendtoHand(cd,nil,REASON_EFFECT)
+				Duel.ConfirmCards(1-tp,cd)
 			end
 		end
 	end
@@ -170,7 +170,7 @@ function c4210036.rtcost(e,tp,eg,ep,ev,re,r,rp,chk)
 			Duel.SendtoGrave(e:GetHandler(),REASON_COST+REASON_DISCARD)
 		end
 	else
-		Duel.SendtoGrave(e:GetHandler(),REASON_COST+REASON_DISCARD)	
+		Duel.SendtoGrave(e:GetHandler(),REASON_COST+REASON_DISCARD) 
 	end
 end
 function c4210036.rttg(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -181,5 +181,6 @@ function c4210036.rtop(e,tp,eg,ep,ev,re,r,rp)
 	local sg=Duel.SelectMatchingCard(tp,c4210036.cdfilter,tp,LOCATION_DECK,0,1,1,nil)
 	if sg:GetCount()>0 then
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,sg)
 	end
 end
