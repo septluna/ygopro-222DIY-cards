@@ -74,10 +74,6 @@ function c12026033.target1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingTarget(aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(12026033,2))
 	local g=Duel.SelectTarget(tp,aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
-	e:SetLabelObject(re)
-	e:SetCategory(re:GetCategory())
-	e:SetProperty(re:GetProperty())
-	e:SetLabel(re:GetLabel())
 --  Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
 end
 function c12026033.cpcon(e,tp,eg,ep,ev,re,r,rp)
