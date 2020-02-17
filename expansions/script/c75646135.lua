@@ -19,23 +19,14 @@ function c75646135.initial_effect(c)
 	e2:SetCategory(CATEGORY_TOHAND)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_MZONE)
-	e2:SetCountLimit(1,756461)
+	e2:SetCountLimit(1,5646135)
 	e2:SetCost(c75646135.thcost)
 	e2:SetTarget(c75646135.thtg)
 	e2:SetOperation(c75646135.thop)
 	c:RegisterEffect(e2)
 end
-function c75646135.chkfilter1(c,e,tp)
-	return c:IsAttribute(ATTRIBUTE_EARTH) and c:IsLevelBelow(4) and 
-		not c:IsHasEffect(EFFECT_REVIVE_LIMIT) and Duel.IsPlayerCanSpecialSummon(tp,0,POS_FACEUP,tp,c)
-		and Duel.IsExistingMatchingCard(c75646135.chkfilter2,tp,LOCATION_DECK,0,1,nil,e,tp,c:GetCode())
-end
-function c75646135.chkfilter2(c,e,tp,cd)
-	return c:IsAttribute(ATTRIBUTE_EARTH) and c:IsLevelBelow(4) and not c:IsCode(cd)
-		and not c:IsHasEffect(EFFECT_REVIVE_LIMIT) and Duel.IsPlayerCanSpecialSummon(tp,0,POS_FACEUP,1-tp,c)
-end
 function c75646135.filter1(c,e,tp)
-	return c:IsAttribute(ATTRIBUTE_EARTH) and c:IsLevelBelow(4) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsAttribute(ATTRIBUTE_EARTH) and c:IsLevelBelow(4) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_ATTACK,tp)
 		and Duel.IsExistingMatchingCard(c75646135.filter2,tp,LOCATION_DECK,0,1,nil,e,tp,c:GetCode())
 end
 function c75646135.filter2(c,e,tp,cd)
@@ -46,14 +37,13 @@ function c75646135.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return not Duel.IsPlayerAffectedByEffect(tp,59822133)
 		and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 		and Duel.GetLocationCount(1-tp,LOCATION_MZONE)>0
-		and Duel.IsExistingMatchingCard(c75646135.chkfilter1,tp,LOCATION_DECK,0,1,nil,e,tp) end
+		and Duel.IsExistingMatchingCard(c75646135.filter1,tp,LOCATION_DECK,0,1,nil,e,tp) end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,2,tp,LOCATION_DECK)
 end
 function c75646135.operation(e,tp,eg,ep,ev,re,r,rp)
 	local sg=Duel.GetMatchingGroup(c75646135.filter1,tp,LOCATION_DECK,0,nil,e,tp)
 	if sg:GetCount()>0 and not Duel.IsPlayerAffectedByEffect(tp,59822133)
 		and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and Duel.GetLocationCount(1-tp,LOCATION_MZONE)>0 then
-		Duel.BreakEffect()
 		Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(75646135,0))
 		local g1=sg:Select(tp,1,1,nil)
 		local tc1=g1:GetFirst()

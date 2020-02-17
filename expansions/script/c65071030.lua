@@ -22,11 +22,11 @@ function c65071030.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	end
 	local ac=Duel.AnnounceNumber(tp,table.unpack(t))
 	Duel.PayLPCost(tp,ac)
-	e:GetHandler():RegisterFlagEffect(65071030,RESET_EVENT+0x1fe0000,0,1,ac)
+	e:SetLabel(ac)
 end
 function c65071030.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	local ct=e:GetHandler():GetFlagEffectLabel(65071030)
-	if chk==0 then return Duel.IsExistingTarget(Card.IsFaceup,tp,0,LOCATION_MZONE,1,nil) end
+	local ct=e:GetLabel()
+	if chk==0 then return true end
 	Duel.SetTargetPlayer(1-tp)
 	Duel.SetTargetParam(ct/2)
 	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,ct/2)
@@ -38,16 +38,13 @@ function c65071030.operation(e,tp,eg,ep,ev,re,r,rp)
 		local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
 		Duel.Damage(p,d,REASON_EFFECT)
 	else
-		local ct=e:GetHandler():GetFlagEffectLabel(65071030)
-		local g=Duel.GetFieldGroup(tp,0,LOCATION_MZONE)
-		local sg=g:Filter(c65071030.tgfil,nil,e)
+		local sg=Duel.GetMatchingGroup(c65071030.tgfil,0,LOCATION_MZONE,e:GetLabel())
 		if sg:GetCount()>0 then
 			Duel.SendtoGrave(sg,REASON_EFFECT)
 		end
 	end
 end
 
-function c65071030.tgfil(c,e)
-	local ct=e:GetHandler():GetFlagEffectLabel(65071030)
-	return c:GetAttack()<=ct/2
+function c65071030.tgfil(c,ct)
+	return c:GetAttack()<=ct/2 and c:IsFaceup()
 end
