@@ -63,7 +63,7 @@ function c12004023.efilter(e,te)
 	return te:GetOwner()~=e:GetOwner()
 end
 function c12004023.descon(e,tp,eg,ep,ev,re,r,rp)
-	return bit.band(r,REASON_EFFECT)~=0
+	return bit.band(r,REASON_EFFECT)==0
 end
 function c12004023.fsfilter1(c)
 	return c:IsSetCard(0xfb1) and c:IsType(TYPE_MONSTER) and c:IsType(TYPE_SYNCHRO) 
