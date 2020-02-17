@@ -9,7 +9,7 @@ function c12010024.initial_effect(c)
 	e4:SetType(EFFECT_TYPE_QUICK_O)
 	e4:SetCode(EVENT_FREE_CHAIN)
 	e4:SetRange(LOCATION_PZONE)
-	e4:SetCountLimit(1,EFFECT_COUNT_CODE_DUEL)
+	e4:SetCountLimit(1,12010024+EFFECT_COUNT_CODE_DUEL)
 	e4:SetCost(c12010024.atkcost)
 	e4:SetTarget(c12010024.atktg)
 	e4:SetOperation(c12010024.atkop)
@@ -170,7 +170,7 @@ function c12010024.activate(e,tp,eg,ep,ev,re,r,rp)
 	if not Duel.IsExistingMatchingCard(c12010024.tdfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,e:GetHandler()) then return false end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local g=Duel.SelectMatchingCard(tp,c12010024.tdfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,5,e:GetHandler())
-	if Duel.SendtoDeck(g,nil,2,REASON_EFFECT)>0 then
+	if Duel.SendtoDeck(g,nil,2,REASON_EFFECT)>0 and e:GetHandler():IsRelateToEffect(e) then
 		Duel.ShuffleDeck(tp)
 		Duel.MoveToField(e:GetHandler(),tp,tp,LOCATION_SZONE,POS_FACEUP,true)
 	end
