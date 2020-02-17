@@ -1,5 +1,6 @@
 --逆熵科技 鸟型闹钟
 function c75646608.initial_effect(c)
+	aux.AddCodeList(c,75646600)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_EQUIP)
@@ -25,11 +26,10 @@ function c75646608.initial_effect(c)
 	e3:SetRange(LOCATION_SZONE)
 	e3:SetHintTiming(0,TIMINGS_CHECK_MONSTER)
 	e3:SetCountLimit(1)
-	e3:SetCondition(c75646608.dircon)
-	e3:SetTarget(c75646608.target1)
-	e3:SetOperation(c75646608.operation1)
+	e3:SetCondition(c75646608.con)
+	e3:SetTarget(c75646608.tg)
+	e3:SetOperation(c75646608.op)
 	c:RegisterEffect(e3)
-	c75646608.key_effect=e3
 	--Equip limit
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_SINGLE)
@@ -44,22 +44,22 @@ function c75646608.initial_effect(c)
 	e5:SetRange(LOCATION_SZONE)
 	e5:SetCode(EFFECT_CANNOT_ACTIVATE)
 	e5:SetTargetRange(0,1)
-	e5:SetValue(c75646608.aclimit)
+	e5:SetValue(1)
 	e5:SetCondition(c75646608.actcon)
 	c:RegisterEffect(e5)
 end
-c75646608.card_code_list={75646600}
-function c75646608.dircon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetFlagEffect(tp,75646600)~=0
+function c75646608.con(e)
+	local f=Duel.GetFlagEffect(e:GetHandlerPlayer(),75646600)
+	return f and f~=0
 end
-function c75646608.target1(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+function c75646608.tg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(1-tp) and chkc:IsOnField() and aux.disfilter1(chkc) end
 	if chk==0 then return Duel.IsExistingTarget(aux.disfilter1,tp,0,LOCATION_ONFIELD,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
 	local g=Duel.SelectTarget(tp,aux.disfilter1,tp,0,LOCATION_ONFIELD,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_DISABLE,g,1,0,0)
 end
-function c75646608.operation1(e,tp,eg,ep,ev,re,r,rp)
+function c75646608.op(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
 	if ((tc:IsFaceup() and not tc:IsDisabled()) or tc:IsType(TYPE_TRAPMONSTER)) and tc:IsRelateToEffect(e) then
@@ -106,11 +106,7 @@ function c75646608.operation(e,tp,eg,ep,ev,re,r,rp)
 		Duel.Equip(tp,e:GetHandler(),tc)
 	end
 end
-function c75646608.aclimit(e,re,tp)
-	return re:IsHasType(EFFECT_TYPE_ACTIVATE) and not re:GetHandler():IsImmuneToEffect(e)
-end
 function c75646608.actcon(e)
 	local tc=e:GetHandler():GetEquipTarget()
 	return Duel.GetAttacker()==tc or Duel.GetAttackTarget()==tc
-		and Duel.GetFlagEffect(tp,75646600)~=0
 end

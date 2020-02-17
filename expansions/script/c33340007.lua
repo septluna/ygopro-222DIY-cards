@@ -44,19 +44,18 @@ function cm.initial_effect(c)
 	e4:SetOperation(cm.rmop)
 	c:RegisterEffect(e4) 
 	local e5=Effect.CreateEffect(c)
-	e5:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
-	e5:SetRange(LOCATION_HAND)
-	e5:SetCode(EVENT_PRE_BATTLE_DAMAGE)
+	e5:SetType(EFFECT_TYPE_FIELD)
+	e5:SetCode(EFFECT_CHANGE_BATTLE_DAMAGE)
+	e5:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+	e5:SetTargetRange(0,1)
+	e5:SetValue(HALF_DAMAGE)
 	e5:SetCondition(cm.rdcon)
-	e5:SetOperation(cm.rdop)
+	e5:SetRange(LOCATION_HAND)
 	c:RegisterEffect(e5)
 end
-cm.setcard="Rcore"
+cm.rssetcode="Thermonuclear"
 function cm.rdcon(e,tp,eg,ep,ev,re,r,rp)
-	return ep~=tp and e:GetHandler():IsPublic()
-end
-function cm.rdop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.ChangeBattleDamage(1-tp,ev/2)
+	return e:GetHandler():IsPublic()
 end
 function cm.thop2(e,tp,eg,ep,ev,re,r,rp)
 	local lp=Duel.GetLP(tp)
@@ -83,7 +82,7 @@ function cm.spcon(e,tp,eg,ep,ev,re,r,rp,chk)
 	return Duel.IsExistingMatchingCard(cm.cfilter,tp,0,0x2,1,nil) 
 end
 function cm.cfilter(c)
-	return c:IsPublic() and c.setcard=="Rcore"
+	return c:IsPublic() and rccv.IsSet(c)
 end
 function cm.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
@@ -96,14 +95,13 @@ function cm.spop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
 end
 function cm.thfilter(c)
-	return c.setcard=="Rcore" and c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsAbleToHand()
+	return rccv.IsSet(c) and c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsAbleToHand()
 end
 function cm.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(cm.thfilter,tp,0x11,0x10,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,0,0x11)
 end
 function cm.thop(e,tp,eg,ep,ev,re,r,rp)
-	if not e:GetHandler():IsRelateToEffect(e) then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(cm.thfilter),tp,0x11,0x10,1,1,nil)
 	if g:GetCount()>0 and Duel.SendtoHand(g,nil,REASON_EFFECT)~=0 then

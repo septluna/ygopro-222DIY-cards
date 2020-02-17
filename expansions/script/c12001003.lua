@@ -36,10 +36,22 @@ function c12001003.operation(e,tp,eg,ep,ev,re,r,rp)
 		Duel.DisableShuffleCheck()
 		Duel.SendtoGrave(g,REASON_EFFECT+REASON_REVEAL)
 		Duel.ConfirmDecktop(tp,3)
+		local g=Duel.GetDecktopGroup(p,3)
+		if g:GetCount()>0 then
+		   Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+		   local sg=g:Select(tp,1,1,nil)
+		   if sg:GetFirst():IsAbleToHand() then
+			   Duel.SendtoHand(sg,nil,REASON_EFFECT)
+			   Duel.ConfirmCards(1-tp,sg)
+			   Duel.ShuffleHand(tp)
+			   Duel.SortDecktop(tp,tp,2)
+		   end
+		end
 	else
+		Duel.SendtoHand(tc,nil,REASON_EFFECT)
 		Duel.ShuffleDeck(tp)
 		Duel.SendtoDeck(e:GetHandler(),nil,0,REASON_EFFECT)
-end
+	end
 end
 function c12001003.dscon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

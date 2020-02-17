@@ -29,6 +29,14 @@ function c12026023.initial_effect(c)
 	e2:SetTarget(c12026023.disable)
 	e2:SetCode(EFFECT_DISABLE)
 	c:RegisterEffect(e2)
+	--disable
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_FIELD)
+	e2:SetRange(LOCATION_MZONE)
+	e2:SetCondition(c12026023.condition1)
+	e2:SetTargetRange(0,LOCATION_ONFIELD)
+	e2:SetCode(EFFECT_DISABLE)
+	c:RegisterEffect(e2)
 end
 function c12026023.disable(e,c)
 	local cc=e:GetHandler()
@@ -37,6 +45,10 @@ end
 function c12026023.condition(e,tp,eg,ep,ev,re,r,rp)
 	local ct=Duel.GetCurrentChain()
 	return ct>1
+end
+function c12026023.condition1(e,tp,eg,ep,ev,re,r,rp)
+	local ct=Duel.GetCurrentChain()
+	return ct>3
 end
 function c12026023.efilter(e,te)
 	return te:GetOwner()~=e:GetOwner()

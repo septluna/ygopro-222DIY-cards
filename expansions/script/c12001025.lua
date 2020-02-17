@@ -14,14 +14,17 @@ function c12001025.initial_effect(c)
 	e1:SetTarget(c12001025.distg3)
 	e1:SetOperation(c12001025.disop)
 	c:RegisterEffect(e1)
-	local e4=Effect.CreateEffect(c)
-	e4:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_SINGLE)
-	e4:SetCode(EFFECT_DESTROY_REPLACE)
-	e4:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e4:SetRange(LOCATION_MZONE)
-	e4:SetTarget(c12001025.desreptg)
-	e4:SetOperation(c12001025.desrepop)
-	c:RegisterEffect(e4)
+	--spsummon
+	local e2=Effect.CreateEffect(c)
+	e2:SetDescription(aux.Stringid(12001025,1))
+	e2:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_RECOVER)
+	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e2:SetProperty(EFFECT_FLAG_DAMAGE_STEP)
+	e2:SetCode(EVENT_TO_GRAVE)
+	e2:SetCondition(c12001025.spcon)
+	e2:SetTarget(c12001025.sptg)
+	e2:SetOperation(c12001025.spop)
+	c:RegisterEffect(e2)
 end
 function c12001025.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
@@ -54,24 +57,28 @@ end
 function c12001025.rcon(e)
 	return e:GetOwner():IsHasCardTarget(e:GetHandler())
 end
-function c12001025.repfilter(c)
-	return c:GetSequence()<5 and ( c:IsType(TYPE_CONTINUOUS) or c:IsFacedown() ) and not c:IsStatus(STATUS_DESTROY_CONFIRMED+STATUS_BATTLE_DESTROYED)
-end
-function c12001025.desreptg(e,tp,eg,ep,ev,re,r,rp,chk)
+function c12001025.spcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if chk==0 then return not c:IsReason(REASON_REPLACE) and c:IsOnField() and c:IsFaceup()
-		and Duel.IsExistingMatchingCard(c12001025.repfilter,tp,LOCATION_SZONE,0,1,c) end
-	if Duel.SelectYesNo(tp,aux.Stringid(12001025,2)) then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESREPLACE)
-		local g=Duel.SelectMatchingCard(tp,c12001025.repfilter,tp,LOCATION_SZONE,0,1,1,c)
-		e:SetLabelObject(g:GetFirst())
-		Duel.HintSelection(g)
-		g:GetFirst():SetStatus(STATUS_DESTROY_CONFIRMED,true)
-		return true
-	else return false end
+	return c:IsPreviousLocation(LOCATION_MZONE) 
 end
-function c12001025.desrepop(e,tp,eg,ep,ev,re,r,rp)
-	local tc=e:GetLabelObject()
-	tc:SetStatus(STATUS_DESTROY_CONFIRMED,false)
-	Duel.Destroy(tc,REASON_EFFECT+REASON_REPLACE)
+function c12001025.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		and e:GetHandler():IsCanBeSpecialSummoned(e,0,tp,false,false) end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,e:GetHandler(),1,0,0)
+	local rec=e:GetHandler():GetBaseAttack()
+	Duel.SetTargetPlayer(tp)
+	Duel.SetTargetParam(rec)
+	Duel.SetOperationInfo(0,CATEGORY_RECOVER,nil,0,tp,rec)
+end
+function c12001025.tfilter(c)
+	return c:IsSetCard(0xfb0) and  c:IsFaceup()
+end
+function c12001025.spop(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	if c:IsRelateToEffect(e) and Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)~=0 and Duel.IsExistingMatchingCard(c12001025.tfilter,tp,LOCATION_EXTRA,0,1,nil) then
+		Duel.BreakEffect()
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
+		local g=Duel.SelectMatchingCard(tp,c12001025.tfilter,tp,LOCATION_EXTRA,0,1,1,nil)
+		   Duel.Overlay(c,Group.FromCards(g:GetFirst()))
+	end
 end

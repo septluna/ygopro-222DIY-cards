@@ -33,7 +33,7 @@ function cm.initial_effect(c)
 	e3:SetOperation(cm.thop3)
 	c:RegisterEffect(e3)   
 end
-cm.setcard="Rcore"
+cm.rssetcode="Thermonuclear"
 function cm.filter(c)
 	return c:IsAbleToDeck() and c:IsFaceup() and c:IsType(TYPE_MONSTER)
 end
@@ -62,7 +62,7 @@ function cm.thop3(e,tp,eg,ep,ev,re,r,rp)
 	Duel.SendtoHand(ag1,1-tp,REASON_RULE) 
 end
 function cm.thfilter(c)
-	return c.setcard=="Rcore" and c:IsAbleToHand()
+	return rccv.IsSet(c) and c:IsAbleToHand()
 end
 function cm.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(cm.thfilter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil) end

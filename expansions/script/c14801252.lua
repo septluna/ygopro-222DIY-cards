@@ -2,6 +2,7 @@
 local m=14801252
 local cm=_G["c"..m]
 function cm.initial_effect(c)
+    c:SetUniqueOnField(1,0,m)
     --xyz summon
     aux.AddXyzProcedure(c,nil,1,2)
     c:EnableReviveLimit()
@@ -92,8 +93,8 @@ function cm.discon(e,tp,eg,ep,ev,re,r,rp)
         and e:GetHandler():IsDefensePos()
 end
 function cm.dicost(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duel.CheckLPCost(tp,1000) end
-    Duel.PayLPCost(tp,1000)
+    if chk==0 then return Duel.CheckLPCost(tp,2000) end
+    Duel.PayLPCost(tp,2000)
 end
 function cm.distg(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return true end

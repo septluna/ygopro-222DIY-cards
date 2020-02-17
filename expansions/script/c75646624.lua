@@ -56,15 +56,17 @@ function c75646624.op(e,tp,eg,ep,ev,re,r,rp)
 			token:RegisterEffect(e1,true)
 		end
 		Duel.SpecialSummonComplete()
-	end		
+	end	 
 end
 function c75646624.atkval(e)
-	if Duel.GetFlagEffect(tp,75646600)~=0 then
+	local f=Duel.GetFlagEffect(e:GetHandlerPlayer(),75646600)
+	if f and f~=0 then
 		return 2400
 	end
 end
 function c75646624.damcon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetFlagEffect(tp,75646600)~=0
+	local f=Duel.GetFlagEffect(e:GetHandlerPlayer(),75646600)
+	return f and f~=0
 end
 function c75646624.damtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end

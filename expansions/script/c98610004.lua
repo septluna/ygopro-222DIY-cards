@@ -37,10 +37,10 @@ function c98610004.spop(e,tp,eg,ep,ev,re,r,rp)
 end
 function c98610004.tpcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return c:IsReason(REASON_EFFECT)and re and re:GetHandler():IsSetCard(0x980)
+	return c:IsReason(REASON_EFFECT)and re and re:GetHandler():IsSetCard(0x870)
 end
 function c98610004.tfilter(c,e,tp)
-	return c:IsSetCard(0x980)and c:IsType(TYPE_MONSTER)and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard(0x870)and c:IsType(TYPE_MONSTER)and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function c98610004.tptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0

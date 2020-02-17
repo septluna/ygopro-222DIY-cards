@@ -14,7 +14,7 @@ function c65020072.thfil(c)
 end
 function c65020072.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsPlayerCanDraw(tp,2)
-		and Duel.IsExistingMatchingCard(c65020072.thfil,tp,LOCATION_HAND,0,1,e:GetHandler()) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		and Duel.IsExistingMatchingCard(c65020072.thfil,tp,LOCATION_HAND,0,1,nil) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 		and Duel.IsPlayerCanSpecialSummonMonster(tp,65020072,0,0x21,1700,1200,4,RACE_PLANT,ATTRIBUTE_DARK) end
 	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_HAND)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,2)
@@ -59,10 +59,10 @@ function c65020072.disfil2(c)
 end
 function c65020072.distg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return false end
-	if chk==0 then return Duel.IsExistingTarget(c65020072.filter,tp,LOCATION_ONFIELD,0,1,e:GetHandler())
+	if chk==0 then return Duel.IsExistingTarget(c65020072.filter,tp,LOCATION_ONFIELD,0,1,nil)
 		and Duel.IsExistingTarget(c65020072.disfil2,tp,0,LOCATION_ONFIELD,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SELF)
-	Duel.SelectTarget(tp,aux.filter,tp,LOCATION_ONFIELD,0,1,1,nil)
+	Duel.SelectTarget(tp,c65020072.filter,tp,LOCATION_ONFIELD,0,1,1,nil)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_OPPO)
 	Duel.SelectTarget(tp,c65020072.disfil2,tp,0,LOCATION_ONFIELD,1,1,nil)
 end

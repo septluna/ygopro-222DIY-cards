@@ -22,7 +22,7 @@ function c98610011.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function c98610011.filter(c)
-	return c:IsSetCard(0x980) and c:IsType(TYPE_MONSTER)
+	return c:IsSetCard(0x870) and c:IsType(TYPE_MONSTER)
 end
 function c98610011.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return  not Duel.IsPlayerAffectedByEffect(tp,EFFECT_IRON_WALL) and Duel.IsPlayerCanDraw(tp,2) end
@@ -50,7 +50,7 @@ function c98610011.activate(e,tp,eg,ep,ev,re,r,rp)
 end
 function c98610011.tpcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return c:IsReason(REASON_EFFECT)and re and re:GetHandler():IsSetCard(0x980)
+	return c:IsReason(REASON_EFFECT)and re and re:GetHandler():IsSetCard(0x870)
 end
 function c98610011.tptg(e,tp,eg,ep,ev,re,r,rp,chk)
     local g=Duel.GetFieldGroup(tp,LOCATION_HAND,0)

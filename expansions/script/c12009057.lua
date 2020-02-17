@@ -1,7 +1,7 @@
 --三面的水神
 function c12009057.initial_effect(c)
-	--link summon
-	aux.AddLinkProcedure(c,nil,3,3,c12009057.lcheck)
+
+	aux.AddLinkProcedure(c,aux.NOT(aux.FilterBoolFunction(Card.IsLinkType,TYPE_TOKEN)),2,99,c12009057.lcheck)
 	c:EnableReviveLimit()
 	--search
 	local e1=Effect.CreateEffect(c)
@@ -30,13 +30,16 @@ function c12009057.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function c12009057.lcheck(g)
+	return g:GetClassCount(Card.GetLinkRace)==1
+end
+function c12009057.lcheck(g)
 	return g:GetClassCount(Card.GetLinkAttribute)==g:GetCount()
 end
 function c12009057.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_LINK)
 end
 function c12009057.thfilter(c)
-	return c:IsSetCard(0x46) and c:IsAbleToHand()
+	return c:IsCode(24094653) and c:IsAbleToHand()
 end
 function c12009057.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c12009057.thfilter,tp,LOCATION_DECK,0,1,nil) end
@@ -51,7 +54,7 @@ function c12009057.thop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c12009057.cfilter2(c,g)
-	return c:IsFaceup() and g:IsContains(c) and c:IsType(TYPE_FUSION)
+	return c:IsFaceup() and g:IsContains(c)
 end
 function c12009057.spcon(e,tp,eg,ep,ev,re,r,rp)
 	local lg=e:GetHandler():GetLinkedGroup()
@@ -102,5 +105,18 @@ function c12009057.spop(e,tp,eg,ep,ev,re,r,rp)
 			sel_zone=sel_zone>>16
 		end
 		Duel.SpecialSummonStep(sc,0,tp,sump,false,false,POS_FACEUP_DEFENSE,sel_zone)
+		--spsummon limit
+		 local e2=Effect.CreateEffect(c)
+		 e2:SetType(EFFECT_TYPE_FIELD)
+		 e2:SetRange(LOCATION_MZONE)
+		 e2:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+		 e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+		 e2:SetTargetRange(1,0)
+		 e2:SetTarget(c12009057.sslimit)
+		 e2:SetReset(RESET_EVENT+RESETS_STANDARD)
+		 sc:RegisterEffect(e2)
 end
+end
+function c12009057.sslimit(e,c,sump,sumtype,sumpos,targetp,se)
+	return c:IsLocation(LOCATION_EXTRA) and not c:IsType(TYPE_SYNCHRO)
 end

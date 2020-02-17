@@ -130,7 +130,7 @@ function c11200042.ctcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SendtoDeck(e:GetHandler(),nil,2,REASON_COST)
 end
 function c11200042.ctfilter(c)
-	return c:IsFaceup() and aux.IsMaterialListCode(c,11200029)
+	return c:IsFaceup() and c:IsCode(11200029)
 end
 function c11200042.cttg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return Duel.IsExistingMatchingCard(c11200042.ctfilter,tp,LOCATION_MZONE,0,1,nil)

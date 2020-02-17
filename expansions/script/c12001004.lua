@@ -21,6 +21,7 @@ function c12001004.initial_effect(c)
 	e3:SetCode(EVENT_TO_GRAVE)
 	e3:SetCountLimit(1,12001104)
 	e3:SetCondition(c12001004.dscon)
+	e3:SetCondition(c12001004.dstg)
 	e3:SetOperation(c12001004.dsop)
 	c:RegisterEffect(e3)
 end
@@ -39,6 +40,7 @@ function c12001004.operation(e,tp,eg,ep,ev,re,r,rp)
 	if tc:IsSetCard(0xfb0) then
 		Duel.DisableShuffleCheck()
 		Duel.SendtoGrave(g,REASON_EFFECT+REASON_REVEAL)
+		Duel.Draw(tp,1,REASON_EFFECT)
 	else
 		Duel.ShuffleDeck(tp)
 		Duel.SendtoDeck(e:GetHandler(),nil,0,REASON_EFFECT)
@@ -48,12 +50,13 @@ function c12001004.dscon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return c:IsPreviousLocation(LOCATION_DECK) and c:IsReason(REASON_REVEAL)
 end
+function c12001004.dstg(e,tp,eg,ep,ev,re,r,rp)
+	if chk==0 then return Duel.IsExistingMatchingCard(aux.TRUE,tp,0,LOCATION_MZONE,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,nil,1,0,LOCATION_MZONE)
+end
 function c12001004.dsop(e,tp,eg,ep,ev,re,r,rp)
-	if chkc then return chkc:IsLocation(LOCATION_ONFIELD) and chkc:IsControler(1-tp) end
-	if chk==0 then return Duel.IsExistingTarget(aux.TRUE,tp,0,LOCATION_ONFIELD,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_REMOVE)
-	local g=Duel.SelectTarget(1-tp,aux.TRUE,tp,0,LOCATION_ONFIELD,1,1,nil)
-	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,1,0,0)
+	local g=Duel.SelectMatchingCard(1-tp,aux.TRUE,tp,0,LOCATION_MZONE,1,1,nil)
 	local tc=g:GetFirst()
 	if tc:IsRelateToEffect(e) then
 		Duel.Remove(tc,POS_FACEUP,REASON_RULE)

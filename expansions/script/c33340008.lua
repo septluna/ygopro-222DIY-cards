@@ -41,19 +41,18 @@ function cm.initial_effect(c)
 	e4:SetOperation(cm.rmop)
 	c:RegisterEffect(e4)
 	local e5=Effect.CreateEffect(c)
-	e5:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
-	e5:SetRange(LOCATION_HAND)
-	e5:SetCode(EVENT_PRE_BATTLE_DAMAGE)
+	e5:SetType(EFFECT_TYPE_FIELD)
+	e5:SetCode(EFFECT_CHANGE_BATTLE_DAMAGE)
+	e5:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+	e5:SetTargetRange(0,1)
+	e5:SetValue(HALF_DAMAGE)
 	e5:SetCondition(cm.rdcon)
-	e5:SetOperation(cm.rdop)
+	e5:SetRange(LOCATION_HAND)
 	c:RegisterEffect(e5)
 end
-cm.setcard="Rcore"
+cm.rssetcode="Thermonuclear"
 function cm.rdcon(e,tp,eg,ep,ev,re,r,rp)
-	return ep==tp and e:GetHandler():IsPublic()
-end
-function cm.rdop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.ChangeBattleDamage(tp,ev/2)
+	return e:GetHandler():IsPublic()
 end
 function cm.thop2(e,tp,eg,ep,ev,re,r,rp)
 	if e:GetHandler():IsRelateToEffect(e) then
@@ -88,7 +87,7 @@ function cm.ntop(e,tp,eg,ep,ev,re,r,rp,c)
 	return true
 end
 function cm.thfilter(c)
-	return c.setcard=="Rcore" and c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsAbleToHand()
+	return rccv.IsSet(c) and c:IsType(TYPE_SPELL+TYPE_TRAP) and c:IsAbleToHand()
 end
 function cm.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(cm.thfilter,tp,0x1,0,1,nil) end

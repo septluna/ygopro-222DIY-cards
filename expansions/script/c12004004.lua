@@ -24,7 +24,7 @@ function c12004004.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function c12004004.thcon2(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():IsLocation(LOCATION_GRAVE) and r==REASON_LINK
+	return e:GetHandler():IsLocation(LOCATION_GRAVE) and ( r==REASON_LINK or r==REASON_FUSION )
 end
 function c12004004.filter(c)
 	return c:IsRace(RACE_MACHINE) and ( c:IsAttribute(ATTRIBUTE_FIRE) or c:IsAttribute(ATTRIBUTE_WATER) ) and c:IsSummonable(true,nil)

@@ -38,7 +38,7 @@ function c98610003.spop(e,tp,eg,ep,ev,re,r,rp)
 end
 function c98610003.tpcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return c:IsReason(REASON_EFFECT)and re and re:GetHandler():IsSetCard(0x980)
+	return c:IsReason(REASON_EFFECT)and re and re:GetHandler():IsSetCard(0x870)
 end
 function c98610003.tfilter(c,tp)
 	return (Duel.GetLocationCount(tp,LOCATION_MZONE)>0 or (c:IsLocation(LOCATION_MZONE) and c:GetSequence()<5 and c:IsControler(tp))) and c:IsAbleToRemove()

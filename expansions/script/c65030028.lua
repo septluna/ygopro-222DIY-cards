@@ -2,128 +2,133 @@
 function c65030028.initial_effect(c)
 	--Activate
 	local e0=Effect.CreateEffect(c)
+	e0:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
 	e0:SetType(EFFECT_TYPE_ACTIVATE)
 	e0:SetCode(EVENT_FREE_CHAIN)
+	e0:SetOperation(c65030028.activate)
 	c:RegisterEffect(e0)
-	--search
+	--wudieffect
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_SEARCH+CATEGORY_TOHAND+CATEGORY_TOGRAVE+CATEGORY_TODECK)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_FZONE)
-	e1:SetCountLimit(1,65030028)
-	e1:SetTarget(c65030028.tg)
+	e1:SetCost(c65030028.cost)
 	e1:SetOperation(c65030028.op)
 	c:RegisterEffect(e1)
-	--indes
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_SINGLE)
-	e2:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
-	e2:SetValue(c65030028.indval)
-	local e12=Effect.CreateEffect(c)
-	e12:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_GRANT)
-	e12:SetRange(LOCATION_SZONE)
-	e12:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
-	e12:SetTarget(c65030028.eftg)
-	e12:SetLabelObject(e2)
-	c:RegisterEffect(e12)
-	--immune
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_SINGLE)
-	e3:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e3:SetRange(LOCATION_MZONE)
-	e3:SetCode(EFFECT_IMMUNE_EFFECT)
-	e3:SetValue(c65030028.efilter)
-	local e13=e12:Clone()
-	e13:SetLabelObject(e3)
-	c:RegisterEffect(e13)
-	--attack all
-	local e4=Effect.CreateEffect(c)
-	e4:SetType(EFFECT_TYPE_SINGLE)
-	e4:SetCode(EFFECT_ATTACK_ALL)
-	e4:SetValue(1)
-	local e14=e12:Clone()
-	e14:SetLabelObject(e4)
-	c:RegisterEffect(e14)
 	--disable
-	local e5=Effect.CreateEffect(c)
-	e5:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
-	e5:SetCode(EVENT_ATTACK_ANNOUNCE)
-	e5:SetRange(LOCATION_MZONE)
-	e5:SetCondition(c65030028.discon)
-	e5:SetOperation(c65030028.disop)
-	local e15=e12:Clone()
-	e15:SetLabelObject(e5)
-	c:RegisterEffect(e15)
-	local e6=e5:Clone()
-	e6:SetCode(EVENT_BE_BATTLE_TARGET)
-	local e16=e12:Clone()
-	e16:SetLabelObject(e6)
-	c:RegisterEffect(e16)
-	--effect!
-	local e7=Effect.CreateEffect(c)
-	e7:SetType(EFFECT_TYPE_FIELD)
-	e7:SetCode(EFFECT_ADD_TYPE)
-	e7:SetRange(LOCATION_FZONE)
-	e7:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
-	e7:SetValue(TYPE_EFFECT)
-	e7:SetTarget(c65030028.eftg)
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e3:SetCode(EVENT_ATTACK_ANNOUNCE)
+	e3:SetRange(LOCATION_FZONE)
+	e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+	e3:SetCondition(c65030028.discon)
+	e3:SetOperation(c65030028.disop)
+	c:RegisterEffect(e3)
+	local e4=e3:Clone()
+	e4:SetCode(EVENT_BE_BATTLE_TARGET)
+	c:RegisterEffect(e4)
+	local e6=Effect.CreateEffect(c)
+	e6:SetType(EFFECT_TYPE_FIELD)
+	e6:SetCode(EFFECT_DISABLE)
+	e6:SetRange(LOCATION_FZONE)
+	e6:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
+	e6:SetTarget(c65030028.distg)
+	c:RegisterEffect(e6)
+	local e7=e6:Clone()
+	e7:SetCode(EFFECT_DISABLE_EFFECT)
 	c:RegisterEffect(e7)
+	local e8=e6:Clone()
+	e8:SetCode(EFFECT_SET_ATTACK)
+	e8:SetValue(0)
+	c:RegisterEffect(e8)
+	local e9=e8:Clone()
+	e9:SetCode(EFFECT_SET_DEFENSE)
+	c:RegisterEffect(e9)
 end
-function c65030028.indval(e,c)
+function c65030028.thfilter(c)
+	return c:IsSetCard(0xcda1) and c:IsAbleToHand()
+end
+function c65030028.activate(e,tp,eg,ep,ev,re,r,rp)
+	if not e:GetHandler():IsRelateToEffect(e) then return end
+	local g=Duel.GetMatchingGroup(c65030028.thfilter,tp,LOCATION_DECK,0,nil)
+	if g:GetCount()>0 and Duel.GetFlagEffect(tp,65030026)==0 and Duel.SelectYesNo(tp,aux.Stringid(65030028,2)) then
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+		local sg=g:Select(tp,1,1,nil)
+		Duel.SendtoHand(sg,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,sg)
+		Duel.RegisterFlagEffect(tp,65030026,RESET_PHASE+PHASE_END,0,1)
+	end
+end
+function c65030028.costfil(c,tp)
+	return c:IsType(TYPE_XYZ) and c:CheckRemoveOverlayCard(tp,1,1) and not c:IsType(TYPE_EFFECT)
+end
+function c65030028.cost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(c65030028.costfil,tp,LOCATION_MZONE,0,1,nil,tp) and Duel.GetMatchingGroupCount(Card.IsType,tp,LOCATION_MZONE,0,nil,TYPE_EFFECT)==0 and (Duel.GetFlagEffect(tp,65030027)==0 or Duel.GetFlagEffect(tp,65030028)==0) end
+	local g=Duel.SelectMatchingCard(tp,c65030028.costfil,tp,LOCATION_MZONE,0,1,1,nil,tp)
+	Duel.HintSelection(g)
+	g:GetFirst():RemoveOverlayCard(tp,1,1,REASON_COST)
+end
+function c65030028.op(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local b1=Duel.GetFlagEffect(tp,65030027)==0
+	local b2=Duel.GetFlagEffect(tp,65030028)==0
+	local op=3
+	if b1 and b2 then
+		op=Duel.SelectOption(tp,aux.Stringid(65030028,0),aux.Stringid(65030028,1))
+	elseif b1 then
+		op=Duel.SelectOption(tp,aux.Stringid(65030028,0))
+	elseif b2 then
+		op=Duel.SelectOption(tp,aux.Stringid(65030028,1))+1
+	end
+	if op==0 then
+		--disable
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_FIELD)
+	e2:SetTargetRange(0xff,0xff)
+	e2:SetTarget(c65030028.disable)
+	e2:SetCode(EFFECT_DISABLE)
+	e2:SetReset(RESET_PHASE+PHASE_END,2)
+	Duel.RegisterEffect(e2,tp)
+		Duel.RegisterFlagEffect(tp,65030027,RESET_PHASE+PHASE_END,0,2)
+	elseif op==1 then
+		--cannot link summon
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_FIELD)
+	e3:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+	e3:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
+	e3:SetTargetRange(1,1)
+	e3:SetTarget(c65030028.splimit)
+	e3:SetReset(RESET_PHASE+PHASE_END,2)
+	Duel.RegisterEffect(e3,tp)
+	local e4=e3:Clone()
+	e4:SetCode(EFFECT_CANNOT_SUMMON)
+	Duel.RegisterEffect(e4,tp)
+		Duel.RegisterFlagEffect(tp,65030028,RESET_PHASE+PHASE_END,0,2)
+	end
+end
+function c65030028.splimit(e,c,tp,sumtp,sumpos)
 	return c:IsType(TYPE_EFFECT)
 end
-function c65030028.efilter(e,te)
-	return te:IsActiveType(TYPE_MONSTER) and te:GetOwner()~=e:GetOwner()
+function c65030028.disable(e,c)
+	return c:IsType(TYPE_EFFECT) or bit.band(c:GetOriginalType(),TYPE_EFFECT)==TYPE_EFFECT
 end
-function c65030028.eftg(e,c)
-	return c:GetOriginalType()~=TYPE_EFFECT and c:IsType(TYPE_XYZ)
+function c65030028.cfilter(c)
+	return c:IsFaceup() and c:IsType(TYPE_XYZ) and not c:IsType(TYPE_EFFECT)  
+end
+function c65030028.cfilter2(c)
+	return c:IsType(TYPE_EFFECT) and c:IsFaceup()
 end
 function c65030028.discon(e,tp,eg,ep,ev,re,r,rp)
 	local c=Duel.GetAttackTarget()
-	return c 
+	if not c then return false end
+	if c65030028.cfilter(c) then c=Duel.GetAttacker() end
+	return c and c65030028.cfilter2(c,tp)
 end
 function c65030028.disop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetAttackTarget()
-	if tc:IsControler(tp) then tc=Duel.GetAttacker() end
-	c:CreateRelation(tc,RESET_EVENT+RESETS_STANDARD)
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_DISABLE)
-	e1:SetCondition(c65030028.discon2)
-	e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-	tc:RegisterEffect(e1)
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_SINGLE)
-	e2:SetCode(EFFECT_DISABLE_EFFECT)
-	e2:SetCondition(c65030028.discon2)
-	e2:SetReset(RESET_EVENT+RESETS_STANDARD)
-	tc:RegisterEffect(e2)
+	if c65030028.cfilter(tc) then tc=Duel.GetAttacker() end
+	tc:RegisterFlagEffect(65030028,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_BATTLE,0,1)
 end
-function c65030028.discon2(e)
-	return e:GetOwner():IsRelateToCard(e:GetHandler())
-end
-
-function c65030028.fil(c)
-	return c:IsSetCard(0xcda1) and c:IsAbleToHand()
-end
-function c65030028.tg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsType,tp,LOCATION_DECK,0,1,nil,TYPE_MONSTER) end
-	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
-end
-function c65030028.op(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.SelectMatchingCard(tp,Card.IsType,tp,LOCATION_DECK,0,1,1,nil,TYPE_MONSTER)
-	if g:GetCount() then
-		if Duel.SendtoGrave(g,REASON_EFFECT)~=0 then
-			Duel.BreakEffect()
-			local tc=Duel.GetOperatedGroup():GetFirst()
-			if tc:IsType(TYPE_NORMAL) and Duel.IsExistingMatchingCard(c65030028.fil,tp,LOCATION_DECK,0,1,nil) and Duel.SelectYesNo(tp,aux.Stringid(65030028,0)) then
-				local sg=Duel.SelectMatchingCard(tp,c65030028.fil,tp,LOCATION_DECK,0,1,1,nil)
-				Duel.SendtoHand(sg,tp,REASON_EFFECT)
-				Duel.ConfirmCards(1-tp,sg)
-			elseif not tc:IsType(TYPE_NORMAL) then
-				Duel.SendtoDeck(tc,nil,2,REASON_EFFECT)
-			end
-		end
-	end
+function c65030028.distg(e,c)
+	return c:GetFlagEffect(65030028)~=0
 end

@@ -1,6 +1,6 @@
 --事龙人 4
 function c12018003.initial_effect(c)
-	--c:SetUniqueOnField(1,0,aux.FilterBoolFunction(Card.IsSetCard,0x1fbe),LOCATION_MZONE)
+	--c:SetUniqueOnField(1,0,aux.FilterBoolFunction(Card.IsSetCard,0x3fb7),LOCATION_MZONE)
 	--special summon
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
@@ -32,13 +32,13 @@ function c12018003.initial_effect(c)
 	c:RegisterEffect(e5)
 end
 function c12018003.ccfilter(c)
-	return c:IsSetCard(0x1fbe) and c:IsFaceup()
+	return c:IsSetCard(0x3fb7) and c:IsFaceup()
 end
 function c12018003.descon(e)
 	return Duel.IsExistingMatchingCard(c12018003.ccfilter,0,LOCATION_MZONE,LOCATION_MZONE,1,e:GetHandler())
 end
 function c12018003.tgfilter(c)
-	return c:IsSetCard(0x1fbe) and c:IsType(TYPE_MONSTER) and c:IsAbleToGrave()
+	return c:IsSetCard(0x3fb7) and c:IsType(TYPE_MONSTER) and c:IsAbleToGrave()
 end
 function c12018003.tgtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c12018003.tgfilter,tp,LOCATION_DECK,0,1,nil) end
@@ -52,7 +52,7 @@ function c12018003.tgop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c12018003.spfilter(c,tp)
-	return (( c:IsRace(RACE_DRAGON) and c:IsLevelAbove(9) ) or  c:IsSetCard(0x1fbe) ) and (c:IsControler(tp) or c:IsFaceup()) and Duel.GetMZoneCount(tp,c,tp)>0
+	return (( c:IsRace(RACE_DRAGON) and c:IsLevelAbove(9) ) or  c:IsSetCard(0x3fb7) ) and (c:IsControler(tp) or c:IsFaceup()) and Duel.GetMZoneCount(tp,c,tp)>0
 end
 function c12018003.hspcon(e,c)
 	if c==nil then return true end

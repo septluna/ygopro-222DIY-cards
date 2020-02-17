@@ -95,7 +95,7 @@ function c12008003.rfilter(c)
 	return c:IsRace(RACE_MACHINE) and Duel.GetLocationCountFromEx(tp,tp,c,TYPE_FUSION)>0
 end
 function c12008003.spfilter(c,e,tp)
-	return c:IsType(TYPE_FUSION) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:IsSetCard(0xfb1)
+	return c:IsType(TYPE_FUSION) and c:IsCanBeSpecialSummoned(e,0,tp,false,false) and c:IsCode(12004020)
 end
 function c12008003.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c12008003.spfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
@@ -106,6 +106,6 @@ function c12008003.operation(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 	local g=Duel.SelectMatchingCard(tp,c12008003.spfilter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp)
 	if g:GetCount()>0 then
-		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
+		Duel.SpecialSummon(g,SUMMON_TYPE_FUSION,tp,tp,false,false,POS_FACEUP)
 	end
 end

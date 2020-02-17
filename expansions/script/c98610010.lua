@@ -22,7 +22,7 @@ function c98610010.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function c98610010.filter(c)
-	return c:IsSetCard(0x980) and c:IsAbleToRemove()
+	return c:IsSetCard(0x870) and c:IsAbleToRemove()
 end
 function c98610010.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	local rg=Duel.GetDecktopGroup(tp,3)
@@ -46,7 +46,7 @@ function c98610010.activate(e,tp,eg,ep,ev,re,r,rp)
 end
 function c98610010.tpcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return c:IsReason(REASON_EFFECT)and re and re:GetHandler():IsSetCard(0x980)
+	return c:IsReason(REASON_EFFECT)and re and re:GetHandler():IsSetCard(0x870)
 end
 function c98610010.tptg(e,tp,eg,ep,ev,re,r,rp,chk)
     local rg1=Duel.GetDecktopGroup(tp,5)

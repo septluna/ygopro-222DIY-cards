@@ -1,9 +1,11 @@
 --热核污染病毒-Æ
+if not pcall(function() require("expansions/script/c10199990") end) then require("script/c10199990") end
 local m=33340004
 local cm=_G["c"..m]
 if not RcoreVal then
-   RcoreVal=RcoreVal or {}
-   rccv=RcoreVal
+	RcoreVal=RcoreVal or {}
+	rccv=RcoreVal
+	rscf.DefineSet(rccv,"Thermonuclear")
 function rccv.publiceffect(c)   
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
@@ -63,7 +65,7 @@ function cm.initial_effect(c)
 	e3:SetOperation(cm.thop3)
 	c:RegisterEffect(e3) 
 end
-cm.setcard="Rcore"
+cm.rssetcode="Thermonuclear"
 function cm.thop3(e,tp,eg,ep,ev,re,r,rp)
 	local g1=Duel.GetFieldGroup(tp,LOCATION_HAND,0)
 	if g1:GetCount()==0 then return end
@@ -75,7 +77,7 @@ function cm.filter(c)
 	return c:IsFaceup() and c:IsAttackAbove(0)
 end
 function cm.thtg2(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(cm.filter,tp,LOCATION_MZONE,0,1,nil) end
+	if chk==0 then return true end
 	local g=Duel.GetMatchingGroup(cm.filter,tp,LOCATION_MZONE,0,nil)
 	local tg=g:GetMaxGroup(Card.GetAttack)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,tg,1,0,0)
@@ -97,7 +99,7 @@ function cm.thop2(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function cm.thfilter(c)
-	return c.setcard=="Rcore" and c:IsType(TYPE_MONSTER) and c:IsAbleToHand()
+	return rccv.IsSet(c) and c:IsType(TYPE_MONSTER) and c:IsAbleToHand()
 end
 function cm.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(cm.thfilter,tp,LOCATION_DECK,0,1,nil) end
