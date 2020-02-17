@@ -59,7 +59,7 @@ function c12026024.target(e,tp,eg,ep,ev,re,r,rp,chk)
 		   local res,teg,tep,tev,tre,tr,trp=Duel.CheckEvent(event,true)
 		   return not tg or tg(e,tp,teg,tep,tev,tre,tr,trp,0)
 		end
-		return re:GetHandler():IsRelateToEffect(re) and c:IsAbleToGrave() and not re:IsHasType(EFFECT_TYPE_ACTIVATE) and eg:GetHandler():IsAbleToGrave() and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		return re:GetHandler():IsRelateToEffect(re) and c:IsAbleToGrave() and ( not re:IsHasType(EFFECT_TYPE_ACTIVATE) or re:IsType(TYPE_CONTINUOUS) )  and eg:GetHandler():IsAbleToGrave() and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 	end
 	local event=re:GetCode()
 	e:SetLabelObject(re)
