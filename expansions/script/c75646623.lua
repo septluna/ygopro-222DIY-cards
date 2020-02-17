@@ -1,5 +1,6 @@
 --破晓与约定 妮娜
 function c75646623.initial_effect(c)
+	aux.AddCodeList(c,75646600)
 	--link summon
 	aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsLinkType,TYPE_EFFECT),2)
 	c:EnableReviveLimit()

@@ -2,31 +2,13 @@
 function c12001015.initial_effect(c)
 	--pendulum summon
 	aux.EnablePendulumAttribute(c)
-	--spsummon
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetCode(EFFECT_CANNOT_SPECIAL_SUMMON)
-	e2:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_CANNOT_NEGATE)
-	e2:SetRange(LOCATION_PZONE)
-	e2:SetTargetRange(1,0)
-	e2:SetTarget(c12001015.splimit)
-	c:RegisterEffect(e2)
-	local e6=Effect.CreateEffect(c)
-	e6:SetDescription(aux.Stringid(12001015,1))
-	e6:SetCategory(CATEGORY_DESTROY)
-	e6:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e6:SetCode(EVENT_PHASE+PHASE_END)
-	e6:SetRange(LOCATION_SZONE)
-	e6:SetCountLimit(1)
-	e6:SetTarget(c12001015.destg1)
-	e6:SetOperation(c12001015.desop1)
-	c:RegisterEffect(e6)
+
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_PZONE)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e1:SetCountLimit(1)
+	e1:SetCountLimit(1,12001015+100)
 	e1:SetTarget(c12001015.sptg)
 	e1:SetOperation(c12001015.spop)
 	c:RegisterEffect(e1)
@@ -130,7 +112,7 @@ function c12001015.tpfilter(c)
 end
 function c12001015.tpop(e,tp,eg,ep,ev,re,r,rp)
 	if  not (Duel.CheckLocation(tp,LOCATION_PZONE,0) or Duel.CheckLocation(tp,LOCATION_PZONE,1)) then return false end
-	if Duel.CheckLocation(tp,LOCATION_PZONE,0) and Duel.IsExistingMatchingCard(c12001015.tpfilter,tp,LOCATION_EXTRA+LOCATION_GRAVE,0,1,e:GetHandler()) then
+	if Duel.CheckLocation(tp,LOCATION_PZONE,0) and Duel.IsExistingMatchingCard(c12001015.tpfilter,tp,LOCATION_EXTRA+LOCATION_GRAVE,0,1,nil) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOFIELD)
 		local g=Duel.SelectMatchingCard(tp,c12001015.tpfilter,tp,LOCATION_EXTRA+LOCATION_GRAVE,0,1,1,e:GetHandler())
 		Duel.MoveToField(g:GetFirst(),tp,tp,LOCATION_SZONE,POS_FACEUP, true)

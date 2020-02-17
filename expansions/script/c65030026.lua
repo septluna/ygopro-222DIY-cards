@@ -33,14 +33,19 @@ end
 function c65030026.spop(e,tp,eg,ep,ev,re,r,rp)
 	local zone=e:GetHandler():GetLinkedZone()
 	local tc=Duel.GetFirstTarget()
+	local num=0
 	if tc:IsRelateToEffect(e) then
 		Duel.SpecialSummonStep(tc,0,tp,tp,false,false,POS_FACEUP,zone)
 		if tc:IsType(TYPE_DUAL) and Duel.SelectYesNo(tp,aux.Stringid(65030026,0)) then
 			tc:EnableDualState()
+			num=1
 		end
 		if Duel.SpecialSummonComplete()~=0 then
-			Duel.BreakEffect()
 			Duel.SendtoGrave(e:GetHandler(),REASON_EFFECT)
+			if num==1 then
+				local tgg=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_MZONE,0,tc,TYPE_EFFECT)
+				Duel.SendtoGrave(tgg,REASON_EFFECT)
+			end
 		end
 	end
 end

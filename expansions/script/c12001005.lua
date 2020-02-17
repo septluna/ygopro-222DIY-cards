@@ -51,6 +51,7 @@ function c12001005.operation(e,tp,eg,ep,ev,re,r,rp)
 			Duel.ShuffleDeck(tp)
 		  end
 	else
+		Duel.SendtoHand(tc,nil,REASON_EFFECT)
 		Duel.ShuffleDeck(tp)
 		Duel.SendtoDeck(e:GetHandler(),nil,0,REASON_EFFECT)
 end

@@ -34,7 +34,7 @@ function c98610007.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function c98610007.ffilter(c)
-	return c:IsSetCard(0x980)and c:IsType(TYPE_MONSTER) 
+	return c:IsSetCard(0x870)and c:IsType(TYPE_MONSTER) 
 end
 function c98610007.target(e,tp,eg,ep,ev,re,r,rp,chk)
     local c=e:GetHandler()
@@ -74,7 +74,7 @@ function c98610007.spreg(e,tp,eg,ep,ev,re,r,rp)
 	if not re then return end
 	local c=e:GetHandler()
 	local rc=re:GetHandler()
-	if c:IsReason(REASON_EFFECT) and rc:IsSetCard(0x980) then
+	if c:IsReason(REASON_EFFECT) and rc:IsSetCard(0x870) then
 		c:RegisterFlagEffect(98610007,RESET_EVENT+RESETS_STANDARD,0,1)
 	end
 end

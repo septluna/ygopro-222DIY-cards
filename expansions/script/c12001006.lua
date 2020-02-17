@@ -15,6 +15,11 @@ function c12001006.initial_effect(c)
 	e2:SetTarget(c12001006.target)
 	e2:SetOperation(c12001006.operation)
 	c:RegisterEffect(e2)
+	local e3=e2:Clone()
+	e3:SetCode(EVENT_CHAINING)
+	e3:SetTarget(c12001006.target1)
+	c:RegisterEffect(e3)
+	
 	local e4=Effect.CreateEffect(c)
 	e4:SetCategory(CATEGORY_LEAVE_GRAVE)
 	e4:SetType(EFFECT_TYPE_QUICK_O)
@@ -27,6 +32,10 @@ function c12001006.initial_effect(c)
 end
 function c12001006.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsPlayerCanDiscardDeck(tp,1) end
+	Duel.RegisterFlagEffect(tp,12001006,RESET_CHAIN,0,1)
+end
+function c12001006.target1(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsPlayerCanDiscardDeck(tp,1) and not Duel.GetFlagEffect(tp,12001006)==0 and rp==1-tp end
 end
 function c12001006.operation(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end

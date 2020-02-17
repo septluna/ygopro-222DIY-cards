@@ -1,5 +1,6 @@
 --逆熵科技 蛙型发信器
 function c75646609.initial_effect(c)
+	aux.AddCodeList(c,75646600)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_EQUIP)
@@ -9,17 +10,20 @@ function c75646609.initial_effect(c)
 	e1:SetTarget(c75646609.target)
 	e1:SetOperation(c75646609.operation)
 	c:RegisterEffect(e1)
-	--direct attack
+	--attack
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_EQUIP)
 	e2:SetCode(EFFECT_UPDATE_DEFENSE)
 	e2:SetValue(600)
 	c:RegisterEffect(e2)
-	--pierce
+	--reflect
 	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_EQUIP)
-	e3:SetCode(EFFECT_PIERCE)
-	e3:SetCondition(c75646609.dircon1)
+	e3:SetType(EFFECT_TYPE_FIELD)
+	e3:SetCode(EFFECT_REFLECT_BATTLE_DAMAGE)
+	e3:SetRange(LOCATION_SZONE)
+	e3:SetTargetRange(LOCATION_MZONE,0)
+	e3:SetTarget(c75646609.reftg)
+	e3:SetValue(1)
 	c:RegisterEffect(e3)
 	--Equip limit
 	local e4=Effect.CreateEffect(c)
@@ -35,21 +39,14 @@ function c75646609.initial_effect(c)
 	e5:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e5:SetRange(LOCATION_SZONE)
 	e5:SetCountLimit(1)
-	e5:SetCondition(c75646609.dircon)
+	e5:SetCondition(c75646609.thcon)
 	e5:SetTarget(c75646609.thtg)
 	e5:SetOperation(c75646609.thop)
 	c:RegisterEffect(e5)
-	c75646609.key_effect=e5
 end
 c75646609.card_code_list={75646600}
-function c75646609.dircon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetFlagEffect(tp,75646600)~=0
-end
 function c75646609.eqlimit(e,c)
 	return c:IsSetCard(0x2c5)
-end
-function c75646609.dircon1(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetFlagEffect(tp,75646600)~=0
 end
 function c75646609.filter(c)
 	return c:IsFaceup() and c:IsSetCard(0x2c5)
@@ -66,6 +63,13 @@ function c75646609.operation(e,tp,eg,ep,ev,re,r,rp)
 	if e:GetHandler():IsRelateToEffect(e) and tc:IsRelateToEffect(e) and tc:IsFaceup() then
 		Duel.Equip(tp,e:GetHandler(),tc)
 	end
+end
+function c75646609.reftg(e,c)
+	return c==e:GetHandler():GetEquipTarget()
+end
+function c75646609.thcon(e)
+	local f=Duel.GetFlagEffect(e:GetHandlerPlayer(),75646600)
+	return f and f~=0
 end
 function c75646609.thfilter(c)
 	return c:IsType(TYPE_EQUIP) and aux.IsCodeListed(c,75646600) and c:IsAbleToHand()

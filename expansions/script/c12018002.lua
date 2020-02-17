@@ -1,6 +1,6 @@
 --事龙人 3
 function c12018002.initial_effect(c)
-	--c:SetUniqueOnField(1,0,aux.FilterBoolFunction(Card.IsSetCard,0x1fbe),LOCATION_MZONE)
+	--c:SetUniqueOnField(1,0,aux.FilterBoolFunction(Card.IsSetCard,0x3fb7),LOCATION_MZONE)
 	--special summon
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
@@ -35,13 +35,13 @@ function c12018002.initial_effect(c)
 	c:RegisterEffect(e5)
 end
 function c12018002.ccfilter(c)
-	return c:IsSetCard(0x1fbe) and c:IsFaceup()
+	return c:IsSetCard(0x3fb7) and c:IsFaceup()
 end
 function c12018002.descon(e)
 	return Duel.IsExistingMatchingCard(c12018002.ccfilter,0,LOCATION_MZONE,LOCATION_MZONE,1,e:GetHandler())
 end
 function c12018002.spfilter(c,tp)
-	return (( c:IsRace(RACE_SEASERPENT) and c:IsLevelAbove(9) ) or  c:IsSetCard(0x1fbe) ) and (c:IsControler(tp) or c:IsFaceup()) and Duel.GetMZoneCount(tp,c,tp)>0
+	return (( c:IsRace(RACE_SEASERPENT) and c:IsLevelAbove(9) ) or  c:IsSetCard(0x3fb7) ) and (c:IsControler(tp) or c:IsFaceup()) and Duel.GetMZoneCount(tp,c,tp)>0
 end
 function c12018002.hspcon(e,c)
 	if c==nil then return true end

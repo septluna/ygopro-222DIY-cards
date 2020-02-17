@@ -50,7 +50,7 @@ function c65020076.con(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()~=tp and (ph==PHASE_MAIN1 or ph==PHASE_MAIN2)
 end
 function c65020076.costfil(c)
-	return bit.band(c:GetOriginalType(),TYPE_TRAP)~=0
+	return bit.band(c:GetOriginalType(),TYPE_TRAP)~=0 
 end
 function c65020076.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local og=e:GetHandler():GetOverlayGroup()
@@ -60,16 +60,18 @@ function c65020076.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SendtoGrave(g,REASON_COST)
 end
 function c65020076.desfilter(c)
-	return c:IsType(TYPE_TRAP) and c:IsFaceup() 
+	return c:IsType(TYPE_TRAP) and c:IsFaceup() and not c:IsStatus(STATUS_ACTIVATED)
 end
 function c65020076.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return false end
 	if chk==0 then return Duel.IsExistingTarget(c65020076.desfilter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,e:GetHandler())
-		and Duel.IsExistingTarget(Card.IsFaceup,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,2,nil) end
+		and Duel.IsExistingTarget(Card.IsFaceup,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,2,e:GetHandler()) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
 	local g1=Duel.SelectTarget(tp,c65020076.desfilter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,e:GetHandler())
+	g1:AddCard(e:GetHandler())
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
 	local g2=Duel.SelectTarget(tp,Card.IsFaceup,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,g1)
+	g1:RemoveCard(e:GetHandler())
 	g1:Merge(g2)
 	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g1,2,0,0)
 end

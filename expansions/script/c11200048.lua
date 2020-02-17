@@ -17,17 +17,24 @@ function c11200048.initial_effect(c)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e2:SetCode(EVENT_FREE_CHAIN)
 	e2:SetRange(LOCATION_GRAVE)
-	e2:SetCountLimit(1,11200948)
+	e2:SetCountLimit(1,11200048)
 	e2:SetCost(c11200048.spcost)
 	e2:SetTarget(c11200048.destg)
 	e2:SetOperation(c11200048.desop)
 	c:RegisterEffect(e2)
+	--act in set turn
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_SINGLE)
+	e3:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
+	e3:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
+	e3:SetCondition(c11200048.actcon)
+	c:RegisterEffect(e3)
 end
 function c11200048.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsControler(1-tp) and chkc:IsLocation(LOCATION_MZONE) and chkc:IsCanAddCounter(0x1620,1) end
-	if chk==0 then return Duel.IsExistingTarget(Card.IsCanAddCounter,tp,0,LOCATION_MZONE,1,nil,0x1620,1) end
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsCanAddCounter(0x1620,1) end
+	if chk==0 then return Duel.IsExistingTarget(Card.IsCanAddCounter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil,0x1620,1) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-	local g=Duel.SelectTarget(tp,Card.IsCanAddCounter,tp,0,LOCATION_MZONE,1,1,nil,0x1620,1)
+	local g=Duel.SelectTarget(tp,Card.IsCanAddCounter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil,0x1620,1)
 	Duel.SetOperationInfo(0,CATEGORY_COUNTER,g,1,0x1620,1)
 end
 function c11200048.operation(e,tp,eg,ep,ev,re,r,rp)
@@ -74,26 +81,24 @@ function c11200048.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SendtoDeck(e:GetHandler(),nil,2,REASON_COST)
 end
 function c11200048.desfilter(c)
-	return c:IsFaceup() and aux.IsCodeListed(c,11200029)
-end
-function c11200048.dfsfilter(c)
-	return c:IsFaceup() and c:GetCounter(0x1620)>0
+	return c:GetCounter(0x1620)>0
 end
 function c11200048.destg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return false end
-	if chk==0 then return Duel.IsExistingTarget(c11200048.desfilter,tp,LOCATION_MZONE,0,1,nil)
-		and Duel.IsExistingTarget(c11200048.dfsfilter,tp,0,LOCATION_MZONE,1,nil) end
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and c11200048.desfilter(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(c11200048.desfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-	local g1=Duel.SelectTarget(tp,c11200048.desfilter,tp,LOCATION_MZONE,0,1,1,nil)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-	local g2=Duel.SelectTarget(tp,c11200048.dfsfilter,tp,0,LOCATION_MZONE,1,1,nil)
-	g1:Merge(g2)
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g1,2,0,0)
+	local g=Duel.SelectTarget(tp,c11200048.desfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil)
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
 end
 function c11200048.desop(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
-	local tg=g:Filter(Card.IsRelateToEffect,nil,e)
-	if tg:GetCount()>0 then
-		Duel.Destroy(tg,REASON_EFFECT)
+	local tc=Duel.GetFirstTarget()
+	if tc:IsRelateToEffect(e) then
+		Duel.Destroy(tc,REASON_EFFECT)
 	end
+end
+function c11200048.nfilter(c)
+	return c:IsFaceup() and c:IsCode(11200029)
+end
+function c11200048.actcon(e)
+	return Duel.IsExistingMatchingCard(c11200048.nfilter,tp,LOCATION_MZONE,0,1,nil)
 end

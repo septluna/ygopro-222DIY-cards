@@ -40,7 +40,7 @@ function c11200034.ctcon(e,tp,eg,ep,ev,re,r,rp)
 	return ph==PHASE_MAIN1 or (ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE) or ph==PHASE_MAIN2
 end
 function c11200034.ctfilter(c)
-	return c:IsFaceup() and c:IsRace(RACE_AQUA)
+	return c:IsFaceup() and c:IsCode(11200029)
 end
 function c11200034.cttg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return Duel.IsExistingMatchingCard(c11200034.ctfilter,tp,LOCATION_MZONE,0,1,nil)
@@ -80,7 +80,7 @@ function c11200034.ctop(e,tp,eg,ep,ev,re,r,rp)
 		e3_1_6:SetCode(EFFECT_UNRELEASABLE_NONSUM)
 		tc:RegisterEffect(e3_1_6)
 	end
-	if ct>=3 and Duel.SelectYesNo(tp,aux.Stringid(11200034,2)) then
+	if Duel.GetCounter(0,1,1,0x1620)>=3 and Duel.SelectYesNo(tp,aux.Stringid(11200034,2)) then
 		Duel.BreakEffect()
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
 		local dg=Duel.SelectMatchingCard(tp,aux.TRUE,tp,0,LOCATION_ONFIELD,1,1,nil)

@@ -1,62 +1,48 @@
 --感谢型亚瑟们
-function c17060836.initial_effect(c)
+local m=17060836
+local cm=_G["c"..m]
+function cm.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetOperation(c17060836.activate)
+	e1:SetOperation(cm.activate)
 	c:RegisterEffect(e1)
-	--indes
+	--inactivatable
 	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_SINGLE)
-	e2:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
-	e2:SetRange(LOCATION_FZONE)
-	e2:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
-	e2:SetCondition(c17060836.effcon)
-	e2:SetValue(1)
-	e2:SetLabel(3)
+	e2:SetType(EFFECT_TYPE_FIELD)
+	e2:SetCode(EFFECT_CANNOT_INACTIVATE)
+	e2:SetRange(LOCATION_SZONE)
+	e2:SetCondition(cm.condition)
+	e2:SetValue(cm.effectfilter)
 	c:RegisterEffect(e2)
-	--indes
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_FIELD)
-	e3:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
-	e3:SetRange(LOCATION_FZONE)
-	e3:SetTargetRange(LOCATION_MZONE+LOCATION_PZONE,0)
-	e3:SetCondition(c17060836.effcon)
-	e3:SetTarget(c17060836.indtg)
-	e3:SetValue(1)
-	e3:SetLabel(5)
+	local e3=e2:Clone()
+	e3:SetCode(EFFECT_CANNOT_DISEFFECT)
 	c:RegisterEffect(e3)
-	local e3b=e3:Clone()
-	e3b:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
-	e3b:SetValue(aux.tgoval)
-	c:RegisterEffect(e3b)
 end
-c17060836.is_named_with_Million_Arthur=1
-function c17060836.IsMillion_Arthur(c)
-	local m=_G["c"..c:GetCode()]
-	return m and m.is_named_with_Million_Arthur
+cm.is_named_with_Million_Arthur=1
+function cm.thfilter(c)
+	return c:IsType(TYPE_MONSTER) and c:IsSetCard(0x7f0) and c:IsAbleToHand()
 end
-function c17060836.thfilter(c)
-	return c:IsType(TYPE_MONSTER) and c17060836.IsMillion_Arthur(c) and c:IsAbleToHand()
-end
-function c17060836.activate(e,tp,eg,ep,ev,re,r,rp)
+function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end
-	local g=Duel.GetMatchingGroup(c17060836.thfilter,tp,LOCATION_DECK,0,nil)
-	if g:GetCount()>0 and Duel.SelectYesNo(tp,aux.Stringid(17060836,0)) then
+	local g=Duel.GetMatchingGroup(cm.thfilter,tp,LOCATION_DECK,0,nil)
+	if g:GetCount()>0 and Duel.SelectYesNo(tp,aux.Stringid(m,0)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 		local sg=g:Select(tp,1,1,nil)
 		Duel.SendtoHand(sg,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,sg)
 	end
 end
-function c17060836.cfilter(c)
-	return c:IsFaceup() and c17060836.IsMillion_Arthur(c)
+function cm.cfilter(c)
+	return c:IsFaceup() and c:IsSetCard(0x7f0)
 end
-function c17060836.effcon(e)
-	return Duel.GetMatchingGroup(c17060836.cfilter,e:GetHandlerPlayer(),LOCATION_MZONE,0,nil):GetClassCount(Card.GetCode)>=e:GetLabel()
+function cm.condition(e,tp,eg,ep,ev,re,r,rp)
+	return Duel.GetMatchingGroupCount(cm.cfilter,0,LOCATION_MZONE,0,nil)>=3
 end
-function c17060836.indtg(e,c)
-	return c:IsType(TYPE_PENDULUM)
+function cm.effectfilter(e,ct)
+	local p=e:GetHandler():GetControler()
+	local te,tp,loc=Duel.GetChainInfo(ct,CHAININFO_TRIGGERING_EFFECT,CHAININFO_TRIGGERING_PLAYER,CHAININFO_TRIGGERING_LOCATION)
+	return p==tp and te:GetHandler():IsSetCard(0x7f0) and bit.band(loc,LOCATION_ONFIELD)~=0
 end

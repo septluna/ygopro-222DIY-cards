@@ -38,10 +38,10 @@ function c98610005.spop(e,tp,eg,ep,ev,re,r,rp)
 end
 function c98610005.tpcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return c:IsReason(REASON_EFFECT)and re and re:GetHandler():IsSetCard(0x980)
+	return c:IsReason(REASON_EFFECT)and re and re:GetHandler():IsSetCard(0x870)
 end
 function c98610005.tfilter(c)
-	return c:IsSetCard(0x980) and c:IsLocation(LOCATION_REMOVED)  
+	return c:IsSetCard(0x870) and c:IsLocation(LOCATION_REMOVED)  
 end
 function c98610005.tptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsAbleToRemove() end

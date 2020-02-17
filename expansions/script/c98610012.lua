@@ -22,7 +22,7 @@ function c98610012.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function c98610012.cfilter(c)
-	return c:IsAbleToRemove() and c:IsSetCard(0x980)
+	return c:IsAbleToRemove() and c:IsSetCard(0x870)
 end
 function c98610012.condition(e,tp,eg,ep,ev,re,r,rp)
 	return re:IsActiveType(TYPE_MONSTER+TYPE_SPELL+TYPE_TRAP) or re:IsHasType(EFFECT_TYPE_ACTIVATE) and Duel.IsChainNegatable(ev)
@@ -46,7 +46,7 @@ function c98610012.activate(e,tp,eg,ep,ev,re,r,rp)
 end
 function c98610012.tpcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return c:IsReason(REASON_EFFECT)and re and re:GetHandler():IsSetCard(0x980)
+	return c:IsReason(REASON_EFFECT)and re and re:GetHandler():IsSetCard(0x870)
 end
 function c98610012.tptg(e,tp,eg,ep,ev,re,r,rp,chk)
    if chk==0 then return true end

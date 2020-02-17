@@ -6,97 +6,85 @@ function c65020075.initial_effect(c)
 	--activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(65020075,0))
-	e1:SetCategory(CATEGORY_TOHAND)
+	e1:SetCategory(CATEGORY_ATKCHANGE)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_MZONE)
-	e1:SetCountLimit(1)
-	e1:SetHintTiming(0,TIMINGS_CHECK_MONSTER)
 	e1:SetCondition(c65020075.con)
-	e1:SetCost(c65020075.thcost)
-	e1:SetTarget(c65020075.thtg)
-	e1:SetOperation(c65020075.thop)
+	e1:SetCost(c65020075.cost)
+	e1:SetTarget(c65020075.tg)
+	e1:SetOperation(c65020075.op)
 	c:RegisterEffect(e1)
-	--spsummon
+	 --attach
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(65020075,1))
-	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetRange(LOCATION_MZONE)
 	e2:SetCode(EVENT_FREE_CHAIN)
+	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,65020075)
-	e2:SetCost(c65020075.spcost)
-	e2:SetTarget(c65020075.sptg)
-	e2:SetOperation(c65020075.spop)
-	e2:SetHintTiming(0,TIMING_END_PHASE)
+	e2:SetCondition(c65020075.xcon)
+	e2:SetTarget(c65020075.xtg)
+	e2:SetOperation(c65020075.xop)
 	c:RegisterEffect(e2)
 end
-function c65020075.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then return c:CheckRemoveOverlayCard(tp,2,REASON_COST) end
-	c:RemoveOverlayCard(tp,2,2,REASON_COST)
-end
-function c65020075.filter(c,e,tp)
-	return c:IsSetCard(0x9da3) and c:IsType(TYPE_XYZ) and not c:IsCode(65020075) and e:GetHandler():IsCanBeXyzMaterial(c)
-		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) and Duel.GetLocationCountFromEx(tp,tp,e:GetHandler(),c)>0
-end
-function c65020075.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return aux.MustMaterialCheck(e:GetHandler(),tp,EFFECT_MUST_BE_XMATERIAL)
-		and Duel.IsExistingMatchingCard(c65020075.filter,tp,LOCATION_EXTRA,0,1,nil,e,tp) end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
-end
-function c65020075.spop(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	if not aux.MustMaterialCheck(c,tp,EFFECT_MUST_BE_XMATERIAL) then return end
-	if c:IsFacedown() or not c:IsRelateToEffect(e) or c:IsControler(1-tp) or c:IsImmuneToEffect(e) then return end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SelectMatchingCard(tp,c65020075.filter,tp,LOCATION_EXTRA,0,1,1,nil,e,tp,c:GetRank()+1)
-	local sc=g:GetFirst()
-	if sc then
-		local mg=c:GetOverlayGroup()
-		if mg:GetCount()~=0 then
-			Duel.Overlay(sc,mg)
-		end
-		sc:SetMaterial(Group.FromCards(c))
-		Duel.Overlay(sc,Group.FromCards(c))
-		Duel.SpecialSummon(sc,SUMMON_TYPE_XYZ,tp,tp,false,false,POS_FACEUP)
-		sc:CompleteProcedure()
-	end
-end
-
 function c65020075.con(e,tp,eg,ep,ev,re,r,rp)
 	local ph=Duel.GetCurrentPhase()
-	return Duel.GetTurnPlayer()~=tp and (ph==PHASE_MAIN1 or ph==PHASE_MAIN2)
+	return Duel.GetTurnPlayer()~=tp 
 end
-function c65020075.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
+function c65020075.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
 	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
 end
-function c65020075.desfilter(c,tp)
-	return c:IsType(TYPE_TRAP) and c:IsFaceup() and Duel.IsExistingTarget(aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,c)
+function c65020075.desfilter(c)
+	return c:IsFaceup() and c:IsAttackAbove(1) and c:IsSetCard(0x9da3)
 end
-function c65020075.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return false end
-	if chk==0 then return Duel.IsExistingTarget(c65020075.desfilter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil,tp) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
-	local g1=Duel.SelectTarget(tp,c65020075.desfilter,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil,tp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
-	local g2=Duel.SelectTarget(tp,aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,g1)
-	g1:Merge(g2)
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g1,2,0,0)
+function c65020075.tg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return c65020075.desfilter(chkc) and chkc:IsLocation(LOCATION_MZONE) and c:IsControler(tp) end
+	if chk==0 then return Duel.IsExistingTarget(c65020075.desfilter,tp,LOCATION_MZONE,0,1,nil) end
+	Duel.SelectTarget(tp,c65020075.desfilter,tp,LOCATION_MZONE,0,1,1,nil,tp)
 end
-function c65020075.thop(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS):Filter(Card.IsRelateToEffect,nil,e)
-	if g:GetCount()>0 then
-		local sg=g:Filter(Card.IsStatus,nil,STATUS_ACTIVATED)
-		if sg:GetCount()>0 then
-			local sc=sg:GetFirst()
-			while sc do
-				sc:CancelToGrave()
-				sc=sg:GetNext()
-			end
-		end
-		Duel.SendtoHand(g,nil,REASON_EFFECT)
+function c65020075.op(e,tp,eg,ep,ev,re,r,rp)
+	local tc=Duel.GetFirstTarget()
+	if tc:IsRelateToEffect(e) and tc:IsFaceup() then
+		local atk=tc:GetAttack()
+		local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,0,nil)
+	local gc=g:GetFirst()
+	while gc do
+		local e1=Effect.CreateEffect(e:GetHandler())
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_UPDATE_ATTACK)
+		e1:SetValue(atk)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
+		gc:RegisterEffect(e1)
+		gc=g:GetNext()
+	end
+	end
+end
+
+function c65020075.xcon(e,tp,eg,ep,ev,re,r,rp)
+	local ph=Duel.GetCurrentPhase()
+	return Duel.GetTurnPlayer()~=tp
+		and (ph==PHASE_MAIN1 or ph==PHASE_MAIN2)
+end
+function c65020075.xfilter(c)
+	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:IsSetCard(0x9da3)
+end
+function c65020075.xtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	local c=e:GetHandler()
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and c65020075.xfilter(chkc) and chkc~=c end
+	if chk==0 then return Duel.IsExistingTarget(c65020075.xfilter,tp,LOCATION_MZONE,0,1,c)
+		and c:IsCanOverlay() end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
+	Duel.SelectTarget(tp,c65020075.xfilter,tp,LOCATION_MZONE,0,1,1,c)
+end
+function c65020075.xop(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local tc=Duel.GetFirstTarget()
+	if c:IsRelateToEffect(e) and tc:IsRelateToEffect(e) and not tc:IsImmuneToEffect(e) then
+		local mg=c:GetOverlayGroup()
+		if mg:GetCount()>0 then Duel.Overlay(tc,mg) end
+		Duel.Overlay(tc,Group.FromCards(c))
 	end
 end

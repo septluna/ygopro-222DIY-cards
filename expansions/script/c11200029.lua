@@ -1,13 +1,6 @@
 --泄矢诹访子
 function c11200029.initial_effect(c)
 	aux.AddCodeList(c,11200029)
-	--cannot special summon
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_SINGLE)
-	e0:SetProperty(EFFECT_FLAG_SINGLE_RANGE+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e0:SetRange(LOCATION_DECK)
-	e0:SetCode(EFFECT_SPSUMMON_CONDITION)
-	c:RegisterEffect(e0)
 	--to grave
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_TOGRAVE)

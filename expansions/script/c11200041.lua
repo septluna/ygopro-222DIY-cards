@@ -75,6 +75,13 @@ function c11200041.spop(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetValue(1)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 		c:RegisterEffect(e1,true)
+		local e2=Effect.CreateEffect(c)
+		e2:SetType(EFFECT_TYPE_SINGLE)
+		e2:SetCode(EFFECT_LEAVE_FIELD_REDIRECT)
+		e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+		e2:SetReset(RESET_EVENT+RESETS_REDIRECT)
+		e2:SetValue(LOCATION_REMOVED)
+		c:RegisterEffect(e2,true)
 		Duel.SpecialSummonComplete()
 	end
 end

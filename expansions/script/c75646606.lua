@@ -1,5 +1,6 @@
 --逆熵科技 青花鱼号
 function c75646606.initial_effect(c)
+	aux.AddCodeList(c,75646600)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_EQUIP)
@@ -14,37 +15,28 @@ function c75646606.initial_effect(c)
 	e2:SetType(EFFECT_TYPE_EQUIP)
 	e2:SetCode(EFFECT_UPDATE_DEFENSE)
 	e2:SetValue(600)
-	e2:SetCondition(c75646606.dircon1)
 	c:RegisterEffect(e2)
-	--indes
+	--atklimit
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_EQUIP)
-	e3:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
-	e3:SetValue(1)
+	e3:SetCode(EFFECT_CANNOT_ATTACK)
+	e3:SetCondition(c75646606.condition)
 	c:RegisterEffect(e3)
-	--Equip limit
-	local e4=Effect.CreateEffect(c)
-	e4:SetType(EFFECT_TYPE_SINGLE)
-	e4:SetCode(EFFECT_EQUIP_LIMIT)
-	e4:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-	e4:SetValue(c75646606.eqlimit)
+	local e4=e3:Clone()
+	e4:SetCode(EFFECT_CANNOT_BE_BATTLE_TARGET)
+	e4:SetValue(aux.imval1)
 	c:RegisterEffect(e4)
-	local e5=Effect.CreateEffect(c)
-	e5:SetType(EFFECT_TYPE_FIELD)
-	e5:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
-	e5:SetRange(LOCATION_SZONE)
-	e5:SetTargetRange(LOCATION_SZONE,0)
-	e5:SetCondition(c75646606.dircon)
-	e5:SetTarget(c75646606.target1)
-	e5:SetValue(aux.indoval)
+	local e5=e4:Clone()
+	e5:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
+	e5:SetValue(aux.tgoval)
 	c:RegisterEffect(e5)
-end
-c75646606.card_code_list={75646600}
-function c75646606.dircon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetFlagEffect(tp,75646600)~=0
-end
-function c75646606.target1(e,c)
-	return aux.IsCodeListed(c,75646600)
+	--Equip limit
+	local e6=Effect.CreateEffect(c)
+	e6:SetType(EFFECT_TYPE_SINGLE)
+	e6:SetCode(EFFECT_EQUIP_LIMIT)
+	e6:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+	e6:SetValue(c75646606.eqlimit)
+	c:RegisterEffect(e6)
 end
 function c75646606.eqlimit(e,c)
 	return c:IsSetCard(0x2c5)
@@ -64,7 +56,8 @@ function c75646606.operation(e,tp,eg,ep,ev,re,r,rp)
 	if e:GetHandler():IsRelateToEffect(e) and tc:IsRelateToEffect(e) and tc:IsFaceup() then
 		Duel.Equip(tp,e:GetHandler(),tc)
 	end
-end
-function c75646606.dircon1(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetFlagEffect(tp,75646600)~=0
+end 
+function c75646606.condition(e)
+	local f=Duel.GetFlagEffect(e:GetHandlerPlayer(),75646600)
+	return f and f~=0
 end

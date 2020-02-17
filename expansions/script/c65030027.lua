@@ -49,6 +49,9 @@ end
 function c65030027.fil(c)
 	return c:IsType(TYPE_DUAL) and c:IsAbleToGrave()
 end
+function c65030027.fil2(c)
+	return c:IsSetCard(0xcda1) and c:IsAbleToGrave() and c:IsType(TYPE_MONSTER)
+end
 function c65030027.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and c65030027.filter(chkc,e,tp) end
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
@@ -64,7 +67,11 @@ function c65030027.activate(e,tp,eg,ep,ev,re,r,rp)
 	if g:GetCount()>0 then
 		if Duel.SendtoGrave(g,REASON_EFFECT) and tc:IsRelateToEffect(e)  and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
 			Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)
-			tc:EnableDualState()
+			if Duel.IsExistingMatchingCard(c65030027.fil,tp,LOCATION_DECK,0,1,nil) and not tc:IsDualState() and Duel.SelectYesNo(tp,aux.Stringid(65030027,0)) then
+				local g1=Duel.SelectMatchingCard(tp,c65030027.fil2,tp,LOCATION_DECK,0,1,1,nil)
+				Duel.SendtoGrave(g1,REASON_EFFECT)
+				tc:EnableDualState()
+			end
 		end
 	end
 end

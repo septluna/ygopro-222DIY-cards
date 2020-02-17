@@ -37,13 +37,13 @@ function c98610002.spop(e,tp,eg,ep,ev,re,r,rp)
 end
 function c98610002.tpcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return c:IsReason(REASON_EFFECT)and re and re:GetHandler():IsSetCard(0x980)
+	return c:IsReason(REASON_EFFECT)and re and re:GetHandler():IsSetCard(0x870)
 end
 function c98610002.refilter(c)
-	return c:IsSetCard(0x980) and c:IsAbleToDeck()
+	return c:IsSetCard(0x870) and c:IsAbleToDeck()
 end
 function c98610002.repfilter1(c)
-	return c:IsSetCard(0x980) and c:IsAbleToHand()
+	return c:IsSetCard(0x870) and c:IsAbleToHand()
 end
 function c98610002.tptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c98610002.refilter,tp,LOCATION_GRAVE,0,1,nil)and 

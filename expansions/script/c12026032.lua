@@ -16,15 +16,14 @@ function c12026032.initial_effect(c)
 	c:RegisterEffect(e1)
 	--atk up
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(12026032,0))
-	e2:SetCategory(CATEGORY_TOHAND)
+	e2:SetDescription(aux.Stringid(12026020,1))
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
+	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
+	e2:SetCategory(CATEGORY_TOHAND)
 	e2:SetCountLimit(1,12026032+100)
-	e2:SetCost(c12026032.thcost)
-	e2:SetTarget(c12026032.thtg)
-	e2:SetOperation(c12026032.thop)
+	e2:SetTarget(c12026020.rmtg)
+	e2:SetOperation(c12026020.rmop)
 	c:RegisterEffect(e2)
 	--leave field
 	local e2=Effect.CreateEffect(c)
@@ -50,30 +49,6 @@ function c12026032.spop(e,tp,eg,ep,ev,re,r,rp,c)
 	local mg=Duel.GetMatchingGroup(c12026032.confilter,tp,LOCATION_MZONE,0,nil,c)
 	local g=Senya.SelectGroup(tp,HINTMSG_TOGRAVE,mg,c12026032.gcheck,nil,1,3,tp,c)
 	Duel.SendtoGrave(g,REASON_COST)
-end
-
-function c12026032.thfilter1(c)
-	return c:IsType(TYPE_MONSTER) and c:IsAttribute(ATTRIBUTE_LIGHT) and c:IsAbleToDeck()
-end
-function c12026032.thcost(c)
-	if chk==0 then return Duel.IsExistingMatchingCard(c12026032.thfilter1,tp,LOCATION_GRAVE,0,3,nil) end
-	local tc=Duel.SelectMatchingCard(tp,c12026032.thfilter1,tp,LOCATION_GRAVE,0,3,3,nil)
-	Duel.SendtoDeck(tc,nil,2,REASON_COST)
-end
-function c12026032.thfilter(c)
-	return c:IsType(TYPE_MONSTER) and c:IsAttribute(ATTRIBUTE_LIGHT) and c:IsAbleToHand()
-end
-function c12026032.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chk==0 then return Duel.IsExistingMatchingCard(c12026032.thfilter,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,1,0,0)
-end
-function c12026032.thop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingCard(tp,c12026032.thfilter,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,1,nil)
-	if g:GetCount() then
-		Duel.SendtoHand(g,tp,REASON_EFFECT)
-		Duel.ConfirmCards(g,1-tp)
-	end
 end
 function c12026032.regop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

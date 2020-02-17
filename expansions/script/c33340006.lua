@@ -46,7 +46,7 @@ function cm.initial_effect(c)
 	e4:SetOperation(cm.recop)
 	c:RegisterEffect(e4) 
 end
-cm.setcard="Rcore"
+cm.rssetcode="Thermonuclear"
 function cm.rectg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	Duel.SetTargetPlayer(tp)
@@ -62,14 +62,17 @@ function cm.thop2(e,tp,eg,ep,ev,re,r,rp)
 	if c:GetOwner()==tp then return end
 	Duel.SendtoHand(c,1-tp,REASON_EFFECT)
 end
+function cm.tdfilter(c)
+	return rccv.IsSet(c) and c:IsAbleToDeck()
+end
 function cm.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToDeck,tp,0x2,0,1,nil) and Duel.IsPlayerCanDraw(tp,1) end
+	if chk==0 then return Duel.IsExistingMatchingCard(cm.tdfilter,tp,0x2,0,1,nil) and Duel.IsPlayerCanDraw(tp,1) end
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,1,tp,0x2)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)
 end
 function cm.tdop(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end
-	local tg=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,LOCATION_HAND,0,nil)
+	local tg=Duel.GetMatchingGroup(cm.tdfilter,tp,LOCATION_HAND,0,nil)
 	if tg:GetCount()>0 then
 	   Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	   local tg2=tg:Select(tp,1,1,nil)
@@ -79,7 +82,7 @@ function cm.tdop(e,tp,eg,ep,ev,re,r,rp)
 	end 
 end
 function cm.thfilter(c)
-	return c.setcard=="Rcore" and c:IsAbleToHand()
+	return rccv.IsSet(c) and c:IsAbleToHand()
 end
 function cm.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(cm.thfilter,tp,0x11,0,1,nil) end

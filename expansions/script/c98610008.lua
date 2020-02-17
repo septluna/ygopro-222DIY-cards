@@ -30,7 +30,7 @@ function c98610008.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function c98610008.ffilter(c)
-	return c:IsSetCard(0x980)and c:IsType(TYPE_MONSTER) 
+	return c:IsSetCard(0x870)and c:IsType(TYPE_MONSTER) 
 end
 function c98610008.tgcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
@@ -59,10 +59,10 @@ function c98610008.tgop(e,tp,eg,ep,ev,re,r,rp)
 end
 function c98610008.tpcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return c:IsReason(REASON_EFFECT)and re and re:GetHandler():IsSetCard(0x980)
+	return c:IsReason(REASON_EFFECT)and re and re:GetHandler():IsSetCard(0x870)
 end
 function c98610008.tfilter(c)
-	return c:IsSetCard(0x980)and  c:IsFaceup()
+	return c:IsSetCard(0x870)and  c:IsFaceup()
 end
 function c98610008.tptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0 and e:GetHandler():IsCanBeSpecialSummoned(e,0,tp,false,false)

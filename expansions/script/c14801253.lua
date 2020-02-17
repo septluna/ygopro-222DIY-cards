@@ -2,6 +2,7 @@
 local m=14801253
 local cm=_G["c"..m]
 function cm.initial_effect(c)
+    c:SetUniqueOnField(1,0,m)
     --xyz summon
     aux.AddXyzProcedure(c,nil,1,2)
     c:EnableReviveLimit()
@@ -110,8 +111,8 @@ function cm.cond(e,tp,eg,ep,ev,re,r,rp)
     return e:GetHandler():IsDefensePos() and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE)) and Duel.IsChainNegatable(ev)
 end
 function cm.negcost(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duel.CheckLPCost(tp,1000) end
-    Duel.PayLPCost(tp,1000)
+    if chk==0 then return Duel.CheckLPCost(tp,2000) end
+    Duel.PayLPCost(tp,2000)
 end
 function cm.negtg(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return true end

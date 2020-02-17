@@ -44,21 +44,20 @@ end
 function c33330103.disop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.NegateEffect(ev)
 end
-function c33330103.hspfilter(c,tp)
+function c33330103.hspfilter(c)
 	return c:IsSetCard(0x55f)
-		and c:IsAbleToRemoveAsCost()
+		and c:IsAbleToDeckOrExtraAsCost()
 end
-function c33330103.hspcon(e,c,tp)
+function c33330103.hspcon(e,c)
 	if c==nil then return true end
 	local tp=c:GetControler()
 	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-	return ft>0 and Duel.IsExistingMatchingCard(c33330103.hspfilter,tp,LOCATION_GRAVE,0,4,c,tp)
+	return ft>0 and Duel.IsExistingMatchingCard(c33330103.hspfilter,tp,LOCATION_GRAVE,0,4,c)
 end
 function c33330103.hspop(e,tp,eg,ep,ev,re,r,rp,c)
-	local c=e:GetHandler()
 	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-	local g=Duel.SelectMatchingCard(tp,c33330103.hspfilter,tp,LOCATION_GRAVE,0,4,4,c,tp)
-	Duel.Remove(g,POS_FACEUP,REASON_COST)
+	local g=Duel.IsExistingMatchingCard(tp,c33330103.hspfilter,tp,LOCATION_GRAVE,0,4,4,c)
+	Duel.SendtoDeck(g,nil,2,REASON_COST)
 end
 function c33330103.actop(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
@@ -76,14 +75,29 @@ function c33330103.lcfil(c)
 	return c:IsSetCard(0x55f) and c:IsLinkAbove(2)
 end
 function c33330103.atkfil(c)
-	return c:IsFaceup() and c:IsAttackAbove(3000)
+	return c:IsFaceup() and c:IsAttackAbove(2000)
 end
 function c33330103.atktg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToGrave,tp,LOCATION_DECK,0,1,nil) and Duel.IsExistingMatchingCard(c33330103.atkfil,tp,0,LOCATION_MZONE,1,nil) end
+	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToGrave,tp,LOCATION_DECK+LOCATION_HAND+LOCATION_ONFIELD,0,1,nil) and Duel.IsExistingMatchingCard(c33330103.atkfil,tp,0,LOCATION_MZONE,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
 end
 function c33330103.atkop(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetDecktopGroup(tp,1)
+	local g1=Duel.GetMatchingGroup(Card.IsAbleToGrave,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,nil)
+	local g2=Duel.GetDecktopGroup(tp,1)
+	local op=99
+	if g1:GetCount()>0 and g2:GetCount()>0 then
+		op=Duel.SelectOption(tp,aux.Stringid(33330103,0),aux.Stringid(33330103,1))
+	elseif g1:GetCount()>0 then
+		op=Duel.SelectOption(tp,aux.Stringid(33330103,0))
+	elseif g2:GetCount()>0 then
+		op=Duel.SelectOption(tp,aux.Stringid(33330103,1))+1
+	else return end
+	local g=Group.CreateGroup()
+	if op==0 then
+		g=g1:FilterSelect(tp,aux.TRUE,1,1,nil)
+	elseif op==1 then
+		g=g2
+	end
 	if Duel.SendtoGrave(g,REASON_EFFECT)~=0 then
 		local atg=Duel.GetMatchingGroup(c33330103.atkfil,tp,0,LOCATION_MZONE,nil)
 		local atc=atg:GetFirst()
@@ -91,7 +105,7 @@ function c33330103.atkop(e,tp,eg,ep,ev,re,r,rp)
 			local e1=Effect.CreateEffect(e:GetHandler())
 			e1:SetType(EFFECT_TYPE_SINGLE)
 			e1:SetCode(EFFECT_SET_ATTACK_FINAL)
-			e1:SetValue(2500)
+			e1:SetValue(1000)
 			e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_DISABLE)
 			atc:RegisterEffect(e1)
 			atc=atg:GetNext()

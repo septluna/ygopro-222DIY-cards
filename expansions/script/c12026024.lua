@@ -1,17 +1,15 @@
 --化作机械的暗影 拉结尔
 function c12026024.initial_effect(c)
-	--copy effect
-	local e3=Effect.CreateEffect(c)
-	e3:SetDescription(aux.Stringid(12026024,0))
-	e3:SetType(EFFECT_TYPE_QUICK_O)
-	e3:SetCode(EVENT_FREE_CHAIN)
-	e3:SetRange(LOCATION_MZONE)
-	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e3:SetCountLimit(1,12026024+100)
-	e3:SetCost(c12026024.copycost)
-	e3:SetTarget(c12026024.copytg)
-	e3:SetOperation(c12026024.copyop)
-	c:RegisterEffect(e3)
+	--Change effect to nothing
+	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(12026024,0))
+	e1:SetType(EFFECT_TYPE_QUICK_O)
+	e1:SetCode(EVENT_CHAINING)
+	e1:SetCountLimit(1,12026024+100)
+	e1:SetRange(LOCATION_HAND)
+	e1:SetTarget(c12026024.target)
+	e1:SetOperation(c12026024.activate)
+	c:RegisterEffect(e1)
 	--special summon
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(12026024,2))
@@ -50,34 +48,41 @@ function c12026024.spop(e,tp,eg,ep,ev,re,r,rp)
 	   end
 	end
 end
-function c12026024.copycost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():GetFlagEffect(12026024)==0 end
-	e:GetHandler():RegisterFlagEffect(12026024,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1)
-end
-function c12026024.copyfilter(c)
-	return c:IsType(TYPE_MONSTER) and c:IsLocation(LOCATION_GRAVE) and c:IsRace(RACE_MACHINE) and not c:IsCode(12026024)
-end
-function c12026024.copytg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+function c12026024.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and c12026024.copyfilter(chkc) and chkc~=c end
-	if chk==0 then return Duel.IsExistingTarget(c12026024.copyfilter,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,c) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-	Duel.SelectTarget(tp,c12026024.copyfilter,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,1,c)
+	if chk==0 then
+		local tg=re:GetTarget()
+		local event=re:GetCode()
+		if event==EVENT_CHAINING then return
+		   not tg or tg(e,tp,eg,ep,ev,re,r,rp,0)
+		else		 
+		   local res,teg,tep,tev,tre,tr,trp=Duel.CheckEvent(event,true)
+		   return not tg or tg(e,tp,teg,tep,tev,tre,tr,trp,0)
+		end
+		return re:GetHandler():IsRelateToEffect(re) and c:IsAbleToGrave() and eg:GetHandler():IsAbleToGrave() and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+	end
+	local event=re:GetCode()
+	e:SetLabelObject(re)
+	e:SetCategory(re:GetCategory())
+	e:SetProperty(re:GetProperty())
+	local tg=re:GetTarget()
+	if event==EVENT_CHAINING then
+	   if tg then tg(e,tp,eg,ep,ev,re,r,rp,1) end
+	else
+	   local res,teg,tep,tev,tre,tr,trp=Duel.CheckEvent(event,true)
+	   if tg then tg(e,tp,teg,tep,tev,tre,tr,trp,1) end
+	end
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
 end
-function c12026024.copyop(e,tp,eg,ep,ev,re,r,rp)
-    local c=e:GetHandler()
-    local tc=Duel.GetFirstTarget()
-    if tc and c:IsRelateToEffect(e) and c:IsFaceup() and tc:IsRelateToEffect(e) and tc:IsFaceup() and not tc:IsType(TYPE_TOKEN) then
-        local code=tc:GetOriginalCodeRule()
-        local e1=Effect.CreateEffect(c)
-        e1:SetType(EFFECT_TYPE_SINGLE)
-        e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-        e1:SetCode(EFFECT_CHANGE_CODE)
-        e1:SetValue(code)
-        e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
-        c:RegisterEffect(e1)
-        if not tc:IsType(TYPE_TRAPMONSTER) then
-            c:CopyEffect(code,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,1)
-        end
-    end
+function c12026024.activate(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	if not c:GetOriginalCode()==12026024 then return end
+	if not c:IsRelateToEffect(e) then return end
+	Duel.BreakEffect()
+	local c=e:GetHandler()
+	local te=e:GetLabelObject()
+	if not te then return end
+	local op=te:GetOperation()
+	if op then op(e,tp,eg,ep,ev,re,r,rp) end
+	Duel.SendtoGrave(c+eg:GetHandler(),REASON_EFFECT)
 end

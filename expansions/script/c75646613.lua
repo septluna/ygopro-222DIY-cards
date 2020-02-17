@@ -1,66 +1,75 @@
 --最讨厌科学了
 function c75646613.initial_effect(c)
-	--negate attack
+	aux.AddCodeList(c,75646600)
+	--Activate
 	local e1=Effect.CreateEffect(c)
+	e1:SetDescription(aux.Stringid(75646613,0))
+	e1:SetCategory(CATEGORY_RECOVER+CATEGORY_DRAW)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_ATTACK_ANNOUNCE)
-	e1:SetCondition(c75646613.negcon)
-	e1:SetCost(c75646613.negcost)
-	e1:SetOperation(c75646613.negop)
+	e1:SetCondition(c75646613.condition)
+	e1:SetTarget(c75646613.target)
+	e1:SetOperation(c75646613.activate)
 	c:RegisterEffect(e1)
-	--draw
+	--set
 	local e2=Effect.CreateEffect(c)
-	e2:SetCategory(CATEGORY_TODECK+CATEGORY_DRAW)
-	e2:SetType(EFFECT_TYPE_IGNITION)
-	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
-	e2:SetRange(LOCATION_GRAVE)
-	e2:SetCondition(c75646613.dircon)
-	e2:SetCost(aux.bfgcost)
-	e2:SetTarget(c75646613.tg)
-	e2:SetOperation(c75646613.activate)
-	c:RegisterEffect(e2)	
-	c75646613.key_effect=e2
+	e2:SetDescription(aux.Stringid(75646613,1))
+	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
+	e2:SetCode(EVENT_TO_GRAVE)
+	e2:SetCondition(c75646613.setcon)
+	e2:SetTarget(c75646613.settg)
+	e2:SetOperation(c75646613.setop)
+	c:RegisterEffect(e2)
+	local e3=e2:Clone()
+	e3:SetCode(EVENT_REMOVE)
+	c:RegisterEffect(e3)
 end
-c75646613.card_code_list={75646600}
-function c75646613.negcon(e,tp,eg,ep,ev,re,r,rp)
+function c75646613.condition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()~=tp
 end
-function c75646613.costfilter(c)
-	return aux.IsCodeListed(c,75646600) and c:IsDiscardable()
-end
-function c75646613.negcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c75646613.costfilter,tp,LOCATION_HAND,0,1,nil) end
-	Duel.DiscardHand(tp,c75646613.costfilter,1,1,REASON_COST+REASON_DISCARD,nil)
-end
-function c75646613.negop(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.NegateAttack() then
-		Duel.SkipPhase(1-tp,PHASE_BATTLE,RESET_PHASE+PHASE_BATTLE_STEP,1)
-	end
-end
-function c75646613.dircon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetFlagEffect(tp,75646600)~=0
-end
-function c75646613.filter(c)
-	return aux.IsCodeListed(c,75646600) and c:IsAbleToDeck()
-end
-function c75646613.tg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and chkc:IsControler(tp) and c75646613.filter(chkc) end
-	if chk==0 then return Duel.IsPlayerCanDraw(tp,2)
-		and Duel.IsExistingTarget(c75646613.filter,tp,LOCATION_GRAVE,0,5,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectTarget(tp,c75646613.filter,tp,LOCATION_GRAVE,0,5,5,nil)
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,g:GetCount(),0,0)
+function c75646613.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chk==0 then return true end
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,2)
 end
 function c75646613.activate(e,tp,eg,ep,ev,re,r,rp)
-	local tg=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
-	if not tg or tg:FilterCount(Card.IsRelateToEffect,nil,e)~=5 then return end
-	Duel.SendtoDeck(tg,nil,0,REASON_EFFECT)
-	local g=Duel.GetOperatedGroup()
-	if g:IsExists(Card.IsLocation,1,nil,LOCATION_DECK) then Duel.ShuffleDeck(tp) end
-	local ct=g:FilterCount(Card.IsLocation,nil,LOCATION_DECK+LOCATION_EXTRA)
-	if ct==5 then
-		Duel.BreakEffect()
-		Duel.Draw(tp,2,REASON_EFFECT)
+	local tc=Duel.GetAttacker()
+	local b1=Duel.IsPlayerCanDraw(tp,2)
+	local b2=Duel.GetFlagEffect(tp,75646600)~=0
+	local op=0
+	if b1 and not b2 then 
+	op=Duel.SelectOption(tp,aux.Stringid(75646613,2),aux.Stringid(75646613,3),aux.Stringid(75646613,4))
+	elseif not b1 and not b2 then op=Duel.SelectOption(tp,aux.Stringid(75646613,2),aux.Stringid(75646613,3))
+	elseif b2 then op=3
+	end
+	if op==0 then Duel.NegateAttack()
+	elseif op==1 then Duel.Recover(tp,tc:GetAttack(),REASON_EFFECT)
+	elseif op==2 then Duel.Draw(tp,2,REASON_EFFECT)
+	elseif op==3 then Duel.NegateAttack()
+					  Duel.Recover(tp,tc:GetAttack(),REASON_EFFECT)
+					  Duel.Draw(tp,2,REASON_EFFECT)
+	end
+end
+function c75646613.setcon(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	return c:IsReason(REASON_EFFECT) and rp==1-tp and c:GetPreviousControler()==tp
+		and c:IsPreviousLocation(LOCATION_ONFIELD)
+end
+function c75646613.settg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return e:GetHandler():IsSSetable() end
+	Duel.SetOperationInfo(0,CATEGORY_LEAVE_GRAVE,e:GetHandler(),1,0,0)
+end
+function c75646613.setop(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	if c:IsRelateToEffect(e) then
+		Duel.SSet(tp,c)
+	end
+	if Duel.GetFlagEffect(tp,75646600)~=0 then 
+		local e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
+		e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+		c:RegisterEffect(e1)
 	end
 end

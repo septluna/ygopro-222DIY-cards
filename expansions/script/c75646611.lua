@@ -1,45 +1,52 @@
 --科学的原点 PAIN
 function c75646611.initial_effect(c)
+	aux.AddCodeList(c,75646600)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetHintTiming(0,TIMINGS_CHECK_MONSTER)
 	c:RegisterEffect(e1)
-	--def
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_FIELD)
-	e2:SetCode(EFFECT_UPDATE_DEFENSE)
-	e2:SetRange(LOCATION_SZONE)
-	e2:SetTargetRange(LOCATION_MZONE,0)
-	e2:SetTarget(aux.TargetBoolFunction(Card.IsSetCard,0x2c5))
-	e2:SetValue(1000)
-	c:RegisterEffect(e2)
-	--todeck
-	local e3=Effect.CreateEffect(c)
-	e3:SetCategory(CATEGORY_TODECK)
-	e3:SetType(EFFECT_TYPE_IGNITION)
-	e3:SetRange(LOCATION_GRAVE)
-	e3:SetCondition(c75646611.dircon)
-	e3:SetCost(aux.bfgcost)
-	e3:SetTarget(c75646611.tg)
-	e3:SetOperation(c75646611.activate)
-	c:RegisterEffect(e3)
-	c75646611.key_effect=e3
+	--act in hand
+	local e4=Effect.CreateEffect(c)
+	e4:SetType(EFFECT_TYPE_SINGLE)
+	e4:SetCode(EFFECT_TRAP_ACT_IN_HAND)
+	e4:SetCondition(c75646611.handcon)
+	c:RegisterEffect(e4)
+	--cannot material
+	local e5=Effect.CreateEffect(c)
+	e5:SetType(EFFECT_TYPE_FIELD)
+	e5:SetRange(LOCATION_SZONE)
+	e5:SetCode(EFFECT_CANNOT_BE_FUSION_MATERIAL)
+	e5:SetTarget(c75646611.tg)
+	e5:SetValue(1)
+	e5:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
+	c:RegisterEffect(e5)
+	local e6=e5:Clone()
+	e6:SetCode(EFFECT_CANNOT_BE_SYNCHRO_MATERIAL)
+	c:RegisterEffect(e6)
+	local e7=e5:Clone()
+	e7:SetCode(EFFECT_CANNOT_BE_XYZ_MATERIAL)
+	c:RegisterEffect(e7)
+	local e8=e5:Clone()
+	e8:SetCode(EFFECT_CANNOT_BE_LINK_MATERIAL)
+	c:RegisterEffect(e8)
 end
-c75646611.card_code_list={75646600}
-function c75646611.dircon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetFlagEffect(tp,75646600)~=0
+function c75646611.handcon(e)
+	local f=Duel.GetFlagEffect(e:GetHandlerPlayer(),75646600)
+	return f and f~=0
 end
-function c75646611.tg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToDeck,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,e:GetHandler()) end
-	local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,e:GetHandler())
-	Duel.SetOperationInfo(0,CATEGORY_TODECK,g,1,0,0)
-end
-function c75646611.activate(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToDeck,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,aux.ExceptThisCard(e))
-	if g:GetCount()>0 then
-		Duel.HintSelection(g)
-		Duel.SendtoDeck(g,nil,2,REASON_EFFECT)
+function c75646611.tg(e,c)
+	local tp=e:GetHandlerPlayer()
+	if Duel.GetFlagEffect(tp,75646600)>0 then
+		return c:GetControler()==1-tp
+	else return 1
 	end
 end
+
+
+
+
+
+
+
