@@ -170,7 +170,7 @@ function cm.thtg1(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function cm.thop1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if  c:IsLocation(LOCATION_DECK) and Duel.SendtoDeck(c,nil,0,REASON_EFFECT)~=0  then
+	if  c:IsLocation(LOCATION_GRAVE) and Duel.SendtoDeck(c,nil,0,REASON_EFFECT)~=0  then
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 	local g=Duel.SelectMatchingCard(tp,cm.thfilter1,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,1,nil)
 	if g:GetCount()>0 then
