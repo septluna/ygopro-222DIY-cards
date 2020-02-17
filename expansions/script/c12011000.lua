@@ -63,10 +63,10 @@ function c12011000.efop(e,tp,eg,ep,ev,re,r,rp)
 		rc:RegisterEffect(e2,true)
 	end
 end
-function c12011000.target(e,c)
+function c12011000.target(e,rc)
 	local g,te=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS,CHAININFO_TRIGGERING_EFFECT)
 	return not (te and te:IsHasProperty(EFFECT_FLAG_CARD_TARGET))
-		or not (g and g:IsContains(c))
+		or not (g and g:IsContains(rc))
 end
 function c12011000.efilter(e,te)
 	return te:GetOwnerPlayer()~=e:GetHandlerPlayer()
