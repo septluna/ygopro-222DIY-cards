@@ -105,6 +105,7 @@ function c12009057.spop(e,tp,eg,ep,ev,re,r,rp)
 			sel_zone=sel_zone>>16
 		end
 		Duel.SpecialSummonStep(sc,0,tp,sump,false,false,POS_FACEUP_DEFENSE,sel_zone)
+		Duel.SpecialSummonComplete()
 		--spsummon limit
 		 local e2=Effect.CreateEffect(c)
 		 e2:SetType(EFFECT_TYPE_FIELD)
