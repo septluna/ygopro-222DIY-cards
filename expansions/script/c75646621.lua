@@ -79,6 +79,7 @@ function c75646621.operation(e,tp,eg,ep,ev,re,r,rp)
 				Duel.SpecialSummonStep(token,0,tp,tp,false,false,POS_FACEUP_DEFENSE)
 				ct=ct-1
 			until ct==0
+			Duel.SpecialSummonComplete()
 		end
 	end
 end
@@ -89,7 +90,7 @@ end
 function c75646621.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return eg:IsContains(chkc) and c75646621.cfilter(chkc,e,tp) end
 	if chk==0 then return eg:IsExists(c75646621.cfilter,1,nil,e,tp) and not eg:IsContains(e:GetHandler()) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
 	local g=eg:FilterSelect(tp,c75646621.cfilter,1,1,nil,e,tp)
 	Duel.SetTargetCard(g)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,g,1,0,0)

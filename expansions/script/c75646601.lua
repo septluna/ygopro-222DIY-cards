@@ -66,9 +66,9 @@ function c75646601.recost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g1=Duel.GetMatchingGroup(c75646601.cfilter2,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,tp)
 	if not g1:IsExists(Card.IsHasEffect,1,nil,75646628,tp) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DISCARD)
-		local dg=g1:Select(tp,1,1,c)
-		dg:AddCard(c)
+		local dg=g1:Select(tp,1,1,c)		
 		if dg:GetFirst():IsCode(75646600) then e:SetLabel(1) end
+		dg:AddCard(c)
 		Duel.SendtoGrave(dg,REASON_DISCARD+REASON_COST)
 	else			
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SELECT)

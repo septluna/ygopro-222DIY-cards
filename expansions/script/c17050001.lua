@@ -2,7 +2,7 @@
 local m=17050001
 local cm=_G["c"..m]
 function cm.initial_effect(c)
-	c:EnableCounterPermit(0x37f2,LOCATION_PZONE+LOCATION_MZONE)
+	c:EnableCounterPermit(0x7f3,LOCATION_PZONE+LOCATION_MZONE)
 	--pendulum summon
 	aux.EnablePendulumAttribute(c)
 	--summon with 3 tribute
@@ -142,11 +142,11 @@ end
 function cm.ctop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) then
-		c:AddCounter(0x37f2,1)
+		c:AddCounter(0x7f3,1)
 	end
 end
 function cm.effcon(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():GetCounter(0x37f2)>=e:GetLabel()
+	return e:GetHandler():GetCounter(0x7f3)>=e:GetLabel()
 end
 function cm.efilter(e,te)
 	return te:GetOwner()~=e:GetOwner()

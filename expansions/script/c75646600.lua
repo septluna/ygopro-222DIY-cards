@@ -11,7 +11,7 @@ function c75646600.initial_effect(c)
 	c:RegisterEffect(e1)
 end
 function c75646600.condition(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetLP(tp)<=10000
+	return Duel.GetLP(tp)<=500
 end
 function c75646600.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
@@ -20,7 +20,7 @@ function c75646600.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	end
 end
 function c75646600.activate(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLP(tp)>10000 then return end
+	if Duel.GetLP(tp)>500 then return end
 	Duel.Hint(HINT_MUSIC,0,aux.Stringid(75646600,0))
 	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetType(EFFECT_TYPE_FIELD)

@@ -2,7 +2,7 @@
 local m=17045002
 local cm=_G["c"..m]
 function cm.initial_effect(c)
-	c:EnableCounterPermit(0x57f2)
+	c:EnableCounterPermit(0x17f2)
 	--pendulum summon
 	aux.EnablePendulumAttribute(c)
 	--spsummon
@@ -92,19 +92,19 @@ function cm.spop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) then return end
 	Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
-	if c:IsCanAddCounter(0x57f2,1) then
-		c:AddCounter(0x57f2,1)
+	if c:IsCanAddCounter(0x17f2,1) then
+		c:AddCounter(0x17f2,1)
 	end
 end
 function cm.atkval(e,c)
-	return Duel.GetCounter(0,1,1,0x57f2)*500
+	return Duel.GetCounter(0,1,1,0x17f2)*500
 end
 function cm.indtg(e,c)
-	return c:GetCounter(0x57f2)>0
+	return c:GetCounter(0x17f2)>0
 end
 function cm.discost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():IsCanRemoveCounter(tp,0x57f2,1,REASON_COST) end
-	e:GetHandler():RemoveCounter(tp,0x57f2,1,REASON_COST)
+	if chk==0 then return e:GetHandler():IsCanRemoveCounter(tp,0x17f2,1,REASON_COST) end
+	e:GetHandler():RemoveCounter(tp,0x17f2,1,REASON_COST)
 end
 function cm.disop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -138,8 +138,8 @@ function cm.ctop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetFieldGroup(tp,LOCATION_MZONE,0)
 	if c:IsRelateToEffect(e) then g:AddCard(c) end
 	for tc in aux.Next(g) do
-		if tc:IsCanAddCounter(0x57f2,1) then
-			tc:AddCounter(0x57f2,1)
+		if tc:IsCanAddCounter(0x17f2,1) then
+			tc:AddCounter(0x17f2,1)
 		end
 	end
 end

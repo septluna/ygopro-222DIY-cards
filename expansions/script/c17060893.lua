@@ -8,7 +8,7 @@ function cm.initial_effect(c)
 	aux.AddContactFusionProcedure(c,Card.IsReleasable,LOCATION_MZONE+LOCATION_PZONE,0,Duel.Release,REASON_COST+REASON_MATERIAL)
 	--remove
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(17060854,0))
+	e1:SetDescription(aux.Stringid(17060893,0))
 	e1:SetCategory(CATEGORY_DESTROY)
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
@@ -20,7 +20,7 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e1)
 	--special summon
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(17060864,1))
+	e2:SetDescription(aux.Stringid(17060893,1))
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
@@ -61,32 +61,29 @@ function cm.rmop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_REMOVE)
 	local tc=g:Select(1-tp,1,1,nil):GetFirst()
 	Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)
-	local c=e:GetHandler()
-	local fid=c:GetFieldID()
-	local e1=Effect.CreateEffect(c)
+	tc:RegisterFlagEffect(17060893,RESET_EVENT+RESETS_STANDARD,0,1)
+	local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e1:SetCode(EVENT_PHASE+PHASE_END)
 	e1:SetCountLimit(1)
-	e1:SetLabel(fid)
 	e1:SetLabelObject(tc)
+	e1:SetReset(RESET_PHASE+PHASE_END,2)
 	e1:SetCondition(cm.retcon)
 	e1:SetOperation(cm.retop)
-	e1:SetReset(RESET_PHASE+PHASE_END)
 	Duel.RegisterEffect(e1,tp)
-	tc:RegisterFlagEffect(17060854,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1,fid)
 end
 function cm.retcon(e,tp,eg,ep,ev,re,r,rp)
 	local tc=e:GetLabelObject()
-	if tc:GetFlagEffectLabel(17060854)==e:GetLabel() then
-		return true
-	else
+	if tc:GetFlagEffect(17060893)==0 then
 		e:Reset()
 		return false
+	else
+		return Duel.GetTurnPlayer()==1-tp
 	end
 end
 function cm.retop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=e:GetLabelObject()
-	Duel.SendtoHand(tc,nil,REASON_EFFECT)
+	Duel.SendtoHand(tc,1-tp,REASON_EFFECT)
 end
 function cm.spfilter(c,e,tp)
 	return c:IsCanBeSpecialSummoned(e,0,tp,false,false)
