@@ -99,7 +99,7 @@ function cm.epop(e,tp,eg,ep,ev,re,r,rp)
     end
 end
 function cm.cfilter(c,tp)
-	return c:IsReason(REASON_BATTLE+REASON_EFFECT)
+	return c:IsReason(REASON_BATTLE+REASON_EFFECT) and c:IsAbleToHand()
 		and c:GetPreviousControler()==tp and c:IsPreviousLocation(LOCATION_ONFIELD) and c:IsType(TYPE_PENDULUM)
 end
 function cm.thcon(e,tp,eg,ep,ev,re,r,rp)
@@ -108,9 +108,14 @@ end
 function cm.thfilter(c)
     return c:IsType(TYPE_PENDULUM) and c:IsAbleToHand()
 end
-
 function cm.thop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.SendtoHand(eg:Filter(cm.thfilter,nil),nil,REASON_EFFECT)
+	local tc=eg:GetFirst()
+	while tc do
+	if tc:IsType(TYPE_PENDULUM) and tc:IsAbleToHand() and tc:GetPreviousControler()==tp then
+		Duel.SendtoHand(tc,nil,REASON_EFFECT)
+	end
+	tc=eg:GetNext()
+	end
 end
 function cm.atop(e,tp,eg,ep,ev,re,r,rp)
     local c=e:GetHandler()
