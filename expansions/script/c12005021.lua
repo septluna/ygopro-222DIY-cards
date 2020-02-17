@@ -28,7 +28,7 @@ function c12005021.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.PayLPCost(tp,333) 
 end
 function c12005021.condition(e,tp,eg,ep,ev,re,r,rp)
-	return (re:GetHandler():IsStatus(STATUS_ACT_FROM_HAND) or re:GetActivateLocation()==LOCATION_HAND) and Duel.IsChainNegatable(ev)
+        return (re:GetHandler():IsStatus(STATUS_ACT_FROM_HAND) or re:GetActivateLocation()==LOCATION_HAND) and Duel.IsChainNegatable(ev) and re:GetHandler():IsType(TYPE_MONSTER) and not re:IsHasType(EFFECT_TYPE_ACTIVATE)
 end
 function c12005021.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
