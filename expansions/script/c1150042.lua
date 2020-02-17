@@ -60,6 +60,7 @@ function c1150042.op2(e,tp,eg,ep,ev,re,r,rp)
 end
 --
 function c1150042.op3(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
 	local e3_1=Effect.CreateEffect(c)
 	e3_1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e3_1:SetCode(EVENT_DAMAGE)
