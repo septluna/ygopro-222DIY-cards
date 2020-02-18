@@ -32,7 +32,7 @@ function c33400474.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	 if chk==0 then 
 		if e:GetLabel()~=1 then return false end
 		e:SetLabel(0)
-		return e:IsHasType(EFFECT_TYPE_ACTIVATE) and  Duel.GetLocationCountFromEx(tp)>0
+		return e:IsHasType(EFFECT_TYPE_ACTIVATE) and  Duel.GetLocationCountFromEx(tp,tp,nil,c)>0
 		and Duel.IsExistingMatchingCard(c33400474.cfilter,tp,LOCATION_GRAVE,0,1,nil,e,tp)
 	 end
 	local g=Duel.SelectMatchingCard(tp,c33400474.cfilter,tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
@@ -43,7 +43,7 @@ function c33400474.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c33400474.operation(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCountFromEx(tp)<=0 then return end
+	if Duel.GetLocationCountFromEx(tp,tp,nil,c)<=0 then return end
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
 	local nm
