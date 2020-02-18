@@ -41,6 +41,7 @@ function c11200047.filter(c)
 	return c:IsFaceup() and c:IsRace(RACE_AQUA)
 end
 function c11200047.operation(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
 	local g=Duel.GetMatchingGroup(c11200047.filter,tp,LOCATION_MZONE,0,nil)
 	local tc=g:GetFirst()
 	while tc do
