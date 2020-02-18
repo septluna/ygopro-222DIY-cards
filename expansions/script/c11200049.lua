@@ -13,7 +13,6 @@ function c11200049.initial_effect(c)
 	--counter
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(17030033,0))
-	e2:SetCategory(CATEGORY_TOHAND)
 	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
@@ -62,23 +61,23 @@ function c11200049.ctcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SendtoDeck(e:GetHandler(),nil,2,REASON_COST)
 end
 function c11200049.xyzfilter(c)
-	return c:IsFaceup() and c:IsType(TYPE_XYZ) and c:IsRace(RACE_AQUA)
+	return c:IsFaceup() and c:IsRace(RACE_AQUA) and c:IsType(TYPE_XYZ)
 end
 function c11200049.matfilter(c)
-	return c:IsType(TYPE_XYZ) and c:IsRace(RACE_AQUA) and c:IsCanOverlay()
+	return c:IsRace(RACE_AQUA) and c:IsType(TYPE_XYZ)
 end
 function c11200049.cttg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and c11200049.xyzfilter(chkc) end
 	if chk==0 then return Duel.IsExistingTarget(c11200049.xyzfilter,tp,LOCATION_MZONE,0,1,nil)
-		and Duel.IsExistingMatchingCard(c11200049.matfilter,tp,LOCATION_DECK+LOCATION_HAND,0,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
+		and Duel.IsExistingMatchingCard(c11200049.matfilter,tp,LOCATION_EXTRA,0,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
 	Duel.SelectTarget(tp,c11200049.xyzfilter,tp,LOCATION_MZONE,0,1,1,nil)
 end
 function c11200049.ctop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc:IsRelateToEffect(e) and not tc:IsImmuneToEffect(e) then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_XMATERIAL)
-		local g=Duel.SelectMatchingCard(tp,c11200049.matfilter,tp,LOCATION_DECK+LOCATION_HAND,0,1,1,nil,tc)
+	if tc:IsFaceup() and tc:IsRelateToEffect(e) and not tc:IsImmuneToEffect(e) then
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
+		local g=Duel.SelectMatchingCard(tp,c11200049.matfilter,tp,LOCATION_EXTRA,0,1,1,nil)
 		if g:GetCount()>0 then
 			Duel.Overlay(tc,g)
 		end

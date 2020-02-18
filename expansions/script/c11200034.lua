@@ -37,20 +37,20 @@ function c11200034.initial_effect(c)
 end
 function c11200034.ctcon(e,tp,eg,ep,ev,re,r,rp)
 	local ph=Duel.GetCurrentPhase()
-	return ph==PHASE_MAIN1 or (ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE) or ph==PHASE_MAIN2
+	return ph==PHASE_MAIN1 or ph==PHASE_MAIN2
 end
 function c11200034.ctfilter(c)
 	return c:IsFaceup() and c:IsCode(11200029)
 end
 function c11200034.cttg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return Duel.IsExistingMatchingCard(c11200034.ctfilter,tp,LOCATION_MZONE,0,1,nil)
-		and Duel.IsExistingMatchingCard(Card.IsCanAddCounter,tp,0,LOCATION_MZONE,1,nil,0x1620,1) end
+		and Duel.IsExistingMatchingCard(Card.IsCanAddCounter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil,0x1620,1) end
 end
 function c11200034.ctop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local ct=Duel.GetMatchingGroupCount(c11200034.ctfilter,tp,LOCATION_MZONE,0,nil)
 	if ct==0 then return end
-	local g=Duel.GetMatchingGroup(Card.IsCanAddCounter,tp,0,LOCATION_MZONE,nil,0x1620,1)
+	local g=Duel.GetMatchingGroup(Card.IsCanAddCounter,tp,LOCATION_MZONE,LOCATION_MZONE,nil,0x1620,1)
 	if g:GetCount()==0 then return end
 	for i=1,ct do
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_COUNTER)
