@@ -28,16 +28,16 @@ end
 function cm.isset(c)
 	return c:GetCode()>=tg[1] and c:GetCode()<=tg[2]
 end
-function cm.tgtgfil(c)
+function cm.tgtgfil(c,tp)
 	return c:IsType(TYPE_TUNER) and Duel.IsExistingMatchingCard(cm.tgthfil,tp,LOCATION_DECK,0,1,nil,c:GetAttribute(),c:GetRace())
 end
 function cm.tgthfil(c,att,rac)
 	return c:IsAbleToHand() and c:IsAttribute(att) and c:IsRace(rac)
 end
 function cm.tgtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and cm.tgtgfil(chkc) and chkc:IsControler(tp) end
-	if chk==0 then return Duel.IsExistingTarget(cm.tgtgfil,tp,LOCATION_GRAVE,0,1,nil) end
-	local g=Duel.SelectTarget(tp,cm.tgtgfil,tp,LOCATION_GRAVE,0,1,1,nil)
+	if chkc then return chkc:IsLocation(LOCATION_GRAVE) and cm.tgtgfil(chkc,tp) and chkc:IsControler(tp) end
+	if chk==0 then return Duel.IsExistingTarget(cm.tgtgfil,tp,LOCATION_GRAVE,0,1,nil,tp) end
+	local g=Duel.SelectTarget(tp,cm.tgtgfil,tp,LOCATION_GRAVE,0,1,1,nil,tp)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 
