@@ -33,6 +33,7 @@ function c30557003.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,e:GetHandler(),1,0,0)
 end
 function c30557003.operation(e,tp,eg,ep,ev,re,r,rp)
+	Duel.RegisterFlagEffect(tp,30557003,RESET_PHASE+PHASE_END,0,1)
 	local c=e:GetHandler()
 	if Duel.GetMZoneCount(tp)>0 and c:IsRelateToEffect(e) and Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEDOWN_DEFENSE)~=0 and Duel.IsExistingMatchingCard(c30557003.stfil,tp,LOCATION_DECK,0,1,nil,tp) then
 		Duel.ConfirmCards(1-tp,c)
@@ -60,7 +61,6 @@ function c30557003.operation(e,tp,eg,ep,ev,re,r,rp)
 			end
 		end
 	end
-	Duel.RegisterFlagEffect(tp,30557003,RESET_PHASE+PHASE_END,0,1)
 end
 function c30557003.drcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return not e:GetHandler():IsPublic() end

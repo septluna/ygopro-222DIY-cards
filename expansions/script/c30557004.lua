@@ -33,12 +33,12 @@ function c30557004.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK+LOCATION_GRAVE)
 end
 function c30557004.operation(e,tp,eg,ep,ev,re,r,rp)
+	Duel.RegisterFlagEffect(tp,30557004,RESET_PHASE+PHASE_END,0,1)
 	local g=Duel.SelectMatchingCard(tp,c30557004.stfil,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil)
 	if g:GetCount()>0 then
 		Duel.SendtoHand(g,tp,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)
 	end
-	Duel.RegisterFlagEffect(tp,30557004,RESET_PHASE+PHASE_END,0,1)
 end
 
 function c30557004.drcost(e,tp,eg,ep,ev,re,r,rp,chk)

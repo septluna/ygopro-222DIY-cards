@@ -34,6 +34,7 @@ function c30557002.desfil(c)
 	return c:IsSetCard(0x306) and c:IsType(TYPE_MONSTER) and not c:IsCode(30557002)
 end
 function c30557002.operation(e,tp,eg,ep,ev,re,r,rp)
+	Duel.RegisterFlagEffect(tp,30557002,RESET_PHASE+PHASE_END,0,1)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CARDTYPE)
 	local ct=Duel.AnnounceType(tp)
 	Duel.ConfirmDecktop(1-tp,3)
@@ -54,7 +55,6 @@ function c30557002.operation(e,tp,eg,ep,ev,re,r,rp)
 		local tgg=Duel.GetMatchingGroup(c30557002.tggfil,tp,0,LOCATION_ONFIELD,nil,ct)
 		Duel.SendtoGrave(tgg,REASON_RULE)
 	end
-	Duel.RegisterFlagEffect(tp,30557002,RESET_PHASE+PHASE_END,0,1)
 end
 function c30557002.drcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return not e:GetHandler():IsPublic() end

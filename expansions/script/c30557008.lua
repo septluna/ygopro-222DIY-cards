@@ -6,6 +6,7 @@ function c30557008.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_CHAINING)
 	e1:SetCondition(c30557008.condition)
+	e1:SetCost(c30557008.cost)
 	e1:SetTarget(c30557008.target)
 	e1:SetOperation(c30557008.activate)
 	c:RegisterEffect(e1)
@@ -21,6 +22,16 @@ function c30557008.initial_effect(c)
 	e2:SetTarget(c30557008.thtg)
 	e2:SetOperation(c30557008.thop)
 	c:RegisterEffect(e2)
+	--act in hand
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_SINGLE)
+	e3:SetCode(EFFECT_TRAP_ACT_IN_HAND)
+	e3:SetCondition(c30557008.actcon)
+	c:RegisterEffect(e3)
+end
+function c30557008.actcon(e,c)
+	local tp=e:GetHandlerPlayer()
+	return Duel.IsExistingMatchingCard(Card.IsAbleToGraveAsCost,tp,LOCATION_HAND,0,1,nil)
 end
 function c30557008.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()~=tp
@@ -58,6 +69,13 @@ end
 function c30557008.condition(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.IsExistingMatchingCard(aux.TRUE,tp,LOCATION_HAND,0,1,nil)
 		and (re:GetActivateLocation()==LOCATION_HAND or re:GetActivateLocation()==LOCATION_GRAVE) and Duel.IsChainNegatable(ev) and re:GetHandlerPlayer()~=tp and not re:IsHasType(EFFECT_TYPE_ACTIVATE)
+end
+function c30557008.cost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return true end
+	if e:GetHandler():IsStatus(STATUS_ACT_FROM_HAND) then
+		local g=Duel.SelectMatchingCard(tp,Card.IsAbleToGraveAsCost,tp,LOCATION_HAND,0,1,1,nil)
+		Duel.SendtoGrave(g,REASON_COST)
+	end
 end
 function c30557008.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
