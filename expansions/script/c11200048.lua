@@ -40,7 +40,7 @@ end
 function c11200048.operation(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if tc:IsFaceup() and tc:IsRelateToEffect(e) and tc:IsControler(1-tp) then
+	if tc:IsFaceup() and tc:IsRelateToEffect(e) then
 		tc:AddCounter(0x1620,1)
 		local e3_1_1=Effect.CreateEffect(c)
 		e3_1_1:SetType(EFFECT_TYPE_SINGLE)
@@ -97,8 +97,8 @@ function c11200048.desop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c11200048.nfilter(c)
-	return c:IsFaceup() and c:IsCode(11200029)
+	return (c:IsFaceup() or c:IsLocation(LOCATION_GRAVE)) and c:IsCode(11200029)
 end
 function c11200048.actcon(e)
-	return Duel.IsExistingMatchingCard(c11200048.nfilter,tp,LOCATION_MZONE,0,1,nil)
+	return Duel.IsExistingMatchingCard(c11200048.nfilter,e:GetHandlerPlayer(),LOCATION_MZONE+LOCATION_GRAVE,0,1,nil)
 end
