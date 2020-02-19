@@ -52,9 +52,8 @@ function c12031010.descost(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c12031010.destg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) end
-	if chk==0 then return Duel.IsExistingTarget(aux.TRUE,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-	local g=Duel.SelectTarget(tp,aux.TRUE,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil)
+	if chk==0 then return Duel.IsExistingTarget(Card.IsFaceup,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil) and Duel.IsExistingMatchingCard(nil,tp,LOCATION_EXTRA,0,1,nil) end
+	local g=Duel.SelectTarget(tp,Card.IsFaceup,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil)
 end
 function c12031010.bafilter(c)
 	return c:IsCode(12031000) and c:IsFaceup()
@@ -63,7 +62,7 @@ function c12031010.desop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tg=Duel.GetFirstTarget()
 	if tg:IsRelateToEffect(e) then
-		local gg=Duel.GetMatchingGroup(nil,tp,LOCATION_DECK,0,1,nil)
+		local gg=Duel.GetMatchingGroup(nil,tp,LOCATION_EXTRA,0,1,nil)
 		if gg:GetCount()>0 then
 			tc=gg:GetFirst()
 			Duel.ConfirmCards(1-tp,tc)
