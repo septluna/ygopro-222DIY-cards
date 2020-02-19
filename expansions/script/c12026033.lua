@@ -1,7 +1,7 @@
 --三位一体的女神 拉结尔
 function c12026033.initial_effect(c)
 	--link summon
-	aux.AddLinkProcedure(c,nil,4,4,c12026033.lcheck)
+	aux.AddLinkProcedure(c,nil,3,4,c12026033.lcheck)
 	c:EnableReviveLimit()
 
 	local e3=Effect.CreateEffect(c)
