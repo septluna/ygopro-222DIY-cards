@@ -2,7 +2,7 @@
 function c75646620.initial_effect(c)
 	aux.AddCodeList(c,75646600)
 	--link summon
-	aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsLinkType,TYPE_EFFECT),2,3,c75646620.lcheck)
+	aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsLinkType,TYPE_EFFECT),2,99,c75646620.lcheck)
 	c:EnableReviveLimit()
 	--indes
 	local e1=Effect.CreateEffect(c)
@@ -23,6 +23,7 @@ function c75646620.initial_effect(c)
 	e3:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
 	e3:SetCode(EVENT_CHAINING)
 	e3:SetRange(LOCATION_MZONE)
+	e3:SetCondition(c75646620.nkcon)
 	e3:SetOperation(c75646620.regop)
 	c:RegisterEffect(e3)
 	--cannot select battle target
@@ -31,6 +32,7 @@ function c75646620.initial_effect(c)
 	e4:SetRange(LOCATION_MZONE)
 	e4:SetTargetRange(0,LOCATION_MZONE)
 	e4:SetCode(EFFECT_CANNOT_SELECT_BATTLE_TARGET)
+	e4:SetCondition(c75646620.nkcon)
 	e4:SetValue(c75646620.atlimit)
 	c:RegisterEffect(e4)
 	--recover
@@ -55,12 +57,15 @@ function c75646620.initial_effect(c)
 	c:RegisterEffect(e8)
 	local e9=e5:Clone()
 	e9:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-	e9:SetCondition(c75646620.con)
+	e9:SetCondition(c75646620.recon)
 	c:RegisterEffect(e9)
 	local e10=e6:Clone()
 	e10:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
-	e10:SetCondition(c75646620.con)
+	e10:SetCondition(c75646620.recon)
 	c:RegisterEffect(e10)
+end
+function c75646620.nkcon(e)
+	return Duel.GetFlagEffect(e:GetHandlerPlayer(),75646600)==0
 end
 function c75646620.con(e)
 	local f=Duel.GetFlagEffect(e:GetHandlerPlayer(),75646600)
@@ -90,11 +95,16 @@ function c75646620.cfilter(c,ec)
 end
 function c75646620.reccon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(c75646620.cfilter,1,nil,e:GetHandler())
+		and Duel.GetFlagEffect(e:GetHandlerPlayer(),75646600)==0
+end
+function c75646620.recon(e,tp,eg,ep,ev,re,r,rp)
+	local f=Duel.GetFlagEffect(e:GetHandlerPlayer(),75646600)
+	return f and f~=0 and eg:IsExists(c75646620.cfilter,1,nil,e:GetHandler())
 end
 function c75646620.recop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_CARD,0,75646620)
 	Duel.Recover(tp,200,REASON_EFFECT)
-	if Duel.GetFlagEffect(tp,75646600)>0 and Duel.IsPlayerCanDraw(tp,1)	and Duel.SelectYesNo(tp,aux.Stringid(75646602,2)) then
+	if Duel.GetFlagEffect(tp,75646600)>0 and Duel.IsPlayerCanDraw(tp,1) and Duel.SelectYesNo(tp,aux.Stringid(75646602,2)) then
 		Duel.Draw(tp,1,REASON_EFFECT)
 	end
 end

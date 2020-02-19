@@ -35,11 +35,10 @@ function c75646617.spfilter(c,e,tp)
 end
 function c75646617.operation(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	local sg=Duel.GetMatchingGroup(c75646617.spfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,nil,e,tp)
 	if tc and tc:IsRelateToEffect(e) then
-		if Duel.SendtoHand(tc,nil,REASON_EFFECT)>0 and (tc:IsCode(75646600) or Duel.GetFlagEffect(tp,75646600)>0) and Duel.SelectYesNo(tp,aux.Stringid(75646617,0)) and sg:GetCount()>0 then
+		if Duel.SendtoHand(tc,nil,REASON_EFFECT)>0 and (tc:IsCode(75646600) or Duel.GetFlagEffect(tp,75646600)>0) and Duel.SelectYesNo(tp,aux.Stringid(75646617,0)) and Duel.IsExistingMatchingCard(c75646617.spfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,nil,e,tp) then
 			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-			local tg=sg:Select(tp,1,1,nil)
+			local tg=Duel.SelectMatchingCard(tp,c75646617.spfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,1,nil,e,tp)
 			Duel.BreakEffect()
 			Duel.SpecialSummon(tg,0,tp,tp,false,false,POS_FACEUP)
 		end
