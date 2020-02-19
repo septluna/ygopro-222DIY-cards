@@ -1,8 +1,8 @@
---version 20.02.04
+--version 20.02.18
 if not pcall(function() require("expansions/script/c10199991") end) then require("script/c10199991") end
 local m=10199990
 local vm=10199991
-local Version_Number=20200204
+local Version_Number=20200218
 
 -----------------------"Part_Effect_Base"-----------------------
 
@@ -2082,8 +2082,8 @@ function rscost.rmct(cttype,ct1,ct2,issetlabel)
 	ct2=ct2 or ct1
 	return function(e,tp,eg,ep,ev,re,r,rp,chk)
 		local c=e:GetHandler()
-		local minct= (type(ct1)=="boolean" and ct1) and c:GetCounter(cttype) or ct1
-		local maxct= (type(ct2)=="boolean" and ct2) and c:GetCounter(cttype) or ct2
+		local minct= rsof.Check_Boolean(ct1) and c:GetCounter(cttype) or ct1
+		local maxct= rsof.Check_Boolean(ct2) and c:GetCounter(cttype) or ct2
 		if chk==0 then return c:IsCanRemoveCounter(tp,cttype,minct,REASON_COST) end
 		if maxct>minct then
 		   local rmlist={}
@@ -2107,8 +2107,8 @@ function rscost.rmct2(cttype,loc1,loc2,ct1,ct2,issetlabel)
 	ct2=ct2 or ct1
 	return function(e,tp,eg,ep,ev,re,r,rp,chk)
 		local c=e:GetHandler()
-		local minct= (type(ct1)=="boolean" and ct1) and c:GetCounter(cttype) or ct1
-		local maxct= (type(ct2)=="boolean" and ct2) and c:GetCounter(cttype) or ct2
+		local minct= rsof.Check_Boolean(ct1) and c:GetCounter(cttype) or ct1
+		local maxct= rsof.Check_Boolean(ct2) and c:GetCounter(cttype) or ct2
 		if chk==0 then return Duel.IsCanRemoveCounter(tp,loc1,loc2,cttype,minct,REASON_COST) end
 		if maxct>minct then
 		   local rmlist={}
@@ -2130,8 +2130,8 @@ function rscost.rmxyz(ct1,ct2,issetlabel)
 	ct2=ct2 or ct1
 	return function(e,tp,eg,ep,ev,re,r,rp,chk)
 		local c=e:GetHandler()
-		local minct= (type(ct1)=="boolean" and ct1) and c:GetOverlayCount(cttype) or ct1
-		local maxct= (type(ct2)=="boolean" and ct2) and c:GetOverlayCount() or ct2
+		local minct= rsof.Check_Boolean(ct1) and c:GetOverlayCount(cttype) or ct1
+		local maxct= rsof.Check_Boolean(ct2) and c:GetOverlayCount() or ct2
 		if chk==0 then return c:CheckRemoveOverlayCard(tp,minct,REASON_COST) end
 		c:RemoveOverlayCard(tp,minct,maxct,REASON_COST)
 		local rct=Duel.GetOperatedGroup():GetCount()
@@ -2153,7 +2153,7 @@ end
 function rscost.lpcost(lp,isdirectly,islabel)
 	return function(e,tp,eg,ep,ev,re,r,rp,chk)
 		local clp=lp
-		if lp and type(lp)=="boolean" then clp=math.floor(Duel.GetLP(tp)/2) end
+		if rsof.Check_Boolean(lp) then clp=math.floor(Duel.GetLP(tp)/2) end
 		if isdirectly then clp=Duel.GetLP(tp)-clp end
 		if chk==0 then 
 			return clp>0 and Duel.CheckLPCost(tp,clp)
@@ -2375,7 +2375,7 @@ function rscon.sumtolz(linkmfilter,summfilter)
 		local c=e:GetHandler()
 		local zone=0
 		local lmg=Group.CreateGroup()
-		if type(linkmfilter)=="boolean" and linkmfilter then
+		if rsof.Check_Boolean(linkmfilter) then
 			lmg=rsgf.Mix2(c)
 		else
 			lmg=Duel.GetMatchingGroup(linkmfilter,tp,LOCATION_MZONE,LOCATION_MZONE,nil,e,tp,eg,ep,ev,re,rp)
@@ -2476,6 +2476,169 @@ function rsop.negsumop(waystring)
 		return rsop.disnegop("sum",waystring)(...)
 	end
 end
+--Operation: Select Card
+function rsop.SelectCheck_Hint(loc1,loc2,minct,checkhint,checkselection)
+	local res1,res2=false,false
+	if checkhint then 
+		res1= (loc1 and loc1&LOCATION_DECK+LOCATION_EXTRA+LOCATION_HAND ~=0) or (loc2 and loc2&LOCATION_DECK+LOCATION_EXTRA+LOCATION_HAND ~=0) 
+	end
+	if checkselection then 
+		res2= ((loc1 and loc1&LOCATION_ONFIELD+LOCATION_REMOVED ~=0) or (loc2 and loc2&LOCATION_ONFIELD+LOCATION_REMOVED ~=0)) and not rsof.Check_Boolean(minct)
+	end
+	if checkhint and not checkselection then return res1
+	elseif not checkhint and checkselection then return res2
+	else return res1,res2
+	end
+end
+function rsop.SelectCheck_Filter(filter,...)
+	local filterpar={...}
+	local filterpar2={}
+	if type(filter)=="table" then
+		for index,par in pairs(filter) do
+			if index>=2 then
+				table.insert(filterpar2,par)
+			end
+		end
+		filter=filter[1]
+		filterpar=rsof.Table_Mix(filterpar2,filterpar)
+	end
+	return filter,filterpar
+end
+function rsop.SelectCheck_Solve(solvefun)
+	local solveparlist={}
+	if type(solvefun)=="table" then
+		for index,par in pairs(solvefun) do
+			if index>=2 then
+				table.insert(solveparlist,par)
+			end
+		end
+		solvefun=solvefun[1]
+	end
+	return solvefun,solveparlist
+end
+--Function:Select card by filter and do operation on it
+function rsop.SelectSolve(selecthint,sp,filter,tp,loc1,loc2,minct,maxct,exceptg,solvefun,...)
+	minct=minct or 1 
+	maxct=maxct or minct
+	local filter2,filterpar=rsop.SelectCheck_Filter(filter,...)
+	local solvefun2,solvefunpar=rsop.SelectCheck_Solve(solvefun)
+	if rsof.Check_Boolean(minct) then
+		local g=Duel.GetMatchingGroup(sp,filter2,tp,loc1,loc2,exceptg,...)
+		return rsgf.SelectSolve(g,selecthint,sp,filter2,minct,maxct,exceptg,solvefun,table.unpack(filterpar))
+	else
+		rshint.Select(sp,selecthint)
+		local g=Duel.SelectMatchingCard(sp,filter2,tp,loc1,loc2,minct,maxct,exceptg,table.unpack(filterpar))
+		if not solvefun then return g
+		else
+			return solvefun2(tg,table.unpack(solvefunpar))  
+		end
+	end
+end
+--Function:Select card and send to hand
+function rsop.SelectToHand(sp,filter,tp,loc1,loc2,minct,maxct,exceptg,solvepar,...)
+	local res=rsop.SelectCheck_Hint(loc1,loc2,minct,true)
+	solvepar=type(solvepar)=="table" and solvepar or {solvepar}
+	return rsop.SelectSolve("th",sp,filter,tp,loc1,loc2,minct,maxct,exceptg,rsop.SelectToHand_Operation(res,table.unpack(solvepar)),...)
+end
+function rsop.SelectToHand_Operation(res,sp2,reason)
+	return function(tg)
+		if #tg<=0 then return 0,tg end
+		if not res then
+			Duel.HintSelection(tg)
+		end
+		local ct=Duel.SendtoHand(tg,sp2,reason or REASON_EFFECT) 
+		local og=Duel.GetOperatedGroup()
+		if res then
+			Duel.ConfirmCards(sp2 and 1-sp2 or 1-sp,og)
+		end
+		return ct,og
+	end
+end
+--Function:Select card and send to grave
+function rsop.SelectToGrave(sp,filter,tp,loc1,loc2,minct,maxct,exceptg,reason,...)
+	local res=rsop.SelectCheck_Hint(loc1,loc2,minct,true)
+	reason=type(reason)=="table" and reason[1] or reason
+	return rsop.SelectSolve("tg",sp,filter,tp,loc1,loc2,minct,maxct,exceptg,rsop.SelectToGrave_Operation(res,reason),...)
+end
+function rsop.SelectToGrave_Operation(res,sp2,reason)
+	return function(tg)
+		if #tg<=0 then return 0,tg end
+		if rsop.SelectCheck_Hint(loc1,loc2,false,true) then
+			Duel.HintSelection(tg)
+		end
+		local ct=Duel.SendtoGrave(tg,reason or REASON_EFFECT) 
+		local og=Duel.GetOperatedGroup()
+		return ct,og
+	end
+end
+--Function:Select card and send to deck
+function rsop.SelectToDeck(sp,filter,tp,loc1,loc2,minct,maxct,exceptg,solvepar,...)
+	local res=rsop.SelectCheck_Hint(loc1,loc2,minct,true)
+	solvepar=type(solvepar)=="table" and solvepar or {solvepar}
+	return rsop.SelectSolve("td",sp,filter,tp,loc1,loc2,minct,maxct,exceptg,rsop.SelectToDeck_Operation(res,table.unpack(solvepar)),...)
+end
+function rsop.SelectToDeck_Operation(res,sp2,deckseq,reason)
+	return function(tg)
+		if #tg<=0 then return 0,tg end
+		if res then
+			Duel.HintSelection(tg)
+		end
+		local ct=Duel.SendtoDeck(tg,sp2,deckseq or 2,reason or REASON_EFFECT ) 
+		local og=Duel.GetOperatedGroup()
+		return ct,og
+	end
+end
+--Function:Select card and destroy
+function rsop.SelectDestroy(sp,filter,tp,loc1,loc2,minct,maxct,exceptg,solvepar,...)
+	local res=rsop.SelectCheck_Hint(loc1,loc2,minct,true)
+	solvepar=type(solvepar)=="table" and solvepar or {solvepar}
+	return rsop.SelectSolve("des",sp,filter,tp,loc1,loc2,minct,maxct,exceptg,rsop.SelectDestroy_Operation(res,table.unpack(solvepar)),...)
+end
+function rsop.SelectDestroy_Operation(res,reason,desloc)
+	return function(tg)
+		if #tg<=0 then return 0,tg end
+		if res then
+			Duel.HintSelection(tg)
+		end
+		local ct=Duel.Destroy(tg,reason or REASON_EFFECT,desloc or LOCATION_GRAVE ) 
+		local og=Duel.GetOperatedGroup()
+		return ct,og
+	end
+end
+--Function:Select card and remove
+function rsop.SelectRemove(sp,filter,tp,loc1,loc2,minct,maxct,exceptg,solvepar,...)
+	local res=rsop.SelectCheck_Hint(loc1,loc2,minct,true)
+	solvepar=type(solvepar)=="table" and solvepar or {solvepar}
+	return rsop.SelectSolve("rm",sp,filter,tp,loc1,loc2,minct,maxct,exceptg,rsop.SelectRemove_Operation(res,table.unpack(solvepar)),...)
+end
+function rsop.SelectRemove_Operation(res,reason,desloc)
+	return function(tg)
+		if #tg<=0 then return 0,tg end
+		if res then
+			Duel.HintSelection(tg)
+		end
+		local ct=Duel.Remove(tg,rmpos or POS_FACEUP,reason or REASON_EFFECT) 
+		local og=Duel.GetOperatedGroup()
+		return ct,og
+	end
+end
+--Function:Select card and special summon
+function rsop.SelectSpecialSummon(sp,filter,tp,loc1,loc2,minct,maxct,exceptg,solvepar,...)
+	local res=rsop.SelectCheck_Hint(loc1,loc2,minct,true)
+	solvepar=type(solvepar)=="table" and solvepar or {solvepar} 
+	return rsop.SelectSolve("sp",sp,filter,tp,loc1,loc2,minct,maxct,exceptg,rsop.SelectSpecialSummon_Operation(res,solvepar),...)
+end
+function rsop.SelectSpecialSummon_Operation(res,sumfunvarlist)
+	return function(tg)
+		if #tg<=0 then return 0,tg end
+		if res then
+			Duel.HintSelection(tg)
+		end
+		local ct=rssf.SpecialSummon(tg,table.unpakc(sumfunvarlist)) 
+		local og=Duel.GetOperatedGroup()
+		return ct,og
+	end
+end
 --Operation: Equip 
 function rsop.eqop(e,eqc,eqtc,pos,opside)
 	local c=e:GetHandler()
@@ -2483,13 +2646,13 @@ function rsop.eqop(e,eqc,eqtc,pos,opside)
 	if opside then tp=1-tp end
 	if type(pos)=="nil" then pos=true end
 	local vtype=aux.GetValueType(eqlist1)
-	if vtype=="boolean" and eqlist1 then 
+	if rsof.Check_Boolean(eqlist1) then 
 		eqc=rscf.GetRelationThisCard(e)
 	elseif vtype=="Card" then
 		eqc=eqlist1
 	end
 	vtype=aux.GetValueType(eqlist2)
-	if vtype=="boolean" and eqlist1 then 
+	if rsof.Check_Boolean(eqlist2) then 
 		eqtc=rscf.GetRelationThisCard(e)
 	elseif vtype=="Card" then
 		eqtc=eqlist2
@@ -2547,7 +2710,7 @@ function rsop.SendtoDeck(corg,p,seq,reason,nohint)
 	end
 	local ct=Duel.SendtoDeck(g,p,seq,reason)
 	return ct,Duel.GetOperatedGroup()
-end
+end 
 --Operation function:Send to grave and hint 
 --if you don't neet hint, best use normal Duel.SendtoDeck
 function rsop.SendtoGrave(corg,reason,nohint)
@@ -2598,7 +2761,7 @@ function rsop.SelectOption(p,...)
 	local ops={}
 	local opval={}
 	for k,v in ipairs(functionlist) do
-		if type(v)=="boolean" and v and k~=#functionlist then
+		if rsof.Check_Boolean(v) and k~=#functionlist then
 			local selecthint=functionlist[k+1]
 			if type(selecthint)=="table" then ops[off]=aux.Stringid(selecthint[1],selecthint[2])
 			else
@@ -2612,7 +2775,7 @@ function rsop.SelectOption(p,...)
 		return nil
 	else
 		local final=functionlist[#functionlist]
-		if #ops==1 and type(final)=="boolean" and final then
+		if #ops==1 and rsof.Check_Boolean(final) then
 			return opval[0]
 		else
 			local op=Duel.SelectOption(p,table.unpack(ops))
@@ -2692,7 +2855,7 @@ function rsop.AnnounceNumber(tp,maxdigit)
 			num=0
 		elseif op==1 then
 			for digit=1,maxdigit do
-				Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(m+3,7-digitindex))
+				Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(m+2,7-digitindex))
 				num=num+Duel.AnnounceNumber(tp,1,2,3,4,5,6,7,8,9,0)*digitlevel
 				digitlevel=digitlevel/10
 				digitindex=digitindex-1
@@ -2767,8 +2930,8 @@ end
 function rszsf.GetSurroundingZone2(seq,loc,cp,p,truezone,contains)
 	local nozone={[0]=0,[1]=0}
 	if not p then p=cp end
-	if not (type(truezone)=="boolean" and truezone==false) then truezone=true end
-	if not (type(contains)=="boolean" and contains==false) then contains=true end
+	if not rsof.Check_Boolean(truezone,false) then truezone=true end
+	if not rsof.Check_Boolean(contains,false) then contains=true end
 	if loc==LOCATION_DECK+LOCATION_GRAVE+LOCATION_REMOVED+LOCATION_HAND then
 		Debug.Message("rszsf.GetSurroundingZone2: Location is not on field")
 		return nozone,nozone,nozone 
@@ -2937,6 +3100,60 @@ function rsgf.Table_To_Group(list)
 	end
 	return group 
 end
+--Group:Select card from group and do operation on it
+function rsgf.SelectSolve(g,selecthint,sp,filter,minct,maxct,exceptg,solvefun,...)
+	minct=minct or 1 
+	maxct=maxct or minct
+	local filter2,filterpar=rsop.SelectCheck_Filter(filter,...)
+	local solvefun2,solvefunpar=rsop.SelectCheck_Solve(solvefun)
+	local tg=Group.CreateGroup()
+	if rsof.Check_Boolean(minct) then
+		tg=g   
+	else
+		rshint.Select(sp,selecthint)
+		tg=g:FilterSelect(sp,filter2,minct,maxct,exceptg,table.unpack(filterpar))
+	end 
+	if not solvefun then return tg end
+	return solvefun2(tg,table.unpack(solvefunpar))   
+end
+Group.SelectSolve=rsgf.SelectSolve
+--Group:Select card from group and send to hand
+function rsgf.SelectToHand(g,sp,filter,minct,maxct,exceptg,solvepar,...)
+	solvepar=type(solvepar)=="table" and solvepar or {solvepar}
+	return rsgf.SelectSolve(g,"th",sp,filter,minct,maxct,exceptg,{rsop.SendtoHand,table.unpack(solvepar)},...)
+end
+Group.SelectToHand=rsgf.SelectToHand
+--Group:Select card from group and send to grave
+function rsgf.SelectToGrave(g,sp,filter,minct,maxct,exceptg,reason,...)
+	reason=type(reason)=="table" and reason[1] or reason
+	return rsgf.SelectSolve(g,"tg",sp,filter,minct,maxct,exceptg,{rsop.SendtoGrave,reason},...)
+end
+Group.SelectToGrave=rsgf.SelectToGrave
+--Group:Select card from group and send to deck
+function rsgf.SelectToDeck(g,sp,filter,minct,maxct,exceptg,solvepar,...)
+	solvepar=type(solvepar)=="table" and solvepar or {solvepar}
+	return rsgf.SelectSolve(g,"td",sp,filter,minct,maxc,t,exceptg,{rsop.SendtoDeck,table.unpack(solvepar)},...)
+end
+Group.SelectToDeck=rsgf.SelectToDeck
+--Group:Select card from group and destroy
+function rsgf.SelectDestroy(g,sp,filter,minct,maxct,exceptg,solvepar,...)
+	solvepar=type(solvepar)=="table" and solvepar or {solvepar}
+	return rsgf.SelectSolve(g,"des",sp,filter,minct,maxct,exceptg,{rsop.Destroy,table.unpack(solvepar)},...)
+end
+Group.SelectDestroy=rsgf.SelectDestroy
+--Group:Select card from group and remove
+function rsgf.SelectRemove(g,sp,filter,minct,maxct,exceptg,solvepar,...)
+	solvepar=type(solvepar)=="table" and solvepar or {solvepar}
+	return rsgf.SelectSolve(g,"rm",sp,filter,minct,maxct,exceptg,{rsop.Remove,table.unpack(solvepar)},...)
+end
+Group.SelectRemove=rsgf.SelectRemove
+--Group:Select card from group and special summon
+function rsgf.SelectSpecialSummon(g,sp,filter,minct,maxct,exceptg,solvepar,...)
+	solvepar=type(solvepar)=="table" and solvepar or {solvepar}
+	return rsgf.SelectSolve(g,"sp",sp,filter,minct,maxct,exceptg,{rssf.SpecialSummon,table.unpack(solvepar)},...)
+end
+Group.SelectSpecialSummon=rsgf.SelectSpecialSummon
+
 
 -------------------"Part_Card_Function"---------------------
 
@@ -3992,7 +4209,7 @@ function rscf.IsComplexType_Base(c,waysting,type1,type2,...)
 	end
 	local typelist={type1,type2,...}
 	local publictype=0
-	if type(type2)=="boolean" and type2 then
+	if rsof.Check_Boolean(type2) then
 		publictype=type1
 		typelist={...}
 	end
@@ -4028,7 +4245,7 @@ Card.IsOriginalComplexType=rscf.IsOriginalComplexType
 function rscf.IsComplexReason(c,reason1,reason2,...)
 	local reasonlist={reason1,reason2,...}
 	local publicreason=0
-	if type(reason2)=="boolean" and reason2 then
+	if rsof.Check_Boolean(reason2) then
 		publicreason=reason1
 		reasonlist={...}
 	end
@@ -4243,4 +4460,13 @@ function rsof.Table_To_Desc(hintlist)
 	end
 	return table.unpack(newlist)
 end
-
+--other function: check a value is true or false
+function rsof.Check_Boolean(value,booleanvaule)
+	if type(booleanvaule)=="nil" or booleanvaule==true then return 
+		type(value)=="boolean" and value==true
+	else
+		return type(value)=="boolean" and value==false
+	end
+end 
+-------------------"Hape"---------------------
+rsof.Escape_Old_Functions()

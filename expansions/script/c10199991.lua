@@ -1,5 +1,5 @@
 --Real Scl Version - Variable
-local Version_Number=200119
+local Version_Number=200218
 local m=10199990
 local vm=10199991
 rsv={}  --"Base Function"
@@ -108,17 +108,19 @@ rscf.extype_np  =   rscf.extype - TYPE_PENDULUM
 rscf.exlist  =   { TYPE_FUSION,TYPE_SYNCHRO,TYPE_XYZ,TYPE_LINK }
 
 --Escape Old Functions
-rsof.DefineCard  =   rscf.DefineCard
-rsof.SendtoHand  =   rsop.SendtoHand
-rsof.SendtoDeck  =   rsop.SendtoDeck
-rsof.SendtoGrave =   rsop.SendtoGrave
-rsof.Destroy	 =   rsop.Destroy
-rsof.Remove   =   rsop.Remove
-rsof.SelectHint  =   rshint.Select
-rsof.SelectOption=   rsop.SelectOption
-rsof.SelectOption_Page= rsop.SelectOption_Page
-rsof.SelectNumber=   rsop.AnnounceNumber
-rsof.SelectNumber_List= rsop.AnnounceNumber_List
-rsof.IsSet   =   rscf.DefineSet
+function rsof.Escape_Old_Functions()
+	rsof.DefineCard  =   rscf.DefineCard
+	rsof.SendtoHand  =   rsop.SendtoHand
+	rsof.SendtoDeck  =   rsop.SendtoDeck
+	rsof.SendtoGrave =   rsop.SendtoGrave
+	rsof.Destroy	 =   rsop.Destroy
+	rsof.Remove   =   rsop.Remove
+	rsof.SelectHint  =   rshint.Select
+	rsof.SelectOption=   rsop.SelectOption
+	rsof.SelectOption_Page= rsop.SelectOption_Page
+	rsof.SelectNumber=   rsop.AnnounceNumber
+	rsof.SelectNumber_List= rsop.AnnounceNumber_List
+	rsof.IsSet   =   rscf.DefineSet
+end
 
 
