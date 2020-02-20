@@ -70,8 +70,11 @@ function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 	end
 	local ng=g1:Filter(cm.Siegfried,nil)
 	local vc=ng:GetFirst()
-	if vc:IsType(TYPE_XYZ) then
-		e:GetHandler():CancelToGrave()
-		Duel.Overlay(vc,Group.FromCards(e:GetHandler()))
+	while vc do
+		if vc:IsType(TYPE_XYZ) and cm.Siegfried(vc) then
+			e:GetHandler():CancelToGrave()
+			Duel.Overlay(vc,Group.FromCards(e:GetHandler()))
+		end
+		vc=ng:GetNext()
 	end
 end
