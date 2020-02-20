@@ -2279,7 +2279,10 @@ end
 function rscon.sumtype(sumtbl,sumfilter,matchall)
 	return function(e,tp,eg,ep,ev,re,r,rp)
 		local c=e:GetHandler()
-		local checkg=e:IsHasType(EFFECT_TYPE_FIELD) and rsgf.Mix2(c) or eg:Clone()
+		sumfilter=sumfilter or aux.TRUE 
+		local code=e:GetCode()
+		local fieldres=(code==EVENT_SUMMON_SUCCESS or code==EVENT_SPSUMMON_SUCCESS or code==EVENT_FLIP_SUMMON_SUCCESS ) and e:IsHasType(EFFECT_TYPE_FIELD)
+		local checkg=not fieldres and rsgf.Mix2(c) or eg:Clone()
 		sumtbl=sumtbl or "sp"
 		local tf=false
 		local codetbl1={"sp","adv","rit","fus","syn","xyz","link","pen"}
@@ -2293,19 +2296,19 @@ function rscon.sumtype(sumtbl,sumfilter,matchall)
 					stypeg:AddCard(tc)
 				end
 			end 
-			if #stypeg<=0 or (matchall and not stypeg:Equal(checkg)) then
-				return false
-			end
 			local mat=tc:GetMaterial()
 			if sumfilter then
 				local res=sumfilter(tc,e,tp,re,rp,mat)
 				if res then filterg:AddCard(tc) end
 			end
-			if #filterg<=0 or (matchall and not filterg:Equal(checkg)) then
-				return false
-			end
-			return true 
 		end
+		if #stypeg<=0 or (matchall and not stypeg:Equal(checkg)) then
+			return false
+		end
+		if #filterg<=0 or (matchall and not filterg:Equal(checkg)) then
+			return false
+		end
+		return true 
 	end
 end 
 --Condition: Negate Effect/Activation
