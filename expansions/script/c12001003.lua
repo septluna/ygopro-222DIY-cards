@@ -36,7 +36,7 @@ function c12001003.operation(e,tp,eg,ep,ev,re,r,rp)
 		Duel.DisableShuffleCheck()
 		Duel.SendtoGrave(g,REASON_EFFECT+REASON_REVEAL)
 		Duel.ConfirmDecktop(tp,3)
-		local g=Duel.GetDecktopGroup(p,3)
+		local g=Duel.GetDecktopGroup(tp,3)
 		if g:GetCount()>0 then
 		   Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 		   local sg=g:Select(tp,1,1,nil)
