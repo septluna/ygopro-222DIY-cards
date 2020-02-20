@@ -14,7 +14,7 @@ end
 function c26807029.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local tc=Duel.GetFieldCard(tp,LOCATION_SZONE,5)
 	if chkc then return false end
-	if chk==0 then return tc and tc:IsFaceup() and tc:IsAbleToDeck() and tc:IsCanBeEffectTarget(e) end
+	if chk==0 then return tc and tc:IsAbleToDeck() and tc:IsCanBeEffectTarget(e) end
 	if not Duel.CheckPhaseActivity() then e:SetLabel(1) else e:SetLabel(0) end
 	Duel.SetTargetCard(tc)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,tc,1,0,0)
