@@ -21,8 +21,8 @@ function c12003012.initial_effect(c)
 	e4:SetRange(LOCATION_GRAVE)
 	e4:SetCountLimit(1,12003112)
 	e4:SetCost(function(e,tp,eg,ep,ev,re,r,rp,chk)
-		if chk==0 then return Duel.CheckReleaseGroup(tp,c12003012.cfilter1,1,nil,tp) end
-		local g1=Duel.SelectReleaseGroup(tp,c12003012.cfilter1,1,1,nil,tp)
+		if chk==0 then return Duel.IsExistingMatchingCard(c12003012.cfilter1,tp,LOCATION_HAND,0,1,nil,tp) end
+		local g1=Duel.SelectMatchingCard(tp,c12003012.cfilter1,tp,LOCATION_HAND,0,1,1,nil,tp)
 		Duel.Release(g1,REASON_COST)
 	end)
 	e4:SetTarget(c12003012.target)
