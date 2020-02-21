@@ -60,11 +60,11 @@ function c30557001.thop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 
-function c30557001.cfilter(c)
-	return c:IsSetCard(0x306) and c:IsType(TYPE_MONSTER)
+function c30557001.cfilter(c,tp)
+	return c:IsSetCard(0x306) and c:IsType(TYPE_MONSTER) and c:GetPreviousControler()==tp
 end
 function c30557001.descon1(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(c30557001.cfilter,1,nil)
+	return eg:IsExists(c30557001.cfilter,1,nil,tp)
 end
 function c30557001.spfilter(c,e,tp)
 	return c:IsSetCard(0x306) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEDOWN_DEFENSE)

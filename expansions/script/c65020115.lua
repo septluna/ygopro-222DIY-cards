@@ -29,7 +29,7 @@ function c65020115.thfil1(c,e,tp)
 end
 function c65020115.thfil2(c,fc)
 	if c:IsForbidden() or not c:IsAbleToHand() then return false end
-	return c:IsCode(table.unpack(fc.material)) and not c:IsCode(65020115)
+	return aux.IsMaterialListCode(fc,c:GetCode()) and not c:IsCode(65020115)
 end
 function c65020115.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c65020115.thfil1,tp,LOCATION_EXTRA,0,1,nil,e,tp) end

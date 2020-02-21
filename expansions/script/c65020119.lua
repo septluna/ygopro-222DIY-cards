@@ -26,7 +26,7 @@ function c65020119.thfil1(c,e,tp)
 end
 function c65020119.thfil2(c,fc,e,tp)
 	if c:IsForbidden() or not c:IsCanBeSpecialSummoned(e,0,tp,false,false) then return false end
-	return c:IsCode(table.unpack(fc.material)) and not c:IsCode(65020119)
+	return aux.IsMaterialListCode(fc,c:GetCode()) and not c:IsCode(65020119)
 end
 function c65020119.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c65020119.thfil1,tp,LOCATION_EXTRA,0,1,nil,e,tp) and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 end

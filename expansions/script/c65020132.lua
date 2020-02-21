@@ -36,7 +36,7 @@ function c65020132.cfil(c,tp)
 end
 function c65020132.matfil(c,fc)
 	if c:IsForbidden() or not c:IsAbleToHand() then return false end
-	return c:IsCode(table.unpack(fc.material))
+	return aux.IsMaterialListCode(fc,c:GetCode())
 end
 function c65020132.tg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(tp) and c65020132.cfil(chkc,tp) end
