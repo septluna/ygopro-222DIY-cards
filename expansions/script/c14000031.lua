@@ -25,7 +25,7 @@ function cm.initial_effect(c)
 	Duel.AddCustomActivityCounter(m,ACTIVITY_CHAIN,aux.FALSE)
 end
 function cm.actcon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.IsAbleToEnterBP() and Duel.GetTurnPlayer()==tp and not Duel.IsExistingMatchingCard(aux.TRUE,tp,LOCATION_ONFIELD,0,1,nil) and Duel.GetDrawCount(tp)>0
+	return Duel.GetTurnPlayer()==tp and not Duel.IsExistingMatchingCard(aux.TRUE,tp,LOCATION_ONFIELD,0,1,nil) and Duel.GetDrawCount(tp)>0
 end
 function cm.counterfilter(c)
 	return c:GetSummonLocation()~=LOCATION_EXTRA
