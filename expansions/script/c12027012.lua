@@ -52,6 +52,7 @@ function cm.disop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetDecktopGroup(tp,1)
 	local tc=g:GetFirst()
 	if tc:IsSetCard(0xfb0) or tc:IsSetCard(0x2fbd) then
+		Duel.SendtoGrave(tc,REASON_EFFECT)
 		Duel.DisableShuffleCheck()
 		Duel.NegateEffect(ev)
 		Duel.SendtoExtraP(e:GetHandler(),tp,REASON_EFFECT)
