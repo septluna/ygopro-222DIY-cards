@@ -22,7 +22,7 @@ function c12004002.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function c12004002.condition(e,tp,eg,ep,ev,re,r,rp)
-	return rp==1-tp 
+	return ep==1-tp 
 end
 function c12004002.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
