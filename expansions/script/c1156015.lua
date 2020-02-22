@@ -133,10 +133,21 @@ function c1156015.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 end
 --
+function c1156015.con2_1(e,tp,eg,ep,ev,re,r,rp)
+    return not e:GetHandler():IsHasEffect(EFFECT_QP_ACT_IN_SET_TURN) 
+end
 function c1156015.op2(e,tp,eg,ep,ev,re,r,rp)
 	if (re:GetHandler():IsType(TYPE_FIELD) or Duel.GetLocationCount(tp,LOCATION_SZONE)>0) and not re:GetHandler():IsImmuneToEffect(e) then
 		re:GetHandler():CancelToGrave()
-		if Duel.MoveToField(re:GetHandler(),tp,tp,LOCATION_SZONE,POS_FACEDOWN,true) then
+		if Duel.MoveToField(re:GetHandler(),tp,tp,LOCATION_SZONE,POS_FACEDOWN,false) then
+			if re:GetHandler():IsType(TYPE_QUICKPLAY) then
+               			local e2_1=Effect.CreateEffect(e:GetHandler())
+                		e2_1:SetType(EFFECT_TYPE_SINGLE)
+                		e2_1:SetCode(EFFECT_CANNOT_TRIGGER)
+                		e2_1:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
+                		e2_1:SetCondition(c1156015.con2_1)
+                		re:GetHandler():RegisterEffect(e2_1)
+            		end 
 			Duel.ConfirmCards(1-tp,re:GetHandler())
 			Duel.RaiseEvent(re:GetHandler(),EVENT_SSET,e,REASON_EFFECT,tp,tp,0)
 		end
