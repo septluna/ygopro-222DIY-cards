@@ -91,7 +91,7 @@ function c12018004.activate(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c12018004.ccfilter(c)
-	return c:IsSetCard(0x1fbe) and c:IsFaceup()
+	return c:IsSetCard(0x3fb7) and c:IsFaceup()
 end
 function c12018004.descon(e)
 	return Duel.IsExistingMatchingCard(c12018004.ccfilter,0,LOCATION_MZONE,LOCATION_MZONE,1,e:GetHandler())
@@ -131,7 +131,7 @@ function c12018004.efilter(e,re)
 	return not re:GetHandler():IsSetCard(0xa656)
 end
 function c12018004.tgfilter(c)
-	return c:IsSetCard(0x1fbe) and c:IsFaceup()
+	return c:IsSetCard(0x3fb7) and c:IsFaceup()
 end
 function c12018004.splimit(e,se,sp,st)
 	return not e:GetHandler():IsLocation(LOCATION_EXTRA)
