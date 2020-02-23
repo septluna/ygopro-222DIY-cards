@@ -26,7 +26,7 @@ function c12008011.initial_effect(c)
 	c:RegisterEffect(e2)  
 end
 function c12008011.condition(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0)==0
+	return Duel.GetFieldGroupCount(tp,LOCATION_ONFIELD,0)==0
 end
 function c12008011.thfilter(c)
 	return c:IsFaceup() and c:IsSetCard(0xfbb) and c:IsAbleToHand()
