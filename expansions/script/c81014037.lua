@@ -33,11 +33,11 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function cm.cfilter(c)
-	return c:IsCode(37564765) and c:IsAbleToDeckAsCost()
+	return c:IsCode(37564765) and c:IsAbleToDeckOrExtraAsCost()
 end
 function cm.atkcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(cm.cfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local g=Duel.SelectMatchingCard(tp,cm.cfilter,tp,LOCATION_HAND+LOCATION_GRAVE,0,1,1,nil)
 	local cf=g:Filter(Card.IsFacedown,nil)
 	if cf:GetCount()>0 then

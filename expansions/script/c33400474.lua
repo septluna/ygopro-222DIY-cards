@@ -27,12 +27,13 @@ end
 function c33400474.filter(c,e,tp,nm)
 	return c:IsSetCard(0x341) and  c:IsType(TYPE_XYZ) and c:IsRank(nm)
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_XYZ,tp,false,false) 
+	and  Duel.GetLocationCountFromEx(tp,tp,nil,c)>0
 end
 function c33400474.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	 if chk==0 then 
 		if e:GetLabel()~=1 then return false end
 		e:SetLabel(0)
-		return e:IsHasType(EFFECT_TYPE_ACTIVATE) and  Duel.GetLocationCountFromEx(tp,tp,nil,c)>0
+		return e:IsHasType(EFFECT_TYPE_ACTIVATE) 
 		and Duel.IsExistingMatchingCard(c33400474.cfilter,tp,LOCATION_GRAVE,0,1,nil,e,tp)
 	 end
 	local g=Duel.SelectMatchingCard(tp,c33400474.cfilter,tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
@@ -43,7 +44,7 @@ function c33400474.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
 function c33400474.operation(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetLocationCountFromEx(tp,tp,nil,c)<=0 then return end
+	if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 then return end
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
 	local nm

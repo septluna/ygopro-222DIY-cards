@@ -28,7 +28,6 @@ end
 function c75646612.cfilter(c,tp)
 	if c:IsLocation(LOCATION_GRAVE) then return c:IsHasEffect(75646628,tp) and c:IsAbleToRemoveAsCost() end
 	return aux.IsCodeListed(c,75646600) and c:IsAbleToGraveAsCost() 
-		and (c:IsLocation(LOCATION_HAND) or c:IsFaceup())
 end
 function c75646612.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local loc=LOCATION_ONFIELD+LOCATION_HAND+LOCATION_GRAVE 
@@ -54,10 +53,9 @@ end
 function c75646612.spop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) then return end
-	local sg=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,0,LOCATION_ONFIELD,nil)
-	if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 and (e:GetLabel()==1 or Duel.GetFlagEffect(tp,75646600)~=0) and sg:GetCount()>0 and Duel.SelectYesNo(tp,aux.Stringid(75646612,2)) then
+	if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 and (e:GetLabel()==1 or Duel.GetFlagEffect(tp,75646600)>0) and Duel.IsExistingMatchingCard(Card.IsAbleToDeck,tp,0,LOCATION_ONFIELD,1,nil) and Duel.SelectYesNo(tp,aux.Stringid(75646612,2)) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-		local tg=sg:Select(tp,1,1,nil)
+		local tg=Duel.SelectMatchingCard(tp,Card.IsAbleToDeck,tp,0,LOCATION_ONFIELD,1,1,nil)
 		Duel.BreakEffect()
 		Duel.SendtoDeck(tg,nil,2,REASON_EFFECT)
 	end
