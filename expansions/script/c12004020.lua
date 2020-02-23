@@ -25,7 +25,7 @@ function c12004020.initial_effect(c)
 end
 function c12004020.disop(e,tp,eg,ep,ev,re,r,rp)
 	local loc=Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_LOCATION)
-	if bit.band(loc,re:GetHandler():GetLocation())==0 then
+	if bit.band(loc,re:GetHandler():GetLocation())==0 and Duel.IsChainNegatable(ev) then
 		Duel.NegateEffect(ev)
 	end
 end
