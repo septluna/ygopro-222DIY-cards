@@ -54,7 +54,7 @@ function cm.costfilter(c)
 	return c:IsSetCard(0xfbb) and c:IsType(TYPE_MONSTER) and not c:IsPublic()
 end
 function cm.con(e,tp,eg,ep,ev,re,r,rp)
-	return rp~=tp and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE)) and Duel.IsChainNegatable(ev)
+	return rp~=tp and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE)) and re:GetHandler():IsDestructable()
 end
 function cm.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
