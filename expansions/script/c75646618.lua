@@ -18,7 +18,7 @@ function c75646618.initial_effect(c)
 	c:RegisterEffect(e1)
 	--Recover
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(28806532,0))
+	e2:SetDescription(aux.Stringid(75646618,0))
 	e2:SetCategory(CATEGORY_RECOVER+CATEGORY_SPECIAL_SUMMON)
 	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e2:SetCode(EVENT_TO_GRAVE)
@@ -51,17 +51,19 @@ function c75646618.eqop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,c75646618.filter,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,c)
 	if g:GetCount()>0 then
 		Duel.Equip(tp,g:GetFirst(),c)
-		if Duel.GetFlagEffect(tp,75646600)~=0 then
+		if Duel.GetFlagEffect(tp,75646600)>0 then
 			local e1=Effect.CreateEffect(e:GetHandler())
 			e1:SetType(EFFECT_TYPE_SINGLE)
 			e1:SetCode(EFFECT_IMMUNE_EFFECT)
-			e1:SetCondition(c75646618.imcon)
 			e1:SetValue(c75646618.imfilter)
 			e1:SetOwnerPlayer(tp)
 			e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 			g:GetFirst():RegisterEffect(e1)
 		end
 	end
+end
+function c75646618.imfilter(e,re)
+	return e:GetOwnerPlayer()~=re:GetOwnerPlayer()
 end
 function c75646618.cfilter(c)
 	return aux.IsCodeListed(c,75646600) and c:IsType(TYPE_SPELL+TYPE_TRAP)
