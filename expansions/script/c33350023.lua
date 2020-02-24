@@ -9,7 +9,7 @@ function cm.initial_effect(c)
 	local e2=rsef.SC(c,EVENT_SPSUMMON_SUCCESS,nil,nil,"cd",rscon.sumtype("xyz",cm.cfilter),cm.op)
 end
 cm.setname="TaleSouls"
-function cm.cfilter(e,tp,re,rp,mat)
+function cm.cfilter(c,e,tp,re,rp,mat)
 	return #mat>0 and mat:IsExists(Card.IsCode,1,nil,33350016)
 end
 function cm.op(e,tp)

@@ -72,9 +72,11 @@ function cm.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_POSITION,eg,eg:GetCount(),0,0)
 end
 function cm.operation(e,tp,eg,ep,ev,re,r,rp)
+	local bool1=1
 	local g=eg:Filter(cm.filter,nil,e,tp)
 	local tc=g:GetFirst()
 	while tc do
+		bool1=1
 		if Duel.GetLocationCount(1-tp,LOCATION_SZONE)>0 and tc:IsCanTurnSet() and not tc:IsType(TYPE_PENDULUM+TYPE_TOKEN) then
 			if Duel.MoveToField(tc,tp,1-tp,LOCATION_SZONE,POS_FACEDOWN,true)~=0  then
 				local e1=Effect.CreateEffect(e:GetHandler())
@@ -84,11 +86,12 @@ function cm.operation(e,tp,eg,ep,ev,re,r,rp)
 				e1:SetReset(RESET_EVENT+RESETS_STANDARD-RESET_TURN_SET)
 				e1:SetValue(TYPE_SPELL+TYPE_CONTINUOUS)
 				tc:RegisterEffect(e1)
+				bool1=0
 			else
 				Duel.Remove(tc,POS_FACEDOWN,REASON_RULE)
 			end
 		end
-		if not tc:IsType(TYPE_TOKEN) and (tc:IsFaceup() or not tc:IsLocation(LOCATION_REMOVED)) then
+		if not tc:IsType(TYPE_TOKEN) and (tc:IsFaceup() or not tc:IsLocation(LOCATION_REMOVED)) and bool1==1 then
 			Duel.Remove(tc,POS_FACEDOWN,REASON_RULE)
 		end
 		tc=g:GetNext()
