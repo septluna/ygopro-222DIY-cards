@@ -93,7 +93,7 @@ function c12030001.drtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetTargetPlayer(tp)
 	Duel.SetTargetParam(2)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,2)
-	if  rp==1-tp and tp==e:GetLabel() and Duel.SelectYesNo(tp,aux.Stringid(12030001,3)) then
+	if  rp==1-tp and tp==e:GetLabel() and not Duel.SelectYesNo(tp,aux.Stringid(12030001,3)) then
 		Duel.RegisterFlagEffect(tp,12030001,RESET_PHASE+PHASE_END,0,1)
 	else
 		e:SetCategory(CATEGORY_TODECK)
