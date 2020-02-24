@@ -97,7 +97,6 @@ function c12001022.operation(e,tp,eg,ep,ev,re,r,rp)
 		Duel.MoveSequence(c,nseq)
 	end
 	else
-		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ShuffleDeck(nil)
 end
 end
