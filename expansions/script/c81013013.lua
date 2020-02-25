@@ -36,7 +36,6 @@ function cm.spop(e,tp,eg,ep,ev,re,r,rp)
 end
 function cm.efcon(e,tp,eg,ep,ev,re,r,rp)
 	return bit.band(r,REASON_FUSION)~=0
-		and e:GetHandler():IsPreviousLocation(LOCATION_ONFIELD)
 end
 function cm.efop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
