@@ -113,7 +113,6 @@ function cm.thop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RELEASE)
 	local dg=Duel.SelectMatchingCard(tp,cm.filter1,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,1,nil)
 	Duel.Release(dg,REASON_EFFECT+REASON_COST)
-	c:CompleteProcedure()
 	Duel.RegisterFlagEffect(tp,m,RESET_EVENT+RESET_PHASE+PHASE_END,0,1)
 end
 function cm.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
