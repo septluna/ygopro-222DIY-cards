@@ -158,6 +158,7 @@ function c12004021.drop(e,tp,eg,ep,ev,re,r,rp)
 	if not tg or tg:FilterCount(Card.IsRelateToEffect,nil,e)~=3 then return end
 	local c=e:GetHandler()
 	Duel.SendtoDeck(tg+c,nil,2,REASON_EFFECT)
+	Duel.ShuffleDeck(tp)
 	Duel.BreakEffect()
 	Duel.Draw(tp,1,REASON_EFFECT)
 end
