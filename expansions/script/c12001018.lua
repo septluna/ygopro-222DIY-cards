@@ -24,7 +24,7 @@ function c12001018.initial_effect(c)
 	e2:SetCode(EVENT_TO_GRAVE)
 	e2:SetCountLimit(1,12001104)
 	e2:SetCondition(c12001018.con2)
-	e2:SetCondition(c12001018.dstg)
+	e2:SetTarget(c12001018.dstg)
 	e2:SetOperation(c12001018.dsop)
 	c:RegisterEffect(e2)
 --
@@ -130,6 +130,8 @@ function c12001018.tfilter2(c)
 end
 function c12001018.dstg(e,tp,eg,ep,ev,re,r,rp)
 	if chk==0 then return Duel.IsExistingMatchingCard(aux.TRUE,tp,0,LOCATION_MZONE,1,nil) end
+	local g=Duel.GetMatchingGroup(nil,tp,0,LOCATION_MZONE,nil)
+        Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,1,0,0)
 end
 function c12001018.dsop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_REMOVE)
