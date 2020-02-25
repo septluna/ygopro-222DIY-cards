@@ -13,13 +13,13 @@ function cm.initial_effect(c)
 
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(12001017,1))
-	e3:SetCategory(CATEGORY_TOGRAVE)
+	e3:SetCategory(CATEGORY_REMOVE)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e3:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DELAY)
 	e3:SetCode(EVENT_TO_GRAVE)
 	e3:SetCountLimit(1,12001104)
 	e3:SetCondition(c12001017.dscon)
-	e3:SetCondition(c12001017.dstg)
+	e3:SetSetTarget(c12001017.dstg)
 	e3:SetOperation(c12001017.dsop)
 	c:RegisterEffect(e3)
  
@@ -49,7 +49,8 @@ function c12001017.dscon(e,tp,eg,ep,ev,re,r,rp)
 end
 function c12001017.dstg(e,tp,eg,ep,ev,re,r,rp)
 	if chk==0 then return Duel.IsExistingMatchingCard(aux.TRUE,tp,0,LOCATION_MZONE,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,nil,1,0,LOCATION_MZONE)
+	local g=Duel.GetMatchingGroup(nil,tp,0,LOCATION_MZONE,nil)
+        Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,1,0,0)
 end
 function c12001017.dsop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_REMOVE)
