@@ -4,6 +4,7 @@ function c33310159.initial_effect(c)
 	aux.AddXyzProcedure(c,aux.TRUE,5,2)
 	--linmo
 	local e1=Effect.CreateEffect(c)
+	e1:SetCategory(CATEGORY_TODECK)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e1:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
@@ -23,16 +24,14 @@ function c33310159.initial_effect(c)
 	c33310159[c]=e1
 end
 function c33310159.ltg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsSetCard,tp,LOCATION_GRAVE+LOCATION_HAND,0,1,nil,0x55b) end
+	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToDeck,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,1,0,LOCATION_GRAVE)
 end
 function c33310159.lop(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) and c:IsFaceup() then
-	local g=Duel.SelectMatchingCard(tp,Card.IsSetCard,tp,LOCATION_GRAVE+LOCATION_HAND,0,1,1,nil,0x55b)
+	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToDeck,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,2,nil)
 	if g then
 		Duel.HintSelection(g)
-		Duel.Overlay(c,g)
-	end
+		Duel.SendtoDeck(g,nil,2,REASON_EFFECT)
 	end
 end
 
@@ -79,7 +78,7 @@ function c33310159.eftg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		if e:GetLabel()==0 then return false end
 		e:SetLabel(0)
-		return og:IsExists(c33310159.filter,tp,1,nil,e,tp,eg,ep,ev,re,r,rp)
+		return og:IsExists(c33310159.filter,1,nil,e,tp,eg,ep,ev,re,r,rp)
 	end
 	local tc=og:FilterSelect(tp,c33310159.filter,1,1,nil,e,tp,eg,ep,ev,re,r,rp):GetFirst()
 	Duel.SendtoGrave(tc,REASON_COST)
