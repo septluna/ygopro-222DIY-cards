@@ -21,7 +21,7 @@ function c12001004.initial_effect(c)
 	e3:SetCode(EVENT_TO_GRAVE)
 	e3:SetCountLimit(1,12001104)
 	e3:SetCondition(c12001004.dscon)
-	e3:SetCondition(c12001004.dstg)
+	e3:SetSetTarget(c12001004.dstg)
 	e3:SetOperation(c12001004.dsop)
 	c:RegisterEffect(e3)
 end
