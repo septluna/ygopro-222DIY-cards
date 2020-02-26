@@ -111,6 +111,6 @@ function c12030008.drop(e,tp,eg,ep,ev,re,r,rp)
 	if  rp==1-tp and tp==e:GetLabel() then
 	   Duel.Remove(ss,POS_FACEDOWN,REASON_EFFECT)
 	else
-	   Duel.SendtoDeck(ss,tp,2,REASON_EFFECT)
+	   Duel.SendtoDeck(ss,nil,2,REASON_EFFECT)
 	end
 end
