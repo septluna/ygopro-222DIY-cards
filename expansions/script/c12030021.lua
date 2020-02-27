@@ -60,7 +60,7 @@ function cm.matcheck(e,c)
 		if tc:IsSummonType(SUMMON_TYPE_SPECIAL) and tc:GetTurnID()~=Duel.GetTurnCount() then e:SetLabel(1) end
 	end
 end
-function cm.sumfilter(e,tp,re,rp,mat)
+function cm.sumfilter(c,e,tp,re,rp,mat)
 	return #mat>0 and e:GetLabelObject():GetLabel()==1
 end
 function cm.drop(e,tp)
