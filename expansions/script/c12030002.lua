@@ -90,6 +90,7 @@ function c12030002.disop(e,tp,eg,ep,ev,re,r,rp)
 	if g:GetCount()>0 then
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)
+		Duel.RegisterFlagEffect(tp,12030002,nil,0,1)
 	end
 	else
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
