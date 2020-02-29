@@ -31,3 +31,22 @@ function Amana.tgcon(e)
 	return Duel.GetCurrentPhase()==PHASE_END
 		and not Duel.IsExistingMatchingCard(Amana.cfilter,tp,LOCATION_MZONE,0,1,nil)
 end
+--momoka
+function Amana.Momoka(c)
+	local e0=Effect.CreateEffect(c)
+	e0:SetType(EFFECT_TYPE_SINGLE)
+	e0:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+	e0:SetCode(EFFECT_EXTRA_LINK_MATERIAL)
+	e0:SetRange(LOCATION_HAND)
+	e0:SetValue(Amana.matval)
+	c:RegisterEffect(e0)
+end
+function Amana.mfilter(c)
+	return c:IsLocation(LOCATION_MZONE)
+end
+function Amana.exmfilter(c)
+	return c:IsLocation(LOCATION_HAND) and c:IsCode(m)
+end
+function Amana.matval(e,c,mg)
+	return c:IsSetCard(0x3603) and mg:IsExists(Amana.mfilter,1,nil) and not mg:IsExists(Amana.exmfilter,1,nil)
+end
