@@ -117,9 +117,7 @@ function c65020008.pop(e,tp,eg,ep,ev,re,r,rp)
 		local scl1=tc1:GetLeftScale()
 		local scl2=tc2:GetRightScale()
 		if scl1>scl2 then scl1,scl2=scl2,scl1 end
-	local num=Duel.GetLocationCountFromEx(tp,tp,nil,TYPE_PENDULUM)
-	local num2=Duel.GetMatchingGroupCount(c65020008.pfilter,tp,LOCATION_EXTRA,0,nil,e,tp,scl1,scl2)
-	if num>num2 then num=num2 end
+	local num=Duel.GetMatchingGroupCount(c65020008.pfilter,tp,LOCATION_EXTRA,0,nil,e,tp,scl1,scl2)
 	local g=Duel.SelectMatchingCard(tp,c65020008.pfilter,tp,LOCATION_EXTRA,0,num,num,nil,e,tp,scl1,scl2)
 	if g:GetCount()>0 then
 		if Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)~=0 then

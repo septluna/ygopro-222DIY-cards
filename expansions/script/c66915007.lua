@@ -32,7 +32,7 @@ function cm.spfilter(c)
     return  c:IsType(TYPE_CONTINUOUS) and c:IsAbleToGraveAsCost() and c:IsSetCard(0x374) and c:IsType(TYPE_SPELL) or c:IsType(TYPE_TRAP)
 end
 function cm.spcon(e,tp,eg,ep,ev,re,r,rp)
-    return Duel.IsExistingMatchingCard(cm.spfilter,tp,LOCATION_HAND+LOCATION_SZONE,0,1,nil) and not Duel.IsExistingMatchingCard(Card.IsFaceup,tp,LOCATION_MZONE,0,1,nil)
+    return not Duel.IsExistingMatchingCard(Card.IsFaceup,tp,LOCATION_MZONE,0,1,nil) and Duel.IsExistingMatchingCard(cm.spfilter,tp,LOCATION_HAND+LOCATION_SZONE,0,1,nil)
 end
 function cm.spop(e,tp,eg,ep,ev,re,r,rp,c)
     local g=Duel.SelectMatchingCard(tp,cm.spfilter,tp,LOCATION_HAND+LOCATION_SZONE,0,1,1,nil)

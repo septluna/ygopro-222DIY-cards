@@ -15,13 +15,13 @@ function c12001004.initial_effect(c)
 	c:RegisterEffect(e1)
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(12001004,1))
-	e3:SetCategory(CATEGORY_TOGRAVE)
+	e3:SetCategory(CATEGORY_REMOVE)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e3:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DELAY)
+	e3:SetProperty(EFFECT_FLAG_DELAY)
 	e3:SetCode(EVENT_TO_GRAVE)
 	e3:SetCountLimit(1,12001104)
 	e3:SetCondition(c12001004.dscon)
-	e3:SetSetTarget(c12001004.dstg)
+	e3:SetTarget(c12001004.dstg)
 	e3:SetOperation(c12001004.dsop)
 	c:RegisterEffect(e3)
 end
@@ -50,15 +50,12 @@ function c12001004.dscon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return c:IsPreviousLocation(LOCATION_DECK) and c:IsReason(REASON_REVEAL)
 end
-function c12001004.dstg(e,tp,eg,ep,ev,re,r,rp)
+function c12001004.dstg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(aux.TRUE,tp,0,LOCATION_MZONE,1,nil) end
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,nil,1,0,0)
 end
 function c12001004.dsop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_REMOVE)
 	local g=Duel.SelectMatchingCard(1-tp,aux.TRUE,tp,0,LOCATION_MZONE,1,1,nil)
 	local tc=g:GetFirst()
-	if tc:IsRelateToEffect(e) then
-		Duel.Remove(tc,POS_FACEUP,REASON_RULE)
-	end
+	Duel.Remove(tc,POS_FACEUP,REASON_RULE)
 end

@@ -38,6 +38,7 @@ function Amana.Momoka(c)
 	e0:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 	e0:SetCode(EFFECT_EXTRA_LINK_MATERIAL)
 	e0:SetRange(LOCATION_HAND)
+	e0:SetCountLimit(1,m+900)
 	e0:SetValue(Amana.matval)
 	c:RegisterEffect(e0)
 end
@@ -49,4 +50,29 @@ function Amana.exmfilter(c)
 end
 function Amana.matval(e,c,mg)
 	return c:IsSetCard(0x3603) and mg:IsExists(Amana.mfilter,1,nil) and not mg:IsExists(Amana.exmfilter,1,nil)
+end
+--majsoulGirl/Boy
+function Amana.MajsoulGirl(c)
+	local e0=Effect.CreateEffect(c)
+	e0:SetType(EFFECT_TYPE_SINGLE)
+	e0:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+	e0:SetCode(EFFECT_CHANGE_CODE)
+	e0:SetRange(LOCATION_MZONE)
+	e0:SetCondition(Amana.namecon)
+	e0:SetValue(26818000)
+	c:RegisterEffect(e0)
+end
+function Amana.MajsoulBoy(c)
+	local e0=Effect.CreateEffect(c)
+	e0:SetType(EFFECT_TYPE_SINGLE)
+	e0:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+	e0:SetCode(EFFECT_CHANGE_CODE)
+	e0:SetRange(LOCATION_MZONE)
+	e0:SetCondition(Amana.namecon)
+	e0:SetValue(26818001)
+	c:RegisterEffect(e0)
+end
+function Amana.namecon(e)
+	local ph=Duel.GetCurrentPhase()
+	return (ph>=PHASE_BATTLE_START and ph<=PHASE_BATTLE) or ph==PHASE_END
 end

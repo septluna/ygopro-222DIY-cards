@@ -36,7 +36,7 @@ function cm.target(e,tp,eg,ep,ev,re,r,rp,chk)
     Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,0,LOCATION_DECK)
 end
 function cm.filter(c)
-    return (c:IsSetCard(0x374) and c:IsType(TYPE_SPELL) or c:IsType(TYPE_TRAP) and c:IsType(TYPE_CONTINUOUS)) or c:IsCode(66915001) and c:IsAbleToHand()
+    return (c:IsSetCard(0x374) and c:IsType(TYPE_SPELL) and c:IsType(TYPE_CONTINUOUS) or c:IsType(TYPE_TRAP)) or c:IsCode(66915001) and c:IsAbleToHand()
 end
 function cm.activate(e,tp,eg,ep,ev,re,r,rp)
     if Duel.IsPlayerCanDiscardDeck(tp,5) then

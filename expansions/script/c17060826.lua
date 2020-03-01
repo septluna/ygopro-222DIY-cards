@@ -69,11 +69,9 @@ function cm.rccfilter(c)
 end
 function cm.spop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) then
-		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
-	end
 	local g=Duel.GetMatchingGroup(aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,nil)
-	if Duel.IsExistingMatchingCard(cm.rccfilter,tp,LOCATION_MZONE,0,1,c) and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(17060826,2)) then
+	if c:IsRelateToEffect(e) and Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)~=0
+	and Duel.IsExistingMatchingCard(cm.rccfilter,tp,LOCATION_MZONE,0,1,c) and #g>0 and Duel.SelectYesNo(tp,aux.Stringid(17060826,2)) then
 		Duel.BreakEffect()
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
 		local sg=g:Select(tp,1,1,nil)

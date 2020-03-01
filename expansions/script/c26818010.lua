@@ -32,14 +32,20 @@ function cm.spop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)
 		if not tc:IsCode(26818000,26818001) then
 			Duel.BreakEffect()
-			Duel.SkipPhase(tp,PHASE_MAIN1,RESET_PHASE+PHASE_END,1)
-			local e1=Effect.CreateEffect(e:GetHandler())
-			e1:SetType(EFFECT_TYPE_FIELD)
-			e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
-			e1:SetTargetRange(1,0)
-			e1:SetCode(EFFECT_CANNOT_BP)
-			e1:SetReset(RESET_PHASE+PHASE_END)
-			Duel.RegisterEffect(e1,tp)
+			local ph=Duel.GetCurrentPhase()
+			if ph==PHASE_MAIN1 then
+				Duel.SkipPhase(tp,PHASE_MAIN1,RESET_PHASE+PHASE_END,1,1)
+				local e1=Effect.CreateEffect(e:GetHandler())
+				e1:SetType(EFFECT_TYPE_FIELD)
+				e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
+				e1:SetTargetRange(1,0)
+				e1:SetCode(EFFECT_CANNOT_BP)
+				e1:SetReset(RESET_PHASE+PHASE_END)
+				Duel.RegisterEffect(e1,tp)
+			end
+			if ph==PHASE_MAIN2 then
+				Duel.SkipPhase(tp,PHASE_MAIN2,RESET_PHASE+PHASE_END,1)
+			end
 		end
 	end
 end

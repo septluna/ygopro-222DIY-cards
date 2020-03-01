@@ -20,11 +20,11 @@ function c12001018.initial_effect(c)
 	e2:SetDescription(aux.Stringid(12001018,2))
 	e2:SetCategory(CATEGORY_REMOVE)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e2:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DELAY)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_TO_GRAVE)
 	e2:SetCountLimit(1,12001104)
 	e2:SetCondition(c12001018.con2)
-	e2:SetTarget(c12001018.dstg)
+	e2:SetCondition(c12001018.dstg)
 	e2:SetOperation(c12001018.dsop)
 	c:RegisterEffect(e2)
 --
@@ -128,16 +128,12 @@ end
 function c12001018.tfilter2(c)
 	return c:IsAbleToRemove()
 end
-function c12001018.dstg(e,tp,eg,ep,ev,re,r,rp)
+function c12001018.dstg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(aux.TRUE,tp,0,LOCATION_MZONE,1,nil) end
-	local g=Duel.GetMatchingGroup(nil,tp,0,LOCATION_MZONE,nil)
-        Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,1,0,0)
 end
 function c12001018.dsop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_REMOVE)
 	local g=Duel.SelectMatchingCard(1-tp,aux.TRUE,tp,0,LOCATION_MZONE,1,1,nil)
 	local tc=g:GetFirst()
-	if tc:IsRelateToEffect(e) then
-		Duel.Remove(tc,POS_FACEUP,REASON_RULE)
-	end
+	Duel.Remove(tc,POS_FACEUP,REASON_RULE)
 end
