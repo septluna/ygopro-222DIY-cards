@@ -5,20 +5,15 @@ function c21520085.initial_effect(c)
 	c:EnableReviveLimit()
 	--atk & def
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(21520085,0))
-	e1:SetCategory(CATEGORY_ATKCHANGE+CATEGORY_DEFCHANGE)
-	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
-	e1:SetProperty(EFFECT_FLAG_DELAY)
-	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e1:SetCondition(c21520085.adcon)
-	e1:SetCost(c21520085.adcost)
-	e1:SetOperation(c21520085.adop)
+	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetRange(LOCATION_MZONE)
+	e1:SetCode(EFFECT_UPDATE_ATTACK)
+	e1:SetCondition(c21520085.atkcon)
+	e1:SetValue(c21520085.atkval)
 	c:RegisterEffect(e1)
-	--atk up
-	local e2=Effect.CreateEffect(c)
-	e2:SetType(EFFECT_TYPE_SINGLE)
-	e2:SetCode(EFFECT_UPDATE_ATTACK)
-	e2:SetValue(c21520085.atkval)
+	local e2=e1:Clone()
+	e2:SetCode(EFFECT_UPDATE_DEFENSE)
 	c:RegisterEffect(e2)
 	--damage
 	local e3=Effect.CreateEffect(c)
@@ -26,7 +21,7 @@ function c21520085.initial_effect(c)
 	e3:SetCategory(CATEGORY_DAMAGE)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
 	e3:SetCode(EVENT_DAMAGE_STEP_END)
-	e3:SetCondition(c21520085.damcon)
+--	e3:SetCondition(c21520085.damcon)
 	e3:SetTarget(c21520085.damtg)
 	e3:SetOperation(c21520085.damop)
 	c:RegisterEffect(e3)
@@ -90,8 +85,12 @@ end
 function c21520085.tdfilter(c,atk)
 	return c:IsAbleToDeck() --and c:IsAttackBelow(atk) and c:IsType(TYPE_MONSTER) and not c:IsAttribute(ATTRIBUTE_DARK)
 end
+function c21520085.atkcon(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetMatchingGroup(Card.IsType,tp,LOCATION_GRAVE,0,nil,TYPE_MONSTER)
+	return g:GetCount()==g:FilterCount(Card.IsAttribute,nil,ATTRIBUTE_DARK)
+end
 function c21520085.atkval(e,c)
-	return Duel.GetMatchingGroupCount(Card.IsAttribute,e:GetHandlerPlayer(),LOCATION_GRAVE,0,nil,ATTRIBUTE_DARK)*100
+	return Duel.GetMatchingGroupCount(Card.IsAttribute,e:GetHandlerPlayer(),LOCATION_GRAVE,LOCATION_GRAVE,nil,ATTRIBUTE_DARK)*300
 end
 function c21520085.damcon(e,tp,eg,ep,ev,re,r,rp)
 	local gc=Duel.GetMatchingGroupCount(Card.IsType,tp,LOCATION_GRAVE,0,nil,TYPE_MONSTER)
@@ -99,15 +98,15 @@ function c21520085.damcon(e,tp,eg,ep,ev,re,r,rp)
 	return gc==dgc and gc>0
 end
 function c21520085.damtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return true end
-	local dgc=Duel.GetMatchingGroupCount(Card.IsAttribute,tp,LOCATION_GRAVE,0,nil,ATTRIBUTE_DARK)
-	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,dgc*200)
+	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAttribute,tp,LOCATION_GRAVE,LOCATION_GRAVE,1,nil,ATTRIBUTE_DARK) end
+	local dgc=Duel.GetMatchingGroupCount(Card.IsAttribute,tp,LOCATION_GRAVE,LOCATION_GRAVE,nil,ATTRIBUTE_DARK)
+	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,nil,0,1-tp,dgc*100)
 end
 function c21520085.damop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if c:IsRelateToEffect(e) then
-		local dgc=Duel.GetMatchingGroupCount(Card.IsAttribute,tp,LOCATION_GRAVE,0,nil,ATTRIBUTE_DARK)
-		Duel.Damage(1-tp,dgc*200,REASON_EFFECT)
+		local dgc=Duel.GetMatchingGroupCount(Card.IsAttribute,tp,LOCATION_GRAVE,LOCATION_GRAVE,nil,ATTRIBUTE_DARK)
+		Duel.Damage(1-tp,dgc*100,REASON_EFFECT)
 	end
 end
 function c21520085.exatkcon(e,tp,eg,ep,ev,re,r,rp)
@@ -131,13 +130,13 @@ function c21520085.exatkop(e,tp,eg,ep,ev,re,r,rp)
 	if c:IsRelateToEffect(e) then
 		local atk=tc:GetTextAttack()
 		if atk<0 then atk=0 end
-		--atk & def
+--[[		--atk & def
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_SET_BASE_ATTACK)
 		e1:SetValue(atk)
 		e1:SetReset(RESET_EVENT+0x1fe0000)
-		c:RegisterEffect(e1)
+		c:RegisterEffect(e1)--]]
 		local e2=Effect.CreateEffect(c)
 		e2:SetType(EFFECT_TYPE_SINGLE)
 		e2:SetCode(EFFECT_EXTRA_ATTACK)

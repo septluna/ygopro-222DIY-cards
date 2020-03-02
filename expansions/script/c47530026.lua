@@ -24,18 +24,19 @@ function c47530026.initial_effect(c)
     e2:SetOperation(c47530026.sumop)
     c:RegisterEffect(e2)   
     --spsummon proc
-    local e3=Effect.CreateEffect(c)
-    e3:SetDescription(aux.Stringid(47530026,0))
-    e3:SetType(EFFECT_TYPE_SINGLE)
-    e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-    e3:SetCode(EFFECT_SUMMON_PROC)
-    e3:SetValue(SUMMON_TYPE_ADVANCE)
-    e3:SetCondition(c47530026.otcon)
-    e3:SetOperation(c47530026.otop)
-    c:RegisterEffect(e3)    
-    local e4=e3:Clone()
-    e4:SetCode(EFFECT_SET_PROC)
-    c:RegisterEffect(e4)
+    local e1=Effect.CreateEffect(c)
+    e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+    e1:SetType(EFFECT_TYPE_SINGLE)
+    e1:SetCode(EFFECT_LIMIT_SUMMON_PROC)
+    e1:SetCondition(c47530026.ttcon)
+    e1:SetOperation(c47530026.ttop)
+    e1:SetValue(SUMMON_TYPE_ADVANCE)
+    c:RegisterEffect(e1)
+    local e2=Effect.CreateEffect(c)
+    e2:SetType(EFFECT_TYPE_SINGLE)
+    e2:SetCode(EFFECT_LIMIT_SET_PROC)
+    e2:SetCondition(c47530026.setcon)
+    c:RegisterEffect(e2)
     --tribute check
     local e5=Effect.CreateEffect(c)
     e5:SetType(EFFECT_TYPE_SINGLE)
@@ -123,7 +124,7 @@ function c47530026.psplimit(e,c)
     return not c:IsRace(RACE_MACHINE)
 end
 function c47530026.setfilter(c)
-    return c47530026.IsEFSF(c) and c:IsType(TYPE_TRAP) and c:IsType(TYPE_COUNTER)
+    return c47530026.IsEFSF(c) and (c:IsType(TYPE_TRAP) or c:IsType(TYPE_SPELL)) 
 end
 function c47530026.sumtg(e,tp,eg,ep,ev,re,r,rp,chk)
     local c=e:GetHandler()
@@ -145,16 +146,20 @@ end
 function c47530026.otfilter(c)
     return c:GetSummonLocation()==LOCATION_EXTRA and c:IsRace(RACE_MACHINE)
 end
-function c47530026.otcon(e,c,minc)
+function c47530026.ttcon(e,c,minc)
     if c==nil then return true end
     local mg=Duel.GetMatchingGroup(c47530026.otfilter,0,LOCATION_MZONE,LOCATION_MZONE,nil)
-    return c:IsLevelAbove(7) and minc<=1 and Duel.CheckTribute(c,1,1,mg)
+    return c:IsLevelAbove(7) and minc<=2 and Duel.CheckTribute(c,2,2,mg
 end
-function c47530026.otop(e,tp,eg,ep,ev,re,r,rp,c)
-    local mg=Duel.GetMatchingGroup(c47530026.otfilter,0,LOCATION_MZONE,LOCATION_MZONE,nil)
-    local sg=Duel.SelectTribute(tp,c,1,1,mg)
+function c47530026.ttop(e,tp,eg,ep,ev,re,r,rp,c)
+    local mg=Duel.GetMatchingGroup(c47530026.otfilter,0,LOCATION_MZONE,0,nil)
+    local sg=Duel.SelectTribute(tp,c,2,2,mg)
     c:SetMaterial(sg)
     Duel.Release(sg,REASON_SUMMON+REASON_MATERIAL)
+end
+function c47530026.setcon(e,c,minc)
+    if not c then return true end
+    return false
 end
 function c47530026.valcheck(e,c)
     local g=c:GetMaterial()

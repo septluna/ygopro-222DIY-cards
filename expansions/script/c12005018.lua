@@ -66,7 +66,7 @@ function cm.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SendtoGrave(c,REASON_COST+REASON_DISCARD)
 end
 function cm.spcon(e,tp,eg,ep,ev,re,r,rp)
-	return not e:GetHandler():IsReason(REASON_DRAW)
+	return not e:GetHandler():IsReason(REASON_DRAW) and c:IsPreviousLocation(LOCATION_DECK)
 end
 function cm.filter(c)
 	return c:IsSetCard(0xfbb) and c:IsType(TYPE_TRAP) and c:IsAbleToHand()

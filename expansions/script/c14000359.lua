@@ -19,7 +19,7 @@ function cm.initial_effect(c)
 	e2:SetTarget(cm.stg)
 	e2:SetOperation(cm.sop)
 	c:RegisterEffect(e2)
-	--[[inactivatable
+	--inactivatable
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD)
 	e3:SetCode(EFFECT_CANNOT_INACTIVATE)
@@ -31,25 +31,29 @@ function cm.initial_effect(c)
 	e4:SetCode(EFFECT_CANNOT_DISEFFECT)
 	e4:SetRange(LOCATION_SZONE)
 	e4:SetValue(cm.effectfilter)
-	c:RegisterEffect(e4)]]
+	c:RegisterEffect(e4)
 end
 function cm.Skay(c)
 	local m=_G["c"..c:GetCode()]
 	return m and m.named_with_Skayarder
 end
-function cm.cfilter(c)
-	return cm.Skay(c) and c:IsType(TYPE_MONSTER)
+function cm.cfilter(c,e,tp)
+	return cm.Skay(c) and c:IsType(TYPE_MONSTER) and Duel.IsExistingMatchingCard(cm.cfilter1,tp,LOCATION_HAND+LOCATION_MZONE,0,1,c,e,tp,c)
+end
+function cm.cfilter1(c,e,tp,mc)
+	local rg=Group.FromCards(c,mc)
+	return cm.Skay(c) and c:IsType(TYPE_MONSTER) and Duel.IsExistingMatchingCard(cm.spfilter,tp,LOCATION_HAND+LOCATION_DECK,0,1,rg,e,tp)
 end
 function cm.scost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-	if chk==0 then return Duel.CheckReleaseGroupEx(tp,cm.cfilter,2,nil) end
+	if chk==0 then return Duel.CheckReleaseGroupEx(tp,cm.cfilter,1,nil,e,tp) end
 	local g=nil
 	if ft>0 then
-		g=Duel.SelectReleaseGroupEx(tp,cm.cfilter,1,1,nil)
+		g=Duel.SelectReleaseGroupEx(tp,cm.cfilter,1,1,nil,e,tp)
 	else
-		g=Duel.SelectReleaseGroup(tp,cm.cfilter,1,1,nil)
+		g=Duel.SelectReleaseGroup(tp,cm.cfilter,1,1,nil,e,tp)
 	end
-	local g1=Duel.SelectReleaseGroupEx(tp,cm.cfilter,1,1,nil)
+	local g1=Duel.SelectReleaseGroupEx(tp,cm.cfilter,1,1,g,e,tp)
 	g:Merge(g1)
 	Duel.Release(g,REASON_COST)
 end

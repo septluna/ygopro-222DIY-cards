@@ -2,8 +2,8 @@
 if not pcall(function() require("expansions/script/c10199990") end) then require("script/c10199990") end
 local m=65010006
 local cm=_G["c"..m]
-cm.card_code_list={65010001}
 function cm.initial_effect(c)
+	aux.AddCodeList(c,65010001)
 	local f1=function(rc)
 		return rc:IsFacedown() or not rc:IsCode(65010001)
 	end

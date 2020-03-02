@@ -23,11 +23,14 @@ function c75646065.initial_effect(c)
 	e4:SetOperation(c75646065.chainop)
 	c:RegisterEffect(e4)
 end
+function c75646065.lkfilter(c)
+	return c:IsLinkSetCard(0x2c0) or c::IsLinkSetCard(0xa2c2)
+end
 function c75646065.lcheck(g,lc)
-	return g:IsExists(Card.IsLinkSetCard,1,nil,0x2c0)
+	return g:IsExists(c75646065.lkfilter,1)
 end
 function c75646065.filter(c)
-	return c:IsSetCard(0x2c0) and (c:IsLocation(LOCATION_GRAVE) or c:IsFaceup()) and c:IsAbleToDeck()
+	return (c:IsLinkSetCard(0x2c0) or c::IsLinkSetCard(0xa2c2)) and (c:IsLocation(LOCATION_GRAVE) or c:IsFaceup()) and c:IsAbleToDeck()
 end
 function c75646065.tg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_GRAVE+LOCATION_REMOVED) and chkc:IsControler(tp) and c75646065.filter(chkc) end

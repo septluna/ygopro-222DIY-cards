@@ -2,8 +2,8 @@
 if not pcall(function() require("expansions/script/c10199990") end) then require("script/c10199990") end
 local m=65010007
 local cm=_G["c"..m]
-cm.card_code_list={65010001}
 function cm.initial_effect(c)
+	aux.AddCodeList(c,65010001)
 	local e1=rsef.ACT(c,nil,nil,{1,m,1})
 	local e2=rsef.QO(c,nil,nil,1,"eq",{"tg",EFFECT_FLAG_NO_TURN_RESET },LOCATION_SZONE,nil,nil,rstg.target(rscf.FilterFaceUp(Card.IsCode,65010001),"eq",LOCATION_MZONE),cm.op)
 end

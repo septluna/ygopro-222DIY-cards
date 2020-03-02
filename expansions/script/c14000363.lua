@@ -15,7 +15,7 @@ function cm.initial_effect(c)
 	e1:SetOperation(cm.spop)
 	e1:SetValue(1)
 	c:RegisterEffect(e1)
-	--[[disable and atk down
+	--disable and atk down
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
 	e2:SetCode(EFFECT_DISABLE)
@@ -33,7 +33,7 @@ function cm.initial_effect(c)
 	e4:SetRange(LOCATION_MZONE)
 	e4:SetCondition(cm.atkcon)
 	e4:SetOperation(cm.atkop)
-	c:RegisterEffect(e4)]]
+	c:RegisterEffect(e4)
 	--release
 	local e5=Effect.CreateEffect(c)
 	e5:SetDescription(aux.Stringid(m,1))
@@ -45,6 +45,7 @@ function cm.initial_effect(c)
 	e5:SetTarget(cm.tg)
 	e5:SetOperation(cm.op)
 	c:RegisterEffect(e5)
+	cm.release_effect=e5
 end
 function cm.Skay(c)
 	local m=_G["c"..c:GetCode()]

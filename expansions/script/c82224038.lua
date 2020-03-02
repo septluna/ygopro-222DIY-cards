@@ -26,16 +26,21 @@ end
 function cm.tg(e,tp,eg,ep,ev,re,r,rp,chk)  
 	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end  
 	Duel.SetTargetPlayer(tp)  
-	Duel.SetTargetParam(1)  
+	Duel.SetTargetParam(2)  
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,1)  
 end  
 function cm.op(e,tp,eg,ep,ev,re,r,rp)  
 	local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)  
 	if Duel.Draw(p,d,REASON_EFFECT)==0 then return end  
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)  
-	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToDeck,tp,LOCATION_HAND,0,1,1,nil)  
+	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToDeck,tp,LOCATION_HAND,0,2,2,nil)  
 	if g:GetCount()>0 then  
 		Duel.BreakEffect()  
-		Duel.SendtoDeck(g,nil,1,REASON_EFFECT)  
+		Duel.SendtoDeck(g,nil,0,REASON_EFFECT)  
+		Duel.SortDecktop(p,p,2)  
+		for i=1,2 do  
+			local mg=Duel.GetDecktopGroup(p,1)  
+			Duel.MoveSequence(mg:GetFirst(),1)  
+		end 
 	end  
 end  

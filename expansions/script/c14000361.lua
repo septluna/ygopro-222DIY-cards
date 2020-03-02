@@ -8,7 +8,7 @@ function cm.initial_effect(c)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	c:RegisterEffect(e1)
-	--[[Search
+	--Search
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(m,0))
 	e2:SetCategory(CATEGORY_SEARCH+CATEGORY_TOHAND)
@@ -18,7 +18,7 @@ function cm.initial_effect(c)
 	e2:SetCost(cm.thcost)
 	e2:SetTarget(cm.thtg)
 	e2:SetOperation(cm.thop)
-	c:RegisterEffect(e2)]]
+	c:RegisterEffect(e2)
 	--cannot be destroyed by battle
 	local e3=Effect.CreateEffect(c)
 	e3:SetType(EFFECT_TYPE_FIELD)

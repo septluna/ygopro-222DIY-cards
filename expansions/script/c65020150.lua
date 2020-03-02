@@ -60,8 +60,9 @@ function c65020150.con(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()~=tp and (Duel.GetCurrentPhase()==PHASE_MAIN1 or Duel.GetCurrentPhase()==PHASE_MAIN2)
 end
 function c65020150.cost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():GetFlagEffect(65020150)==0 end
+	if chk==0 then return e:GetHandler():GetFlagEffect(65020150)==0 and Duel.IsExistingMatchingCard(Card.IsDiscardable,tp,LOCATION_HAND,0,1,nil) end
 	e:GetHandler():RegisterFlagEffect(65020150,RESET_CHAIN,0,1)
+	Duel.DiscardHand(tp,Card.IsDiscardable,1,1,REASON_COST+REASON_DISCARD,nil)
 end
 function c65020150.tgfil(c)
 	return c:IsFacedown() and c:IsCanChangePosition()

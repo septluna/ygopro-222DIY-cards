@@ -34,24 +34,14 @@ function c65040034.tg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function c65040034.op(e,tp,eg,ep,ev,re,r,rp,chk)
 	local p=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER)
+	if not Duel.IsPlayerCanDraw(p) then return end
 	local g=Duel.GetFieldGroup(p,LOCATION_HAND,0)
 	local num=g:GetCount()
 	if num>0 then
-		local num2=Duel.SendtoDeck(g,nil,2,REASON_EFFECT)
+		local num2=Duel.SendtoDeck(g,nil,2,REASON_EFFECT)+1
 		if num2>0 then
 			Duel.ShuffleDeck(p)
-			if Duel.Draw(p,num2,REASON_EFFECT)~=0 and Duel.IsPlayerCanDraw(tp) and Duel.SelectYesNo(tp,aux.Stringid(65040034,1)) then
-				Duel.BreakEffect()
-				Duel.Draw(tp,1,REASON_EFFECT)
-				local mmg=Duel.GetFieldGroup(tp,LOCATION_HAND,0)
-				Duel.ConfirmCards(1-tp,mmg)
-				if Duel.IsExistingMatchingCard(Card.IsAbleToDeck,tp,LOCATION_HAND,0,1,nil) and Duel.SelectYesNo(1-tp,aux.Stringid(65040034,2)) then
-					local ggg=Duel.SelectMatchingCard(1-tp,Card.IsAbleToDeck,tp,LOCATION_HAND,0,1,1,nil)
-					Duel.SendtoDeck(ggg,nil,2,REASON_EFFECT)			 
-					Duel.ShuffleDeck(tp)
-					Duel.Draw(tp,ggg:GetCount(),REASON_EFFECT)
-				end
-			end
+			Duel.Draw(p,num2,REASON_EFFECT)
 		end
 	end
 end

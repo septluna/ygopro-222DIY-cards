@@ -24,7 +24,8 @@ function c1111502.initial_effect(c)
 --
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_F)
-	e2:SetCode(EVENT_LEAVE_FIELD)
+	e2:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
+	e2:SetCode(EVENT_TO_GRAVE)
 	e2:SetCondition(c1111502.con2)
 	e2:SetTarget(c1111502.tg2)
 	e2:SetOperation(c1111502.op2)
@@ -48,8 +49,10 @@ function c1111502.tfilter1(c,e,tp)
 	return c:IsType(TYPE_MONSTER) and muxu.check_set_Urban(c) and c:IsCanBeSpecialSummoned(e,0,tp,true,true) and c:IsRace(RACE_FAIRY)
 end
 function c1111502.ofilter1(c,tp)
-	return muxu.check_set_Urban(c) and c:IsType(TYPE_SPELL) 
-		and (c:IsType(TYPE_FIELD) or Duel.GetLocationCount(tp,LOCATION_SZONE,0)>0) and not c:IsForbidden()
+	return muxu.check_set_Urban(c)
+		and c:IsType(TYPE_SPELL) and c:IsType(TYPE_CONTINUOUS) 
+		and Duel.GetLocationCount(tp,LOCATION_SZONE,0)>0
+		and not c:IsForbidden()
 end
 function c1111502.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
@@ -79,8 +82,7 @@ end
 --
 function c1111502.con2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return c:IsPreviousPosition(POS_FACEUP)
-		and c:GetPreviousControler()==tp and rp==1-tp
+	return c:GetPreviousControler()==tp and rp==1-tp
 end
 --
 function c1111502.tfilter2(c,tp)

@@ -25,15 +25,15 @@ function c65020146.filter(c)
 	return c:IsSetCard(0x3da7) and c:IsAbleToDeck()
 end
 function c65020146.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c65020146.filter,tp,LOCATION_GRAVE,0,3,nil) and Duel.IsPlayerCanDraw(tp,1) end
+	if chk==0 then return Duel.IsExistingMatchingCard(c65020146.filter,tp,LOCATION_GRAVE,0,3,nil) and Duel.IsPlayerCanDraw(tp,2) end
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,3,tp,LOCATION_GRAVE)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,0,0,tp,2)
 end
 function c65020146.operation(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(c65020146.filter),tp,LOCATION_GRAVE,0,3,5,nil)
+	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(c65020146.filter),tp,LOCATION_GRAVE,0,3,3,nil)
 	if g:GetCount()>0 and Duel.SendtoDeck(g,nil,2,REASON_EFFECT)~=0 then
 		Duel.ShuffleDeck(tp)
-		Duel.Draw(tp,1,REASON_EFFECT)
+		Duel.Draw(tp,2,REASON_EFFECT)
 	end
 end
 function c65020146.cost(e,tp,eg,ep,ev,re,r,rp,chk)

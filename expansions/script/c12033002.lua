@@ -1,18 +1,26 @@
 --加速小绿2
 function c12033002.initial_effect(c)
 	--special summon
-	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(12033002,0))
-	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
-	e1:SetType(EFFECT_TYPE_QUICK_O)
-	e1:SetCode(EVENT_FREE_CHAIN)
-	e1:SetHintTiming(0,TIMING_END_PHASE)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetCountLimit(1,12033002)
-	e1:SetCost(c12033002.spcost1)
-	e1:SetTarget(c12033002.sptg1)
-	e1:SetOperation(c12033002.spop1)
-	c:RegisterEffect(e1)
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_FIELD)
+	e2:SetCode(EFFECT_SPSUMMON_PROC)
+	e2:SetProperty(EFFECT_FLAG_UNCOPYABLE)
+	e2:SetRange(LOCATION_HAND)
+	e2:SetCondition(c12033002.spcon)
+	c:RegisterEffect(e2)
+	--special summon
+--	local e1=Effect.CreateEffect(c)
+--	e1:SetDescription(aux.Stringid(12033002,0))
+--	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
+--	e1:SetType(EFFECT_TYPE_QUICK_O)
+--	e1:SetCode(EVENT_FREE_CHAIN)
+--	e1:SetHintTiming(0,TIMING_END_PHASE)
+--	e1:SetRange(LOCATION_MZONE)
+--	e1:SetCountLimit(1,12033002)
+--	e1:SetCost(c12033002.spcost1)
+--	e1:SetTarget(c12033002.sptg1)
+
+
 	--special summon
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(12033002,1))

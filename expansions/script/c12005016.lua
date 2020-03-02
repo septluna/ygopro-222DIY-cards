@@ -27,7 +27,7 @@ function c12005016.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 function c12005016.mfilter(c)
-    return c:IsSetCard(0xfbb) or c:IsSetCard(0x1fbd)
+	return c:IsSetCard(0xfbb) or c:IsSetCard(0x1fbd)
 end
 function c12005016.rmcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_SYNCHRO)
@@ -79,14 +79,14 @@ function c12005016.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	end
 end
 function c12005016.activate(e,tp,eg,ep,ev,re,r,rp)
-	if not Duel.IsPlayerCanDiscardDeck(tp,1) then return end
 	local g=Duel.GetDecktopGroup(tp,1)
 	if Duel.SendtoGrave(g,REASON_EFFECT)>0 then
-	local te=e:GetLabelObject()
-	if not te then return end
-	local op=te:GetOperation()
-	if op then op(e,tp,eg,ep,ev,re,r,rp) end
+	   local te=e:GetLabelObject()
+	   if not te then return end
+	   local op=te:GetOperation()
+	   if op then op(e,tp,eg,ep,ev,re,r,rp) end
 	end
+	if not Duel.IsPlayerCanDiscardDeck(tp,1) then return end
 end
 function c12005016.drcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsAbleToExtraAsCost() end

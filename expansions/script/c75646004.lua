@@ -6,7 +6,6 @@ function c75646004.initial_effect(c)
 	e1:SetCode(EFFECT_SPSUMMON_PROC)
 	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
 	e1:SetRange(LOCATION_HAND)
-	e1:SetCountLimit(1,75646004)
 	e1:SetCondition(c75646004.spcon)
 	c:RegisterEffect(e1)
 	--Draw
@@ -30,7 +29,7 @@ function c75646004.initial_effect(c)
 	c:RegisterEffect(e3)   
 end
 function c75646004.filter(c)
-	return c:IsFaceup() and c:IsSetCard(0x2c0) and c:IsType(TYPE_MONSTER)
+	return c:IsFaceup() and (c:IsSetCard(0x2c0) or c:IsSetCard(0xa2c2))	 and c:IsType(TYPE_MONSTER)
 end
 function c75646004.spcon(e,c)
 	if c==nil then return true end
@@ -69,7 +68,7 @@ function c75646004.chainop(e,tp,eg,ep,ev,re,r,rp)
 			Duel.SetChainLimit(c75646004.chainlm)
 		else
 			Duel.SetChainLimit(aux.FALSE)
-		end		
+		end  
 	end
 end
 function c75646004.chainlm(e,rp,tp)

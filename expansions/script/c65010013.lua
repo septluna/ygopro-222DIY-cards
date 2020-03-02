@@ -2,8 +2,8 @@
 if not pcall(function() require("expansions/script/c10199990") end) then require("script/c10199990") end
 local m=65010013
 local cm=_G["c"..m]
-cm.card_code_list={65010001}
 function cm.initial_effect(c)
+	aux.AddCodeList(c,65010001)
 	local e1=rsef.QO(c,EVENT_CHAINING,{m,0},{1,m},"neg","dsp,dcal",LOCATION_HAND,rscon.negcon(cm.filterfun,true),rscost.cost(Card.IsDiscardable,"dish"),cm.tg,cm.op)
 	--special summon
 	local e2=Effect.CreateEffect(c)

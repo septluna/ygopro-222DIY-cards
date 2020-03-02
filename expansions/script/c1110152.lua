@@ -7,6 +7,7 @@ cm.named_with_Urban=true
 function c1110152.initial_effect(c)
 --
 	c:EnableReviveLimit()
+	aux.AddCodeList(c,1110196)
 --
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(1110152,0))

@@ -2,8 +2,8 @@
 if not pcall(function() require("expansions/script/c10199990") end) then require("script/c10199990") end
 local m=65010011
 local cm=_G["c"..m]
-cm.card_code_list={65010001}
 function cm.initial_effect(c)
+	aux.AddCodeList(c,65010001)
 	local e1=rsef.ACT(c) 
 	local e2=rsef.FTO(c,EVENT_SUMMON_SUCCESS,{m,0},{1,0x1},nil,"de",LOCATION_FZONE,cm.con,nil,cm.tg,cm.op)
 	local e3=rsef.FTO(c,EVENT_SPSUMMON_SUCCESS,{m,0},{1,0x1},nil,"de",LOCATION_FZONE,cm.con,nil,cm.tg,cm.op)

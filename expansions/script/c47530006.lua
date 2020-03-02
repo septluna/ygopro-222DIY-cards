@@ -25,7 +25,6 @@ function c47530006.initial_effect(c)
     --
     local e3=Effect.CreateEffect(c)
     e3:SetDescription(aux.Stringid(47530006,0))
-    e3:SetCategory(CATEGORY_TOGRAVE)
     e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
     e3:SetRange(LOCATION_MZONE)
     e3:SetCode(EVENT_BECOME_TARGET)
@@ -69,9 +68,7 @@ function c47530006.tgop(e,tp,eg,ep,ev,re,r,rp)
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOZONE)
     local s=Duel.SelectDisableField(tp,1,LOCATION_MZONE,0,0)
     local nseq=math.log(s,2)
-    if Duel.MoveSequence(c,nseq) then
-        Duel.SendtoGrave(g,REASON_RULE)
-    end
+    Duel.MoveSequence(c,nseq) 
 end
 function c47530006.rgtg(e,tp,eg,ep,ev,re,r,rp,chk)
     local c=e:GetHandler()
