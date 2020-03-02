@@ -137,7 +137,6 @@ function c1110115.tfilter1(c,e,tp,fusc,mg)
 	return c:IsLocation(LOCATION_GRAVE)
 		and bit.band(c:GetReason(),0x40008)==0x40008 and c:GetReasonCard()==fusc
 		and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
-		and fusc:CheckFusionMaterial(mg,c,PLAYER_NONE,true)
 end
 function c1110115.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
