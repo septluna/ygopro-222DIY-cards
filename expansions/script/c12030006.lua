@@ -81,7 +81,7 @@ function c12030006.setcon(e,c,minc)
 end
 function c12030006.rettg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local h=Duel.GetFieldGroupCount(tp,LOCATION_HAND,0)
-	if chk==0 then return h<5 and Duel.IsPlayerCanDraw(tp,5-hc) end
+	if chk==0 then return h<5 and Duel.IsPlayerCanDraw(tp,5-h) end
 	Duel.SetTargetPlayer(tp)
 	Duel.SetTargetParam(5-h)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,5-h)
