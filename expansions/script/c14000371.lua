@@ -6,13 +6,13 @@ function cm.initial_effect(c)
 	--fusion
 	c:SetSPSummonOnce(m)
 	c:EnableReviveLimit()
-	aux.AddFusionProcFunFunRep(c,cm.matfilter,1,1,true)
+	aux.AddFusionProcFun2(c,cm.matfilter,cm.matfilter1,true)
 	--spsummon condition
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e1:SetCode(EFFECT_SPSUMMON_CONDITION)
-	e1:SetValue(cm.splimit)
+	e1:SetValue(aux.fuslimit)
 	c:RegisterEffect(e1)
 	--special summon rule
 	local e2=Effect.CreateEffect(c)
@@ -89,8 +89,8 @@ end
 function cm.matfilter(c)
 	return cm.check_fusion_set_Skayarder(c)
 end
-function cm.splimit(e,se,sp,st)
-	return e:GetHandler():GetLocation()~=LOCATION_EXTRA
+function cm.matfilter1(c)
+	return c:IsFusionType(TYPE_EFFECT)
 end
 function cm.rsfilter(c,fc,tp)
 	return cm.Skay(c) and c:IsLevel(8)

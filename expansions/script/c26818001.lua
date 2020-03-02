@@ -99,7 +99,7 @@ function cm.atkop(e,tp,eg,ep,ev,re,r,rp)
 end
 function cm.askcon(e,tp,eg,ep,ev,re,r,rp)
 	local tp=e:GetHandlerPlayer()
-	return Duel.GetTurnPlayer()==1-tp and Duel.GetCurrentPhase()==PHASE_MAIN1 or Duel.GetCurrentPhase()==PHASE_MAIN2
+	return Duel.GetTurnPlayer()==1-tp and Duel.GetCurrentPhase()==PHASE_MAIN1 and Duel.IsAbleToEnterBP()
 end
 function cm.askop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

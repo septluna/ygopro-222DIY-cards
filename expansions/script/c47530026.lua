@@ -149,7 +149,7 @@ end
 function c47530026.ttcon(e,c,minc)
     if c==nil then return true end
     local mg=Duel.GetMatchingGroup(c47530026.otfilter,0,LOCATION_MZONE,LOCATION_MZONE,nil)
-    return c:IsLevelAbove(7) and minc<=2 and Duel.CheckTribute(c,2,2,mg
+    return c:IsLevelAbove(7) and minc<=2 and Duel.CheckTribute(c,2,2,mg)
 end
 function c47530026.ttop(e,tp,eg,ep,ev,re,r,rp,c)
     local mg=Duel.GetMatchingGroup(c47530026.otfilter,0,LOCATION_MZONE,0,nil)

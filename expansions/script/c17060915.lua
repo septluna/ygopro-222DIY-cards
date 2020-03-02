@@ -6,7 +6,7 @@ function cm.initial_effect(c)
 	aux.EnablePendulumAttribute(c)
 	--search
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(m,0))
+	e1:SetDescription(aux.Stringid(17060915,0))
 	e1:SetCategory(CATEGORY_TOGRAVE+CATEGORY_SEARCH+CATEGORY_TOHAND)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_PZONE)
@@ -16,7 +16,7 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e1)
 	--spsummon proc
 	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(m,1))
+	e2:SetDescription(aux.Stringid(17060915,1))
 	e2:SetType(EFFECT_TYPE_FIELD)
 	e2:SetCode(EFFECT_SPSUMMON_PROC)
 	e2:SetProperty(EFFECT_FLAG_UNCOPYABLE)
@@ -27,7 +27,7 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e2)
 	--synchro level
 	local e3=Effect.CreateEffect(c)
-	e3:SetDescription(aux.Stringid(m,2))
+	e3:SetDescription(aux.Stringid(17060915,2))
 	e3:SetType(EFFECT_TYPE_SINGLE)
 	e3:SetRange(LOCATION_MZONE)
 	e3:SetCode(EFFECT_SYNCHRO_LEVEL)
@@ -78,13 +78,12 @@ end
 function cm.hspcon(e,c)
 	if c==nil then return true end
 	local tp=c:GetControler()
-	local ft=Duel.GetLocationCount(tp,LOCATION_GRAVE)
-	return ft>0 and Duel.IsExistingMatchingCard(cm.spfilter,tp,LOCATION_GRAVE,0,1,nil,ft)
+	return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		and Duel.IsExistingMatchingCard(cm.spfilter,tp,LOCATION_GRAVE,0,1,nil)
 end
 function cm.hspop(e,tp,eg,ep,ev,re,r,rp,c)
-	local ft=Duel.GetLocationCount(tp,LOCATION_GRAVE)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	local g=Duel.SelectMatchingCard(tp,cm.spfilter,tp,LOCATION_GRAVE,0,1,1,nil,ft)
+	local g=Duel.SelectMatchingCard(tp,cm.spfilter,tp,LOCATION_GRAVE,0,1,1,nil)
 	Duel.Remove(g,POS_FACEUP,REASON_COST)
 end
 function cm.slevel(e,c)

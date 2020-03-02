@@ -83,7 +83,7 @@ function c33400208.disop(e,tp,eg,ep,ev,re,r,rp)
 	local t2=bit.band(tc:GetType(),0x7)
 	if t1==t2  then 
 		 Duel.Damage(1-tp,500,REASON_EFFECT) 
-		 if Duel.SelectYesNo(tp,aux.Stringid(33400208,3)) then	   
+		 if Duel.SelectYesNo(tp,aux.Stringid(33400208,3)) then	 
 				local e1=Effect.CreateEffect(tc2)
 				e1:SetType(EFFECT_TYPE_FIELD)
 				e1:SetCode(EFFECT_DISABLE)
@@ -103,8 +103,8 @@ function c33400208.disop(e,tp,eg,ep,ev,re,r,rp)
 		 end 
 	end
 	if tc:IsCode(ac) then 
-		  Duel.Damage(1-tp,500,REASON_EFFECT)
-		  if tc1:IsRelateToEffect(e) and Duel.SelectYesNo(tp,aux.Stringid(33400208,4))then	
+		  Duel.Damage(1-tp,1000,REASON_EFFECT)
+		  if tc1:IsRelateToEffect(e) and Duel.SelectYesNo(tp,aux.Stringid(33400208,4))then  
 			  Duel.SendtoGrave(tc1,REASON_EFFECT)
 		  end
 		  

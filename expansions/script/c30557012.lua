@@ -32,6 +32,7 @@ function c30557012.operation(e,tp,eg,ep,ev,re,r,rp)
 	e3:SetType(EFFECT_TYPE_CONTINUOUS+EFFECT_TYPE_FIELD)
 	e3:SetCode(EVENT_CHAIN_SOLVING)
 	e3:SetProperty(EFFECT_FLAG_DELAY)
+	e3:SetReset(RESET_PHASE+PHASE_END)
 	e3:SetOperation(c30557012.op)
 	Duel.RegisterEffect(e3,tp)
 end
@@ -45,7 +46,7 @@ function c30557012.op(e,tp,eg,ep,ev,re,r,rp)
 			Duel.DisableShuffleCheck()
 			Duel.Destroy(g,REASON_EFFECT+REASON_REVEAL)
 		else
-			Duel.MoveSequence(tc,1)
+			Duel.MoveSequence(gc,1)
 		end
 	end
 end

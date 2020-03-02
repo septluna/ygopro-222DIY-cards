@@ -36,7 +36,6 @@ function c65010556.spop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,c65010556.filter,tp,LOCATION_REMOVED,0,1,1,nil,e,tp)
 	local tc=g:GetFirst()
 	if tc and Duel.SpecialSummonStep(tc,0,tp,tp,false,false,POS_FACEUP)~=0 then
-		Duel.SpecialSummonStep(g,0,tp,tp,false,false,POS_FACEUP)
 		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)
 		e1:SetCode(EFFECT_CANNOT_TRIGGER)
@@ -48,7 +47,7 @@ function c65010556.spop(e,tp,eg,ep,ev,re,r,rp)
 			e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 			e2:SetReset(RESET_EVENT+RESETS_REDIRECT)
 			e2:SetValue(LOCATION_DECKBOT)
-			c:RegisterEffect(e2)
+			tc:RegisterEffect(e2)
 	end
 		Duel.SpecialSummonComplete()
 end

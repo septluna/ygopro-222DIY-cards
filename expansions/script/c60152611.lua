@@ -31,7 +31,7 @@ function c60152611.e2con(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetFieldGroupCount(tp,LOCATION_MZONE,0)==0
 end
 function c60152611.e2tgfilter(c)
-	return return c:IsSetCard(0x6b27) and c:IsSummonable(true,nil)
+	return c:IsSetCard(0x6b27) and c:IsSummonable(true,nil)
 end
 function c60152611.e2tg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c60152611.e2tgfilter,tp,LOCATION_HAND,0,1,nil) end

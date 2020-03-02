@@ -54,7 +54,7 @@ function c65050204.op(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetMZoneCount(tp)<=0 then return end
 	local tc=Duel.GetFirstTarget()
 	local g=Duel.SelectMatchingCard(tp,c65050204.spfil,tp,LOCATION_HAND,0,1,1,nil,e,tp)
-	if g and Duel.SpecialSummon(g,0,tp,false,false,POS_FACEUP)~=0 and tc:IsRelateToEffect(e) then
+	if g and Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)~=0 and tc:IsRelateToEffect(e) then
 		Duel.SendtoGrave(tc,REASON_EFFECT)
 	end
 end

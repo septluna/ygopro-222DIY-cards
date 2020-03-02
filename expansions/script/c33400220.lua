@@ -69,7 +69,7 @@ function c33400220.xyzop(e,tp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c33400220.cfilter,tp,LOCATION_GRAVE,0,2,nil) end
 	 local g1=Duel.GetMatchingGroup(c33400220.cfilter,tp,LOCATION_GRAVE,0,nil)
 	 Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE) 
-	local g=g1:SelectSubGroup(tp,c33400220.xyzcheck,false,2,99)	 
+	local g=g1:SelectSubGroup(tp,c33400220.xyzcheck,false,2,99)  
 	Duel.Remove(g,POS_FACEUP,REASON_COST)
 end
 function c33400220.macon(e,tp,eg,ep,ev,re,r,rp)
@@ -111,7 +111,8 @@ function c33400220.dmop(e,tp,eg,ep,ev,re,r,rp)
 	local t2=bit.band(tc:GetType(),0x7)
 	if t1==t2  then 
 	   Duel.Damage(1-tp,1000,REASON_EFFECT) 
-		 if Duel.SelectYesNo(tp,aux.Stringid(33400220,3)) then 
+		 if Duel.IsExistingMatchingCard(Card.IsAbleToRemove,tp,0,LOCATION_GRAVE+LOCATION_ONFIELD,1,nil) then 
+			if Duel.SelectYesNo(tp,aux.Stringid(33400220,3)) then 
 			 Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 			 local g1=Duel.SelectTarget(tp,Card.IsAbleToRemove,tp,0,LOCATION_GRAVE+LOCATION_ONFIELD,1,1,nil)
 			 Duel.Remove(g1,POS_FACEUP,REASON_EFFECT)
@@ -132,7 +133,8 @@ function c33400220.dmop(e,tp,eg,ep,ev,re,r,rp)
 				e2:SetLabelObject(tc1)
 				e2:SetReset(RESET_PHASE+PHASE_END)
 				Duel.RegisterEffect(e2,tp)  
-		 end	 
+			end	 
+		 end
 	end
 	if tc:IsCode(ac) then  
 			Duel.Damage(1-tp,1000,REASON_EFFECT) 
