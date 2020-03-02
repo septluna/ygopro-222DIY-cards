@@ -25,7 +25,7 @@ function c12016013.initial_effect(c)
 	--to hand
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_TOHAND)
-	e1:SetDescription(aux.Stringid(12016013,0))
+	e1:SetDescription(aux.Stringid(12016013,2))
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetHintTiming(0,TIMINGS_CHECK_MONSTER+TIMING_END_PHASE)
