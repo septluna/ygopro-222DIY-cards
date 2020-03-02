@@ -82,7 +82,7 @@ function c12016013.aclimit(e,re,tp)
 	return re:GetActivateLocation()==LOCATION_MZONE and not re:GetHandler():IsSetCard(0xfb9)
 end
 function c12016013.rthcfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0x103) and c:IsAbleToHandAsCost()
+	return c:IsFaceup() and c:IsSetCard(0xfb9) and c:IsAbleToHandAsCost()
 end
 function c12016013.rthcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
