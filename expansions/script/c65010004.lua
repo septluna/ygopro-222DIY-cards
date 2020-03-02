@@ -2,8 +2,8 @@
 if not pcall(function() require("expansions/script/c10199990") end) then require("script/c10199990") end
 local m=65010004
 local cm=_G["c"..m]
-cm.card_code_list={65010001}
 function cm.initial_effect(c)
+	aux.AddCodeList(c,65010001)
 	local e1=rsef.ACT(c)
 	local e2=rsef.QO(c,nil,{m,0},{1,m},nil,nil,LOCATION_SZONE,nil,rscost.cost({aux.FilterBoolFunction(Card.IsCode,65010001),"res",LOCATION_MZONE }),nil,cm.op)
 	local f=function(rc)

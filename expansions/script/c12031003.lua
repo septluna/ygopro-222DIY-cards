@@ -69,7 +69,7 @@ function c12031003.thcon(e,tp,eg,ep,ev,re,r,rp)
 		and e:GetHandler():IsPublic()
 end
 function c12031003.thfilter(c)
-	return c:IsSetCard(0xfa0) and ( c:IsAbleToHand() or c:IsAbleToGrave() )
+	return c:IsRace(RACE_MACHINE) and c:IsAttribute(ATTRIBUTE_DARK) and ( c:IsAbleToHand() or c:IsAbleToGrave() )
 end
 function c12031003.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(c12031003.thfilter,tp,LOCATION_DECK,0,1,nil) end

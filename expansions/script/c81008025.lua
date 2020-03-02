@@ -26,10 +26,9 @@ function c81008025.initial_effect(c)
 	--copy
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_IGNITION)
-	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e2:SetRange(LOCATION_MZONE)
+	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e2:SetCountLimit(1,81008925)
-	e2:SetCost(c81008025.copycost)
 	e2:SetTarget(c81008025.copytg)
 	e2:SetOperation(c81008025.copyop)
 	c:RegisterEffect(e2)
@@ -61,52 +60,52 @@ function c81008025.tdop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.Destroy(sg2,REASON_EFFECT)
 	end
 end
-function c81008025.copycost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():GetFlagEffect(81008025)==0 end
-	e:GetHandler():RegisterFlagEffect(81008025,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1)
-end
-function c81008025.copyfilter(c)
-	return c:IsFaceup()
+function c81008025.sfilter(c)
+	return c:IsFaceup() and c:IsType(TYPE_EFFECT)
 end
 function c81008025.copytg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	if chkc then return chkc:IsControler(1-tp) and chkc:IsLocation(LOCATION_MZONE) and c81008025.copyfilter(chkc) end
-	if chk==0 then return Duel.IsExistingTarget(c81008025.copyfilter,tp,0,LOCATION_MZONE,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-	Duel.SelectTarget(tp,c81008025.copyfilter,tp,0,LOCATION_MZONE,1,1,nil)
+	if chkc then return chkc:IsControler(1-tp) and chkc:IsLocation(LOCATION_MZONE) and c81008025.sfilter(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(c81008025.sfilter,tp,0,LOCATION_MZONE,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
+	Duel.SelectTarget(tp,c81008025.sfilter,tp,0,LOCATION_MZONE,1,1,nil)
 end
 function c81008025.copyop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tc=Duel.GetFirstTarget()
-	if tc and c:IsRelateToEffect(e) and c:IsFaceup() and tc:IsRelateToEffect(e) and tc:IsFaceup() and not tc:IsType(TYPE_TOKEN) then
-		local code=tc:GetOriginalCodeRule()
+	if c:IsRelateToEffect(e) and c:IsFaceup() and tc:IsRelateToEffect(e) then
+		local code=tc:GetOriginalCode()
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 		e1:SetCode(EFFECT_CHANGE_CODE)
+		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 		e1:SetValue(code)
-		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
+		e1:SetLabel(tp)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END+RESET_OPPO_TURN)
 		c:RegisterEffect(e1)
-		if not tc:IsType(TYPE_TRAPMONSTER) then
-			local cid=c:CopyEffect(code,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,1)
-		end
+		local cid=c:CopyEffect(code,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END+RESET_OPPO_TURN)
 		local e2=Effect.CreateEffect(c)
-		e2:SetDescription(aux.Stringid(81008025,3))
+		e2:SetDescription(aux.Stringid(81008025,2))
 		e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 		e2:SetCode(EVENT_PHASE+PHASE_END)
-		e2:SetRange(LOCATION_MZONE)
+		e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 		e2:SetCountLimit(1)
-		e2:SetLabelObject(e1)
-		e2:SetLabel(cid)
+		e2:SetRange(LOCATION_MZONE)
+		e2:SetCondition(c81008025.rstcon)
 		e2:SetOperation(c81008025.rstop)
-		e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
+		e2:SetLabel(cid)
+		e2:SetLabelObject(e1)
+		e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END+RESET_OPPO_TURN)
 		c:RegisterEffect(e2)
 	end
+end
+function c81008025.rstcon(e,tp,eg,ep,ev,re,r,rp)
+	local e1=e:GetLabelObject()
+	return Duel.GetTurnPlayer()~=e1:GetLabel()
 end
 function c81008025.rstop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local cid=e:GetLabel()
-	if cid~=0 then c:ResetEffect(cid,RESET_COPY) end
+	c:ResetEffect(cid,RESET_COPY)
 	local e1=e:GetLabelObject()
 	e1:Reset()
 	Duel.HintSelection(Group.FromCards(c))

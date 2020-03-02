@@ -57,16 +57,28 @@ function c12026023.cpcon(e,tp,eg,ep,ev,re,r,rp)
 	return re:GetHandler():IsType(TYPE_SPELL) and ( re:GetHandler():IsControler(1-tp) or Duel.GetFlagEffect(tp,12026023)==0 )
 end
 function c12026023.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) end
-	if chk==0 then return Duel.IsExistingTarget(aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(12026023,2))
-	local g=Duel.SelectTarget(tp,aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
+	if chk==0 then
+		local tg=re:GetTarget()
+		local event=re:GetCode()
+		if event==EVENT_CHAINING then return
+		   not tg or tg(e,tp,eg,ep,ev,re,r,rp,0)
+		else		 
+		   local res,teg,tep,tev,tre,tr,trp=Duel.CheckEvent(event,true)
+		   return not tg or tg(e,tp,teg,tep,tev,tre,tr,trp,0)
+		end
+		return re:GetHandler():IsRelateToEffect(re)
+	end
 	local event=re:GetCode()
 	e:SetLabelObject(re)
 	e:SetCategory(re:GetCategory())
 	e:SetProperty(re:GetProperty())
-	e:SetLabel(re:GetLabel())
---  Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
+	local tg=re:GetTarget()
+	if event==EVENT_CHAINING then
+	   if tg then tg(e,tp,eg,ep,ev,re,r,rp,1) end
+	else
+	   local res,teg,tep,tev,tre,tr,trp=Duel.CheckEvent(event,true)
+	   if tg then tg(e,tp,teg,tep,tev,tre,tr,trp,1) end
+	end
 end
 function c12026023.activate(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

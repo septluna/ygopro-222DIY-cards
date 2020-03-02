@@ -50,7 +50,7 @@ function c30557007.desop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function c30557007.disable(e,c)
-	return (c:IsType(TYPE_EFFECT) or bit.band(c:GetOriginalType(),TYPE_EFFECT)==TYPE_EFFECT) and c:IsAttackAbove(e:GetHandler():GetAttack())
+	return (c:IsType(TYPE_EFFECT) or bit.band(c:GetOriginalType(),TYPE_EFFECT)==TYPE_EFFECT) and c:IsType(TYPE_MONSTER) and c:GetBaseAttack()>=e:GetHandler():GetBaseAttack()
 end
 function c30557007.con(e,tp,eg,ep,ev,re,r,rp)
 	return ep~=tp 
@@ -68,7 +68,7 @@ function c30557007.op(e,tp,eg,ep,ev,re,r,rp)
 		local atk=c:GetAttack()
 		 local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_SET_ATTACK_FINAL)
+		e1:SetCode(EFFECT_SET_BASE_ATTACK)
 		e1:SetValue(atk)
 		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
 		tc:RegisterEffect(e1)

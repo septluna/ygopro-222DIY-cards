@@ -23,26 +23,6 @@ function c12031011.initial_effect(c)
 	e4:SetTarget(c12031011.thtg)
 	e4:SetOperation(c12031011.thop)
 	c:RegisterEffect(e4)
-	if not c12031011.global_check then
-		c12031011.global_check=true
-		local ge1=Effect.CreateEffect(c)
-		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		ge1:SetCode(EVENT_TO_GRAVE)
-		ge1:SetOperation(c12031011.checkop)
-		Duel.RegisterEffect(ge1,0)
-	end
-end
-function c12031011.cfilter(c,tp)
-	return c:IsType(TYPE_MONSTER) and c:IsReason(REASON_COST)
-end
-function c12031011.checkop(e,tp,eg,ep,ev,re,r,rp)
-	if not eg and re and re:IsHasType(0x7e0) then return end
-	local sg=eg:Filter(c12031011.cfilter,nil,tp)
-	local tc=sg:GetFirst()
-	while tc do
-		Duel.RegisterFlagEffect(tp,12031011+100,RESET_PHASE+PHASE_END,0,1)
-		tc=sg:GetNext()
-	end
 end
 function c12031011.ovfilter(c)
 	return c:IsFaceup() and c:IsCode(12031000)
@@ -58,7 +38,7 @@ function c12031011.disop(e,tp,eg,ep,ev,re,r,rp)
 	local tt=c:GetOverlayCount()
 	if Duel.GetFlagEffect(tp,12031011)==0 then 
 	if not ( ( re:IsHasType(EFFECT_TYPE_ACTIVATE) and not re:GetHandler():IsType(TYPE_CONTINUOUS) ) or not e:GetHandler():IsType(TYPE_XYZ) ) then
-	Duel.Overlay(c,Group.FromCards(re:GetHandler()))
+	   Duel.Overlay(c,Group.FromCards(re:GetHandler()))
 	   Duel.BreakEffect()
 	   local ff=c:GetOverlayCount()
 	   if ff>tt then
@@ -80,30 +60,20 @@ function c12031011.thfilter(c)
 	return c:IsAttribute(ATTRIBUTE_DARK) and c:IsAbleToHand()
 end
 function c12031011.thfilter1(c)
-	return c:IsAttribute(ATTRIBUTE_DARK) or c:IsAttribute(ATTRIBUTE_EARTH) and c:IsAbleToHand()
+	return c:GetAttack()==3000 and c:IsAbleToHand()
 end
 function c12031011.thtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return true end
 end
 function c12031011.thop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local cc=Duel.GetFlagEffect(tp,12031011+100)
-	if Duel.GetFlagEffect(tp,12031011+100)==0 or Duel.IsExistingMatchingCard(c12031011.thfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,LOCATION_GRAVE+LOCATION_REMOVED,cc,nil) then return end
-	if cc<3 then
+	if not Duel.IsExistingMatchingCard(c12031011.thfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,LOCATION_GRAVE+LOCATION_REMOVED,1,nil) then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local ct=Duel.SelectMatchingCard(tp,c12031011.thfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,LOCATION_GRAVE+LOCATION_REMOVED,cc,cc,nil)
-	   local sss=Duel.SendtoHand(ct,tp,REASON_EFFECT)
-	   if sss>0 then
-	   Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DISCARD)
-	   Duel.DiscardHand(tp,nil,sss-1,sss-1,nil)
-	   end
-	else
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local ct=Duel.SelectMatchingCard(tp,c12031011.thfilter1,tp,LOCATION_GRAVE+LOCATION_REMOVED,LOCATION_GRAVE+LOCATION_REMOVED,cc,cc,nil)
-	   local sss=Duel.SendtoHand(ct,tp,REASON_EFFECT)
-	   if sss>0 then
-	   Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DISCARD)
-	   Duel.DiscardHand(tp,nil,sss-1,sss-1,nil)
-	   end
+	local ct=Duel.SelectMatchingCard(tp,c12031011.thfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,LOCATION_GRAVE+LOCATION_REMOVED,1,1,nil)
+	Duel.SendtoHand(ct,tp,REASON_EFFECT)
+	if c:IsCode()==12031000 and Duel.IsExistingMatchingCard(c12031011.thfilter1,tp,LOCATION_DECK,0,1,nil) then
+	   Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+	   local ct=Duel.SelectMatchingCard(tp,c12031011.thfilter1,tp,LOCATION_DECK,0,1,1,nil)
+	   Duel.SendtoHand(ct,tp,REASON_EFFECT)
 	end
 end

@@ -26,6 +26,7 @@ function cm.initial_effect(c)
 	e2:SetCode(EVENT_FREE_CHAIN)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1)
+	e2:SetCondition(aux.exccon)
 	e2:SetTarget(cm.sptg)
 	e2:SetOperation(cm.spop)
 	c:RegisterEffect(e2)
@@ -54,7 +55,7 @@ function cm.costfilter(c)
 	return c:IsSetCard(0xfbb) and c:IsType(TYPE_MONSTER) and not c:IsPublic()
 end
 function cm.con(e,tp,eg,ep,ev,re,r,rp)
-	return rp~=tp and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE)) and re:GetHandler():IsDestructable()
+	return rp~=tp and (re:IsActiveType(TYPE_MONSTER) or re:IsHasType(EFFECT_TYPE_ACTIVATE)) and Duel.IsChainNegatable(ev) and re:GetHandler():IsDestructable()
 end
 function cm.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
@@ -66,7 +67,7 @@ function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function cm.spfilter(c,e,tp)
-	return ( c:IsSetCard(0xfbb) or c:IsSetCard(0x1fbd) ) and c:IsType(TYPE_MONSTER) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard(0x1fbd) and c:IsType(TYPE_MONSTER) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function cm.sptg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_GRAVE) and cm.spfilter(chkc,e,tp) end

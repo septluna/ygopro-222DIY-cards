@@ -33,7 +33,7 @@ function c12030006.initial_effect(c)
 	--return
 	local e7=Effect.CreateEffect(c)
 	e7:SetDescription(aux.Stringid(12030006,2))
-	e7:SetCategory(CATEGORY_TOHAND)
+	e7:SetCategory(CATEGORY_DRAW)
 	e7:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_F)
 	e7:SetRange(LOCATION_MZONE)
 	e7:SetCountLimit(1)
@@ -41,6 +41,18 @@ function c12030006.initial_effect(c)
 	e7:SetTarget(c12030006.rettg)
 	e7:SetOperation(c12030006.retop)
 	c:RegisterEffect(e7)
+	--cannot be target
+	local e7=Effect.CreateEffect(c)
+	e7:SetType(EFFECT_TYPE_SINGLE)
+	e7:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+	e7:SetCode(EFFECT_CANNOT_BE_BATTLE_TARGET)
+	e7:SetRange(LOCATION_MZONE)
+	e7:SetValue(aux.imval1)
+	c:RegisterEffect(e7)
+	local e8=e7:Clone()
+	e8:SetCode(EFFECT_CANNOT_BE_EFFECT_TARGET)
+	e8:SetValue(aux.tgoval)
+	c:RegisterEffect(e8)
 end
 function c12030006.ttcon1(e,c,minc)
 	if c==nil then return true end
@@ -67,40 +79,23 @@ function c12030006.setcon(e,c,minc)
 	if not c then return true end
 	return false
 end
-function c12030006.condition1(e,tp,eg,ep,ev,re,r,rp)
-   return e:GetHandler():IsPreviousLocation(LOCATION_ONFIELD) and e:GetHandler():GetPreviousControler()==1-tp
-end
-function c12030006.condition2(e,tp,eg,ep,ev,re,r,rp)
-   return e:GetHandler():IsPreviousLocation(LOCATION_ONFIELD) and e:GetHandler():GetPreviousControler()==tp
-end
-function c12030006.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	local c=e:GetHandler()
-	if chk==0 then return Duel.GetLocationCount(1-tp,LOCATION_MZONE)>0
-		and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP_DEFENSE,1-tp) end
-	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,c,1,0,0)
-end
-function c12030006.operation(e,tp,eg,ep,ev,re,r,rp)
-	if e:GetHandler():IsRelateToEffect(e) then
-		Duel.SpecialSummon(e:GetHandler(),0,tp,1-tp,false,false,POS_FACEUP_DEFENSE)
-	end
-end
-function c12030006.operation1(e,tp,eg,ep,ev,re,r,rp)
-	if e:GetHandler():IsRelateToEffect(e) then
-		Duel.SpecialSummon(e:GetHandler(),0,tp,tp,false,false,POS_FACEUP_DEFENSE)
-	end
-end
-function c12030006.ccfilter(c)
-	return c:IsAbleToHandAsCost() and c:IsType(TYPE_MONSTER) 
-end
 function c12030006.rettg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local th=Duel.GetFieldGroupCount(tp,0,LOCATION_HAND)
-	local rh=Duel.GetFieldGroupCount(tp,LOCATION_HAND,0)
-	if chk==0 then return ( th~=5 and Duel.IsExistingMatchingCard(c12030006.ccfilter,tp,0,LOCATION_GRAVE,5-th,nil) ) or
-						  ( rh~=5 and Duel.IsExistingMatchingCard(c12030006.ccfilter,tp,LOCATION_GRAVE,0,5-rh,nil) ) end
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,e:GetHandler(),5-th,0,0)
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,e:GetHandler(),5-rh,0,0)
+	local h=Duel.GetFieldGroupCount(tp,LOCATION_HAND,0)
+	if chk==0 then return h<5 and Duel.IsPlayerCanDraw(tp,5-hc) end
+	Duel.SetTargetPlayer(tp)
+	Duel.SetTargetParam(5-h)
+	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,5-h)
 end
 function c12030006.retop(e,tp,eg,ep,ev,re,r,rp)
+	local p=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER)
+	local h=Duel.GetFieldGroupCount(p,LOCATION_HAND,0)
+	if h>=5 then return end
+	Duel.Draw(p,5-h,REASON_EFFECT)
+	Duel.BreakEffect()
+	if not e:GetHandler():IsRelateToEffect(e) then return end
+	Duel.GetControl(e:GetHandler(),1-tp)
+end
+function c12030006.retop1(e,tp,eg,ep,ev,re,r,rp)
 	local th=Duel.GetFieldGroupCount(tp,0,LOCATION_HAND)
 	local rh=Duel.GetFieldGroupCount(tp,LOCATION_HAND,0)
 	if not ( ( th~=5 and Duel.IsExistingMatchingCard(c12030006.ccfilter,tp,0,LOCATION_GRAVE,5-th,nil) ) or 

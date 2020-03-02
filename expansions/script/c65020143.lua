@@ -2,7 +2,7 @@
 function c65020143.initial_effect(c)
 	--flip
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_SEARCH+CATEGORY_TOHAND+CATEGORY_ATKCHANGE)
+	e1:SetCategory(CATEGORY_SEARCH+CATEGORY_TOHAND)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_FLIP+EFFECT_TYPE_TRIGGER_O)
 	e1:SetProperty(EFFECT_FLAG_DELAY)
 	e1:SetCountLimit(1,65020143)
@@ -25,25 +25,14 @@ function c65020143.filter(c)
 	return c:IsSetCard(0x3da7) and c:IsAbleToHand()
 end
 function c65020143.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c65020143.filter,tp,LOCATION_DECK,0,1,nil) end
+	if chk==0 then return Duel.IsExistingMatchingCard(c65020143.filter,tp,LOCATION_DECK,0,2,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function c65020143.operation(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.SelectMatchingCard(tp,c65020143.filter,tp,LOCATION_DECK,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,c65020143.filter,tp,LOCATION_DECK,0,2,2,nil)
 	if g:GetCount()>0 then
 		if Duel.SendtoHand(g,tp,REASON_EFFECT)~=0 then
 			Duel.ConfirmCards(1-tp,g)
-			local ag=Duel.GetMatchingGroup(Card.IsFaceup,tp,0,LOCATION_MZONE,nil)
-			local ac=ag:GetFirst()
-			while ac do
-				local e1=Effect.CreateEffect(e:GetHandler())
-				e1:SetType(EFFECT_TYPE_SINGLE)
-				e1:SetCode(EFFECT_UPDATE_ATTACK)
-				e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-				e1:SetValue(-500)
-				ac:RegisterEffect(e1)
-				ac=ag:GetNext()
-			end
 		end
 	end
 end

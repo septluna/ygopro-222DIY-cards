@@ -2,8 +2,8 @@
 if not pcall(function() require("expansions/script/c10199990") end) then require("script/c10199990") end
 local m=65010003
 local cm=_G["c"..m]
-cm.card_code_list={65010001}
 function cm.initial_effect(c)
+	aux.AddCodeList(c,65010001)
 	--Activate
 	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_REMOVE)

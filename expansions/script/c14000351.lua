@@ -9,7 +9,7 @@ function cm.initial_effect(c)
 	e0:SetType(EFFECT_TYPE_SINGLE)
 	e0:SetCode(EFFECT_SPSUMMON_CONDITION)
 	c:RegisterEffect(e0)
-	--[[tohand
+	--tohand
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(m,1))
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
@@ -19,7 +19,8 @@ function cm.initial_effect(c)
 	e1:SetCountLimit(1,m)
 	e1:SetTarget(cm.thtg)
 	e1:SetOperation(cm.thop)
-	c:RegisterEffect(e1)]]
+	c:RegisterEffect(e1)
+	cm.release_effect=e1
 	--SpecialSummon
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(m,2))
@@ -59,7 +60,7 @@ function cm.Skay(c)
 	return m and m.named_with_Skayarder
 end
 function cm.thfilter(c)
-	return cm.Skay(c) and c:IsType(TYPE_MONSTER) and c:IsAbleToHand()
+	return cm.Skay(c) and c:IsAbleToHand()
 end
 function cm.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(cm.thfilter,tp,LOCATION_DECK,0,1,nil) end
@@ -82,6 +83,7 @@ function cm.deckcon(e,c)
 		and Duel.IsExistingMatchingCard(cm.cfilter,tp,LOCATION_MZONE,0,1,nil)
 end
 function cm.deckop(e,tp,eg,ep,ev,re,r,rp,c)
+	Duel.Hint(HINT_CARD,0,14000351)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SELECT)
 	local mg=Duel.SelectMatchingCard(tp,cm.cfilter,tp,LOCATION_MZONE,0,1,1,nil)
 	local tc=mg:GetFirst()

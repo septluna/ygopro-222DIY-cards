@@ -22,12 +22,11 @@ function cm.initial_effect(c)
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCountLimit(1)
 	e2:SetCondition(cm.setcon)
 	e2:SetTarget(cm.settg)
 	e2:SetOperation(cm.setop)
 	c:RegisterEffect(e2)
-	--[[tohand
+	--tohand
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(m,1))
 	e3:SetCategory(CATEGORY_TOHAND)
@@ -37,7 +36,8 @@ function cm.initial_effect(c)
 	e3:SetCountLimit(1,m)
 	e3:SetTarget(cm.tg)
 	e3:SetOperation(cm.op)
-	c:RegisterEffect(e3)]]
+	c:RegisterEffect(e3)
+	cm.release_effect=e3
 end
 function cm.Skay(c)
 	local m=_G["c"..c:GetCode()]
@@ -81,7 +81,6 @@ function cm.setop(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(cm.setfilter),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil)
 	if g:GetCount()>0 then
 		Duel.SSet(tp,g)
-		Duel.ConfirmCards(1-tp,g)
 	end
 end
 function cm.thfilter(c)

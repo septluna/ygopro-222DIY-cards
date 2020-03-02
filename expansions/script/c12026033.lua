@@ -64,7 +64,7 @@ function c12026033.disop(e,tp,eg,ep,ev,re,r,rp)
 		e2:SetRange(LOCATION_MZONE)
 		e2:SetReset(RESET_EVENT+0x1fe0000+RESET_PHASE+PHASE_END)
 		e2:SetCountLimit(1)
-		e2:SetTarget(c12026033.target1)
+		e2:SetTarget(re:GetTarget())
 		e2:SetOperation(re:GetOperation())
 		c:RegisterEffect(e2)
 	end
@@ -77,7 +77,7 @@ function c12026033.target1(e,tp,eg,ep,ev,re,r,rp,chk)
 --  Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
 end
 function c12026033.cpcon(e,tp,eg,ep,ev,re,r,rp)
-	return rp==1-tp and Duel.GetCustomActivityCount(12016013,tp,ACTIVITY_CHAIN)>1
+	return rp==1-tp and Duel.GetCustomActivityCount(12026033,tp,ACTIVITY_CHAIN)>1
 end
 function c12026033.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then

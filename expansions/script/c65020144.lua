@@ -2,7 +2,7 @@
 function c65020144.initial_effect(c)
 	--flip
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_DAMAGE)
+	e1:SetCategory(CATEGORY_TOHAND)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_FLIP+EFFECT_TYPE_TRIGGER_O)
 	e1:SetProperty(EFFECT_FLAG_DELAY)
 	e1:SetCountLimit(1,65020144)
@@ -24,15 +24,14 @@ function c65020144.filter(c)
 	return c:IsSetCard(0x3da7) and c:IsAbleToHand()
 end
 function c65020144.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(c65020144.filter,tp,LOCATION_GRAVE,0,2,nil) end
+	if chk==0 then return Duel.IsExistingMatchingCard(c65020144.filter,tp,LOCATION_GRAVE,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,2,tp,LOCATION_GRAVE)
 	Duel.SetOperationInfo(0,CATEGORY_DAMAGE,0,0,1-tp,500)
 end
 function c65020144.operation(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(c65020144.filter),tp,LOCATION_GRAVE,0,2,2,nil)
-	if g:GetCount()==2 and Duel.SendtoHand(g,tp,REASON_EFFECT)~=0 then
+	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(c65020144.filter),tp,LOCATION_GRAVE,0,1,2,nil)
+	if g:GetCount()>0 and Duel.SendtoHand(g,tp,REASON_EFFECT)~=0 then
 		Duel.ConfirmCards(1-tp,g)
-		Duel.Damage(1-tp,500,REASON_EFFECT)
 	end
 end
 function c65020144.cost(e,tp,eg,ep,ev,re,r,rp,chk)

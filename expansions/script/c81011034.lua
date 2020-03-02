@@ -1,8 +1,8 @@
 --薇薇安·伊文捷琳 α
 function c81011034.initial_effect(c)
 	--xyz summon
-	aux.AddXyzProcedure(c,aux.NOT(aux.FilterBoolFunction(Card.IsXyzType,TYPE_PENDULUM)),6,2,nil,nil,99)
 	c:EnableReviveLimit()
+	aux.AddXyzProcedureLevelFree(c,c81011034.mfilter,c81011034.xyzcheck,2,99)
 	--atkup
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_SINGLE)
@@ -32,8 +32,14 @@ function c81011034.initial_effect(c)
 	e2:SetOperation(c81011034.setop)
 	c:RegisterEffect(e2)
 end
+function c81011034.mfilter(c,xyzc)
+	return c:IsXyzType(TYPE_LINK)
+end
+function c81011034.xyzcheck(g)
+	return g:GetClassCount(Card.GetLink)==1
+end
 function c81011034.atkfilter(c)
-	return c:IsType(TYPE_SPELL)
+	return c:IsType(TYPE_SPELL) and c:IsType(TYPE_QUICKPLAY)
 end
 function c81011034.atkval(e,c)
 	return Duel.GetMatchingGroup(c81011034.atkfilter,c:GetControler(),LOCATION_GRAVE,0,nil):GetClassCount(Card.GetCode)*300
@@ -60,5 +66,11 @@ function c81011034.setop(e,tp,eg,ep,ev,re,r,rp)
 	if tc:IsRelateToEffect(e) and tc:IsSSetable() then
 		Duel.SSet(tp,tc)
 		Duel.ConfirmCards(1-tp,tc)
+		local e1=Effect.CreateEffect(e:GetHandler())
+		e1:SetType(EFFECT_TYPE_SINGLE)
+		e1:SetCode(EFFECT_QP_ACT_IN_SET_TURN)
+		e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
+		e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+		tc:RegisterEffect(e1)
 	end
 end

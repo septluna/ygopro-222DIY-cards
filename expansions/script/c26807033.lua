@@ -34,8 +34,8 @@ function c26807033.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local ft2=Duel.GetLocationCount(1-tp,LOCATION_MZONE)
 	local ct=math.min(ft1,ft2)
 	if chk==0 then return ct>0 and not Duel.IsPlayerAffectedByEffect(tp,59822133)
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,26807034,0,0x4011,0,0,1,RACE_BEAST,ATTRIBUTE_EARTH,POS_FACEUP_DEFENSE)
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,26807034,0,0x4011,0,0,1,RACE_BEAST,ATTRIBUTE_EARTH,POS_FACEUP_DEFENSE,1-tp) end
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,26807034,0,0x4011,0,0,1,RACE_FAIRY,ATTRIBUTE_WIND,POS_FACEUP_DEFENSE)
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,26807034,0,0x4011,0,0,1,RACE_FAIRY,ATTRIBUTE_WIND,POS_FACEUP_DEFENSE,1-tp) end
 	Duel.SetOperationInfo(0,CATEGORY_TOKEN,nil,ct*2,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,ct*2,0,0)
 end
@@ -45,13 +45,20 @@ function c26807033.spop(e,tp,eg,ep,ev,re,r,rp)
 	local ft2=Duel.GetLocationCount(1-tp,LOCATION_MZONE)
 	local ct=math.min(ft1,ft2)
 	if ct>0 and not Duel.IsPlayerAffectedByEffect(tp,59822133)
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,26807034,0,0x4011,0,0,1,RACE_BEAST,ATTRIBUTE_EARTH,POS_FACEUP_DEFENSE)
-		and Duel.IsPlayerCanSpecialSummonMonster(tp,26807034,0,0x4011,0,0,1,RACE_BEAST,ATTRIBUTE_EARTH,POS_FACEUP_DEFENSE,1-tp) then
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,26807034,0,0x4011,0,0,1,RACE_FAIRY,ATTRIBUTE_WIND,POS_FACEUP_DEFENSE)
+		and Duel.IsPlayerCanSpecialSummonMonster(tp,26807034,0,0x4011,0,0,1,RACE_FAIRY,ATTRIBUTE_WIND,POS_FACEUP_DEFENSE,1-tp) then
 		for i=1,ct do
 			local token=Duel.CreateToken(tp,26807034)
 			Duel.SpecialSummonStep(token,0,tp,tp,false,false,POS_FACEUP_DEFENSE)
 			token=Duel.CreateToken(tp,26807034)
 			Duel.SpecialSummonStep(token,0,tp,1-tp,false,false,POS_FACEUP_DEFENSE)
+			local e1=Effect.CreateEffect(e:GetHandler())
+			e1:SetType(EFFECT_TYPE_SINGLE)
+			e1:SetCode(EFFECT_UNRELEASABLE_SUM)
+			e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
+			e1:SetValue(1)
+			e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+			token:RegisterEffect(e1,true)
 		end
 		Duel.SpecialSummonComplete()
 	end

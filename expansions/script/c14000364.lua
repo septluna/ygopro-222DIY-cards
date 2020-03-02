@@ -15,7 +15,7 @@ function cm.initial_effect(c)
 	e1:SetOperation(cm.spop)
 	e1:SetValue(1)
 	c:RegisterEffect(e1)
-	--[[immune
+	--immune
 	local e2=Effect.CreateEffect(c)
 	e2:SetType(EFFECT_TYPE_FIELD)
 	e2:SetRange(LOCATION_MZONE)
@@ -24,7 +24,7 @@ function cm.initial_effect(c)
 	e2:SetCondition(cm.efcon)
 	e2:SetTarget(cm.etarget)
 	e2:SetValue(cm.efilter)
-	c:RegisterEffect(e2)]]
+	c:RegisterEffect(e2)
 	--release
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(m,1))
@@ -36,6 +36,7 @@ function cm.initial_effect(c)
 	e3:SetTarget(cm.tg)
 	e3:SetOperation(cm.op)
 	c:RegisterEffect(e3)
+	cm.release_effect=e3
 end
 function cm.Skay(c)
 	local m=_G["c"..c:GetCode()]
@@ -70,7 +71,7 @@ function cm.efcon(e)
 end
 function cm.etarget(e,c)
 	local code=c:GetCode()
-	return cm.Skay(c) and c:IsFaceup() and (c:GetFlagEffect(code)~=0 or c:GetSummonType()==SUMMON_TYPE_SPECIAL+1)
+	return cm.Skay(c) and c:IsFaceup() and (c:GetFlagEffect(code)~=0 or c:GetSummonType()&(SUMMON_TYPE_SPECIAL+1)==SUMMON_TYPE_SPECIAL+1)
 end
 function cm.efilter(e,re)
 	return re:GetOwnerPlayer()~=e:GetHandlerPlayer()

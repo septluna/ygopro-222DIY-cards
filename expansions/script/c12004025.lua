@@ -36,7 +36,7 @@ function cm.initial_effect(c)
 	c:RegisterEffect(e4)  
 end
 function c12004025.lcheck(g,lc)
-	return g:IsExists(Card.IsRace,1,nil,RACE_MACHINE)
+	return g:IsExists(Card.IsRace,1,nil,RACE_MACHINE) and g:IsExists(Card.IsSetCard,1,nil,0x1fbd)
 end
 function c12004025.hspcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_LINK)

@@ -15,7 +15,7 @@ function cm.initial_effect(c)
 	e1:SetOperation(cm.spop)
 	e1:SetValue(1)
 	c:RegisterEffect(e1)
-	--[[SpecialSummon
+	--SpecialSummon
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(m,2))
 	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -38,7 +38,8 @@ function cm.initial_effect(c)
 	e3:SetCost(cm.cost)
 	e3:SetTarget(cm.tg)
 	e3:SetOperation(cm.op)
-	c:RegisterEffect(e3)]]
+	c:RegisterEffect(e3)
+	cm.discard_effect=e3
 end
 function cm.Skay(c)
 	local m=_G["c"..c:GetCode()]

@@ -15,7 +15,7 @@ function cm.initial_effect(c)
 	e1:SetOperation(cm.spop)
 	e1:SetValue(1)
 	c:RegisterEffect(e1)
-	--[[todeck and remove
+	--todeck and remove
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(m,2))
 	e2:SetCategory(CATEGORY_TODECK+CATEGORY_REMOVE)
@@ -23,7 +23,6 @@ function cm.initial_effect(c)
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCountLimit(1)
 	e2:SetCondition(cm.scon)
 	e2:SetTarget(cm.stg)
 	e2:SetOperation(cm.sop)
@@ -37,7 +36,8 @@ function cm.initial_effect(c)
 	e3:SetCode(EVENT_RELEASE)
 	e3:SetTarget(cm.tg)
 	e3:SetOperation(cm.op)
-	c:RegisterEffect(e3)]]
+	c:RegisterEffect(e3)
+	cm.release_effect=e3
 end
 function cm.Skay(c)
 	local m=_G["c"..c:GetCode()]

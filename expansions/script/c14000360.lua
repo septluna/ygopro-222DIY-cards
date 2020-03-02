@@ -43,7 +43,7 @@ function cm.cfilter(c,ft,tp)
 	return cm.Skay(c) and c:IsType(TYPE_MONSTER) and c:IsReleasable()
 end
 function cm.scost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingTarget(cm.cfilter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,nil) end
+	if chk==0 then return Duel.IsExistingMatchingCard(cm.cfilter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,nil) end
 	local g=Duel.SelectMatchingCard(tp,cm.cfilter,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,1,nil)
 	Duel.Release(g,REASON_COST)
 end
@@ -54,7 +54,7 @@ end
 function cm.sop(e,tp,eg,ep,ev,re,r,rp)
 	if not e:GetHandler():IsRelateToEffect(e) then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-	local g=Duel.SelectMatchingCard(tp,aux.TRUE,tp,0,LOCATION_ONFIELD,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,aux.TRUE,tp,0,LOCATION_ONFIELD,1,2,nil)
 	if g:GetCount()>0 then
 		Duel.Destroy(g,REASON_EFFECT)
 	end

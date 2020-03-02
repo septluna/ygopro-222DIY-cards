@@ -15,7 +15,7 @@ function cm.initial_effect(c)
 	e1:SetOperation(cm.spop)
 	e1:SetValue(1)
 	c:RegisterEffect(e1)
-	--[[remove
+	--remove
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(m,3))
 	e2:SetCategory(CATEGORY_REMOVE)
@@ -28,7 +28,7 @@ function cm.initial_effect(c)
 	e2:SetCost(cm.scost)
 	e2:SetTarget(cm.stg)
 	e2:SetOperation(cm.sop)
-	c:RegisterEffect(e2)]]
+	c:RegisterEffect(e2)
 	--release
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(m,1))
@@ -40,6 +40,7 @@ function cm.initial_effect(c)
 	e3:SetTarget(cm.tg)
 	e3:SetOperation(cm.op)
 	c:RegisterEffect(e3)
+	cm.release_effect=e3
 end
 function cm.Skay(c)
 	local m=_G["c"..c:GetCode()]
