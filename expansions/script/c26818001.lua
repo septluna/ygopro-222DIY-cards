@@ -2,6 +2,7 @@
 local m=26818001
 local cm=_G["c"..m]
 function cm.initial_effect(c)
+	aux.AddCodeList(c,26818001)
 	--indestructable
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_SINGLE)
@@ -72,7 +73,7 @@ function cm.indcon(e)
 end
 function cm.atkcon(e,tp,eg,ep,ev,re,r,rp)
 	local tp=e:GetHandlerPlayer()
-	return Duel.IsAbleToEnterBP() and Duel.GetTurnPlayer()==tp and Duel.GetCurrentPhase()==PHASE_MAIN1 or Duel.GetCurrentPhase()==PHASE_MAIN2
+	return Duel.IsAbleToEnterBP() and Duel.GetTurnPlayer()==tp
 end
 function cm.costfilter(c)
 	return aux.IsCodeListed(c,26818001) and c:IsType(TYPE_MONSTER) and (c:IsControler(tp) or c:IsFaceup())
@@ -99,7 +100,7 @@ function cm.atkop(e,tp,eg,ep,ev,re,r,rp)
 end
 function cm.askcon(e,tp,eg,ep,ev,re,r,rp)
 	local tp=e:GetHandlerPlayer()
-	return Duel.GetTurnPlayer()==1-tp and Duel.GetCurrentPhase()==PHASE_MAIN1 and Duel.IsAbleToEnterBP()
+	return Duel.IsAbleToEnterBP() and Duel.GetTurnPlayer()==1-tp
 end
 function cm.askop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
