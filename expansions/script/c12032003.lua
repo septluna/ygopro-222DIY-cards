@@ -39,11 +39,12 @@ function cm.initial_effect(c)
 	--draw
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e0:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
 	e0:SetCode(EVENT_DESTROY)
 	e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE)
 	e0:SetRange(LOCATION_MZONE)
 	e0:SetCondition(cm.condition)
-	e0:SetOperation(aux.chainreg)
+	e0:SetOperation(cm.droperation)
 	c:RegisterEffect(e0)
 	 --negate
 	local e1=Effect.CreateEffect(c)
@@ -61,6 +62,9 @@ function cm.initial_effect(c)
 end
 function cm.condition(e,tp,eg,ep,ev,re,r,rp)
 	return re:GetHandler():IsSetCard(0xfa1)
+end
+function cm.droperation(e,tp,eg,ep,ev,re,r,rp)
+	Duel.Draw(tp,1,REASON_EFFECT)
 end
 function cm.spfilter(c)
 	return c:IsAbleToRemoveAsCost() and c:IsLevelAbove(0)
