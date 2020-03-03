@@ -8,8 +8,7 @@ function cm.initial_effect(c)
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(m,0))
 	e1:SetCategory(CATEGORY_REMOVE)
-	e1:SetType(EFFECT_TYPE_QUICK_O)
-	e1:SetCode(EVENT_FREE_CHAIN)
+	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_HAND)
 	e1:SetCountLimit(1,m)
 	e1:SetTarget(cm.sptg)
@@ -92,9 +91,11 @@ function cm.rfilter(c,sp)
 	return c:IsSetCard(0x1fb3) and c:IsAbleToRemove()
 end
 function cm.drop1(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.IsExistingMatchingCard(cm.rfilter,tp,LOCATION_DECK,0,1,nil) and Duel.SelectYesNo(tp,aux.Stringid(m,1)) then
+	if Duel.IsExistingMatchingCard(cm.rfilter,tp,LOCATION_DECK,0,1,nil) and Duel.SelectYesNo(tp,aux.Stringid(m,4)) then
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	Duel.SelectMatchingCard(tp,cm.rfilter,tp,LOCATION_DECK,0,1,1,nil) end
+	local cc=Duel.SelectMatchingCard(tp,cm.rfilter,tp,LOCATION_DECK,0,1,1,nil) 
+        Duel.Remove(cc,POS_FACEUP,REASON_EFFECT)
+        end
 end
 function cm.regcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(cm.filter,1,nil,1-tp)
@@ -109,9 +110,11 @@ end
 function cm.drop2(e,tp,eg,ep,ev,re,r,rp)
 	local n=Duel.GetFlagEffect(tp,m+100)
 	Duel.ResetFlagEffect(tp,m+100)
-	if Duel.IsExistingMatchingCard(cm.rfilter,tp,LOCATION_DECK,0,1,nil) and Duel.SelectYesNo(tp,aux.Stringid(m,1)) then
+	if Duel.IsExistingMatchingCard(cm.rfilter,tp,LOCATION_DECK,0,1,nil) and Duel.SelectYesNo(tp,aux.Stringid(m,4)) then
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-	Duel.SelectMatchingCard(tp,cm.rfilter,tp,LOCATION_DECK,0,1,1,nil) end
+	local cc=Duel.SelectMatchingCard(tp,cm.rfilter,tp,LOCATION_DECK,0,1,1,nil) 
+        Duel.Remove(cc,POS_FACEUP,REASON_EFFECT)
+        end
 end
 function cm.thfilter(c)
 	return c:IsAbleToRemove()
