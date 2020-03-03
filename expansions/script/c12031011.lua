@@ -71,7 +71,7 @@ function c12031011.thop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 	local ct=Duel.SelectMatchingCard(tp,c12031011.thfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,LOCATION_GRAVE+LOCATION_REMOVED,1,1,nil)
 	Duel.SendtoHand(ct,tp,REASON_EFFECT)
-	if c:IsCode()==12031000 and Duel.IsExistingMatchingCard(c12031011.thfilter1,tp,LOCATION_DECK,0,1,nil) then
+	if c:IsCode(12031000) and Duel.IsExistingMatchingCard(c12031011.thfilter1,tp,LOCATION_DECK,0,1,nil) then
 	   Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 	   local ct=Duel.SelectMatchingCard(tp,c12031011.thfilter1,tp,LOCATION_DECK,0,1,1,nil)
 	   Duel.SendtoHand(ct,tp,REASON_EFFECT)
