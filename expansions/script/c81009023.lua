@@ -43,11 +43,11 @@ end
 function cm.splimit(e,c,sump,sumtype,sumpos,targetp,se)
 	return not c:IsAttribute(ATTRIBUTE_WIND)
 end
-function cm.cfilter(c)
+function cm.cdfilter(c)
 	return c:IsFaceup() and aux.IsCodeListed(c,81010004) and c:IsType(TYPE_MONSTER)
 end
 function cm.spcon(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.IsExistingMatchingCard(cm.cfilter,tp,LOCATION_MZONE,0,1,nil)
+	return Duel.IsExistingMatchingCard(cm.cdfilter,tp,LOCATION_MZONE,0,1,nil)
 end
 function cm.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0

@@ -52,7 +52,7 @@ function cm.activate(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function cm.cfilter(c)
-	return c:IsFaceup() and (c:IsCode(14010242) or cm.TM(c))
+	return c:IsFaceup() and c:IsCode(14010242)
 end
 function cm.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return rp==1-tp and Duel.IsExistingMatchingCard(cm.cfilter,tp,LOCATION_ONFIELD,0,1,nil)
