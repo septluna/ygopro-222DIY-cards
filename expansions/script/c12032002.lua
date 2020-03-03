@@ -59,7 +59,7 @@ end
 function cm.actop(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
 	if re:GetHandler():IsSetCard(0xfa1) then
-		Duel.SetChainLimit(c24010609.chainlm)
+		Duel.SetChainLimit(cm.chainlm)
 	end
 end
 function cm.chainlm(e,rp,tp)
