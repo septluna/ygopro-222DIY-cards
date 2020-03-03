@@ -39,7 +39,7 @@ function c81019025.initial_effect(c)
 	e4:SetOperation(c81019025.thop)
 	c:RegisterEffect(e4)
 end
-function c81019025.atkfilter(c,tp)
+function c81019025.atkfilter1(c,tp)
 	return c:IsType(TYPE_RITUAL) and c:IsType(TYPE_PENDULUM) and Duel.IsExistingTarget(c81019025.atkfilter2,tp,LOCATION_MZONE,0,1,c)
 end
 function c81019025.atkfilter2(c)
