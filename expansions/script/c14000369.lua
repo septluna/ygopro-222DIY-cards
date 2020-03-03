@@ -42,7 +42,7 @@ function cm.Skay(c)
 	return m and m.named_with_Skayarder
 end
 function cm.spfilter1(c)
-	return c:IsFaceup() and cm.Skay(c) and c:IsType(TYPE_MONSTER) and c:IsReleasable()
+	return cm.Skay(c) and c:IsType(TYPE_MONSTER) and c:IsReleasable()
 end
 function cm.spfilter2(c)
 	return c:IsType(TYPE_EFFECT) and c:IsType(TYPE_MONSTER) and c:IsReleasable()

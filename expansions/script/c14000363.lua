@@ -53,7 +53,7 @@ function cm.Skay(c)
 end
 function cm.spfilter1(c,tp,mc)
 	local g=Group.FromCards(c,mc)
-	return c:IsFaceup() and c:IsCode(14000352) and c:IsReleasable() and Duel.IsExistingMatchingCard(cm.spfilter2,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,g)
+	return c:IsCode(14000352) and c:IsReleasable() and Duel.IsExistingMatchingCard(cm.spfilter2,tp,LOCATION_HAND+LOCATION_ONFIELD,0,1,g)
 end
 function cm.spfilter2(c)
 	return cm.Skay(c) and c:IsType(TYPE_MONSTER) and c:IsReleasable()
