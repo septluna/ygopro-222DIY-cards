@@ -60,7 +60,7 @@ end
 function cm.spfilter(c,e,tp)
 	local re=c:GetReasonEffect()
 	return c:IsReason(REASON_COST) and re and re:IsHasType(0x7e0) and re:IsActiveType(TYPE_MONSTER)
-		and re:GetHandler():IsAttribute(ATTRIBUTE_DARK) and c:IsAbleToRemoveAsCost()
+		and re:GetHandler():IsAttribute(ATTRIBUTE_DARK) and c:IsAbleToRemoveAsCost() and c:IsType(TYPE_MONSTER)
 end
 function cm.spcon(e,c)
 	if c==nil then return true end
