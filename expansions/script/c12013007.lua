@@ -1,7 +1,7 @@
 --火枪手
 function c12013007.initial_effect(c)
 	--link summon
-	aux.AddLinkProcedure(c,nil,2,2,c12013007.lcheck)
+	aux.AddLinkProcedure(c,aux.FilterBoolFunction(Card.IsSetCard,0xfb6),2,2)
 	c:EnableReviveLimit()
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(12013007,0))
