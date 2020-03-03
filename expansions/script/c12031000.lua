@@ -37,7 +37,7 @@ function c12031000.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 function c12031000.filter(c)
-	return c:IsFaceup() and c:IsSetCard(0xfa0)
+	return c:IsFaceup() and c:IsCode(12031000)
 end
 function c12031000.atkcon(e)
 	return Duel.IsExistingMatchingCard(c12031000.filter,e:GetHandler():GetControler(),LOCATION_MZONE,0,1,nil)
