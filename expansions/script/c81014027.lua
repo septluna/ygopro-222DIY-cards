@@ -39,11 +39,10 @@ end
 function cm.ffilter(c)
 	return c:IsFusionType(TYPE_EFFECT) and c:IsOnField()
 end
-function cm.efilter(e,re)
-	if re:GetOwnerPlayer()==e:GetOwnerPlayer() then return false end 
+function cm.efilter(e,re,rp)
 	if not re:IsHasProperty(EFFECT_FLAG_CARD_TARGET) then return true end
-	local g=Duel.GetChainInfo(Duel.GetCurrentChain(),CHAININFO_TARGET_CARDS)
-	return not g or not g:IsContains(e:GetHandler())
+	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
+	return e:GetOwnerPlayer()~=re:GetOwnerPlayer() and not g:IsContains(e:GetHandler())
 end
 function cm.condition(e,tp,eg,ep,ev,re,r,rp)
 	if e==re or not re:IsHasProperty(EFFECT_FLAG_CARD_TARGET) then return false end

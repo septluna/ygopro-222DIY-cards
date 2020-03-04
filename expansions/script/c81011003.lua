@@ -40,11 +40,10 @@ end
 function c81011003.imcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():GetLinkedGroup():IsExists(c81011003.tgfilter,1,nil)
 end
-function c81011003.efilter(e,re)
-	if re:GetOwnerPlayer()==e:GetOwnerPlayer() then return false end 
+function c81011003.efilter(e,re,rp)
 	if not re:IsHasProperty(EFFECT_FLAG_CARD_TARGET) then return true end
-	local g=Duel.GetChainInfo(Duel.GetCurrentChain(),CHAININFO_TARGET_CARDS)
-	return not g or not g:IsContains(e:GetHandler())
+	local g=Duel.GetChainInfo(0,CHAININFO_TARGET_CARDS)
+	return e:GetOwnerPlayer()~=re:GetOwnerPlayer() and not g:IsContains(e:GetHandler())
 end
 function c81011003.cbcon(e,tp,eg,ep,ev,re,r,rp)
 	return r~=REASON_REPLACE

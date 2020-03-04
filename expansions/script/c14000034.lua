@@ -1,7 +1,6 @@
 --悖论寄生者·突触
 local m=14000034
 local cm=_G["c"..m]
-xpcall(function() require("expansions/script/c14000501") end,function() require("script/c14000501") end)
 function cm.initial_effect(c)
 	--synchro summon
 	aux.AddSynchroProcedure(c,nil,aux.FilterBoolFunction(Card.IsCode,14000021),1,1)
@@ -86,7 +85,7 @@ function cm.con(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():GetSummonType()==SUMMON_TYPE_SYNCHRO+1
 end
 function cm.rmcon(e,tp,eg,ep,ev,re,r,rp)
-	return rp==tp and re:IsHasType(EFFECT_TYPE_ACTIVATE) and (re:IsActiveType(TYPE_SPELL) or re:GetHandler():IsType(TYPE_SPELL) or spo.named(re:GetHandler()))
+	return rp==tp and re:IsHasType(EFFECT_TYPE_ACTIVATE) and (re:IsActiveType(TYPE_SPELL) or re:GetHandler():IsType(TYPE_SPELL))
 end
 function cm.rmtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetFieldGroupCount(tp,0,LOCATION_DECK)>0 end
@@ -106,7 +105,7 @@ function cm.rmop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function cm.stcon(e,tp,eg,ep,ev,re,r,rp)
-	return rp==tp and re:IsHasType(EFFECT_TYPE_ACTIVATE) and (re:IsActiveType(TYPE_TRAP) or re:GetHandler():IsType(TYPE_TRAP) or spo.named(re:GetHandler()))
+	return rp==tp and re:IsHasType(EFFECT_TYPE_ACTIVATE) and (re:IsActiveType(TYPE_TRAP) or re:GetHandler():IsType(TYPE_TRAP))
 end
 function cm.sttg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetFieldGroupCount(tp,0,LOCATION_DECK)>0 end

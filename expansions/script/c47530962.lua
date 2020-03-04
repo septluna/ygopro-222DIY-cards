@@ -45,6 +45,7 @@ function c47530962.bstg(e,tp,eg,ep,ev,re,r,rp,chk)
     Duel.SetOperationInfo(0,CATEGORY_REMOVE,1,1,0,0)
 end
 function c47530962.bsop(e,tp,eg,ep,ev,re,r,rp)
+    local c=e:GetHandler()
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
     local g=Duel.SelectMatchingCard(tp,Card.IsAbleToGrave,tp,0,LOCATION_MZONE,1,1,nil)
     local tc=g:GetFirst()
@@ -61,7 +62,7 @@ function c47530962.bsop(e,tp,eg,ep,ev,re,r,rp)
     end
 end
 function c47530962.ntdcon(e,tp,eg,ep,ev,re,r,rp)
-    return tp:GetLP()<=4000
+    return Duel.GetLP(tp)<=4000
 end
 function c47530962.ntdtg(e,tp,eg,ep,ev,re,r,rp,chk)
     local c=e:GetHandler()

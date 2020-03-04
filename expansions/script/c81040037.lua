@@ -5,7 +5,7 @@ function cm.initial_effect(c)
 	c:SetSPSummonOnce(m)
 	c:EnableReviveLimit()
 	aux.AddFusionProcFunRep(c,cm.ffilter,2,true)
-	aux.AddContactFusionProcedure(c,Card.IsAbleToRemoveAsCost,LOCATION_GRAVE,0,Duel.Remove,POS_FACEUP,REASON_COST)
+	aux.AddContactFusionProcedure(c,cm.matfilter,LOCATION_GRAVE,0,Duel.Remove,POS_FACEUP,REASON_COST)
 	--spsummon condition
 	local e0=Effect.CreateEffect(c)
 	e0:SetType(EFFECT_TYPE_SINGLE)
@@ -37,15 +37,15 @@ function cm.initial_effect(c)
 	e2:SetTarget(cm.sptg)
 	e2:SetOperation(cm.spop)
 	c:RegisterEffect(e2)
-	--splimit
-	local e3=Effect.CreateEffect(c)
-	e3:SetType(EFFECT_TYPE_SINGLE)
-	e3:SetCode(EFFECT_SPSUMMON_COST)
-	e3:SetCost(cm.spcost)
-	c:RegisterEffect(e3)
 end
 function cm.ffilter(c,fc,sub,mg,sg)
 	return c:IsFusionSetCard(0x81c) and c:IsFusionType(TYPE_RITUAL) and c:IsFusionType(TYPE_MONSTER) and (not sg or not sg:IsExists(Card.IsFusionCode,1,c,c:GetFusionCode()))
+end
+function cm.matfilter(c)
+	return c:IsAbleToRemoveAsCost() and Duel.IsExistingMatchingCard(cm.sfilter,c:GetControler(),LOCATION_MZONE,0,1,nil)
+end
+function cm.sfilter(c)
+	return c:IsFaceup() and c:IsSetCard(0x81c) and c:GetType()&0x81==0x81
 end
 function cm.tdcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetCurrentPhase()==PHASE_MAIN1 or Duel.GetCurrentPhase()==PHASE_MAIN2
@@ -90,10 +90,4 @@ function cm.spop(e,tp,eg,ep,ev,re,r,rp)
 	if tc and Duel.SpecialSummon(tc,SUMMON_TYPE_RITUAL,tp,tp,true,false,POS_FACEUP) then
 		tc:CompleteProcedure()
 	end
-end
-function cm.spcost(e,c,tp,st)
-	return Duel.IsExistingMatchingCard(cm.sfilter,e:GetHandlerPlayer(),LOCATION_MZONE,0,1,nil)
-end
-function cm.sfilter(c)
-	return c:IsFaceup() and c:IsSetCard(0x81c) and c:GetType()&0x81==0x81
 end

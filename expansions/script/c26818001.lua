@@ -30,7 +30,7 @@ function cm.initial_effect(c)
 	e2:SetHintTiming(TIMING_MAIN_END)
 	e2:SetCountLimit(1,m+900)
 	e2:SetCondition(cm.askcon)
-	e2:SetCost(cm.atkcost)
+	e2:SetCost(cm.askcost)
 	e2:SetOperation(cm.askop)
 	c:RegisterEffect(e2)
 	--multiatk
@@ -79,8 +79,8 @@ function cm.costfilter(c)
 	return aux.IsCodeListed(c,26818001) and c:IsType(TYPE_MONSTER) and (c:IsControler(tp) or c:IsFaceup())
 end
 function cm.atkcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.CheckReleaseGroup(tp,cm.costfilter,1,nil) end
-	local sg=Duel.SelectReleaseGroup(tp,cm.costfilter,1,1,nil)
+	if chk==0 then return Duel.CheckReleaseGroup(tp,cm.costfilter,1,e:GetHandler()) end
+	local sg=Duel.SelectReleaseGroup(tp,cm.costfilter,1,1,e:GetHandler())
 	Duel.Release(sg,REASON_COST)
 end
 function cm.atktg(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -101,6 +101,11 @@ end
 function cm.askcon(e,tp,eg,ep,ev,re,r,rp)
 	local tp=e:GetHandlerPlayer()
 	return Duel.IsAbleToEnterBP() and Duel.GetTurnPlayer()==1-tp
+end
+function cm.askcost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.CheckReleaseGroup(tp,cm.costfilter,1,nil) end
+	local sg=Duel.SelectReleaseGroup(tp,cm.costfilter,1,1,nil)
+	Duel.Release(sg,REASON_COST)
 end
 function cm.askop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()

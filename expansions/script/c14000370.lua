@@ -90,9 +90,9 @@ function cm.sop(e,tp,eg,ep,ev,re,r,rp)
 			if tc:IsCanBeSpecialSummoned(e,0,tp,false,false)
 				and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
 				and Duel.SelectYesNo(tp,aux.Stringid(m,2)) then
-				Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)
+				Duel.SpecialSummon(tc,1,tp,tp,false,false,POS_FACEUP)
 				local code=tc:GetOriginalCodeRule()
-				tc:RegisterFlagEffect(m,RESET_EVENT+RESETS_STANDARD,EFFECT_FLAG_CLIENT_HINT,1,0,aux.Stringid(code,0))
+				tc:RegisterFlagEffect(code,RESET_EVENT+RESETS_STANDARD,EFFECT_FLAG_CLIENT_HINT,1,0,aux.Stringid(code,0))
 			end
 		else
 			Duel.SendtoGrave(tc,REASON_EFFECT)

@@ -45,7 +45,7 @@ function c30557011.operation(e,tp,eg,ep,ev,re,r,rp)
 			e1:SetType(EFFECT_TYPE_SINGLE)
 			e1:SetCode(EFFECT_UPDATE_ATTACK)
 			e1:SetValue(-down)
-			e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+			e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
 			tc:RegisterEffect(e1)
 			if preatk~=0 and tc:IsAttack(0) then dg1:AddCard(tc) end
 			if tc:IsAttack(preatk) then dg2:AddCard(tc) end
