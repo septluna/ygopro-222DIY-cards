@@ -53,7 +53,8 @@ function c1110124.tg2(e,tp,eg,ep,ev,re,r,rp,chk)
 	local n=c:GetOverlayCount()
 	if chk==0 then
 		if e:GetLabel()~=100 then return false end
-		return c:CheckRemoveOverlayCard(tp,n,REASON_COST)
+		return c:GetOverlayCount()>0
+			and c:CheckRemoveOverlayCard(tp,n,REASON_COST)
 			and Duel.IsExistingMatchingCard(c1110124.tfilter2,tp,LOCATION_DECK,0,1,nil)
 	end
 	e:SetLabel(n)
