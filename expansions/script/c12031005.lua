@@ -35,7 +35,7 @@ function cm.initial_effect(c)
 	e4:SetValue(cm.efilter)
 	c:RegisterEffect(e4) 
 end
-function cm.econ(e)
+function cm.econ(e,tp)
 	return Duel.IsExistingMatchingCard(Card.IsCode,tp,LOCATION_MZONE,0,1,e:GetHandler(),12031000)
 end
 function cm.efilter(e,te)
