@@ -102,7 +102,7 @@ function c12030004.drop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.GetFlagEffect(tp,12030004+100)==0 then
 	   local g=Duel.SelectMatchingCard(1-tp,Card.IsAbleToGrave,tp,0,LOCATION_MZONE,1,1,nil)
 	   if g:GetCount()>0 then
-		  Duel.SendtoGrave(g,REASON_RULE)
+		 Duel.SendtoHand(g,nil,REASON_RULE)
 	   end
 	else
 	   local g=Duel.SelectMatchingCard(1-tp,Card.IsAbleToDeck,tp,0,LOCATION_MZONE,2,2,nil)
