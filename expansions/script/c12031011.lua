@@ -37,7 +37,7 @@ function c12031011.disop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local tt=c:GetOverlayCount()
 	if Duel.GetFlagEffect(tp,12031011)==0 then 
-	if not ( ( re:IsHasType(EFFECT_TYPE_ACTIVATE) and not re:GetHandler():IsType(TYPE_CONTINUOUS) ) or not e:GetHandler():IsType(TYPE_XYZ) ) then
+	if not ( ( re:IsHasType(EFFECT_TYPE_ACTIVATE) and not re:GetHandler():IsType(TYPE_CONTINUOUS+TYPE_FIELD) ) or not e:GetHandler():IsType(TYPE_XYZ) ) then
 	   Duel.Overlay(c,Group.FromCards(re:GetHandler()))
 	   Duel.BreakEffect()
 	   local ff=c:GetOverlayCount()
