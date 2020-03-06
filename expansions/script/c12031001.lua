@@ -65,7 +65,7 @@ function c12031001.desop(e,tp,eg,ep,ev,re,r,rp)
 	e2:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 	e2:SetCode(EFFECT_CHANGE_CODE)
 	e2:SetRange(LOCATION_MZONE)
-	e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
+	e2:SetReset(RESET_EVENT+RESETS_STANDARD)
 	e2:SetValue(code)
 	c:RegisterEffect(e2)
 		if Duel.IsExistingMatchingCard(c12031001.thfilter,tp,LOCATION_MZONE,0,2,nil) then
