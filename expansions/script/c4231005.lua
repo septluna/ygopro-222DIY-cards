@@ -1,8 +1,8 @@
 --群星的仪式-梦幻召唤
 local m=4231005
 local cm=_G["c"..m]
-cm.fit_monster={4231004}
 function cm.initial_effect(c)
+    aux.AddCodeList(c,4231004)
     iFunc(c).c("RegisterEffect",iFunc(c)
         .e("SetCategory",CATEGORY_SPECIAL_SUMMON)
         .e("SetType",EFFECT_TYPE_ACTIVATE)
